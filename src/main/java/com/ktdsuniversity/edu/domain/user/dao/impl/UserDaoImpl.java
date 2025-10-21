@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.ktdsuniversity.edu.domain.user.dao.UserDao;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserLoginVO;
+import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO;
 
 @Repository
 public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
@@ -23,6 +24,11 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
 	@Override
 	public UserVO selectUserByLogIdAndPwd(RequestUserLoginVO requestUserLoginVO) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUserByLogIdAndPwd", requestUserLoginVO);
+	}
+
+	@Override
+	public int insertNewUser(RequestUserRegistVO requestUserRegistVO) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertNewUser", requestUserRegistVO);
 	}
 
 

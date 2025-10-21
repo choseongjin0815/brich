@@ -5,8 +5,7 @@
 <mapper namespace="com.ktdsuniversity.edu.domain.user.dao.impl.UserDaoImpl">
     <select parameterType="com.ktdsuniversity.edu.domain.user.vo.request.RequestUserLoginVO"
             resultType="com.ktdsuniversity.edu.domain.user.vo.UserVO"
-            id="selectUserByLogIdAndPwd"
-    >
+            id="selectUserByLogIdAndPwd">
         SELECT USR_ID
              , LOG_ID
              , EML
@@ -37,4 +36,38 @@
         WHERE LOG_ID = #{logId}
           AND PSWRD = #{pswrd}
     </select>
+    <insert parameterType="com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO"
+            id="insertNewUser">
+        <selectKey keyProperty="usrId" order="BEFORE" resultType="string">
+         SELECT 'USR-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_USR_PK.NEXTVAL, 6, 0)
+           FROM DUAL
+      </selectKey>
+        INSERT INTO USR 
+        (USR_ID
+        , LOG_ID
+        , EML
+        , PSWRD
+        , NM
+        , SALT
+        , AUTR
+        , CRT_DT
+        , CRTR
+        , UPDT_DT
+        , MTTR
+        )
+        VALUES 
+        ( #{usrId}
+        , #{logId}
+        , #{eml}
+        , #{pswrd}
+        , #{nm}
+        , 'asdasdsadsadsa'
+        , #{autr}
+        , SYSDATE
+        , #{usrId}
+        , SYSDATE
+        , #{usrId}
+        )
+    </insert>
+    
 </mapper>
