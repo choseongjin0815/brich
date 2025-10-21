@@ -9,6 +9,7 @@
 <link type="text/css" rel="stylesheet" href="/css/brich.css">
 <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
 <script type="text/javascript" src="/js/user/regist.js"></script>
+<script type="text/javascript" src="/js/common/validate.js"></script>
 </head>
 <body>
     <div class="regist-wrapper">
@@ -20,23 +21,23 @@
 	            <form method="post" action="/regist" class="user-regist-form">
 	                <div class="right-flex">
 		                <div class="input-flex short"> 
-			                <label for="id">아이디</label>
+			                <label for="id" class="require">아이디</label>
 			                <input type="text" id="id" name="logId" placeholder="아이디를 입력해주세요"/>
 		                </div>
 		                <div class="regist-side-btn"><div>중복 확인</div></div>
 	                </div>
 	                <div class="input-flex">
-		                <label for="name">이름</label>   
+		                <label for="name" class="require">이름</label>   
 		                <input type="text" id="name" name="nm" placeholder="이름을 입력해주세요"/>
 	                </div>
 	                <div class="input-flex">
-		                <label for="company">사업자명</label>
+		                <label for="company" class="require">사업자명</label>
 		                <input type="text" id="company" name="cmpny" placeholder="사업자명을 입력해주세요"/>
 	                </div>
 	                <div>사업자 등록증</div>
 	                <div class="right-flex">
 		                <div class="input-flex short">
-			                <label for="email">이메일</label>
+			                <label for="email" class="require">이메일</label>
 			                <input type="text" id="email" name="eml" placeholder="이메일을 입력해주세요"/>
 		                </div>
 		                <div class="regist-side-btn"><div>인증 번호</div></div>
@@ -49,7 +50,7 @@
 		                <div class="regist-side-btn"><div>인증 확인</div></div>
 	                </div>
 	                <div class="input-flex">
-	                    <label for="password">비밀번호</label>
+	                    <label for="password" class="require">비밀번호</label>
 		                <input type="password" id="password" name="pswrd" placeholder="8~16자리 비밀번호 입력"/>
 		                <input type="password" id="password-confirm" placeholder="비밀번호 확인"/> 
 	                </div>
@@ -61,18 +62,18 @@
                 <form method="post" action="/regist" class="user-regist-form">
                     <div class="right-flex">
                         <div class="input-flex short"> 
-                            <label for="id">아이디</label>
+                            <label for="id" class="require">아이디</label>
                             <input type="text" id="id" placeholder="아이디를 입력해주세요"/>
                         </div>
                         <div class="regist-side-btn"><div>중복 확인</div></div>
                     </div>
                     <div class="input-flex">
-                        <label for="name">이름</label>   
+                        <label for="name" class="require">이름</label>   
                         <input type="text" id="name" placeholder="이름을 입력해주세요"/>
                     </div>
                     <div class="right-flex">
                         <div class="input-flex short">
-                            <label for="email">이메일</label>
+                            <label for="email" class="require">이메일</label>
                             <input type="text" name="eml" id="email" placeholder="이메일을 입력해주세요"/>
                         </div>
                             <div class="regist-side-btn"><div>인증 번호</div>
@@ -80,13 +81,13 @@
                     </div>
                     <div class="right-flex">
                         <div class="input-flex short">
-                           <label for="email-confirm">인증번호 입력</label>
+                           <label for="email-confirm" class="require">인증번호 입력</label>
                            <input type="text" id="email-confirm" placeholder="인증번호를 입력하세요"/>
                         </div>
                         <div class="regist-side-btn"><div>인증 확인</div></div>
                     </div>
                     <div class="input-flex">
-                        <label for="password">비밀번호</label>
+                        <label for="password" class="require">비밀번호</label>
                         <input type="password" id="password" placeholder="8~16자리 비밀번호 입력"/>
                         <input type="password" id="password-confirm" placeholder="비밀번호 확인"/> 
                     </div>

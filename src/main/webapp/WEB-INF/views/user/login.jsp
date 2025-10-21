@@ -11,6 +11,7 @@
 <script type="text/javascript" src="/js/common/login.js"></script>
 </head>
 <body>
+    <div class="login-wrapper">
     <form method="post" id="login">
          아이디
         <input type="text" name="logId">
@@ -19,5 +20,10 @@
         <input type="password" name="pswrd">
         <button type="button" class="login-button">로그인</button>
     </form>
+    <a href="/">로그인 정보를 잊으셨나요?</a>
+    <a href="/choose-role">SIGN UP</a>
+    <a href="/">비회원으로 둘러보기</a>
+    
+    </div>
 </body>
 </html>

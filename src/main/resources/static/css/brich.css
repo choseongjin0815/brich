@@ -189,3 +189,13 @@ body {
 .term-content {
   color: #828282;
 }
+
+.login-wrapper {
+    background-color: #5275C1;
+    height: 100vh;
+    background-image: url('/image/image13.png');
+    background-size: contain; /* 비율 유지하면서 영역 안에 맞춤 */
+    background-position: left center;
+    background-repeat: no-repeat;
+}
+
