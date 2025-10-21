@@ -34,3 +34,7 @@ build/
 
 ### DS_STORE ###
 .DS_store
+
+
+### Data ###
+!**/src/main/resources/application.yml
