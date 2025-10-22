@@ -14,11 +14,9 @@ public class AccessControlInterceptor implements HandlerInterceptor{
 			throws Exception {
 		String uri = request.getRequestURI();  
         UserVO loginUser = (UserVO)request.getSession().getAttribute("__LOGIN_USER__");
-        String auth = loginUser.getAutr();
-        
-        if (auth == null) {
-            response.sendRedirect("/login");
-            return false;
+        String auth = null;
+        if(loginUser != null) {
+        	auth = loginUser.getAutr();
         }
         
         //관리자 페이지는 관리자(1001)만 접근가능
