@@ -4,6 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ktdsuniversity.edu.domain.user.dao.impl.AdminUserDaoImpl">
 
+    <!-- 회원 관리 - 전체 회원 목록 -->
     <resultMap type="com.ktdsuniversity.edu.domain.user.vo.AdminUserListVO" id="AdminUserListVOMap" autoMapping="true">
         <id column="USR_ID" property="usrId" />
         <result column="CMPN_ALL_CNT" property="cmpnAllCnt" />
@@ -44,7 +45,7 @@
                           WHERE C.DLT_YN = 'N'
                             AND C_ADPT.DLT_YN = 'N'
                             AND C_ADPT.BLG_USR_ID = U.USR_ID
-                            AND C.STTS_CD NOT IN ('2001', '2002', '2003', '2008')
+                            AND C.STTS_CD = '2007'
                             AND C_ADPT.ADPT_YN = 'Y')
                    WHEN U.AUTR = '1004'
                    THEN (SELECT COUNT(C.CMPN_ID)
@@ -70,57 +71,196 @@
           WHERE U.DLT_YN = 'N'
             AND U.AUTR NOT IN ('1001', '1005', '1008')
           ORDER BY U.CRT_DT DESC
-        </select>
+    </select>
         
-        <select id="selectAdminUserAutrById" parameterType="string">
-            SELECT AUTR
-              FROM USR
-             WHERE USR_ID = #{_parameter}
-        </select>
-        
-        <resultMap type="com.ktdsuniversity.edu.domain.user.vo.AdminBloggerDetailVO" id="AdminBloggerDetailVOMap" autoMapping="true">
-            <id column="USR_ID" property="usrId" />
-            
-            <result column="CMPN_PROGRESS_CNT" property="cmpnProgressCnt" />
-            <result column="CMPN_COMPLETED_CNT" property="cmpnCompletedCnt" />
-        </resultMap>
-        <select id="selectAdminBloggerDetailById" resultMap="AdminBloggerDetailVOMap" parameterType="string">
-            SELECT U.USR_ID 
-                 , U.LOG_ID
-                 , U.EML
-                 , U.NM
-                 , U.BLG_ADDRS
-                 , U.RCNT_BLG_CRTFCTN_DT
---               , [활동 지역]
---               , [블로그 카테고리]
-                 , U.RCNT_LGN_SCS_DT
-                 , (SELECT COUNT(C_ADPT.BLG_USR_ID)
-                      FROM CMPN_PST_ADPT C_ADPT
-                     INNER JOIN CMPN C
-                        ON C.CMPN_ID = C_ADPT.CMPN_ID
-                     WHERE C.DLT_YN = 'N'
-                       AND C_ADPT.DLT_YN = 'N'
-                       AND C.STTS_CD = '2007'
-                       AND C_ADPT.ADPT_YN = 'Y') AS CMPN_PROGRESS_CNT
---               , [진행 중인 캠페인 목록]
-                 , (SELECT COUNT(C_ADPT.BLG_USR_ID)
-                      FROM CMPN_PST_ADPT C_ADPT
-                     INNER JOIN CMPN C
-                        ON C.CMPN_ID = C_ADPT.CMPN_ID
-                     WHERE C.DLT_YN = 'N'
-                       AND C_ADPT.DLT_YN = 'N'
-                       AND C.STTS_CD = '2009'
-                       AND C_ADPT.ADPT_YN = 'Y') AS CMPN_COMPLETED_CNT
---               , [만료된 캠페인 목록]
-                 , U.PNLT_CNT
-                 , U.SBSCRPTN_EXPRS_DT AS
-                 , U.AVRG_VSTR_CNT AS
-                 , U.BLG_NGHBR_CNT AS
-                 , U.SCRP_CNT AS
-                 , U.CRT_DT AS
-              FROM USR U
-              WHERE U.DLT_YN = 'N'
-                AND U.USR_ID = #{_parameter}
-        </select>
+    <!-- 분기 처리를 위한 아이디로 권한 찾기 -->
+    <select id="selectAdminUserAutrById" parameterType="string">
+        SELECT AUTR
+          FROM USR
+         WHERE USR_ID = #{_parameter}
+    </select>
+    
+    <!-- 회원 관리 - 블로거 상세 정보 -->
+    <resultMap type="com.ktdsuniversity.edu.domain.user.vo.AdminBloggerDetailVO" id="AdminBloggerDetailVOMap" autoMapping="true">
+        <id column="USR_ID" property="usrId" />
+        <result column="CMPN_PROGRESS_CNT" property="cmpnProgressCnt" />
+        <result column="CMPN_COMPLETED_CNT" property="cmpnCompletedCnt" />
+    </resultMap>
+    <select id="selectAdminBloggerDetailById" resultMap="AdminBloggerDetailVOMap" parameterType="string">
+        SELECT U.USR_ID 
+             , U.LOG_ID
+             , U.EML
+             , U.NM
+             , U.AUTR
+             , U.BLG_ADDRS
+             , U.RCNT_BLG_CRTFCTN_DT
+             , U.RCNT_LGN_SCS_DT
+             , (SELECT COUNT(C_ADPT.BLG_USR_ID)
+                  FROM CMPN_PST_ADPT C_ADPT
+                 INNER JOIN CMPN C
+                    ON C.CMPN_ID = C_ADPT.CMPN_ID
+                 WHERE C.DLT_YN = 'N'
+                   AND C_ADPT.DLT_YN = 'N'
+                   AND C_ADPT.BLG_USR_ID = #{_parameter}
+                   AND C.STTS_CD = '2007'
+                   AND C_ADPT.ADPT_YN = 'Y') AS CMPN_PROGRESS_CNT
+             , (SELECT COUNT(C_ADPT.BLG_USR_ID)
+                  FROM CMPN_PST_ADPT C_ADPT
+                 INNER JOIN CMPN C
+                    ON C.CMPN_ID = C_ADPT.CMPN_ID
+                 WHERE C.DLT_YN = 'N'
+                   AND C_ADPT.DLT_YN = 'N'
+                   AND C_ADPT.BLG_USR_ID = #{_parameter}
+                   AND C.STTS_CD = '2009'
+                   AND C_ADPT.ADPT_YN = 'Y') AS CMPN_COMPLETED_CNT
+             , U.PNLT_CNT
+             , U.SBSCRPTN_EXPRS_DT
+             , U.AVRG_VSTR_CNT
+             , U.BLG_NGHBR_CNT
+             , U.SCRP_CNT
+             , U.CRT_DT
+          FROM USR U
+          WHERE U.DLT_YN = 'N'
+            AND U.USR_ID = #{_parameter}
+    </select>
+    
+    <resultMap type="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO" id="CampaignVOMap" autoMapping="true">
+        <id column="CMPN_ID" property="cmpnId" />
+        <result column="CMPN_TITLE" property="cmpnTitle" />
+    </resultMap>
+    
+    <!-- 상세 정보 - 블로거가 현재 진행 중인 캠페인 리스트 (기준: 진행 중) -->
+    <select id="selectBloggerCmpnProgressList" parameterType="string" resultMap="CampaignVOMap">
+        SELECT C.CMPN_TITLE
+	         , C.CMPN_ID
+	      FROM CMPN C
+	     INNER JOIN CMPN_PST_ADPT C_ADPT 
+	        ON C_ADPT.CMPN_ID = C.CMPN_ID
+	     WHERE C.DLT_YN = 'N'
+	       AND C.STTS_CD = '2007'
+	       AND C_ADPT.BLG_USR_ID = #{_parameter}
+	       AND C_ADPT.ADPT_YN = 'Y'
+	       AND C_ADPT.DLT_YN = 'N'
+	     ORDER BY C.CRT_DT DESC
+    </select>
+    
+    <!-- 상세 정보 - 블로거가 참여했던 캠페인 (기준: 종료) -->
+    <select id="selectBloggerCmpnCompletedList" parameterType="string" resultMap="CampaignVOMap">
+        SELECT C.CMPN_TITLE
+	         , C.CMPN_ID
+	     FROM CMPN C
+	    INNER JOIN CMPN_PST_ADPT C_ADPT 
+	       ON C_ADPT.CMPN_ID = C.CMPN_ID
+	    WHERE C.DLT_YN = 'N'
+	      AND C.STTS_CD = '2009'
+	      AND C_ADPT.BLG_USR_ID = #{_parameter}
+	      AND C_ADPT.ADPT_YN = 'Y'
+	      AND C_ADPT.DLT_YN = 'N'
+	    ORDER BY C.CRT_DT DESC
+    </select>
+    
+    <!-- 상세 정보 - 블로거의 지역 정보 -->
+    <resultMap type="com.ktdsuniversity.edu.domain.user.vo.AdminBloggerAreaInfoVO" id="AdminBloggerAreaInfoVOMap" autoMapping="true">
+        <id column="USR_AR_ID" property="usrArId" />
+        <result column="CD_NM" property="cdNm" />
+    </resultMap>
+    <select id="selectBloggerAreaList" parameterType="string" resultMap="AdminBloggerAreaInfoVOMap">
+        SELECT U_AR.USR_AR_ID AS USR_AR_ID
+		     , A.CD_NM AS CD_NM
+		  FROM USR_AR U_AR
+		  LEFT OUTER JOIN USR U
+		    ON U_AR.USR_ID = U.USR_ID
+		  LEFT OUTER JOIN AR_CD A
+		    ON U_AR.AR_ID = A.CD_ID
+		 WHERE U_AR.USR_ID = #{_parameter}
+		   AND U_AR.DLT_YN = 'N'
+    </select>
+    
+    <!-- 상세 정보 - 블로거의 카테고리 -->
+    <resultMap type="com.ktdsuniversity.edu.domain.user.vo.AdminBloggerCatagoryInfoVO" id="AdminBloggerCatagoryInfoVOMap" autoMapping="true">
+        <id column="USR_ID" property="usrId" />
+        <result column="CD_NM" property="cdNm" />
+    </resultMap>
+    <select id="selectBloggerCategoryList" parameterType="string" resultMap="AdminBloggerCatagoryInfoVOMap">
+        SELECT BC.USR_ID AS USR_ID
+		     , C.CD_NM AS CD_NM
+		  FROM BLG_CTG BC
+		 INNER JOIN USR U
+		    ON BC.USR_ID = U.USR_ID 
+		 INNER JOIN CM_CD C
+		    ON BC.CD_ID = C.CD_ID
+		 WHERE BC.USR_ID = #{_parameter}
+		   AND BC.DLT_YN = 'N'
+    </select>
+    
+    <!-- 회원 관리 - 광고주 상세 정보 -->
+    <resultMap type="com.ktdsuniversity.edu.domain.user.vo.AdminAdvertiserDetailVO" id="AdminAdvertiserDetailVOMap" autoMapping="true">
+        <id column="USR_ID" property="usrId" />
+        <result column="CMPN_PROGRESS_CNT" property="cmpnProgressCnt" />
+        <result column="CMPN_COMPLETED_CNT" property="cmpnCompletedCnt" />
+    </resultMap>
+    <select id="selectAdminAdvertiserDetailById" parameterType="string" resultMap="AdminAdvertiserDetailVOMap">
+        SELECT U.USR_ID 
+             , U.LOG_ID
+             , U.EML
+             , U.NM
+             , U.AUTR
+             , U.CMPNY 
+             , U.FL_GRP_ID 
+             , CASE
+                   WHEN U.AUTR = '1007'
+                   THEN 'N'
+                   WHEN U.AUTR = '1004'
+                   THEN 'Y'
+                   ELSE '-'
+                END AS REGIST_ACPT
+             , (SELECT COUNT(C.CMPN_ID)
+                    FROM CMPN C
+                   WHERE C.DLT_YN = 'N'
+                     AND C.STTS_CD = '2009'
+                     AND C.USR_ID = U.USR_ID) AS CMPN_COMPLETED_CNT
+             , (SELECT COUNT(C.CMPN_ID)
+                  FROM CMPN C
+                 WHERE C.DLT_YN = 'N'
+                   AND C.STTS_CD IN ('2005', '2006', '2007', '2009')
+                   AND C.USR_ID = U.USR_ID) AS CMPN_PROGRESS_CNT
+             , U.RCNT_LGN_SCS_DT
+             , U.PNLT_CNT
+             , U.CRT_DT
+          FROM USR U
+         WHERE U.DLT_YN = 'N'
+           AND U.AUTR IN ('1004', '1007')
+           AND U.USR_ID = #{_parameter}
+    </select>
+    
+    <!-- 상세 정보 - 광고주가 현재 진행 중인 캠페인 리스트 (기준: 모집 중 ~ 종료) -->
+    <select id="selectAdvertiserCmpnProgressList" parameterType="string" resultMap="CampaignVOMap">
+        SELECT C.CMPN_TITLE
+		     , C.CMPN_ID
+		  FROM CMPN C
+		 WHERE C.DLT_YN = 'N'
+		   AND C.STTS_CD IN ('2005', '2006', '2007', '2009')
+		   AND C.USR_ID = #{_parameter}
+		 ORDER BY C.CRT_DT DESC
+    </select>
+    
+    <!-- 상세 정보 - 광고주가 진행했던 캠페인 리스트 (기준: 종료) -->
+    <select id="selectAdvertiserCmpnCompletedList" parameterType="string" resultMap="CampaignVOMap">
+        SELECT C.CMPN_TITLE
+		     , C.CMPN_ID
+		  FROM CMPN C
+		 WHERE C.DLT_YN = 'N'
+		   AND C.STTS_CD = '2009'
+		   AND C.USR_ID = #{_parameter}
+		 ORDER BY C.CRT_DT DESC
+    </select>
+    
+    <!-- 상세 정보 - 광고주 가입 승인/반려 -->
+    <update id="updateAdvertiserRegistAuthCode" parameterType="map">
+        UPDATE USR
+		   SET AUTR = #{autr}
+		 WHERE USR_ID = #{usrId}
+		   AND DLT_YN = 'N'
+    </update>
         
 </mapper>

@@ -15,8 +15,8 @@ public class AdminBloggerDetailVO extends AdminUserBaseInfoVO {
 	private String sbscrptnExprsDt;
     private String blgAddrs;
     private String rcntBlgCrtfctnDt;
-    private List<UserAreaVO> usrAr;
-    private List<BlogCategoryVO> usrBlgCtg;
+    private List<AdminBloggerAreaInfoVO> usrAr;
+    private List<AdminBloggerCatagoryInfoVO> usrBlgCtg;
     private int avrgVstrCnt;
     private int blgNghbrCnt;
     private int scrpCnt;
@@ -63,16 +63,16 @@ public class AdminBloggerDetailVO extends AdminUserBaseInfoVO {
 	public void setRcntBlgCrtfctnDt(String rcntBlgCrtfctnDt) {
 		this.rcntBlgCrtfctnDt = rcntBlgCrtfctnDt;
 	}
-	public List<UserAreaVO> getUsrAr() {
+	public List<AdminBloggerAreaInfoVO> getUsrAr() {
 		return this.usrAr;
 	}
-	public void setUsrAr(List<UserAreaVO> usrAr) {
+	public void setUsrAr(List<AdminBloggerAreaInfoVO> usrAr) {
 		this.usrAr = usrAr;
 	}
-	public List<BlogCategoryVO> getUsrBlgCtg() {
+	public List<AdminBloggerCatagoryInfoVO> getUsrBlgCtg() {
 		return this.usrBlgCtg;
 	}
-	public void setUsrBlgCtg(List<BlogCategoryVO> usrBlgCtg) {
+	public void setUsrBlgCtg(List<AdminBloggerCatagoryInfoVO> usrBlgCtg) {
 		this.usrBlgCtg = usrBlgCtg;
 	}
 	public int getAvrgVstrCnt() {

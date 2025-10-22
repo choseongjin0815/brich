@@ -1,8 +1,6 @@
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<input type="hidden" value="${rowItem.usrId}"/>
-<input type="hidden" value="${rowItem.autr}"/>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> %>
 <td>
-    <a href="/admin/user_list/${rowItem.usrId}">${rowItem.logId}</a>
+    <a href="/admin/user_detail/${rowItem.usrId}">${rowItem.logId}</a>
 </td>
 <td>${rowItem.nm}</td>
 

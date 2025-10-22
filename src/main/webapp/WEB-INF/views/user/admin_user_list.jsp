@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -14,17 +14,18 @@
 	   <div class="wrapper">
 		   <h1>회원 관리</h1>
 		   <div class="tab">
-		       <label for="all_user">전체</label>
-		       <input type="radio" id="all_user" name="admin_user_tab" class="tab_item" checked="checked"/>
+		       <label for="all-user">전체</label>
+		       <input type="radio" id="all-user" name="admin-user-tab" class="tab-item" checked="checked"/>
 		       <label for="blogger">블로거</label>
-		       <input type="radio" id="blogger" name="admin_user_tab" class="tab_item"/>
+		       <input type="radio" id="blogger" name="admin-user-tab" class="tab-item"/>
 		       <label for="adtr">광고주</label>
-		       <input type="radio" id="adtr" name="admin_user_tab" class="tab_item"/>
+		       <input type="radio" id="adtr" name="admin-user-tab" class="tab-item"/>
 		   </div>
 		   
 		   <div class="container">
+           
 		       <!-- 전체 회원 -->
-		       <table id="all_user_tbl" class="list_tbl">
+		       <table id="all-user-tbl" class="list-tbl">
 		           <colgroup>
 		               <col/>
 		               <col/>
@@ -42,8 +43,8 @@
 		               <tr>
 		                   <th>아이디</th>
 		                   <th>이름</th>
-		                   <th>진행 중 캠페인</th>
-		                   <th>총 진행 캠페인</th>
+		                   <th>현재 진행 중인 캠페인</th>
+		                   <th>총 진행한 캠페인</th>
 		                   <th>가입 승인</th>
 		                   <th>블로그 주소</th>
 		                   <th>최근 블로그 인증일</th>
@@ -59,10 +60,8 @@
 		               <c:when test="${not empty userList}">
 		                   <c:forEach items="${userList}" var="items">
 		                       <tr>
-		                           <input type="hidden" value="${items.usrId}"/>
-		                           <input type="hidden" value="${items.autr}"/>
 		                           <td>
-		                               <a href="/admin/user_list/${items.usrId}">${items.logId}</a>
+		                               <a href="/admin/user_detail/${items.usrId}">${items.logId}</a>
 		                           </td>
 		                           <td>${items.nm}</td>
 		                           <td>${items.cmpnPrgrssCnt}</td>
@@ -85,7 +84,7 @@
 		       </table>
 		       
 		       <!-- 블로거 -->
-		       <table id="blogger_tbl" class="list_tbl">
+		       <table id="blogger-tbl" class="list-tbl">
 		           <colgroup>
 	                   <col/>
 	                   <col/>
@@ -105,8 +104,8 @@
 	                       <th>블로그 주소</th>
 	                       <th>최근 블로그 인증일</th>
 	                       <th>구독 만료일</th>
-	                       <th>진행 중 캠페인</th>
-	                       <th>총 진행 캠페인</th>
+	                       <th>현재 진행 중인 캠페인</th>
+	                       <th>총 진행한 캠페인</th>
 	                       <th>최근 로그인</th>
 	                       <th>징계 횟수</th>
 	                       <th>가입 일시</th>
@@ -132,7 +131,7 @@
 		       </table>
 		       
 		       <!-- 광고주 -->
-		       <table id="adtr_tbl" class="list_tbl">
+		       <table id="adtr-tbl" class="list-tbl">
 		           <colgroup>
 	                   <col/>
 	                   <col/>
@@ -148,8 +147,8 @@
 	                       <th>아이디</th>
 	                       <th>이름</th>
 	                       <th>가입 승인</th>
-	                       <th>진행 중 캠페인</th>
-	                       <th>총 진행 캠페인</th>
+	                       <th>현재 진행 중인 캠페인</th>
+	                       <th>총 진행한 캠페인</th>
 	                       <th>최근 로그인</th>
 	                       <th>징계 횟수</th>
 	                       <th>가입 일시</th>
@@ -160,7 +159,7 @@
 	               <c:choose>
 	                   <c:when test="${not empty userList}">
 	                       <c:forEach items="${userList}" var="items">
-	                       <c:if test="${items.autr == '1004'}">
+	                       <c:if test="${items.autr == '1004' || items.autr == '1007'}">
 	                            <tr>
 	                                <c:set var="isBlogger" value="false" scope="request"/>
 	                                <c:set var="isAdtr" value="true" scope="request"/>

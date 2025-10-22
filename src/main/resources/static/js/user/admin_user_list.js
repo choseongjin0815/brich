@@ -3,12 +3,12 @@
  */
 $().ready(function() {
     
-    var tables = [$('#all_user_tbl'), $('#blogger_tbl'), $('#adtr_tbl')];
+    var tables = [$("#all-user-tbl"), $("#blogger-tbl"), $("#adtr-tbl")];
     
-    $('table').hide();
-    $('#all_user_tbl').show();
+    $("table").hide();
+    $("#all-user-tbl").show();
     
-    $('input[name="admin_user_tab"').on('change', function() {
+    $("input[name='admin-user-tab'").on("change", function() {
        
        var selectedOption = $(this).attr("id");
        // alert(selectedOption);
@@ -17,7 +17,7 @@ $().ready(function() {
           table.hide();
        });
        
-       $('#' + selectedOption + '_tbl').show();
+       $("#" + selectedOption + "-tbl").show();
     });
     
 });
