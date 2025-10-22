@@ -15,18 +15,17 @@ $().ready(function() {
        }
     });
     $("input[type='checkbox'][name='check']").on("change", function () {
-      var length = $("input[type='checkbox'][name='check']:not(:checked)").length;
+          var length = $("input[type='checkbox'][name='check']:not(:checked)").length;
       if (length === 0) {
         $("#check-all").prop("checked", true);
       } else {
-        $("#check-all").prop("checked", false);
+          $("#check-all").prop("checked", false);
       }
     });
     
     $(".regist-btn").on("click", function() {
-           console.log("dddddd");
-           $(".user-regist-form").submit();
-     });
+         $(".user-regist-form").submit();
+    });
     
     $(".next-btn").on("click", function() {
         var role = $(this).data("role"); 
@@ -37,7 +36,5 @@ $().ready(function() {
        else {
         alert("모두 동의해야합니다!!!");
        } 
-    });
-    
-  
+    });  
 });

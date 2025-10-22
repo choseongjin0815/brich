@@ -5,7 +5,7 @@
 <mapper namespace="com.ktdsuniversity.edu.domain.user.dao.impl.UserDaoImpl">
     <select parameterType="com.ktdsuniversity.edu.domain.user.vo.request.RequestUserLoginVO"
             resultType="com.ktdsuniversity.edu.domain.user.vo.UserVO"
-            id="selectUserByLogIdAndPwd">
+            id="selectUserByLogIdAndAutr">
         SELECT USR_ID
              , LOG_ID
              , EML
@@ -34,7 +34,7 @@
              , DLT_YN
          FROM USR
         WHERE LOG_ID = #{logId}
-          AND PSWRD = #{pswrd}
+          AND AUTR IN('1001', '1002', '1003', '1004')
     </select>
     <insert parameterType="com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO"
             id="insertNewUser">
@@ -61,7 +61,7 @@
         , #{eml}
         , #{pswrd}
         , #{nm}
-        , 'asdasdsadsadsa'
+        , #{salt}
         , #{autr}
         , SYSDATE
         , #{usrId}
@@ -70,4 +70,48 @@
         )
     </insert>
     
+    <select parameterType="string"
+            resultType="_int"
+            id="selectUserCountByLogId">
+        SELECT COUNT(USR_ID)
+          FROM USR 
+         WHERE LOG_ID = #{logId}    
+    </select>
+    
+    <select id="selectUnblockUserByLogId"
+            parameterType="string"
+            resultType="_int">
+        SELECT COUNT(USR_ID)
+          FROM USR
+		 WHERE LOG_ID = #{_parameter}
+		   AND BLCK_YN = 'Y'
+		   AND RCNT_LGN_BLCK_DT <![CDATA[<=]]> SYSDATE - 1 / 24
+		   AND DLT_YN = 'N'  
+    </select>
+    
+    <update id="updateLoginFailCountByLogId"
+            parameterType="string">        
+		UPDATE USR 
+		   SET LGN_PL_CNT = LGN_PL_CNT + 1
+		      ,RCNT_LGN_FL_DT = SYSDATE
+		 WHERE LOG_ID = #{_parameter}
+    </update>
+    
+    <update id="updateBlockByLogid"
+            parameterType="string">
+        UPDATE USR
+		   SET BLCK_YN = 'Y'
+		     , RCNT_LGN_BLCK_DT = SYSDATE
+	     WHERE LOG_ID = #{_parameter}
+		   AND LGN_PL_CNT >= 5
+    </update>
+    
+    <update id="updateLoginSuccessByLogId"
+            parameterType="string">
+        UPDATE USR
+		   SET BLCK_YN = 'N'
+		     , LGN_PL_CNT = 0
+		     , RCNT_LGN_SCS_DT = SYSDATE
+		 WHERE LOG_ID = #{_parameter}
+    </update>
 </mapper>

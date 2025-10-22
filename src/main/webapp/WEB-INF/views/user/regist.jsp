@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <!DOCTYPE html>
 <html>
@@ -7,6 +8,7 @@
 <meta charset="UTF-8">
 <title>회원가입</title>
 <link type="text/css" rel="stylesheet" href="/css/brich.css">
+<link type="text/css" rel="stylesheet" href="/css/regist.css">
 <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
 <script type="text/javascript" src="/js/user/regist.js"></script>
 <script type="text/javascript" src="/js/common/validate.js"></script>
@@ -18,17 +20,19 @@
         </div>
         <div class="regist-main">
             <c:if test="${role eq 'advertiser' }">
-	            <form method="post" action="/regist" class="user-regist-form">
+	            <form:form modelAttribute="requestUserRegistVO" method="post" action="/regist" class="user-regist-form">
 	                <div class="right-flex">
 		                <div class="input-flex short"> 
 			                <label for="id" class="require">아이디</label>
-			                <input type="text" id="id" name="logId" placeholder="아이디를 입력해주세요"/>
+			                <input type="text" id="id" name="logId" class="logId" value="${registData.logId}" placeholder="아이디를 입력해주세요"/>
+			                <form:errors path="logId" cssClass="validate-require" />
 		                </div>
-		                <div class="regist-side-btn"><div>중복 확인</div></div>
+		                <div class="regist-side-btn"><div class="duplicate-id">중복 확인</div></div>
 	                </div>
 	                <div class="input-flex">
 		                <label for="name" class="require">이름</label>   
-		                <input type="text" id="name" name="nm" placeholder="이름을 입력해주세요"/>
+		                <input type="text" id="name" name="nm" placeholder="이름을 입력해주세요" value="${registData.nm}"/>
+	                     <form:errors path="nm" cssClass="validate-require" />
 	                </div>
 	                <div class="input-flex">
 		                <label for="company" class="require">사업자명</label>
@@ -37,8 +41,9 @@
 	                <div>사업자 등록증</div>
 	                <div class="right-flex">
 		                <div class="input-flex short">
-			                <label for="email" class="require">이메일</label>
-			                <input type="text" id="email" name="eml" placeholder="이메일을 입력해주세요"/>
+			                <label for="email" class="require" >이메일</label>
+			                <input type="text" id="email" name="eml" value="${registData.eml}" placeholder="이메일을 입력해주세요"/>
+		                    <form:errors path="eml" cssClass="validate-require" />
 		                </div>
 		                <div class="regist-side-btn"><div>인증 번호</div></div>
 	                </div>
@@ -52,24 +57,28 @@
 	                <div class="input-flex">
 	                    <label for="password" class="require">비밀번호</label>
 		                <input type="password" id="password" name="pswrd" placeholder="8~16자리 비밀번호 입력"/>
-		                <input type="password" id="password-confirm" placeholder="비밀번호 확인"/> 
+		                 <form:errors path="pswrd" cssClass="validate-require" />
+		                <input type="password" id="password-confirm" name="pswrdConfirm" placeholder="비밀번호 확인"/> 
+		                <c:if test="${not empty passwordError}"> 
+		                   <span class='validate-password-confirm'>비밀번호가 일치하지 않습니다.</span>
+		                </c:if>
 	                </div>
-	                <input type="hidden" name="autr" value="1004"/>
-	                <div class="regist-btn">회원가입</div>
-	            </form>
+	                <input type="hidden" name="autr" value="1007"/>
+	                <button type="button" class="regist-btn" data-dependencies="#id,#name,#company,#email,#email-confirm,#password,#password-confirm ">회원가입</button>
+	            </form:form>
             </c:if>
             <c:if test="${role eq 'blogger'}">
-                <form method="post" action="/regist" class="user-regist-form">
+                <form:form modelAttribute="requestUserRegistVO" method="post" action="/regist" class="user-regist-form">
                     <div class="right-flex">
                         <div class="input-flex short"> 
                             <label for="id" class="require">아이디</label>
-                            <input type="text" id="id" placeholder="아이디를 입력해주세요"/>
+                            <input type="text" id="id" name="logId" class="logId" placeholder="아이디를 입력해주세요"/>
                         </div>
-                        <div class="regist-side-btn"><div>중복 확인</div></div>
+                        <div class="regist-side-btn"><div class="duplicate-id">중복 확인</div></div>
                     </div>
                     <div class="input-flex">
                         <label for="name" class="require">이름</label>   
-                        <input type="text" id="name" placeholder="이름을 입력해주세요"/>
+                        <input type="text" id="name" name="nm" placeholder="이름을 입력해주세요"/>
                     </div>
                     <div class="right-flex">
                         <div class="input-flex short">
@@ -88,8 +97,12 @@
                     </div>
                     <div class="input-flex">
                         <label for="password" class="require">비밀번호</label>
-                        <input type="password" id="password" placeholder="8~16자리 비밀번호 입력"/>
-                        <input type="password" id="password-confirm" placeholder="비밀번호 확인"/> 
+                        <input type="password" id="password" name="pswrd" placeholder="8~16자리 비밀번호 입력"/>
+                        <input type="password" id="password-confirm" name="pswrdConfirm" placeholder="비밀번호 확인"/> 
+                        <c:if test="${not empty passwordError}"> 
+                           <span class='validate-password-confirm'>비밀번호가 일치하지 않습니다.</span>
+                        </c:if>
+                        
                     </div>
                     <div class="input-flex">
                         <label>카테고리</label>
@@ -105,8 +118,8 @@
                     </div>
                     <input type="hidden" name="autr" value="1002"/>
                     
-                    <div class="regist-btn">회원가입</div>
-                </form>   
+                    <button type="button" class="regist-btn">회원가입</button>
+                </form:form>   
             </c:if>
         </div>
     </div>

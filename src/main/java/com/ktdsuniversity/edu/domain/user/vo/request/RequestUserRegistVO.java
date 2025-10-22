@@ -1,20 +1,32 @@
 package com.ktdsuniversity.edu.domain.user.vo.request;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+
 public class RequestUserRegistVO{
 	
 	private String usrId;
-	
+	@NotEmpty(message="필수 입력입니다.")
 	private String logId;
 	
+	@NotEmpty(message="필수 입력입니다.")
 	private String nm;
 	
+	@Email(message="이메일 형식으로 작성하세요.")
+	@NotEmpty(message="필수 입력입니다.")
 	private String eml;
 	
+	@NotEmpty(message="필수 입력입니다.")
 	private String pswrd;
+	
+	@NotEmpty(message="필수 입력입니다.")
+	private String pswrdConfirm;
 	
 	private String autr;
 	
 	private String cmpny;
+	
+	private String salt;
 
 	public String getUsrId() {
 		return this.usrId;
@@ -72,12 +84,27 @@ public class RequestUserRegistVO{
 		this.cmpny = cmpny;
 	}
 
+	public String getPswrdConfirm() {
+		return this.pswrdConfirm;
+	}
+
+	public void setPswrdConfirm(String pswrdConfirm) {
+		this.pswrdConfirm = pswrdConfirm;
+	}
+
+	public String getSalt() {
+		return this.salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
 	@Override
 	public String toString() {
 		return "RequestUserRegistVO [usrId=" + usrId + ", logId=" + logId + ", nm=" + nm + ", eml=" + eml + ", pswrd="
-				+ pswrd + ", autr=" + autr + ", cmpny=" + cmpny + ", toString()=" + super.toString() + "]";
+				+ pswrd + ", pswrdConfirm=" + pswrdConfirm + ", autr=" + autr + ", cmpny=" + cmpny + ", salt=" + salt
+				+ ", toString()=" + super.toString() + "]";
 	}
-
-	
 	
 }

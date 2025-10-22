@@ -19,5 +19,7 @@
         광고주
     </c:when>
 </c:choose>
+    <a href="/logout">로그아웃</a>
+
 </body>
 </html>

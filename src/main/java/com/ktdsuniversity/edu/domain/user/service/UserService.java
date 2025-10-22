@@ -10,4 +10,6 @@ public interface UserService {
 
 	public boolean createNewUser(RequestUserRegistVO requestUserRegistVO);
 
+	public int readUserIdByLogId(String logId);
+
 }

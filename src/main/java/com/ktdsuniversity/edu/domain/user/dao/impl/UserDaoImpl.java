@@ -22,13 +22,38 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
     }
 
 	@Override
-	public UserVO selectUserByLogIdAndPwd(RequestUserLoginVO requestUserLoginVO) {
-		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUserByLogIdAndPwd", requestUserLoginVO);
+	public UserVO selectUserByLogIdAndAutr(RequestUserLoginVO requestUserLoginVO) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUserByLogIdAndAutr", requestUserLoginVO);
 	}
 
 	@Override
 	public int insertNewUser(RequestUserRegistVO requestUserRegistVO) {
 		return super.getSqlSession().insert(this.NAME_SPACE + "insertNewUser", requestUserRegistVO);
+	}
+
+	@Override
+	public int selectUserCountByLogId(String logId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUserCountByLogId", logId);
+	}
+
+	@Override
+	public int selectUnblockUserByLogId(String logId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUnblockUserByLogId", logId);
+	}
+
+	@Override
+	public int updateLoginFailCountByLogId(String logId) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateLoginFailCountByLogId", logId);
+	}
+
+	@Override
+	public int updateBlockByLogid(String logId) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateBlockByLogid", logId);
+	}
+
+	@Override
+	public int updateLoginSuccessByLogId(String logId) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateLoginSuccessByLogId");
 	}
 
 
