@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.domain.campaign.vo;
 
+import java.util.List;
+
 import com.ktdsuniversity.edu.global.common.BaseVO;
 
 /**
@@ -197,32 +199,7 @@ public class CampaignVO extends BaseVO{
      */
     private String cnfmDt;
     
-	/**
-	 * 좋아요 수
-	 */
-	public int likeCnt;
-	
-	/**
-	 * 현재 신청자
-	 */
-	public int adptCnt;
-
-    public int getLikeCnt() {
-		return this.likeCnt;
-	}
-
-	public void setLikeCnt(int likeCnt) {
-		this.likeCnt = likeCnt;
-	}
-
-	public int getAdptCnt() {
-		return this.adptCnt;
-	}
-
-	public void setAdptCnt(int adptCnt) {
-		this.adptCnt = adptCnt;
-	}
-
+    
 	public String getCmpnId() {
         return this.cmpnId;
     }
@@ -448,7 +425,7 @@ public class CampaignVO extends BaseVO{
 				+ cmpnEndDt + ", rtrnRsn=" + rtrnRsn + ", addrs=" + addrs + ", attchGrpId=" + attchGrpId
 				+ ", cmpnTitle=" + cmpnTitle + ", cmpnCn=" + cmpnCn + ", offrCn=" + offrCn + ", offrPrc=" + offrPrc
 				+ ", pstMssn=" + pstMssn + ", hstg=" + hstg + ", ntfcn=" + ntfcn + ", view=" + view + ", cnfmDt="
-				+ cnfmDt + ", likeCnt=" + likeCnt + ", adptCnt=" + adptCnt + "]";
+				+ cnfmDt + "]";
 	}
     
     

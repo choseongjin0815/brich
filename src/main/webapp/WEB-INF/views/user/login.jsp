@@ -22,7 +22,7 @@
     </form>
     <a href="/">로그인 정보를 잊으셨나요?</a>
     <a href="/choose-role">SIGN UP</a>
-    <a href="/">비회원으로 둘러보기</a>
+    <a href="/campaignmain">비회원으로 둘러보기</a>
     
     </div>
 </body>
