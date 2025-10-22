@@ -186,7 +186,7 @@ public class CampaignVO extends BaseVO{
     /**
      * @ColumnName VIEW
      * @ColumnType NUMBER(6, 0)
-     * @ColumnComment 사용자가 작성한 캠페인의 상세 내용
+     * @ColumnComment 조회수
      */
     private int view;
 
@@ -196,8 +196,34 @@ public class CampaignVO extends BaseVO{
      * @ColumnComment 캠페인 승인일
      */
     private String cnfmDt;
+    
+	/**
+	 * 좋아요 수
+	 */
+	public int likeCnt;
+	
+	/**
+	 * 현재 신청자
+	 */
+	public int adptCnt;
 
-    public String getCmpnId() {
+    public int getLikeCnt() {
+		return this.likeCnt;
+	}
+
+	public void setLikeCnt(int likeCnt) {
+		this.likeCnt = likeCnt;
+	}
+
+	public int getAdptCnt() {
+		return this.adptCnt;
+	}
+
+	public void setAdptCnt(int adptCnt) {
+		this.adptCnt = adptCnt;
+	}
+
+	public String getCmpnId() {
         return this.cmpnId;
     }
     
@@ -422,7 +448,7 @@ public class CampaignVO extends BaseVO{
 				+ cmpnEndDt + ", rtrnRsn=" + rtrnRsn + ", addrs=" + addrs + ", attchGrpId=" + attchGrpId
 				+ ", cmpnTitle=" + cmpnTitle + ", cmpnCn=" + cmpnCn + ", offrCn=" + offrCn + ", offrPrc=" + offrPrc
 				+ ", pstMssn=" + pstMssn + ", hstg=" + hstg + ", ntfcn=" + ntfcn + ", view=" + view + ", cnfmDt="
-				+ cnfmDt + ", toString()=" + super.toString() + "]";
+				+ cnfmDt + ", likeCnt=" + likeCnt + ", adptCnt=" + adptCnt + "]";
 	}
     
     

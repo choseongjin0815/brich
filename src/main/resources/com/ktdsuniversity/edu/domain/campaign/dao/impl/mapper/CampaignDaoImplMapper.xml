@@ -65,4 +65,66 @@
          WHERE CMPN_PST_ADPT_ID = #{cmpnPstAdptId}
            AND DLT_YN = 'N'
     </update>
+    
+    <select id="selectCampaignDetailById"
+            parameterType="string"
+            resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
+    SELECT CMPN_ID
+         , USR_ID
+         , CTG_CD
+         , STTS_CD
+         , PRSNN_PRC
+         , DRTN_PRC
+         , PRSNN_DSCNT
+         , DRTN_DSCNT
+         , CMPN_PRNT_ID
+         , RCRT_STRT_DT
+         , RCRT_PRSNN
+         , PRGRSS_DRTN
+         , RCRT_END_DT
+         , PST_END_DT
+         , CMPN_END_DT
+         , RTRN_RSN
+         , ADDRS
+         , ATTCH_GRP_ID
+         , CMPN_TITLE
+         , CMPN_CN
+         , OFFR_CN
+         , OFFR_PRC
+         , PST_MSSN
+         , HSTG
+         , NTFCN
+         , "VIEW"
+         , CNFM_DT
+         , CRT_DT
+         , CRTR
+         , UPDT_DT
+         , MTTR
+         , DLT_YN
+    FROM CMPN
+    WHERE CMPN_ID = #{_parameter}
+    </select>
+    
+    
+    <select id="selectCategory"
+            resultType="com.ktdsuniversity.edu.global.common.CommonCodeVO">
+     SELECT CD_ID
+          , CD_NM
+          , PRNT_CD_ID
+          , USE_YN
+          , SRT
+          , KEY1
+          , VALUE1
+          , KEY2
+          , VALUE2
+          , KEY3
+          , VALUE3
+          , CRT_DT
+          , CRTR
+          , UPDT_DT
+          , MTTR
+          , DLT_YN 
+      FROM CM_CD
+     WHERE PRNT_CD_ID= '3000'
+    </select>
 </mapper>
