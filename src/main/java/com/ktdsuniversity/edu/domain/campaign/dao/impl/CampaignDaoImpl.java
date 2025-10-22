@@ -35,18 +35,24 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	}
 	
 	@Override
-	public List<ApplicantVO> selectApplicantListByCmpnId(String cmpnId) {
-		return super.getSqlSession().selectList(this.NAME_SPACE + "selectApplicantListByCmpnId", cmpnId);
-	}
-
-	@Override
-	public String selectCmpnStateByCmpnId(String cmpnId) {
-		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCmpnStateByCmpnId", cmpnId);
+	public List<ApplicantVO> selectApplicantListByCmpnId(ApplicantVO applicantVO) {
+		System.out.println(applicantVO);
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectApplicantListByCmpnId", applicantVO);
 	}
 
 	@Override
 	public int updateAdptYnBycmpnApplyId(ApplicantVO applicantVO) {
 		return super.getSqlSession().update(this.NAME_SPACE + "updateAdptYnBycmpnApplyId", applicantVO);
+	}
+
+	@Override
+	public int selectAdoptCount(String campId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectAdoptCount", campId);
+	}
+
+	@Override
+	public CampaignVO selectCampaignInfoByCmpnId(String campId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignInfoByCmpnId", campId);
 	}
 
 

@@ -15,7 +15,8 @@
     </resultMap>
     <select id="selectApplicantListByCmpnId"
             resultMap="ApplicantVOMap"
-            parameterType="string">
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.ApplicantVO">
+        <include refid="Common.paginationHeader" />
         SELECT CPA.CMPN_PST_ADPT_ID
              , CPA.ADPT_YN
              , U.USR_ID
@@ -41,14 +42,20 @@
                       WHERE DLT_YN  = 'N'
                         AND AUTR != '1005') U
             ON U.USR_ID = CPA.BLG_USR_ID
-         WHERE CPA.CMPN_ID = #{_parameter}
+         WHERE CPA.CMPN_ID = #{campId}
            AND CPA.DLT_YN = 'N'
+       <if test='sortCol != null and sortCol != ""'>
+         ORDER BY ${sortCol} ${order}
+       </if>
+       <include refid="Common.paginationFooter"></include>
     </select>
     
-    <select id="selectCmpnStateByCmpnId"
+    <select id="selectCampaignInfoByCmpnId"
             parameterType="string"
-            resultType="string">
+            resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
         SELECT STTS_CD
+             , RCRT_PRSNN
+             , RCRT_END_DT
           FROM CMPN
          WHERE CMPN_ID = #{_parameter}
     </select>
@@ -65,6 +72,15 @@
          WHERE CMPN_PST_ADPT_ID = #{cmpnPstAdptId}
            AND DLT_YN = 'N'
     </update>
+    
+    <select id="selectAdoptCount"
+            parameterType="string">
+        SELECT COUNT(ADPT_YN)
+		  FROM CMPN_PST_ADPT
+		 WHERE CMPN_ID = #{_parameter}
+		   AND ADPT_YN = 'Y'
+		   AND DLT_YN = 'N'
+    </select>
     
     <select id="selectCampaignDetailById"
             parameterType="string"

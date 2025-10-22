@@ -14,7 +14,7 @@ public interface CampaignService {
 
 	CampaignListVO readCampaignList(RequestSearchCampaignVO requestSearchCampaignVO);
 
-	ResponseApplicantListVO readApplicantListById(String cmpnId);
+	ResponseApplicantListVO readApplicantListById(ApplicantVO applicantVO);
 
 	boolean updateAdptYnBycmpnApplyId(ApplicantVO applicantVO);
 

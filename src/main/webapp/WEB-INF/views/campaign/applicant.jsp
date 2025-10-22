@@ -9,12 +9,13 @@
 		<link type="text/css" rel="stylesheet" href="/css/brich.css" />
 		<script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
 		<script type="text/javascript" src="/js/campaign/applicant.js"></script>
+		<script type="text/javascript" src="/js/common/paginator.js"></script>
 	</head>
 	<body>
 	    <jsp:include page="/WEB-INF/views/campaign/campaignTab.jsp" />
 	    <div class="title">
             <div>캠페인 신청자</div>
-            <span>~2025-10-20</span>
+            <span>~${applicantList.campaignInfo.rcrtEndDt}</span>
         </div>
         
         <div class="id-search">
@@ -23,13 +24,27 @@
         </div>
         
         <div class="list-header grid-applicant-columns">
-            <div>신뢰도</div>
-            <div>블로거</div>
-            <div>평균 방문자 수</div>
-            <div>이웃 수</div>
-            <div>스크랩 수</div>
-            <div>전체 방문자 수</div>
-            <div>채택 3 / 5</div>
+            <div>신뢰도
+                <img class="sort desc" data-sort-type="PNLT_CNT" src="/img/arrow-bottom.png" />
+            </div>
+            <div>블로거
+            </div>
+            <div>평균 방문자 수
+                <img class="sort desc" data-sort-type="AVRG_VSTR_CNT" src="/img/arrow-bottom.png" />
+            </div>
+            <div>이웃 수
+                <img class="sort desc" data-sort-type="BLG_NGHBR_CNT" src="/img/arrow-bottom.png" />
+            </div>
+            <div>스크랩 수
+                <img class="sort desc" data-sort-type="SCRP_CNT" src="/img/arrow-bottom.png" />
+            </div>
+            <div>전체 방문자 수
+                <img class="sort desc" data-sort-type="TTL_VSTR_CNT" src="/img/arrow-bottom.png" />
+            </div>
+            <div>채택
+                <span class="adopt-count">${applicantList.adoptCount}</span> / <span class="total-adopt-count">${applicantList.campaignInfo.rcrtPrsnn}</span>
+                <img class="sort desc" data-sort-type="PNLT_CNT" src="/img/arrow-bottom.png" />
+            </div>
         </div>
            
         <c:forEach items="${applicantList.applicantList}" var="applicant">
@@ -56,7 +71,7 @@
                 <div>${applicant.userInfo.scrpCnt}</div>
                 <div>${applicant.userInfo.ttlVstrCnt}</div>
                 <c:choose>
-                    <c:when test="${applicantList.cmpnState eq '2005'}">
+                    <c:when test="${applicantList.campaignInfo.sttsCd eq '2005'}">
                         <c:choose>
                             <c:when test="${applicant.adptYn eq 'Y'}">
                                 <button type="button" name="adopt" class="adopted">채택</button>
@@ -72,5 +87,16 @@
                 </c:choose>
             </div>
         </c:forEach>
+        <jsp:include page="/WEB-INF/views/layout/paginator.jsp">
+            <jsp:param value="${search.listSize}" name="listSize"/>
+            <jsp:param value="${search.havePrevPageGroup}" name="havePrevPageGroup"/>
+            <jsp:param value="${search.prevGroupStartPageNo}" name="prevGroupStartPageNo"/>
+            <jsp:param value="${search.groupStartPageNo}" name="groupStartPageNo"/>
+            <jsp:param value="${search.groupEndPageNo}" name="groupEndPageNo"/>
+            <jsp:param value="${search.pageNo}" name="pageNo"/>
+            <jsp:param value="${search.haveNextPageGroup}" name="haveNextPageGroup"/>
+            <jsp:param value="${search.nextGroupStartPageNo}" name="nextGroupStartPageNo"/>
+            <jsp:param value="${search.pageCount}" name="pageCount"/>
+        </jsp:include>
 	</body>
 </html>

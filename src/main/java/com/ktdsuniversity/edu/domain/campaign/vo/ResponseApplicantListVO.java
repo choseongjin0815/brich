@@ -4,17 +4,11 @@ import java.util.List;
 
 public class ResponseApplicantListVO {
 
-	private String cmpnState;
-
 	private List<ApplicantVO> applicantList;
-
-	public String getCmpnState() {
-		return this.cmpnState;
-	}
 	
-	public void setCmpnState(String cmpnState) {
-		this.cmpnState = cmpnState;
-	}
+	private int adoptCount;
+	
+	private CampaignVO campaignInfo;
 	
 	public List<ApplicantVO> getApplicantList() {
 		return this.applicantList;
@@ -22,6 +16,22 @@ public class ResponseApplicantListVO {
 
 	public void setApplicantList(List<ApplicantVO> applicantList) {
 		this.applicantList = applicantList;
+	}
+
+	public int getAdoptCount() {
+		return this.adoptCount;
+	}
+
+	public void setAdoptCount(int adoptCount) {
+		this.adoptCount = adoptCount;
+	}
+
+	public CampaignVO getCampaignInfo() {
+		return this.campaignInfo;
+	}
+
+	public void setCampaignInfo(CampaignVO campaignInfo) {
+		this.campaignInfo = campaignInfo;
 	}
 
 	@Override

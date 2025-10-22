@@ -1,20 +1,21 @@
 package com.ktdsuniversity.edu.domain.campaign.controller;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
+
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
-import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.ApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignListVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.ResponseApplicantListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ktdsuniversity.edu.domain.campaign.vo.ApplicantVO;
-import com.ktdsuniversity.edu.domain.campaign.vo.ResponseApplicantListVO;
+import com.ktdsuniversity.edu.global.common.RequestSearchVO;
 
 @Controller
 public class CampaignController {
@@ -41,10 +42,18 @@ public class CampaignController {
     
     
     @GetMapping("/adv/applicant/{cmpnId}")
-    public String readApplicantList(Model model, @PathVariable String cmpnId) {
-    	ResponseApplicantListVO applicantList = this.campaignService.readApplicantListById(cmpnId);
+    public String readApplicantList(Model model, @PathVariable String cmpnId,
+    								ApplicantVO applicantVO,
+    								RequestSearchVO requestSearchVO) {
+    	applicantVO.setCampId(cmpnId);
+    	if (applicantVO.getOrder() != null) {
+    		applicantVO.setOrder(applicantVO.getOrder().toUpperCase());
+    	}
+    	ResponseApplicantListVO applicantList = this.campaignService.readApplicantListById(applicantVO);
     	
     	model.addAttribute("applicantList", applicantList);
+    	model.addAttribute("search", requestSearchVO);
+    	
     	return "campaign/applicant";
     }
     

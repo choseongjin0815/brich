@@ -271,6 +271,10 @@ body {
 .list-header {
     background-color: #F4F2FF;
     color: #6E6893;
+    
+    & > div > img.asc {
+        transform: rotate(180deg);
+    }
 }
 
 .grid-applicant-columns {

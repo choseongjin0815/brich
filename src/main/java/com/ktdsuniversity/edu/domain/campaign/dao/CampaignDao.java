@@ -12,10 +12,12 @@ public interface CampaignDao {
 
 	List<CommonCodeVO> selectCategory();
 
-	List<ApplicantVO> selectApplicantListByCmpnId(String cmpnId);
-
-	String selectCmpnStateByCmpnId(String cmpnId);
+	List<ApplicantVO> selectApplicantListByCmpnId(ApplicantVO applicantVO);
 
 	int updateAdptYnBycmpnApplyId(ApplicantVO applicantVO);
+
+	int selectAdoptCount(String campId);
+
+	CampaignVO selectCampaignInfoByCmpnId(String campId);
 
 }

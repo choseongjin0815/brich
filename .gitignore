@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 /src/main/resources/application.yml
 /target/classes/application.yml
+bin/
 
 ### STS ###
 .apt_generated

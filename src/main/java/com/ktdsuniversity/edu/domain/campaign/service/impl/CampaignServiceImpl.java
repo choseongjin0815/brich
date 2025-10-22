@@ -49,13 +49,16 @@ public class CampaignServiceImpl implements CampaignService {
 		return campaignListVO;
 	}
 
-	public ResponseApplicantListVO readApplicantListById(String cmpnId) {
-		List<ApplicantVO> applicant = this.campaignDao.selectApplicantListByCmpnId(cmpnId);
-		String cmpnState = this.campaignDao.selectCmpnStateByCmpnId(cmpnId);
+	public ResponseApplicantListVO readApplicantListById(ApplicantVO applicantVO) {
+		List<ApplicantVO> applicant = this.campaignDao.selectApplicantListByCmpnId(applicantVO);
+		int adoptCount = this.campaignDao.selectAdoptCount(applicantVO.getCampId());
+		CampaignVO campaignInfo = this.campaignDao.selectCampaignInfoByCmpnId(applicantVO.getCampId());
 		
 		ResponseApplicantListVO applicantList = new ResponseApplicantListVO();
 		applicantList.setApplicantList(applicant);
-		applicantList.setCmpnState(cmpnState);
+		applicantList.setAdoptCount(adoptCount);
+		applicantList.setCampaignInfo(campaignInfo);
+		
 		return applicantList;
 	}
 
