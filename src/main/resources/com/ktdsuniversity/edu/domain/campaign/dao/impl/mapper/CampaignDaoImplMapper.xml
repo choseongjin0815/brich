@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktdsuniversity.edu.domain.campaign.dao.impl.CampaignDaoImpl">
+    <resultMap id="ApplicantVOMap"
+               type="com.ktdsuniversity.edu.domain.campaign.vo.ApplicantVO"
+               autoMapping="true">
+        <id column="CMPN_PST_ADPT_ID" property="cmpnPstAdptId" />
+        <association property="userInfo"
+                    javaType="com.ktdsuniversity.edu.domain.user.vo.UserVO"
+                    autoMapping="true">
+            <id column="USR_ID" property="usrId"></id>
+        </association>
+    </resultMap>
+    <select id="selectApplicantListByCmpnId"
+            resultMap="ApplicantVOMap"
+            parameterType="string">
+        SELECT CPA.CMPN_PST_ADPT_ID
+             , CPA.ADPT_YN
+             , U.USR_ID
+             , U.LOG_ID
+             , U.PNLT_CNT
+             , U.BLG_ADDRS
+             , U.TTL_VSTR_CNT
+             , U.AVRG_VSTR_CNT
+             , U.BLG_NGHBR_CNT
+             , U.SCRP_CNT
+             , U.DLT_YN
+          FROM CMPN_PST_ADPT CPA
+         INNER JOIN (SELECT USR_ID
+                          , LOG_ID
+                          , PNLT_CNT
+                          , BLG_ADDRS
+                          , TTL_VSTR_CNT
+                          , AVRG_VSTR_CNT
+                          , BLG_NGHBR_CNT
+                          , SCRP_CNT
+                          , DLT_YN
+                       FROM USR
+                      WHERE DLT_YN  = 'N'
+                        AND AUTR != '1005') U
+            ON U.USR_ID = CPA.BLG_USR_ID
+         WHERE CPA.CMPN_ID = #{_parameter}
+           AND CPA.DLT_YN = 'N'
+    </select>
+    
+    <select id="selectCmpnStateByCmpnId"
+            parameterType="string"
+            resultType="string">
+        SELECT STTS_CD
+          FROM CMPN
+         WHERE CMPN_ID = #{_parameter}
+    </select>
+    
+    <update id="updateAdptYnBycmpnApplyId"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.ApplicantVO">
+        UPDATE CMPN_PST_ADPT
+        <if test='adptYn == "adopted"'>
+           SET ADPT_YN = 'N'
+        </if>
+        <if test='adptYn == "unadopted"'>
+           SET ADPT_YN = 'Y'
+        </if>
+         WHERE CMPN_PST_ADPT_ID = #{cmpnPstAdptId}
+           AND DLT_YN = 'N'
+    </update>
+</mapper>

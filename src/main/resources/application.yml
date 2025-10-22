@@ -46,3 +46,8 @@ spring:
 #난독화를 할 때 확장자를 가릴것인지 아닌지에 대한 설정
       hide-ext: 
         enable: true
+naver-api:
+  clientId: "tFkm1h795OKRNPMxt5uK"
+  clientSecret: "Y3JVU2efH5"
+            
+   
