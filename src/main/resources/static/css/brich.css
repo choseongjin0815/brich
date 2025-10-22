@@ -1,0 +1,125 @@
+body {
+	color: #333;
+	margin: 0;
+}
+
+.campaign-tab {
+    display: flex;
+    font-size: 1rem;
+    
+    & > label {
+       flex-basis: 100px;
+       text-align: center;
+       border-bottom: 1px solid #C6C2DE;
+    }
+    
+    & > input[name="tab"] {
+        display: none;
+        
+        &:checked + label {
+           border-bottom: 3px solid #333;
+        }
+    }
+}
+
+.title {
+    font-size: 2.25rem;
+    color: #5A6ACF;
+    font-weight: bold;
+    
+    & > div {
+       display: inline-block;
+    }
+    
+    & > span {
+       font-size: 1rem;
+       color: #aaa;
+    }
+}
+
+.id-search {
+    width: 300px;
+    height: 30px;
+    display: flex;
+    
+    justify-content: center;
+    align-items: center;
+    
+    box-sizing: border-box;
+    border: 1px solid #6D5BD0;
+    border-radius: 6px;
+    background-color: #F4F2FF;
+    
+    & > img {
+       width: 20px;
+       height: 20px;
+    }
+    
+    & > input {
+       width: 100%;
+       border: none;
+       height: 100%;
+       padding: 0;
+       border-radius: 6px;
+       background-color: #F4F2FF;
+       
+       &:focus {
+           outline: none;
+       }
+    }
+}
+
+.list-header {
+    background-color: #F4F2FF;
+    color: #6E6893;
+}
+
+.grid-applicant-columns {
+    width: 1300px;
+    height: 40px;
+    
+	display: grid;
+    grid-template-columns: 100px auto repeat(5, 150px);
+    align-items: center;
+    
+    & > div {
+        text-align: center;
+    }
+}
+
+.apllicant {
+	height: 60px;
+	box-sizing: border-box;
+	
+    border-bottom: 1px solid #D9D5EC;
+    
+    & > button {
+        width: 50px;
+        height: 30px;
+        
+        box-sizing: border-box;
+        margin: 0 auto;
+        font-size: 0.75rem;
+        font-weight: bold;
+        
+        border: 0;
+        border-radius: 5px;
+        text-align: center;
+    }
+    
+    & > .unadopted {
+	    border: 1px solid #7B61FF;
+	    background-color: #fff;
+    }
+    
+    & > .adopted {
+        background-color: #7B61FF;
+        color: #fff;
+    }
+    
+    & > .disabled {
+        background-color: #eee;
+        color: #ccc;
+        border: 0;
+    }
+}

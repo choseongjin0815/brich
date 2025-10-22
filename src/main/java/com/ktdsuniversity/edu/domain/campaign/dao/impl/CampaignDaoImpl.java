@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.ApplicantVO;
 
 
 @Repository
@@ -31,6 +32,21 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	@Override
 	public List<CommonCodeVO> selectCategory() {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectCategory");
+	}
+	
+	@Override
+	public List<ApplicantVO> selectApplicantListByCmpnId(String cmpnId) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectApplicantListByCmpnId", cmpnId);
+	}
+
+	@Override
+	public String selectCmpnStateByCmpnId(String cmpnId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCmpnStateByCmpnId", cmpnId);
+	}
+
+	@Override
+	public int updateAdptYnBycmpnApplyId(ApplicantVO applicantVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateAdptYnBycmpnApplyId", applicantVO);
 	}
 
 
