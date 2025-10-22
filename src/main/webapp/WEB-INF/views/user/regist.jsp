@@ -73,17 +73,21 @@
                         <div class="input-flex short"> 
                             <label for="id" class="require">아이디</label>
                             <input type="text" id="id" name="logId" class="logId" placeholder="아이디를 입력해주세요"/>
+                            <form:errors path="logId" cssClass="validate-require" /> 
                         </div>
                         <div class="regist-side-btn"><div class="duplicate-id">중복 확인</div></div>
                     </div>
                     <div class="input-flex">
                         <label for="name" class="require">이름</label>   
                         <input type="text" id="name" name="nm" placeholder="이름을 입력해주세요"/>
+                        <form:errors path="nm" cssClass="validate-require" />
+                        
                     </div>
                     <div class="right-flex">
                         <div class="input-flex short">
                             <label for="email" class="require">이메일</label>
                             <input type="text" name="eml" id="email" placeholder="이메일을 입력해주세요"/>
+                            <form:errors path="eml" cssClass="validate-require" />
                         </div>
                             <div class="regist-side-btn"><div>인증 번호</div>
                         </div>
@@ -98,6 +102,7 @@
                     <div class="input-flex">
                         <label for="password" class="require">비밀번호</label>
                         <input type="password" id="password" name="pswrd" placeholder="8~16자리 비밀번호 입력"/>
+                        <form:errors path="pswrd" cssClass="validate-require" />
                         <input type="password" id="password-confirm" name="pswrdConfirm" placeholder="비밀번호 확인"/> 
                         <c:if test="${not empty passwordError}"> 
                            <span class='validate-password-confirm'>비밀번호가 일치하지 않습니다.</span>
