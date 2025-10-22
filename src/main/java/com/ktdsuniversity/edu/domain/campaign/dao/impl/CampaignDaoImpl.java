@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ApplicantVO;
 
 
@@ -22,6 +24,16 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
         super.setSqlSessionTemplate(sqlSessionTemplate);
     }
 
+	@Override
+	public CampaignVO selectCampaignDetailById(String campaignId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignDetailById", campaignId);
+	}
+
+	@Override
+	public List<CommonCodeVO> selectCategory() {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectCategory");
+	}
+	
 	@Override
 	public List<ApplicantVO> selectApplicantListByCmpnId(String cmpnId) {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectApplicantListByCmpnId", cmpnId);

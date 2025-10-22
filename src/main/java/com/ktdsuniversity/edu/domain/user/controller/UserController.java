@@ -55,6 +55,7 @@ public class UserController {
     		httpSession.setAttribute("__LOGIN_USER__", loginUser);
     	}
     	return "redirect:" + nextUrl;
+
     }
 
     /**
