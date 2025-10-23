@@ -12,14 +12,12 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
         <div class="main">
             <div>캠페인</div>
             <div>카테고리</div>
-            <form class="search_section">
-                <label class="category__radio noview">
-                    <input type="radio" name="category" value="ALL" checked />
-                </label>  
+            <form class="search_section"> 
                 <c:forEach items="${category}" var="category">
                     <label class="category__radio">
-                        <input type="radio" name="category" value="${category.cdNm}"/>
-                        <span>${category.cdNm} </span>
+                        <input type="radio" name="category" value="${category.cdNm}" 
+						 ${category.cdId eq search.category ? 'checked' : ''} />
+                        <span>${category.cdNm}</span>
                     </label>    
                 </c:forEach>
                 <div>필터&검색</div>
@@ -35,10 +33,11 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
             </form> 
             
           <div>
-            <a href="/campaigndetail/CMPN-20250919-000004">dd</a>
-                <c:forEach items="${campaignList}" var="campaignList">
-                    <div> ${campaignList.cmpnTitle} </div>
-                </c:forEach>
+             <c:forEach items="${campaignList}" var="campaignList">
+  				<div>
+					<a href="/campaigndetail/${campaignList.cmpnId}">${campaignList.cmpnTitle}</a>
+				</div>
+             </c:forEach>
           </div>
         </div>
       </div>

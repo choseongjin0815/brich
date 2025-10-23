@@ -189,7 +189,10 @@
 			                         CONNECT BY PRIOR CD_ID = PRNT_CD_ID)
 			  AND CMPN.CTG_CD  = '3001'  
 			  AND CMPN.STTS_CD = '2005'   
-			    
+			  ORDER BY
+		        CASE WHEN #{sortBy} = 'latest'   THEN CMPN.RCRT_STRT_DT END  DESC ,
+		        CASE WHEN #{sortBy} = 'deadline' THEN CMPN.RCRT_END_DT  END  ASC  ,
+		        CASE WHEN #{sortBy} = 'popular'  THEN LIKE_CNT 		    END  DESC			   
     </select>
     
 

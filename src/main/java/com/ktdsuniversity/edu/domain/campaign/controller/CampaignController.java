@@ -41,13 +41,15 @@ public class CampaignController {
     @GetMapping("/campaignmain")
     public String campaignMainPage(RequestSearchCampaignVO requestSearchCampaignVO, Model model,
     						   @SessionAttribute(value = "__LOGIN_USER__", required = false) UserVO loginUser){
+    	
+    	log.info( "입력 파라미터 값 : " + requestSearchCampaignVO.toString());
     	ResponseCampaignListVO CampaignListAndCategory = campaignService.readCampaignListAndCategory(requestSearchCampaignVO);
+    	
     	model.addAttribute("category", CampaignListAndCategory.getCategoryList());
     	model.addAttribute("campaignList", CampaignListAndCategory.getResponseCampaignList());
     	model.addAttribute("search", requestSearchCampaignVO);
     	
-    	log.info( "캠페인 리스트 조회결과 : "+CampaignListAndCategory.getResponseCampaignList().toString());
-    	log.info( "입력 파라미터 값 : " + requestSearchCampaignVO.toString());
+    	log.info( "캠페인 리스트 조회결과 : " + CampaignListAndCategory.getResponseCampaignList().toString());
     	return "campaign/campaignmain";
     }
     

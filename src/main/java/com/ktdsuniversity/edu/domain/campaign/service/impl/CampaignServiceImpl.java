@@ -40,8 +40,8 @@ public class CampaignServiceImpl implements CampaignService {
 		// Level 1 카테고리 목록 구하기
 		List<CommonCodeVO> CategoryList = campaignDao.selectCategoryList();
 		responseCampaignListVO.setCategoryList(CategoryList);
-		
 		log.info("카테고리 목록 : "+ CategoryList.toString());
+		
 		// Level 2 조회조건 세팅
 		if(requestSearchCampaignVO.getCategory() != null ) {
 			// 부모 카테고리 조회
@@ -49,11 +49,10 @@ public class CampaignServiceImpl implements CampaignService {
 			requestSearchCampaignVO.setCategory(searchCatagory);
 			log.info("조회할 카테고리 번호 : " + searchCatagory);
 		}
-		if(requestSearchCampaignVO.getSortBy() != null) {
-			// 정렬
+		if(requestSearchCampaignVO.getSortBy() == null) {
+			// 초기 정렬 세팅
+			requestSearchCampaignVO.setSortBy("latest");
 		}
-		// 캠페인 목록 조회
-		
 		// Level 3 조회
 		responseCampaignListVO.setResponseCampaignList(campaignDao.selectCampaignListCategoryAndSortBy(requestSearchCampaignVO));
 			
