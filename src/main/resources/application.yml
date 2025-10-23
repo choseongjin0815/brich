@@ -26,25 +26,25 @@ spring:
           starttls.enable: true
           starttls.required: true
   # hello-spring application의 별도 설정(Customize)
-  app:
-    multipart:
+app:
+  multipart:
   #업로드 가능한 파일들의 목록
   #업로드 가능한 목록이 더 작기에 가능한 애들 적고 업로드시마다 검사한다.
-      whitelist: 
-        .txt,
-        .yml,
-        .html,
-        .css,
-        text/html,
-        image/png,
-        image/gif,
-        image/jpeg,
-        image/tiff,
-        application/pdf,
-        application/x-tika-ooxml,
-        application/x-tika-msoffice,
-        application/zip,
-        text/plain
+    whitelist: 
+      .txt,
+      .yml,
+      .html,
+      .css,
+      text/html,
+      image/png,
+      image/gif,
+      image/jpeg,
+      image/tiff,
+      application/pdf,
+      application/x-tika-ooxml,
+      application/x-tika-msoffice,
+      application/zip,
+      text/plain
 #사용자가 업로드한 파일이 저장될 위치 
 # C:/uploadFiles
 #    base-dir: /Users/choseong-jin/Documents/uploadFiles

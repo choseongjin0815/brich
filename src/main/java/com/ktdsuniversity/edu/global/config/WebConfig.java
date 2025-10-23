@@ -23,6 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
 						"/js/**",
 						"/css/**",
 						"/img/**",
+						"/file/**",
 						"/terms/**",
 						"/choose-role",
 						"/find/**",

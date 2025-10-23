@@ -20,7 +20,11 @@
         </div>
         <div class="regist-main">
             <c:if test="${role eq 'advertiser' }">
-	            <form:form modelAttribute="requestUserRegistVO" method="post" action="/regist" class="user-regist-form">
+	            <form:form modelAttribute="requestUserRegistVO" 
+	                       method="post" 
+	                       action="/regist" 
+	                       enctype="multipart/form-data"
+	                       class="user-regist-form">
 	                <div class="right-flex">
 		                <div class="input-flex short"> 
 			                <label for="id" class="require">아이디</label>
@@ -39,6 +43,7 @@
 		                <input type="text" id="company" name="cmpny" placeholder="사업자명을 입력해주세요"/>
 	                </div>
 	                <div>사업자 등록증</div>
+	                <input id="file" type="file" name="file" />
 	                <div class="right-flex">
 		                <div class="input-flex short">
 			                <label for="email" class="require" >이메일</label>

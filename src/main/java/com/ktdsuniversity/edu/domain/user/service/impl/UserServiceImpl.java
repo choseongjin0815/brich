@@ -2,11 +2,19 @@ package com.ktdsuniversity.edu.domain.user.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ktdsuniversity.edu.domain.blog.controller.SearchBlogController;
+import com.ktdsuniversity.edu.domain.file.dao.FileDao;
+import com.ktdsuniversity.edu.domain.file.dao.FileGroupDao;
+import com.ktdsuniversity.edu.domain.file.util.MultipartFileHandler;
+import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
+import com.ktdsuniversity.edu.domain.file.vo.FileVO;
 import com.ktdsuniversity.edu.domain.user.dao.UserDao;
 import com.ktdsuniversity.edu.domain.user.service.UserService;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
@@ -21,7 +29,14 @@ import com.ktdsuniversity.edu.global.util.SHAEncrypter;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserDao userDao;
+    private UserDao userDao;   
+    @Autowired
+	private MultipartFileHandler multipartFileHandler;
+	@Autowired
+	private FileGroupDao fileGroupDao;
+	@Autowired
+	private FileDao fileDao;
+    
 	private static final Logger log = LoggerFactory.getLogger(SearchBlogController.class);
 
     @Override
@@ -78,7 +93,27 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean createNewUser(RequestUserRegistVO requestUserRegistVO) {
     	
+    	List<FileVO> uploadResult = this.multipartFileHandler.upload(requestUserRegistVO.getFile());
+    	
     	int logIdCount = this.userDao.selectUserCountByLogId(requestUserRegistVO.getLogId());
+    	
+    	if(uploadResult != null && uploadResult.size() > 0) {
+			//1.File Group Insert
+			FileGroupVO fileGroupVO = new FileGroupVO();
+			fileGroupVO.setFlCnt(uploadResult != null ? uploadResult.size(): 0);
+			int insertGroupCount = this.fileGroupDao.insertFileGroup(fileGroupVO);
+			
+			//2.File Insert
+			
+			for(FileVO result : uploadResult) {
+				result.setFlGrpId(fileGroupVO.getFlGrpId());
+				int insertFileCount = this.fileDao.insertFile(result);
+			}
+			//게시글에 첨부되어있는 파일 그룹의 아이디가 무엇인지 알수있다.
+			requestUserRegistVO.setFlGrpId(fileGroupVO.getFlGrpId());
+			
+		}
+    	
     	if(logIdCount == 1) {
     		//추후 Custom Exception으로 전환 예정
     		throw new IllegalArgumentException("이미 존재하는 이메일 입니다.");

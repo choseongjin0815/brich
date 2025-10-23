@@ -1,5 +1,9 @@
 package com.ktdsuniversity.edu.domain.user.vo.request;
 
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -33,6 +37,10 @@ public class RequestUserRegistVO{
 	private String cmpny;
 	
 	private String salt;
+	
+	private String flGrpId;
+	
+	private List<MultipartFile> file;
 
 	public String getUsrId() {
 		return this.usrId;
@@ -113,11 +121,29 @@ public class RequestUserRegistVO{
 	public void setEmailConfirm(String emailConfirm) {
 		this.emailConfirm = emailConfirm;
 	}
+	
+	public String getFlGrpId() {
+		return this.flGrpId;
+	}
+
+	public void setFlGrpId(String flGrpId) {
+		this.flGrpId = flGrpId;
+	}
+
+	public List<MultipartFile> getFile() {
+		return this.file;
+	}
+
+	public void setFile(List<MultipartFile> file) {
+		this.file = file;
+	}
 
 	@Override
 	public String toString() {
 		return "RequestUserRegistVO [usrId=" + usrId + ", logId=" + logId + ", nm=" + nm + ", eml=" + eml + ", pswrd="
 				+ pswrd + ", pswrdConfirm=" + pswrdConfirm + ", emailConfirm=" + emailConfirm + ", autr=" + autr
-				+ ", cmpny=" + cmpny + ", salt=" + salt + ", toString()=" + super.toString() + "]";
+				+ ", cmpny=" + cmpny + ", salt=" + salt + ", flGrpId=" + flGrpId + ", file=" + file + ", toString()="
+				+ super.toString() + "]";
 	}
+
 }

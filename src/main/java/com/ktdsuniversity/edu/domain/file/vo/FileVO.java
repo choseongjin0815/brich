@@ -34,7 +34,7 @@ public class FileVO extends BaseVO{
      * @ColumnType NUMBER(10, 0)
      * @ColumnComment 파일의 크기 (byte)
      */
-    private int flSz;
+    private long flSz;
 
     /**
      * @ColumnName FL_TYP
@@ -87,16 +87,16 @@ public class FileVO extends BaseVO{
     public void setFlNm(String flNm) {
         this.flNm = flNm;
     }
-    
-    public int getFlSz() {
-        return this.flSz;
-    }
-    
-    public void setFlSz(int flSz) {
-        this.flSz = flSz;
-    }
-    
-    public String getFlTyp() {
+
+    public long getFlSz() {
+		return this.flSz;
+	}
+
+	public void setFlSz(long flSz) {
+		this.flSz = flSz;
+	}
+
+	public String getFlTyp() {
         return this.flTyp;
     }
     

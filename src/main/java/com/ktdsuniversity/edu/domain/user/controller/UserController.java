@@ -32,8 +32,6 @@ public class UserController {
     
 	private static final Logger log = LoggerFactory.getLogger(SearchBlogController.class);
 
-    
-    
     /**
      * 임시 메인 페이지
      * @return 메인 페이지 view
