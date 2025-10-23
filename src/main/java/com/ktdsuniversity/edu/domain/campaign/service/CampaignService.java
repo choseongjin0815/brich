@@ -1,12 +1,12 @@
 package com.ktdsuniversity.edu.domain.campaign.service;
 
-import java.util.List;
-
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
-import com.ktdsuniversity.edu.domain.campaign.vo.ApplicantVO;
-import com.ktdsuniversity.edu.domain.campaign.vo.ResponseApplicantListVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListVO;
 
 public interface CampaignService {
 
@@ -14,8 +14,10 @@ public interface CampaignService {
 
 	CampaignListVO readCampaignList(RequestSearchCampaignVO requestSearchCampaignVO);
 
-	ResponseApplicantListVO readApplicantListById(ApplicantVO applicantVO);
+	ResponseApplicantListVO readApplicantListById(RequestApplicantVO requestApplicantVO);
 
-	boolean updateAdptYnBycmpnApplyId(ApplicantVO applicantVO);
+	boolean updateAdptYnBycmpnApplyId(RequestApplicantVO requestApplicantVO);
+
+	ResponseAdoptListVO readResponseAdoptListByCmpnId(RequestApplicantVO requestApplicantVO);
 
 }

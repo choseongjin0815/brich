@@ -3,8 +3,8 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ktdsuniversity.edu.domain.campaign.dao.impl.CampaignDaoImpl">
-    <resultMap id="ApplicantVOMap"
-               type="com.ktdsuniversity.edu.domain.campaign.vo.ApplicantVO"
+    <resultMap id="ResponseApplicantVOMap"
+               type="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantVO"
                autoMapping="true">
         <id column="CMPN_PST_ADPT_ID" property="cmpnPstAdptId" />
         <association property="userInfo"
@@ -14,20 +14,84 @@
         </association>
     </resultMap>
     <select id="selectApplicantListByCmpnId"
-            resultMap="ApplicantVOMap"
-            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.ApplicantVO">
+            resultMap="ResponseApplicantVOMap"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO">
         <include refid="Common.paginationHeader" />
         SELECT CPA.CMPN_PST_ADPT_ID
-             , CPA.ADPT_YN
-             , U.USR_ID
-             , U.LOG_ID
-             , U.PNLT_CNT
-             , U.BLG_ADDRS
-             , U.TTL_VSTR_CNT
-             , U.AVRG_VSTR_CNT
-             , U.BLG_NGHBR_CNT
-             , U.SCRP_CNT
-             , U.DLT_YN
+		     , CPA.ADPT_YN
+		     , U.USR_ID
+		     , U.LOG_ID
+		     , U.PNLT_CNT
+		     , U.BLG_ADDRS
+		     , U.TTL_VSTR_CNT
+		     , U.AVRG_VSTR_CNT
+		     , U.BLG_NGHBR_CNT
+		     , U.SCRP_CNT
+		     , U.DLT_YN
+		  FROM CMPN_PST_ADPT CPA
+		 INNER JOIN (SELECT USR_ID
+		                  , LOG_ID
+		                  , PNLT_CNT
+		                  , BLG_ADDRS
+		                  , TTL_VSTR_CNT
+		                  , AVRG_VSTR_CNT
+		                  , BLG_NGHBR_CNT
+		                  , SCRP_CNT
+		                  , DLT_YN
+		               FROM USR
+		              WHERE DLT_YN  = 'N'
+		                AND AUTR != '1005') U
+		    ON U.USR_ID = CPA.BLG_USR_ID
+		 WHERE CPA.CMPN_ID = #{cmpnId}
+	   <if test="searchId != null and searchId != ''">
+	       AND U.LOG_ID LIKE '%' || #{searchId} || '%'
+	   </if>
+		   AND CPA.DLT_YN = 'N'
+       <if test='sortCol != null and sortCol != ""'>
+		  ORDER BY NVL(${sortCol}, 0) ${order}  
+       </if>
+       <include refid="Common.paginationFooter"></include>
+    </select>
+    
+    <select id="selectCampaignInfoByCmpnId"
+            parameterType="string"
+            resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
+        SELECT STTS_CD
+		     , RCRT_PRSNN
+		     , TO_CHAR(RCRT_END_DT, 'YYYY-MM-DD') AS RCRT_END_DT
+		     , CMPN_TITLE
+		     , TO_CHAR(CMPN_END_DT, 'YYYY-MM-DD') AS CMPN_END_DT
+		  FROM CMPN
+         WHERE CMPN_ID = #{_parameter}
+    </select>
+    
+    <update id="updateAdptYnByCmpnPstAdptId"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO">
+        UPDATE CMPN_PST_ADPT
+        <if test='adptYn == "adopted"'>
+           SET ADPT_YN = 'N'
+        </if>
+        <if test='adptYn == "unadopted"'>
+           SET ADPT_YN = 'Y'
+        </if>
+         WHERE CMPN_PST_ADPT_ID = #{cmpnPstAdptId}
+           AND DLT_YN = 'N'
+    </update>
+    
+    <select id="selectAdoptCountByCmpnId"
+            parameterType="string"
+            resultType="_int">
+        SELECT COUNT(ADPT_YN)
+		  FROM CMPN_PST_ADPT
+		 WHERE CMPN_ID = #{_parameter}
+		   AND ADPT_YN = 'Y'
+		   AND DLT_YN = 'N'
+    </select>
+
+    <select id="selectApplicantCountByCmpnId"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO"
+            resultType="_int">
+        SELECT COUNT(CPA.BLG_USR_ID)
           FROM CMPN_PST_ADPT CPA
          INNER JOIN (SELECT USR_ID
                           , LOG_ID
@@ -42,44 +106,55 @@
                       WHERE DLT_YN  = 'N'
                         AND AUTR != '1005') U
             ON U.USR_ID = CPA.BLG_USR_ID
-         WHERE CPA.CMPN_ID = #{campId}
+         WHERE CPA.CMPN_ID = #{cmpnId}
+       <if test="searchId != null and searchId != ''">
+           AND U.LOG_ID LIKE '%' || #{searchId} || '%'
+       </if>
            AND CPA.DLT_YN = 'N'
        <if test='sortCol != null and sortCol != ""'>
-         ORDER BY ${sortCol} ${order}
+          ORDER BY NVL(${sortCol}, 0) ${order}  
        </if>
-       <include refid="Common.paginationFooter"></include>
     </select>
     
-    <select id="selectCampaignInfoByCmpnId"
+    <select id="selectCampaignStateByCmpnPstAdptId"
             parameterType="string"
-            resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
+            resultType="string">
         SELECT STTS_CD
-             , RCRT_PRSNN
-             , RCRT_END_DT
-          FROM CMPN
-         WHERE CMPN_ID = #{_parameter}
+		  FROM CMPN C
+		 INNER JOIN CMPN_PST_ADPT CPA
+		    ON C.CMPN_ID = CPA.CMPN_ID
+		 WHERE CPA.CMPN_PST_ADPT_ID  = #{_parameter}
     </select>
     
-    <update id="updateAdptYnBycmpnApplyId"
-            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.ApplicantVO">
-        UPDATE CMPN_PST_ADPT
-        <if test='adptYn == "adopted"'>
-           SET ADPT_YN = 'N'
-        </if>
-        <if test='adptYn == "unadopted"'>
-           SET ADPT_YN = 'Y'
-        </if>
-         WHERE CMPN_PST_ADPT_ID = #{cmpnPstAdptId}
-           AND DLT_YN = 'N'
-    </update>
-    
-    <select id="selectAdoptCount"
-            parameterType="string">
-        SELECT COUNT(ADPT_YN)
-		  FROM CMPN_PST_ADPT
-		 WHERE CMPN_ID = #{_parameter}
-		   AND ADPT_YN = 'Y'
-		   AND DLT_YN = 'N'
+    <resultMap id="ResponseAdoptVOMap"
+               type="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO"
+               autoMapping="true">
+        <id property="cmpnPstAdptId" column="CMPN_PST_ADPT_ID" />
+        <association property="userInfo"
+                     javaType="com.ktdsuniversity.edu.domain.user.vo.UserVO"
+                     autoMapping="true">
+            <id property="usrId" column="USR_ID" />
+        </association>
+    </resultMap>
+    <select id="selectAdoptListByCmpnId"
+            resultMap="ResponseAdoptVOMap"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO">
+        SELECT CPA.CMPN_PST_ADPT_ID
+		     , CPA.PST_URL
+		     , CPA.PST_STTS_CD
+		     , CC.CD_NM
+		     , TO_CHAR(CPA.PST_DDLN, 'YYYY-MM-DD') AS PST_DDLN
+		     , U.USR_ID
+		     , U.LOG_ID
+		     , U.BLG_ADDRS
+		  FROM CMPN_PST_ADPT CPA
+		 INNER JOIN USR U
+		    ON CPA.BLG_USR_ID = U.USR_ID
+		 INNER JOIN CM_CD CC
+		    ON CPA.PST_STTS_CD = CC.CD_ID 
+		 WHERE CPA.CMPN_ID = #{cmpnId}
+		   AND CPA.ADPT_YN = 'Y'
+		   AND CPA.DLT_YN = 'N'
     </select>
     
     <select id="selectCampaignDetailById"

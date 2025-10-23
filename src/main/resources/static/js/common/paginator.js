@@ -16,7 +16,7 @@ $().ready(function() {
                              .on("click", function() {
                                 
                                  var pageNo = $(this).data("page-no");
-                                 var listSize = 1;
+                                 var listSize = 10;
                                  url = "";
                                  if (window.location.search === "") {
                                     url = window.location.pathname + "?pageNo=" + pageNo + "&listSize=" + listSize;

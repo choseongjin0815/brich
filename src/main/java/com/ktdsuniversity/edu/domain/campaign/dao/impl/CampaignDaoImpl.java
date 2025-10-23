@@ -9,8 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
-import com.ktdsuniversity.edu.domain.campaign.vo.ApplicantVO;
 
 
 @Repository
@@ -35,25 +37,37 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	}
 	
 	@Override
-	public List<ApplicantVO> selectApplicantListByCmpnId(ApplicantVO applicantVO) {
-		System.out.println(applicantVO);
-		return super.getSqlSession().selectList(this.NAME_SPACE + "selectApplicantListByCmpnId", applicantVO);
+	public List<ResponseApplicantVO> selectApplicantListByCmpnId(RequestApplicantVO requestApplicantVO) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectApplicantListByCmpnId", requestApplicantVO);
 	}
 
 	@Override
-	public int updateAdptYnBycmpnApplyId(ApplicantVO applicantVO) {
-		return super.getSqlSession().update(this.NAME_SPACE + "updateAdptYnBycmpnApplyId", applicantVO);
+	public int updateAdptYnByCmpnPstAdptId(RequestApplicantVO requestApplicantVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateAdptYnByCmpnPstAdptId", requestApplicantVO);
 	}
 
 	@Override
-	public int selectAdoptCount(String campId) {
-		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectAdoptCount", campId);
+	public int selectAdoptCountByCmpnId(String cmpnId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectAdoptCountByCmpnId", cmpnId);
 	}
 
 	@Override
-	public CampaignVO selectCampaignInfoByCmpnId(String campId) {
-		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignInfoByCmpnId", campId);
+	public CampaignVO selectCampaignInfoByCmpnId(String cmpnId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignInfoByCmpnId", cmpnId);
 	}
 
+	@Override
+	public int selectApplicantCountByCmpnId(RequestApplicantVO requestApplicantVO) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectApplicantCountByCmpnId", requestApplicantVO);
+	}
 
+	@Override
+	public String selectCampaignStateByCmpnPstAdptId(String cmpnPstAdptId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignStateByCmpnPstAdptId", cmpnPstAdptId);
+	}
+
+	@Override
+	public List<ResponseAdoptVO> selectAdoptListByCmpnId(RequestApplicantVO requestApplicantVO) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdoptListByCmpnId", requestApplicantVO);
+	}
 }

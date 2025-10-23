@@ -81,7 +81,7 @@ public abstract class AbstractSearchVO {
 	//// Page Pagination 끝
 	
 	public AbstractSearchVO() {
-		this.listSize = 20;
+		this.listSize = 10;
 		this.pageCountInGroup = 10;
 	}
 
@@ -215,6 +215,16 @@ public abstract class AbstractSearchVO {
 
 	public void setPrevGroupStartPageNo(int prevGroupStartPageNo) {
 		this.prevGroupStartPageNo = prevGroupStartPageNo;
+	}
+
+	@Override
+	public String toString() {
+		return "AbstractSearchVO [pageNo=" + pageNo + ", listSize=" + listSize + ", pageCount=" + pageCount
+				+ ", pageCountInGroup=" + pageCountInGroup + ", groupCount=" + groupCount + ", groupNo=" + groupNo
+				+ ", groupStartPageNo=" + groupStartPageNo + ", groupEndPageNo=" + groupEndPageNo
+				+ ", haveNextPageGroup=" + haveNextPageGroup + ", havePrevPageGroup=" + havePrevPageGroup
+				+ ", nextGroupStartPageNo=" + nextGroupStartPageNo + ", prevGroupStartPageNo=" + prevGroupStartPageNo
+				+ "]";
 	}
 	
 }

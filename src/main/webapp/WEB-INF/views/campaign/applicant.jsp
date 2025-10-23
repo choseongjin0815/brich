@@ -12,20 +12,22 @@
 		<script type="text/javascript" src="/js/common/paginator.js"></script>
 	</head>
 	<body>
-	    <jsp:include page="/WEB-INF/views/campaign/campaignTab.jsp" />
+	    <jsp:include page="/WEB-INF/views/campaign/campaignTab.jsp">
+	       <jsp:param value="${applicantList.campaignInfo.cmpnTitle}" name="cmpnTitle" />
+	    </jsp:include>
 	    <div class="title">
             <div>캠페인 신청자</div>
             <span>~${applicantList.campaignInfo.rcrtEndDt}</span>
         </div>
         
         <div class="id-search">
-           <img src="/img/Search.png" />
            <input type="text" placeholder="ID를 입력하세요." />
+           <img src="/img/Search.png" />
         </div>
         
-        <div class="list-header grid-applicant-columns">
+        <div class="list-header grid-list-header list-applicant">
             <div>신뢰도
-                <img class="sort desc" data-sort-type="PNLT_CNT" src="/img/arrow-bottom.png" />
+                <img class="sort asc" data-sort-type="PNLT_CNT" src="/img/arrow-bottom.png" />
             </div>
             <div>블로거
             </div>
@@ -48,7 +50,7 @@
         </div>
            
         <c:forEach items="${applicantList.applicantList}" var="applicant">
-            <div class="grid-applicant-columns apllicant">
+            <div class="grid-list-header list-applicant apllicant">
                 <div>
                     <c:choose>
 	                    <c:when test="${applicant.userInfo.pnltCnt eq 0}">
@@ -71,18 +73,18 @@
                 <div>${applicant.userInfo.scrpCnt}</div>
                 <div>${applicant.userInfo.ttlVstrCnt}</div>
                 <c:choose>
-                    <c:when test="${applicantList.campaignInfo.sttsCd eq '2005'}">
+                    <c:when test="${applicantList.campaignInfo.sttsCd eq '2006'}">
                         <c:choose>
                             <c:when test="${applicant.adptYn eq 'Y'}">
-                                <button type="button" name="adopt" class="adopted">채택</button>
+                                <button type="button" name="adopt" class="button_50_30 adopted">채택</button>
                             </c:when>
                             <c:otherwise>
-                                <button type="button" name="adopt" class="unadopted">채택</button>
+                                <button type="button" name="adopt" class="button_50_30 unadopted">채택</button>
                             </c:otherwise>
                         </c:choose>
                     </c:when>
                     <c:otherwise>
-                        <button type="button" name="adopt" class="disabled">채택</button>
+                        <button type="button" name="adopt" class="button_50_30 disabled">채택</button>
                     </c:otherwise>
                 </c:choose>
             </div>

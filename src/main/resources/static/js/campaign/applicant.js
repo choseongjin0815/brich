@@ -8,9 +8,9 @@ $().ready(function() {
         var adpt = $(this).attr("class");
         that = $(this);
         
-        
-        if (adpt !== "disabled") {
-            if ($(this).attr("class") === "unadopted" && 
+        if (!adpt.includes("disabled")) {
+            adpt = adpt.includes("unadopted") ? "unadopted" : "adopted";
+            if (adpt === "unadopted" && 
                     $(".adopt-count").text() === $(".total-adopt-count").text()){
                             alert("더 이상 채택할 수 없습니다.");
                     }
@@ -33,7 +33,8 @@ $().ready(function() {
                   }
             }
             
-        });
+        })
+        .css('pointer-events', 'none');
     
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("sortCol") !== null) {
@@ -51,10 +52,35 @@ $().ready(function() {
     $(".sort").on("click", function() {
         order = $(this).attr("class").split(" ")[1];
         col = $(this).data("sort-type");
-        path = window.location.pathname;
         
-        window.location.href = window.location.pathname
-                              + "?order=" + order
-                              + "&sortCol=" + col;
+        if (window.location.search === "") {
+            url = window.location.pathname + "?order=" + order
+                                           + "&sortCol=" + col;
+         }
+         else {
+             url = new URL(window.location.href);
+             searchParam = url.searchParams;
+             searchParam.set("order", order);
+             searchParam.set("sortCol", col);
+             url = url.toString();
+         }
+        
+        window.location.href = url;
     });
+    
+    $(".id-search").children("img").on("click", function() {
+         id = $(this).closest(".id-search").children("input[type=text]").val();
+         url = "";
+         if (window.location.search === "") {
+            url = window.location.pathname + "?searchId=" + id;
+         }
+         else {
+             url = new URL(window.location.href);
+             searchParam = url.searchParams;
+             searchParam.set("searchId", id);
+             searchParam.set("pageNo", 0);
+             url = url.toString();
+         }
+         window.location.href = url;
+    })
 });

@@ -1,20 +1,22 @@
-package com.ktdsuniversity.edu.domain.campaign.vo;
+package com.ktdsuniversity.edu.domain.campaign.vo.response;
 
 import java.util.List;
 
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+
 public class ResponseApplicantListVO {
 
-	private List<ApplicantVO> applicantList;
+	private List<ResponseApplicantVO> applicantList;
 	
 	private int adoptCount;
 	
 	private CampaignVO campaignInfo;
 	
-	public List<ApplicantVO> getApplicantList() {
+	public List<ResponseApplicantVO> getApplicantList() {
 		return this.applicantList;
 	}
 
-	public void setApplicantList(List<ApplicantVO> applicantList) {
+	public void setApplicantList(List<ResponseApplicantVO> applicantList) {
 		this.applicantList = applicantList;
 	}
 

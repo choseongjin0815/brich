@@ -2,9 +2,12 @@ package com.ktdsuniversity.edu.domain.campaign.dao;
 
 import java.util.List;
 
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostAdoptVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
-import com.ktdsuniversity.edu.domain.campaign.vo.ApplicantVO;
 
 public interface CampaignDao {
 
@@ -12,12 +15,18 @@ public interface CampaignDao {
 
 	List<CommonCodeVO> selectCategory();
 
-	List<ApplicantVO> selectApplicantListByCmpnId(ApplicantVO applicantVO);
+	List<ResponseApplicantVO> selectApplicantListByCmpnId(RequestApplicantVO requestApplicantVO);
 
-	int updateAdptYnBycmpnApplyId(ApplicantVO applicantVO);
+	int updateAdptYnByCmpnPstAdptId(RequestApplicantVO requestApplicantVO);
 
-	int selectAdoptCount(String campId);
+	int selectAdoptCountByCmpnId(String cmpnId);
 
-	CampaignVO selectCampaignInfoByCmpnId(String campId);
+	CampaignVO selectCampaignInfoByCmpnId(String cmpnId);
+
+	int selectApplicantCountByCmpnId(RequestApplicantVO requestApplicantVO);
+
+	String selectCampaignStateByCmpnPstAdptId(String cmpnPstAdptId);
+
+	List<ResponseAdoptVO> selectAdoptListByCmpnId(RequestApplicantVO requestApplicantVO);
 
 }
