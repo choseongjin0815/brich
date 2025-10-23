@@ -45,18 +45,21 @@
 			                <input type="text" id="email" name="eml" value="${registData.eml}" placeholder="이메일을 입력해주세요"/>
 		                    <form:errors path="eml" cssClass="validate-require" />
 		                </div>
-		                <div class="regist-side-btn"><div>인증 번호</div></div>
+		                <div class="regist-side-btn email-send"><div>인증 번호</div></div>
 	                </div>
-	                <div class="right-flex">
+	                <div class="right-flex verify-email-box">
 		                <div class="input-flex short">
 		                   <label for="email-confirm">인증번호 입력</label>
-		                   <input type="text" id="email-confirm" placeholder="인증번호를 입력하세요"/>
+		                   <input type="text" id="email-confirm" name="emailConfirm" placeholder="인증번호를 입력하세요"/>
 		                </div>
-		                <div class="regist-side-btn"><div>인증 확인</div></div>
+		                <div class="regist-side-btn email-verify"><div>인증 확인</div></div>
 	                </div>
+	                <span class="email-check-timer"></span>
+	                <span class="email-confirm-message"></span>
+	                
 	                <div class="input-flex">
 	                    <label for="password" class="require">비밀번호</label>
-		                <input type="password" id="password" name="pswrd" placeholder="8~16자리 비밀번호 입력"/>
+		                <input type="password" id="password" name="pswrd" placeholder="8~16자리 비밀번호 입력" maxlength="16"/>
 		                 <form:errors path="pswrd" cssClass="validate-require" />
 		                <input type="password" id="password-confirm" name="pswrdConfirm" placeholder="비밀번호 확인"/> 
 		                <c:if test="${not empty passwordError}"> 
@@ -89,19 +92,21 @@
                             <input type="text" name="eml" id="email" placeholder="이메일을 입력해주세요"/>
                             <form:errors path="eml" cssClass="validate-require" />
                         </div>
-                            <div class="regist-side-btn"><div>인증 번호</div>
+                            <div class="regist-side-btn email-send"><div>인증 번호</div>
                         </div>
                     </div>
                     <div class="right-flex">
                         <div class="input-flex short">
                            <label for="email-confirm" class="require">인증번호 입력</label>
-                           <input type="text" id="email-confirm" placeholder="인증번호를 입력하세요"/>
+                           <input type="text" id="email-confirm" name="emailConfirm" placeholder="인증번호를 입력하세요"/>
                         </div>
-                        <div class="regist-side-btn"><div>인증 확인</div></div>
+                        <div class="regist-side-btn email-verify"><div>인증 확인</div></div>
                     </div>
+                    <span class="email-check-timer"></span>
+                    <span class="email-confirm-message"></span>
                     <div class="input-flex">
                         <label for="password" class="require">비밀번호</label>
-                        <input type="password" id="password" name="pswrd" placeholder="8~16자리 비밀번호 입력"/>
+                        <input type="password" id="password" name="pswrd" placeholder="8~16자리 비밀번호 입력" maxlength="16"/>
                         <form:errors path="pswrd" cssClass="validate-require" />
                         <input type="password" id="password-confirm" name="pswrdConfirm" placeholder="비밀번호 확인"/> 
                         <c:if test="${not empty passwordError}"> 

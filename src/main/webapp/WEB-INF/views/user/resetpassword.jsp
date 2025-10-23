@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>아이디 찾기</title>
+<title>비밀번호 재설정</title>
 <link type="text/css" rel="stylesheet" href="/css/brich.css">
 <link type="text/css" rel="stylesheet" href="/css/regist.css">
 <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
@@ -20,10 +20,12 @@
         </div>
         <span class="email-not-check">${checked}</span>
         <div class="find-id-main regist-main">
-            <form class="user-regist-form">
-                    <div class="input-flex">
-                        <label for="name" class="require">이름</label>   
-                        <input type="text" id="name" name="nm" placeholder="이름을 입력해주세요" value="${registData.nm}"/>
+            <form method="post" action="/reset/password" class="user-regist-form">
+                    <div class="right-flex">
+                        <div class="input-flex"> 
+                            <label for="id" class="require">아이디</label>
+                            <input type="text" id="id" name="logId" class="logId" placeholder="아이디를 입력해주세요"/>
+                        </div>
                     </div>
                     <div class="right-flex">
                         <div class="input-flex">
@@ -41,7 +43,12 @@
                     </div>    
                     <span class="email-check-timer"></span>
                     <span class="email-confirm-message"></span>
-                    <button type="button" class="find-btn">아이디 찾기</button>
+                    <div class="input-flex">
+                        <label for="password" class="require">새비밀번호</label>
+                        <input type="password" id="password" name="pswrd" placeholder="8~16자리 비밀번호 입력" maxlength="16"/>
+                        <input type="password" id="password-confirm" name="pswrdConfirm" placeholder="비밀번호 확인"/> 
+                    </div>
+                    <button type="button" class="do-reset-btn">비밀번호 재설정</button>
                 </form>
         </div>
     </div>

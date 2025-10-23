@@ -12,7 +12,7 @@ $().ready(function() {
             });
         }
     });
-    
+
     $("#password-confirm").on("keyup", function() {
 
         $(this).next(".validate-password-confirm").remove();
@@ -44,21 +44,20 @@ $().ready(function() {
                     "font-size": "14px"   // 14px
                 });
             }
-            else {
+            else if (response.body === 0) {
                 btn.closest(".right-flex").after("<span class='duplicate-id-check'>사용 가능한 아이디입니다.</span>");
                 btn.closest(".right-flex").next(".duplicate-id-check").css({
                     "color": "#FF0000",   // 빨강
                     "font-size": "14px"   // 14px
                 });
             }
+            else if (response.body === 2) {
+                btn.closest(".right-flex").after("<span class='duplicate-id-check'>아이디는 8~16자까지 가능하며 영문자와 숫자를 혼합해야합니다.</span>");
+                btn.closest(".right-flex").next(".duplicate-id-check").css({
+                    "color": "#FF0000",  
+                    "font-size": "14px"   
+                });
+            }
         });
-    });
-
-    $("#email").on("keyup", function() {
-        if (value !== "" && !/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g.test(value)) {
-            //이메일 관련 validation false이고 아직 validate-email메시지가 안뜨고 있으면 써준다.
-            $(this).after($("<span class='validate-email'>이메일 형태로 작성하세요.</span>"));
-            
-        }
     });
 });

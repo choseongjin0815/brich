@@ -2,10 +2,12 @@ package com.ktdsuniversity.edu.domain.user.vo.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 public class RequestUserRegistVO{
 	
 	private String usrId;
+	
 	@NotEmpty(message="필수 입력입니다.")
 	private String logId;
 	
@@ -16,11 +18,15 @@ public class RequestUserRegistVO{
 	@NotEmpty(message="필수 입력입니다.")
 	private String eml;
 	
+//	@Size(min=8, max=16, message="8자리에서 16자리까지 입력 가능합니다.")
 	@NotEmpty(message="필수 입력입니다.")
 	private String pswrd;
 	
 	@NotEmpty(message="필수 입력입니다.")
 	private String pswrdConfirm;
+	
+	@NotEmpty(message="필수 입력입니다.")
+	private String emailConfirm;
 	
 	private String autr;
 	
@@ -100,11 +106,18 @@ public class RequestUserRegistVO{
 		this.salt = salt;
 	}
 
+	public String getEmailConfirm() {
+		return this.emailConfirm;
+	}
+
+	public void setEmailConfirm(String emailConfirm) {
+		this.emailConfirm = emailConfirm;
+	}
+
 	@Override
 	public String toString() {
 		return "RequestUserRegistVO [usrId=" + usrId + ", logId=" + logId + ", nm=" + nm + ", eml=" + eml + ", pswrd="
-				+ pswrd + ", pswrdConfirm=" + pswrdConfirm + ", autr=" + autr + ", cmpny=" + cmpny + ", salt=" + salt
-				+ ", toString()=" + super.toString() + "]";
+				+ pswrd + ", pswrdConfirm=" + pswrdConfirm + ", emailConfirm=" + emailConfirm + ", autr=" + autr
+				+ ", cmpny=" + cmpny + ", salt=" + salt + ", toString()=" + super.toString() + "]";
 	}
-	
 }

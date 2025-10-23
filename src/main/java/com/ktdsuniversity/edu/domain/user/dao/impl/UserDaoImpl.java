@@ -7,8 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.domain.user.dao.UserDao;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
+import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserFindIdVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserLoginVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO;
+import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserResetPasswordVO;
 
 @Repository
 public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
@@ -54,6 +56,16 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
 	@Override
 	public int updateLoginSuccessByLogId(String logId) {
 		return super.getSqlSession().update(this.NAME_SPACE + "updateLoginSuccessByLogId");
+	}
+
+	@Override
+	public String selectUserLogIdByNameAndEmail(RequestUserFindIdVO requestUserFindIdVO) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUserLogIdByNameAndEmail", requestUserFindIdVO);
+	}
+
+	@Override
+	public int updatePswrdByLogIdAndPswrd(RequestUserResetPasswordVO resetPasswordInfo) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updatePswrdByLogIdAndPswrd", resetPasswordInfo);
 	}
 
 

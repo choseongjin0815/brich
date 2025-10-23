@@ -1,8 +1,10 @@
 package com.ktdsuniversity.edu.domain.user.dao;
 
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
+import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserFindIdVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserLoginVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO;
+import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserResetPasswordVO;
 
 public interface UserDao {
 
@@ -19,5 +21,11 @@ public interface UserDao {
 	public int updateBlockByLogid(String logId);
 
 	public int updateLoginSuccessByLogId(String logId);
+
+	public String selectUserLogIdByNameAndEmail(RequestUserFindIdVO requestUserFindIdVO);
+
+	public int updatePswrdByLogIdAndPswrd(RequestUserResetPasswordVO resetPasswordInfo);
+
+
 
 }

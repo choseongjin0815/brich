@@ -114,4 +114,21 @@
 		     , RCNT_LGN_SCS_DT = SYSDATE
 		 WHERE LOG_ID = #{_parameter}
     </update>
+    
+    <select parameterType="com.ktdsuniversity.edu.domain.user.vo.request.RequestUserFindIdVO"
+            resultType="string"
+            id="selectUserLogIdByNameAndEmail">
+        SELECT LOG_ID
+		  FROM USR 
+		 WHERE EML = #{eml}
+		   AND NM = #{nm}
+    </select>
+    
+    <update parameterType="com.ktdsuniversity.edu.domain.user.vo.request.RequestUserResetPasswordVO"
+            id="updatePswrdByLogIdAndPswrd">
+        UPDATE USR 
+		   SET PSWRD = #{pswrd}
+		     , SALT = #{salt}
+		 WHERE LOG_ID = #{logId}
+    </update>
 </mapper>

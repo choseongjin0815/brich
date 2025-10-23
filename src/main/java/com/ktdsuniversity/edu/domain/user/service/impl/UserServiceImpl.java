@@ -10,8 +10,10 @@ import com.ktdsuniversity.edu.domain.blog.controller.SearchBlogController;
 import com.ktdsuniversity.edu.domain.user.dao.UserDao;
 import com.ktdsuniversity.edu.domain.user.service.UserService;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
+import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserFindIdVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserLoginVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO;
+import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserResetPasswordVO;
 import com.ktdsuniversity.edu.global.util.SHAEncrypter;
 
 
@@ -71,6 +73,7 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
+    //추후 파일 업로드 카테고리 추가 예정
     @Transactional
 	@Override
 	public boolean createNewUser(RequestUserRegistVO requestUserRegistVO) {
@@ -104,5 +107,27 @@ public class UserServiceImpl implements UserService {
 		log.info("logId count {}", userCount);
 		return userCount;
 	}
+
+	@Override
+	public String readLogIdByNameAndEmail(RequestUserFindIdVO requestUserFindIdVO) {
+		return this.userDao.selectUserLogIdByNameAndEmail(requestUserFindIdVO);
+	}
+
+	@Override
+	public boolean updatePswrdByLogIdAndPswrd(RequestUserResetPasswordVO resetPasswordInfo) {
+		//재설정할 비밀번호를 암호화한다. 
+    	String salt = SHAEncrypter.generateSalt();
+    	String password = resetPasswordInfo.getPswrd();
+    	
+    	String encryptedPassword = SHAEncrypter.getEncrypt(password, salt);
+		//암호화한 재설정 비밀번호를 다시 resetPassword에 set해준다.
+    	resetPasswordInfo.setPswrd(encryptedPassword);
+    	resetPasswordInfo.setSalt(salt);
+    	
+		int count = this.userDao.updatePswrdByLogIdAndPswrd(resetPasswordInfo);
+		return count > 0;
+	}
+
+
 
 }

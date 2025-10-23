@@ -8,7 +8,7 @@
 	border: 0;
 	
 	&:hover {
-	   transform: scale(1.1);
+	   transform: scale(1.01);
 	}
 }
 
@@ -53,7 +53,7 @@
                height: 50px;
                font-size: 24px;
                line-height: 50px;
-               
+               color: #fff;
                &::placeholder {
                   padding-left: 30px;
                   font-size: 20px;
@@ -131,4 +131,83 @@
 
 .regist-wrapper.find-wrapper {
     width: 800px;
+}
+
+.email-check-timer
+, .email-confirm-message
+, .email-not-check {
+	color: #FF0000;  
+    font-size: 14px;
+}
+
+.email-not-check {
+	text-align: center;
+	font-size: 24px;
+}
+
+.find-btn {
+	padding: 5px 0;
+    width: 100%;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 24px;
+    margin: 0 auto;
+    margin-top: 50px;
+    text-align: center;
+    background-color: #5275c1;
+    border: 0;
+    
+    &:hover {
+       transform: scale(1.1);
+    }
+}
+
+.reset-password-btn,
+.go-login-btn {
+	padding: 5px 0;
+    width: 100%;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 24px;
+    margin: 0 auto;
+    margin-top: 50px;
+    text-align: center;
+    background-color: #5275c1;
+    border: 0;
+    
+    &:hover {
+       transform: scale(1.01);
+    }    
+}
+
+.go-login-btn {
+	background-color: #A6A6A6;
+}
+
+.result-id {
+	margin: 130px 0;
+	font-weight: semi-bold;
+    color: #5a6acf;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+}
+.find-id-main.regist-main.result-main {
+	margin: 0;
+}
+.do-reset-btn {
+	padding: 5px 0;
+    width: 100%;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 24px;
+    margin: 0 auto;
+    margin-top: 50px;
+    text-align: center;
+    background-color: #5275c1;
+    border: 0;
+    
+    &:hover {
+       transform: scale(1.01);
+    }    
 }

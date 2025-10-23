@@ -15,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.ktdsuniversity.edu.domain.blog.controller.SearchBlogController;
 import com.ktdsuniversity.edu.domain.user.service.UserService;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
+import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserFindIdVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserLoginVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO;
+import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserResetPasswordVO;
 import com.ktdsuniversity.edu.global.common.AjaxResponse;
 
 import jakarta.servlet.http.HttpSession;
@@ -139,16 +141,16 @@ public class UserController {
     public String doUserRegistAction(@Valid RequestUserRegistVO requestUserRegistVO
     							   , BindingResult bindingResult
     							   , Model model) {
-    	log.info("requestUserRegistVO: {}", requestUserRegistVO);
-		log.info("{} : {}", requestUserRegistVO.getPswrd(), requestUserRegistVO.getPswrdConfirm());
-
     	//서버단 Validation
     	if(bindingResult.hasErrors()) {
+    	   	log.info("requestUserRegistVO: {}", requestUserRegistVO);
     		model.addAttribute("registData", requestUserRegistVO);
     		
     		//블로거 회원 가입 검증 실패
     		if(requestUserRegistVO.getAutr().equals("1002")) {
     			 model.addAttribute("role", "blogger");
+    			 
+    			 log.info("{}",model.getAttribute("registData"));
     			return "/user/regist";	
     		}
     		//광고주 회원 가입 검증 실패
@@ -186,11 +188,56 @@ public class UserController {
     	AjaxResponse ajaxResponse = new AjaxResponse();
     	ajaxResponse.setBody(count);
     	
+    	if (!logId.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d!@#$%^&*]{8,16}$")) {
+    		ajaxResponse.setBody(2);
+    	} 
+    	
     	return ajaxResponse;
     }
     
     @GetMapping("/find/id")
     public String viewFindIdPage() {
     	return "user/findid";
+    }
+    
+    @GetMapping("/find/id/{nm}")
+    public String viewFindIdSuccess(@PathVariable(required=false) String nm
+    							  , HttpSession httpSession
+    							  , Model model) {
+    	//세션에 있는 인증되어 있는 이메일을 가져온다.
+    	String email = (String)httpSession.getAttribute("verifiedEmail");
+    	log.info("email: {}", email);
+ 
+
+    	
+    	RequestUserFindIdVO requestUserFindIdVO = new RequestUserFindIdVO();
+    	requestUserFindIdVO.setEml(email);
+    	requestUserFindIdVO.setNm(nm);
+    	String logId = this.userService.readLogIdByNameAndEmail(requestUserFindIdVO);
+    	
+    	if(email == null || logId == null || nm == "non") {
+    		model.addAttribute("checked", "해당하는 정보가 없습니다.");
+    		return "user/findid";
+    	}
+    	int start = 3; 
+    	int end = 7;   
+
+    	String masked = logId.substring(0, start)   // 앞부분 그대로
+    	               + "****"                   // 중간은 마스킹
+    	               + logId.substring(end);      // 나머지 그대로
+    	model.addAttribute("findedId", masked);
+    	
+    	return "user/findresult";
+    }
+    
+    @GetMapping("/reset/password")
+    public String viewResetPasswordCheckPage() {
+    	return "/user/resetpassword";
+    }
+    
+    @PostMapping("/reset/password")
+    public String doPasswordResetAction(RequestUserResetPasswordVO resetPasswordInfo) {
+    	boolean updateResult = this.userService.updatePswrdByLogIdAndPswrd(resetPasswordInfo);   	
+    	return "redirect:/login";
     }
 }
