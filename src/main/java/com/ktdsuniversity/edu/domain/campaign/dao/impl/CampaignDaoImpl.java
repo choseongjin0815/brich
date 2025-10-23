@@ -49,5 +49,10 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 		return super.getSqlSession().update(this.NAME_SPACE + "updateAdptYnBycmpnApplyId", applicantVO);
 	}
 
+	@Override
+	public List<CampaignVO> selectExpireSoonCampaign() {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectExpireSoonCampaign");
+	}
+
 
 }

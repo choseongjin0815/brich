@@ -5,6 +5,10 @@ body {
   color: #333;
   margin: 0;
 }
+
+ul{
+	list-style: none;
+}
 .wrapper {
   display: flex;
 
@@ -26,5 +30,6 @@ body {
     }
   }
 }
+
 
 
