@@ -1,5 +1,6 @@
 package com.ktdsuniversity.edu.domain.campaign.dao;
 
+
 import java.util.List;
 
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostAdoptVO;
@@ -32,5 +33,7 @@ public interface CampaignDao {
 	List<ResponseCampaignVO> selectCampaignListCategoryAndSortBy(RequestSearchCampaignVO requestSearchCampaignVO);
 
 	String selectCategoryParent(String selectCategroy);
+
+	List<CampaignVO> selectExpireSoonCampaign();
 
 }

@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+.dashboard-container{
+	display: flex;
+	flex-direction: column;
+	flex-grow:1;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr;
+}
+.title{
+	display: flex;
+	font-size: 2.25rem;
+	color: #5A6ACF;
+	font-weight: bold;
+}

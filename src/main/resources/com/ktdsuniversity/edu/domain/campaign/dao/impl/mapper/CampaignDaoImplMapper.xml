@@ -227,6 +227,15 @@
      WHERE PRNT_CD_ID= '3000'
     </select>
     
+     
+    <select id="selectExpireSoonCampaign"
+    		resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
+    
+    SELECT *
+      FROM CMPN
+    </select>
+    
+</mapper>
     <resultMap type="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO" 
                id="RequestSearchCampaignVOMap"
                autoMapping="true">

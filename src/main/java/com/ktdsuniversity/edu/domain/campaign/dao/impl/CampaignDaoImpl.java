@@ -70,6 +70,11 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCategoryParent", selectCategroy);
 	}
 
+	@Override
+	public List<CampaignVO> selectExpireSoonCampaign() {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectExpireSoonCampaign");
+	}
+
 
 	@Override
 	public String selectCampaignStateByCmpnPstAdptId(String cmpnPstAdptId) {

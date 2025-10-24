@@ -1,8 +1,25 @@
 package com.ktdsuniversity.edu.domain.blog.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
+import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
 
 @Controller
 public class BlogDataController {
 
+	@Autowired BlogDataService blodDataService;
+	
+	@GetMapping("/blog/dashboard")
+	public String viewBlogDashBoard(Model model){
+		
+		ResponseExpireSoonListVO result = 
+				this.blodDataService.readExpireSoonCampaignList();
+		model.addAttribute("list", result);
+		return "blog/dashboard";
+	}
+	
 }
