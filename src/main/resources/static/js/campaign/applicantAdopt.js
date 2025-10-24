@@ -32,9 +32,8 @@ $().ready(function() {
                            });
                   }
             }
-            
         })
-        .css('pointer-events', 'none');
+        .off('mouseenter mouseleave');
     
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("sortCol") !== null) {
@@ -50,7 +49,7 @@ $().ready(function() {
     }
 
     $(".sort").on("click", function() {
-        order = $(this).attr("class").split(" ")[1];
+        order = $(this).attr("class").includes("asc") ? "asc" : "desc";
         col = $(this).data("sort-type");
         
         if (window.location.search === "") {

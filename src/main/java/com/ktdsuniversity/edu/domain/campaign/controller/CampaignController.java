@@ -49,6 +49,11 @@ public class CampaignController {
     @GetMapping("/adv/applicant/{cmpnId}")
     public String readApplicantList(Model model, @PathVariable String cmpnId,
     								RequestApplicantVO requestApplicantVO) {
+    	// TODO 캠페인 주인과 세션이 다를 때 접근 막을 것
+//    	if (!board.getEmail().equals(loginUser.getEmail())) {
+//			throw new HelloSpringException("잘못된 접근입니다.", "error/403");
+//		}
+    	
     	requestApplicantVO.setCmpnId(cmpnId);
     	if (requestApplicantVO.getOrder() != null) {
     		requestApplicantVO.setOrder(requestApplicantVO.getOrder().toUpperCase());
@@ -63,7 +68,10 @@ public class CampaignController {
     
     @GetMapping("/adv/adoptChange")
     @ResponseBody
-    public boolean doUpdateAdptYnAction(RequestApplicantVO requestApplicantVO) {
+    public boolean doUpdateAdptYnAction(RequestApplicantVO requestApplicantVO,
+    									@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
+    	requestApplicantVO.setUsrId(loginUser.getUsrId());
+    	System.out.println(requestApplicantVO);
     	boolean update = this.campaignService.updateAdptYnBycmpnApplyId(requestApplicantVO);
     	
     	if (update) {

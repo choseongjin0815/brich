@@ -387,3 +387,23 @@ body {
 	   color: #fff;
 	}
 }
+
+.submit-before {
+	background-color: #DFDFDF;
+	color: #777777;
+}
+
+.submit-approve {
+	background-color: #CDFFCD;
+    color: #007F00;
+}
+
+.submit-deny {
+	background-color: #FFE0E0;
+    color: #D30000;
+}
+
+.submit-check {
+    background-color: #FFECCC;
+    color: #965E00;
+}

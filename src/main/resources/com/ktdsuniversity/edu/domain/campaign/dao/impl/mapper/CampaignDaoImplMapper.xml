@@ -43,10 +43,10 @@
 		                AND AUTR != '1005') U
 		    ON U.USR_ID = CPA.BLG_USR_ID
 		 WHERE CPA.CMPN_ID = #{cmpnId}
+		   AND CPA.DLT_YN = 'N'
 	   <if test="searchId != null and searchId != ''">
 	       AND U.LOG_ID LIKE '%' || #{searchId} || '%'
 	   </if>
-		   AND CPA.DLT_YN = 'N'
        <if test='sortCol != null and sortCol != ""'>
 		  ORDER BY NVL(${sortCol}, 0) ${order}  
        </if>
@@ -68,11 +68,13 @@
     <update id="updateAdptYnByCmpnPstAdptId"
             parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO">
         UPDATE CMPN_PST_ADPT
+           SET UPDT_DT = SYSDATE
+             , MTTR = #{usrId}
         <if test='adptYn == "adopted"'>
-           SET ADPT_YN = 'N'
+             , ADPT_YN = 'N'
         </if>
         <if test='adptYn == "unadopted"'>
-           SET ADPT_YN = 'Y'
+             , ADPT_YN = 'Y'
         </if>
          WHERE CMPN_PST_ADPT_ID = #{cmpnPstAdptId}
            AND DLT_YN = 'N'
@@ -155,6 +157,12 @@
 		 WHERE CPA.CMPN_ID = #{cmpnId}
 		   AND CPA.ADPT_YN = 'Y'
 		   AND CPA.DLT_YN = 'N'
+		<if test="searchId != null and searchId != ''">
+           AND U.LOG_ID LIKE '%' || #{searchId} || '%'
+       </if>
+       <if test='sortCol != null and sortCol != ""'>
+          ORDER BY NVL(${sortCol}, 0) ${order}  
+       </if>
     </select>
     
     <select id="selectCampaignDetailById"

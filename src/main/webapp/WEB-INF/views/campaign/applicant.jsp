@@ -8,7 +8,7 @@
 		<title>Insert title here</title>
 		<link type="text/css" rel="stylesheet" href="/css/brich.css" />
 		<script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
-		<script type="text/javascript" src="/js/campaign/applicant.js"></script>
+		<script type="text/javascript" src="/js/campaign/applicantAdopt.js"></script>
 		<script type="text/javascript" src="/js/common/paginator.js"></script>
 	</head>
 	<body>

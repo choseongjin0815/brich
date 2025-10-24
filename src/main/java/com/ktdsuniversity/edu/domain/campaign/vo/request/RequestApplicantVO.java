@@ -9,6 +9,7 @@ public class RequestApplicantVO extends AbstractSearchVO {
 	private String order;
 	private String sortCol;
 	private String adptYn;
+	private String usrId;
 	
 	private String searchId;
 	
@@ -36,13 +37,19 @@ public class RequestApplicantVO extends AbstractSearchVO {
 	public void setSortCol(String sortCol) {
 		this.sortCol = sortCol;
 	}
-	
+	public String getUsrId() {
+		return this.usrId;
+	}
+	public void setUsrId(String usrId) {
+		this.usrId = usrId;
+	}
 	public String getAdptYn() {
 		return this.adptYn;
 	}
 	public void setAdptYn(String adptYn) {
 		this.adptYn = adptYn;
 	}
+	
 	public String getSearchId() {
 		return this.searchId;
 	}
@@ -53,6 +60,6 @@ public class RequestApplicantVO extends AbstractSearchVO {
 	@Override
 	public String toString() {
 		return "RequestApplicantVO [cmpnPstAdptId=" + cmpnPstAdptId + ", cmpnId=" + cmpnId + ", order=" + order
-				+ ", sortCol=" + sortCol + ", adptYn=" + adptYn + ", searchId=" + searchId + "]";
+				+ ", sortCol=" + sortCol + ", adptYn=" + adptYn + ", usrId=" + usrId + ", searchId=" + searchId + "]";
 	}
 }
