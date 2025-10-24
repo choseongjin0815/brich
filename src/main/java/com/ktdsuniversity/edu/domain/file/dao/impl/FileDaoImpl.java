@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.domain.file.dao.FileDao;
+import com.ktdsuniversity.edu.domain.file.vo.FileVO;
+import com.ktdsuniversity.edu.domain.file.vo.request.RequestDownloadVO;
 
 @Repository
 public class FileDaoImpl extends SqlSessionDaoSupport implements FileDao {
@@ -17,6 +19,21 @@ public class FileDaoImpl extends SqlSessionDaoSupport implements FileDao {
     public void setSqlSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {
         super.setSqlSessionTemplate(sqlSessionTemplate);
     }
+
+	@Override
+	public int insertFile(FileVO result) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertFile", result);
+	}
+
+	@Override
+	public int updateDownloadCount(RequestDownloadVO requestDownloadVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateDownloadCount", requestDownloadVO);
+	}
+
+	@Override
+	public FileVO selectFileVO(RequestDownloadVO requestDownloadVO) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectFileVO", requestDownloadVO);
+	}
 
 
 }

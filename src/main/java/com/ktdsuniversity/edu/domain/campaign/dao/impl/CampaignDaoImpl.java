@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
+import com.ktdsuniversity.edu.domain.campaign.vo.ApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO;
@@ -32,8 +33,8 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	}
 
 	@Override
-	public List<CommonCodeVO> selectCategory() {
-		return super.getSqlSession().selectList(this.NAME_SPACE + "selectCategory");
+	public List<CommonCodeVO> selectCategoryList() {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectCategoryList");
 	}
 	
 	@Override
@@ -60,6 +61,15 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	public int selectApplicantCountByCmpnId(RequestApplicantVO requestApplicantVO) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectApplicantCountByCmpnId", requestApplicantVO);
 	}
+	public List<ResponseCampaignVO> selectCampaignListCategoryAndSortBy(RequestSearchCampaignVO requestSearchCampaignVO) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectCampaignListCategoryAndSortBy", requestSearchCampaignVO);
+	}
+
+	@Override
+	public String selectCategoryParent(String selectCategroy) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCategoryParent", selectCategroy);
+	}
+
 
 	@Override
 	public String selectCampaignStateByCmpnPstAdptId(String cmpnPstAdptId) {

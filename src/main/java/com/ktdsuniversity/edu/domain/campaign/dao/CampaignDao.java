@@ -13,7 +13,7 @@ public interface CampaignDao {
 
 	CampaignVO selectCampaignDetailById(String campaignId);
 
-	List<CommonCodeVO> selectCategory();
+	List<CommonCodeVO> selectCategoryList();
 
 	List<ResponseApplicantVO> selectApplicantListByCmpnId(RequestApplicantVO requestApplicantVO);
 
@@ -28,5 +28,9 @@ public interface CampaignDao {
 	String selectCampaignStateByCmpnPstAdptId(String cmpnPstAdptId);
 
 	List<ResponseAdoptVO> selectAdoptListByCmpnId(RequestApplicantVO requestApplicantVO);
+
+	List<ResponseCampaignVO> selectCampaignListCategoryAndSortBy(RequestSearchCampaignVO requestSearchCampaignVO);
+
+	String selectCategoryParent(String selectCategroy);
 
 }

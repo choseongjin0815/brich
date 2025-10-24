@@ -23,9 +23,15 @@ public class WebConfig implements WebMvcConfigurer {
 						"/js/**",
 						"/css/**",
 						"/img/**",
+						"/file/**",
 						"/terms/**",
 						"/choose-role",
+						"/find/**",
+						"/duplicate-id/check",
 						"/regist/**",
+						"/reset/**",
+						"/email/**",
+						"/campaignmain",
 						"/login"
 					)); //비회원 기능, 회원가입, 로그인 등은 로그인이 안되어도 접근 되어야함
 

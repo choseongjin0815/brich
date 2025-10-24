@@ -1,14 +1,11 @@
 package com.ktdsuniversity.edu.domain.user.vo.request;
 
-import jakarta.validation.constraints.NotEmpty;
-
-public class RequestUserLoginVO {
-
+public class RequestUserResetPasswordVO {
 	
-	@NotEmpty(message = "필수 입력입니다.")
 	private String logId;
 	
-	@NotEmpty(message = "필수 입력입니다.")
+	private String salt;
+	
 	private String pswrd;
 
 	public String getLogId() {
@@ -17,6 +14,14 @@ public class RequestUserLoginVO {
 
 	public void setLogId(String logId) {
 		this.logId = logId;
+	}
+
+	public String getSalt() {
+		return this.salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
 	}
 
 	public String getPswrd() {
@@ -29,8 +34,7 @@ public class RequestUserLoginVO {
 
 	@Override
 	public String toString() {
-		return "RequestUserLoginVO [logId=" + logId + ", pswrd=" + pswrd + "]";
+		return "RequestUserResetPasswordVO [logId=" + logId + ", salt=" + salt + ", pswrd=" + pswrd + ", toString()="
+				+ super.toString() + "]";
 	}
-	
-	
 }

@@ -44,3 +44,5 @@ build/
 ### Metadata ###
 .metadata
 
+### Bin ###
+bin/
