@@ -29,15 +29,10 @@ public class WebConfig implements WebMvcConfigurer {
 						"/find/**",
 						"/duplicate-id/check",
 						"/regist/**",
-<<<<<<< HEAD
-						"/login",
-						"/campaignmain"
-=======
 						"/reset/**",
 						"/email/**",
 						"/campaignmain",
 						"/login"
->>>>>>> aca9deb45842d7c9b0375e6318bc2129a8edab9f
 					)); //비회원 기능, 회원가입, 로그인 등은 로그인이 안되어도 접근 되어야함
 
 		//고유권한에 대한 접근을 차단하기 위한 인터셉터

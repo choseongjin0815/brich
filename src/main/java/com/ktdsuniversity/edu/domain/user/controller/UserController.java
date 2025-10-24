@@ -73,12 +73,7 @@ public class UserController {
     	if(loginUser != null) {
     		httpSession.setAttribute("__LOGIN_USER__", loginUser);
     	}
-<<<<<<< HEAD
-    	return "redirect:/campaignmain";
-
-=======
     	return "redirect:" + nextUrl;
->>>>>>> aca9deb45842d7c9b0375e6318bc2129a8edab9f
     }
 
     /**
