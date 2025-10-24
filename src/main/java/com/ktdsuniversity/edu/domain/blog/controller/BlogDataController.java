@@ -16,7 +16,7 @@ public class BlogDataController {
 	
 	@GetMapping("/blog/dashboard")
 	public String viewBlogDashBoard(Model model, RequestExpireSoonCampaignVO requestExpireSoonCampaignVO){
-		
+		requestExpireSoonCampaignVO.setListSize(4);
 		ResponseExpireSoonListVO result = 
 				this.blodDataService.readExpireSoonCampaignList(requestExpireSoonCampaignVO);
 		model.addAttribute("list", result);
