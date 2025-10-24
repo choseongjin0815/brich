@@ -38,10 +38,10 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
                     <li>
                       <button>MY 캠페인</button>
                       <ul>
-                        <li><a href="">신청</a></li>
-                        <li><a href="">채택</a></li>
-                        <li><a href="">마감</a></li>
-                        <li><a href="">관심</a></li>
+                        <li><a href="">신청한 캠페인</a></li>
+                        <li><a href="">진행중 캠페인</a></li>
+                        <li><a href="">마감된 캠페인</a></li>
+                        <li><a href="">관심 캠페인</a></li>
                       </ul>
                     </li>
                     <li><a href="">블로그 관리</a></li>
