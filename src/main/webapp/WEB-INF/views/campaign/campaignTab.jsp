@@ -10,7 +10,7 @@
 	<body>
 	    <div class="campaign-tab">
 	        <input type="radio" name="tab" id="campaign-name" checked>
-	        <label for="campaign-name">캠페인 이름</label>
+	        <label class="campaign-tab-name" for="campaign-name">${param.cmpnTitle}</label>
 	        <input type="radio" name="tab" id="campaign-applicant">
 	        <label for="campaign-applicant">신청자</label>
 	        <input type="radio" name="tab" id="campaign-return-hist">

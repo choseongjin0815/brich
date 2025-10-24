@@ -10,6 +10,10 @@ body {
 	overflow: hidden;
 }
 
+a {
+	text-decoration: none;
+}
+
 table {
 	border-collapse: collapse;
 	border-top: 1px solid #d9d5ec;
@@ -43,7 +47,7 @@ td {
 	
 }
 
-.list_tbl {
+.list-tbl {
 	width: 100%;
     /* table-layout: fixed; */
 }

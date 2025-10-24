@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
 
 @Controller
@@ -14,11 +15,13 @@ public class BlogDataController {
 	@Autowired BlogDataService blodDataService;
 	
 	@GetMapping("/blog/dashboard")
-	public String viewBlogDashBoard(Model model){
+	public String viewBlogDashBoard(Model model, RequestExpireSoonCampaignVO requestExpireSoonCampaignVO){
 		
 		ResponseExpireSoonListVO result = 
-				this.blodDataService.readExpireSoonCampaignList();
+				this.blodDataService.readExpireSoonCampaignList(requestExpireSoonCampaignVO);
 		model.addAttribute("list", result);
+		
+		model.addAttribute("search", requestExpireSoonCampaignVO);
 		return "blog/dashboard";
 	}
 	

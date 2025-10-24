@@ -1,6 +1,7 @@
 package com.ktdsuniversity.edu.domain.user.dao.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
@@ -11,10 +12,11 @@ import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
 import com.ktdsuniversity.edu.domain.user.dao.AdminUserDao;
 import com.ktdsuniversity.edu.domain.user.vo.AdminAdvertiserDetailVO;
+import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerAreaInfoVO;
+import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerCategoryInfoVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerDetailVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminUserListVO;
-import com.ktdsuniversity.edu.domain.user.vo.BlogCategoryVO;
-import com.ktdsuniversity.edu.domain.user.vo.UserAreaVO;
+import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 @Repository
 public class AdminUserDaoImpl extends SqlSessionDaoSupport implements AdminUserDao {
@@ -31,6 +33,16 @@ public class AdminUserDaoImpl extends SqlSessionDaoSupport implements AdminUserD
 	public List<AdminUserListVO> selectAdminUserList() {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdminUserList");
 	}
+	
+	@Override
+	public List<AdminUserListVO> selectAdminBloggerList() {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdminBloggerList");
+	}
+
+	@Override
+	public List<AdminUserListVO> selectAdminAdvertiserList() {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdminAdvertiserList");
+	}
 
 	@Override
 	public String selectAdminUserAutrById(String usrId) {
@@ -44,26 +56,22 @@ public class AdminUserDaoImpl extends SqlSessionDaoSupport implements AdminUserD
 
 	@Override
 	public List<CampaignVO> selectBloggerCmpnProgressList(String usrId) {
-		// TODO Auto-generated method stub
-		return null;
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectBloggerCmpnProgressList", usrId);
 	}
 
 	@Override
 	public List<CampaignVO> selectBloggerCmpnCompletedList(String usrId) {
-		// TODO Auto-generated method stub
-		return null;
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectBloggerCmpnCompletedList", usrId);
 	}
 
 	@Override
-	public List<UserAreaVO> selectBloggerAreaList(String usrId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<AdminBloggerAreaInfoVO> selectBloggerAreaList(String usrId) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectBloggerAreaList", usrId);
 	}
 
 	@Override
-	public List<BlogCategoryVO> selectBloggerCategoryList(String usrId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<AdminBloggerCategoryInfoVO> selectBloggerCategoryList(String usrId) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectBloggerCategoryList", usrId);
 	}
 	
 	@Override
@@ -73,20 +81,33 @@ public class AdminUserDaoImpl extends SqlSessionDaoSupport implements AdminUserD
 
 	@Override
 	public List<CampaignVO> selectAdvertiserCmpnProgressList(String usrId) {
-		// TODO Auto-generated method stub
-		return null;
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdvertiserCmpnProgressList", usrId);
 	}
 
 	@Override
 	public List<CampaignVO> selectAdvertiserCmpnCompletedList(String usrId) {
-		// TODO Auto-generated method stub
-		return null;
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdvertiserCmpnCompletedList", usrId);
 	}
 
 	@Override
 	public List<FileGroupVO> selectAdminUserFileList(String usrId) {
-		// TODO Auto-generated method stub
+		// TODO 업로드 가능한 사진 수 정하고 하는 걸로 (수정 필요할 수도 있음)
 		return null;
+	}
+
+	@Override
+	public int updateAdvertiserAuthCodeByApprove(Map<String, String> requestData) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateAdvertiserAuthCodeByApprove", requestData);
+	}
+
+	@Override
+	public int updateAdvertiserAuthCodeByReject(Map<String, String> requestData) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateAdvertiserAuthCodeByReject", requestData);
+	}
+
+	@Override
+	public List<CommonCodeVO> selectBlogCategoryList() {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectBlogCategoryList");
 	}
 
 }

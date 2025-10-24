@@ -1,15 +1,16 @@
-package com.ktdsuniversity.edu.domain.campaign.vo;
+package com.ktdsuniversity.edu.domain.campaign.vo.response;
 
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
+import com.ktdsuniversity.edu.global.common.AbstractSearchVO;
 import com.ktdsuniversity.edu.global.common.BaseVO;
 
-public class ApplicantVO extends BaseVO {
+public class ResponseApplicantVO {
 
 	private String cmpnPstAdptId;
-
 	private String adptYn;
-	private UserVO userInfo;
 	
+	private UserVO userInfo;
+
 	public String getCmpnPstAdptId() {
 		return this.cmpnPstAdptId;
 	}
@@ -31,6 +32,6 @@ public class ApplicantVO extends BaseVO {
 	
 	@Override
 	public String toString() {
-		return "ApplicantVO [adptYn=" + this.adptYn + ", userInfo=" + this.userInfo + "]";
+		return "ApplicantVO [cmpnPstAdptId=" + cmpnPstAdptId + ", adptYn=" + adptYn + ", userInfo=" + userInfo + "]";
 	}
 }
