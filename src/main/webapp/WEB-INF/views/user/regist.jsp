@@ -20,60 +20,60 @@
         </div>
         <div class="regist-main">
             <c:if test="${role eq 'advertiser' }">
-	            <form:form modelAttribute="requestUserRegistVO" 
-	                       method="post" 
-	                       action="/regist" 
-	                       enctype="multipart/form-data"
-	                       class="user-regist-form">
-	                <div class="right-flex">
-		                <div class="input-flex short"> 
-			                <label for="id" class="require">아이디</label>
-			                <input type="text" id="id" name="logId" class="logId" value="${registData.logId}" placeholder="아이디를 입력해주세요"/>
-			                <form:errors path="logId" cssClass="validate-require" />
-		                </div>
-		                <div class="regist-side-btn"><div class="duplicate-id">중복 확인</div></div>
-	                </div>
-	                <div class="input-flex">
-		                <label for="name" class="require">이름</label>   
-		                <input type="text" id="name" name="nm" placeholder="이름을 입력해주세요" value="${registData.nm}"/>
-	                     <form:errors path="nm" cssClass="validate-require" />
-	                </div>
-	                <div class="input-flex">
-		                <label for="company" class="require">사업자명</label>
-		                <input type="text" id="company" name="cmpny" placeholder="사업자명을 입력해주세요"/>
-	                </div>
-	                <div>사업자 등록증</div>
-	                <input id="file" type="file" name="file" />
-	                <div class="right-flex">
-		                <div class="input-flex short">
-			                <label for="email" class="require" >이메일</label>
-			                <input type="text" id="email" name="eml" value="${registData.eml}" placeholder="이메일을 입력해주세요"/>
-		                    <form:errors path="eml" cssClass="validate-require" />
-		                </div>
-		                <div class="regist-side-btn email-send"><div>인증 번호</div></div>
-	                </div>
-	                <div class="right-flex verify-email-box">
-		                <div class="input-flex short">
-		                   <label for="email-confirm">인증번호 입력</label>
-		                   <input type="text" id="email-confirm" name="emailConfirm" placeholder="인증번호를 입력하세요"/>
-		                </div>
-		                <div class="regist-side-btn email-verify"><div>인증 확인</div></div>
-	                </div>
-	                <span class="email-check-timer"></span>
-	                <span class="email-confirm-message"></span>
-	                
-	                <div class="input-flex">
-	                    <label for="password" class="require">비밀번호</label>
-		                <input type="password" id="password" name="pswrd" placeholder="8~16자리 비밀번호 입력" maxlength="16"/>
-		                 <form:errors path="pswrd" cssClass="validate-require" />
-		                <input type="password" id="password-confirm" name="pswrdConfirm" placeholder="비밀번호 확인"/> 
-		                <c:if test="${not empty passwordError}"> 
-		                   <span class='validate-password-confirm'>비밀번호가 일치하지 않습니다.</span>
-		                </c:if>
-	                </div>
-	                <input type="hidden" name="autr" value="1007"/>
-	                <button type="button" class="regist-btn" data-dependencies="#id,#name,#company,#email,#email-confirm,#password,#password-confirm ">회원가입</button>
-	            </form:form>
+                <form:form modelAttribute="requestUserRegistVO" 
+                           method="post" 
+                           action="/regist" 
+                           enctype="multipart/form-data"
+                           class="user-regist-form">
+                    <div class="right-flex">
+                        <div class="input-flex short"> 
+                            <label for="id" class="require">아이디</label>
+                            <input type="text" id="id" name="logId" class="logId" value="${registData.logId}" placeholder="아이디를 입력해주세요"/>
+                            <form:errors path="logId" cssClass="validate-require" />
+                        </div>
+                        <div class="regist-side-btn"><div class="duplicate-id">중복 확인</div></div>
+                    </div>
+                    <div class="input-flex">
+                        <label for="name" class="require">이름</label>   
+                        <input type="text" id="name" name="nm" placeholder="이름을 입력해주세요" value="${registData.nm}"/>
+                         <form:errors path="nm" cssClass="validate-require" />
+                    </div>
+                    <div class="input-flex">
+                        <label for="company" class="require">사업자명</label>
+                        <input type="text" id="company" name="cmpny" placeholder="사업자명을 입력해주세요"/>
+                    </div>
+                    <div>사업자 등록증</div>
+                    <input id="file" type="file" name="file" />
+                    <div class="right-flex">
+                        <div class="input-flex short">
+                            <label for="email" class="require" >이메일</label>
+                            <input type="text" id="email" name="eml" value="${registData.eml}" placeholder="이메일을 입력해주세요"/>
+                            <form:errors path="eml" cssClass="validate-require" />
+                        </div>
+                        <div class="regist-side-btn email-send"><div>인증 번호</div></div>
+                    </div>
+                    <div class="right-flex verify-email-box">
+                        <div class="input-flex short">
+                           <label for="email-confirm">인증번호 입력</label>
+                           <input type="text" id="email-confirm" name="emailConfirm" placeholder="인증번호를 입력하세요"/>
+                        </div>
+                        <div class="regist-side-btn email-verify"><div>인증 확인</div></div>
+                    </div>
+                    <span class="email-check-timer"></span>
+                    <span class="email-confirm-message"></span>
+                    
+                    <div class="input-flex">
+                        <label for="password" class="require">비밀번호</label>
+                        <input type="password" id="password" name="pswrd" placeholder="8~16자리 비밀번호 입력" maxlength="16"/>
+                         <form:errors path="pswrd" cssClass="validate-require" />
+                        <input type="password" id="password-confirm" name="pswrdConfirm" placeholder="비밀번호 확인"/> 
+                        <c:if test="${not empty passwordError}"> 
+                           <span class='validate-password-confirm'>비밀번호가 일치하지 않습니다.</span>
+                        </c:if>
+                    </div>
+                    <input type="hidden" name="autr" value="1007"/>
+                    <button type="button" class="regist-btn" data-dependencies="#id,#name,#company,#email,#email-confirm,#password,#password-confirm ">회원가입</button>
+                </form:form>
             </c:if>
             <c:if test="${role eq 'blogger'}">
                 <form:form modelAttribute="requestUserRegistVO" method="post" action="/regist" class="user-regist-form">
