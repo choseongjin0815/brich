@@ -92,7 +92,6 @@ body {
 		  border-radius: 8px;
 		  color: #fff;
 		  font-size: 24px;
-		  background-color: #5275c1;
 		  margin: 0 auto;
 		  margin-top: 50px;
 		  text-align: center;
@@ -321,4 +320,9 @@ body {
         color: #ccc;
         border: 0;
     }
+}
+
+.validate-require {
+	color: #FF0000;
+	font-size: 14px;
 }
