@@ -1,20 +1,46 @@
 package com.ktdsuniversity.edu.domain.user.vo.request;
 
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+
 public class RequestUserRegistVO{
 	
 	private String usrId;
 	
+	@NotEmpty(message="필수 입력입니다.")
 	private String logId;
 	
+	@NotEmpty(message="필수 입력입니다.")
 	private String nm;
 	
+	@Email(message="이메일 형식으로 작성하세요.")
+	@NotEmpty(message="필수 입력입니다.")
 	private String eml;
 	
+//	@Size(min=8, max=16, message="8자리에서 16자리까지 입력 가능합니다.")
+	@NotEmpty(message="필수 입력입니다.")
 	private String pswrd;
+	
+	@NotEmpty(message="필수 입력입니다.")
+	private String pswrdConfirm;
+	
+	@NotEmpty(message="필수 입력입니다.")
+	private String emailConfirm;
 	
 	private String autr;
 	
 	private String cmpny;
+	
+	private String salt;
+	
+	private String flGrpId;
+	
+	private List<MultipartFile> file;
 
 	public String getUsrId() {
 		return this.usrId;
@@ -72,12 +98,52 @@ public class RequestUserRegistVO{
 		this.cmpny = cmpny;
 	}
 
+	public String getPswrdConfirm() {
+		return this.pswrdConfirm;
+	}
+
+	public void setPswrdConfirm(String pswrdConfirm) {
+		this.pswrdConfirm = pswrdConfirm;
+	}
+
+	public String getSalt() {
+		return this.salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
+	public String getEmailConfirm() {
+		return this.emailConfirm;
+	}
+
+	public void setEmailConfirm(String emailConfirm) {
+		this.emailConfirm = emailConfirm;
+	}
+	
+	public String getFlGrpId() {
+		return this.flGrpId;
+	}
+
+	public void setFlGrpId(String flGrpId) {
+		this.flGrpId = flGrpId;
+	}
+
+	public List<MultipartFile> getFile() {
+		return this.file;
+	}
+
+	public void setFile(List<MultipartFile> file) {
+		this.file = file;
+	}
+
 	@Override
 	public String toString() {
 		return "RequestUserRegistVO [usrId=" + usrId + ", logId=" + logId + ", nm=" + nm + ", eml=" + eml + ", pswrd="
-				+ pswrd + ", autr=" + autr + ", cmpny=" + cmpny + ", toString()=" + super.toString() + "]";
+				+ pswrd + ", pswrdConfirm=" + pswrdConfirm + ", emailConfirm=" + emailConfirm + ", autr=" + autr
+				+ ", cmpny=" + cmpny + ", salt=" + salt + ", flGrpId=" + flGrpId + ", file=" + file + ", toString()="
+				+ super.toString() + "]";
 	}
 
-	
-	
 }
