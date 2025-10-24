@@ -1,4 +1,4 @@
-package com.ktdsuniversity.edu.global.config;
+ package com.ktdsuniversity.edu.global.config;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
