@@ -4,23 +4,23 @@ import java.util.Map;
 
 public class AjaxResponse {
 
-	private Object body;	// 정상 처리 결과
-	private Map<String, Object> error;	// 예외가 있을 때
-
-	public Object getBody() {
-		return this.body;
-	}
-
-	public void setBody(Object body) {
-		this.body = body;
-	}
+	private Map<String, Object> error;
+	private Object body;
 
 	public Map<String, Object> getError() {
-		return this.error;
+		return error;
 	}
 
 	public void setError(Map<String, Object> error) {
 		this.error = error;
+	}
+
+	public Object getBody() {
+		return body;
+	}
+
+	public void setBody(Object body) {
+		this.body = body;
 	}
 	
 }

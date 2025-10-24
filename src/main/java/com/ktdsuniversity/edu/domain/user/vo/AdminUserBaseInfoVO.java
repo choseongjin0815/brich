@@ -1,15 +1,12 @@
 package com.ktdsuniversity.edu.domain.user.vo;
 
-import java.util.List;
-
-import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
-
 public class AdminUserBaseInfoVO {
 	
 	private String usrId;
 	private String logId;
 	private String eml;
 	private String nm;
+	private String autr;
 	
 	private String rcntLgnScsDt;
 	private int pnltCnt;
@@ -38,6 +35,12 @@ public class AdminUserBaseInfoVO {
 	}
 	public void setNm(String nm) {
 		this.nm = nm;
+	}
+	public String getAutr() {
+		return this.autr;
+	}
+	public void setAutr(String autr) {
+		this.autr = autr;
 	}
 	public String getRcntLgnScsDt() {
 		return this.rcntLgnScsDt;
