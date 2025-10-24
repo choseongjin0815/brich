@@ -14,19 +14,6 @@
 </head>
 <body>
     <div class="login-wrapper">
-<<<<<<< HEAD
-    <form method="post" id="login">
-         아이디
-        <input type="text" name="logId">
-        <br>
-        비밀번호 
-        <input type="password" name="pswrd">
-        <button type="button" class="login-button">로그인</button>
-    </form>
-    <a href="/">로그인 정보를 잊으셨나요?</a>
-    <a href="/choose-role">SIGN UP</a>
-    <a href="/campaignmain">비회원으로 둘러보기</a>
-=======
 	    <div class="login-area">
 		    <form method="post" id="login">
 		        <div class="login-input-box">
@@ -44,9 +31,7 @@
 		    <a href="/find/id" class="login-page-btn">로그인 정보를 잊으셨나요?</a>
 		    <a href="/choose-role" class="login-button">SIGN UP</a>
 		    <a href="/campaignmain" class="login-page-btn">비회원으로 둘러보기</a>
-    </div>
->>>>>>> aca9deb45842d7c9b0375e6318bc2129a8edab9f
-    
+        </div>
     </div>
 </body>
 </html>
