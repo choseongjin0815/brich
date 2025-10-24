@@ -24,6 +24,44 @@ public class ResponseCampaignVO extends CampaignVO{
 	  * 부모지역 이름
 	  */
 	 public String parentArea;
+
+	 public int getLikeCnt() {
+		 return this.likeCnt;
+	 }
+
+	 public void setLikeCnt(int likeCnt) {
+		 this.likeCnt = likeCnt;
+	 }
+
+	 public int getAdptCnt() {
+		 return this.adptCnt;
+	 }
+
+	 public void setAdptCnt(int adptCnt) {
+		 this.adptCnt = adptCnt;
+	 }
+
+	 @Override
+	public String toString() {
+		return "ResponseCampaignVO [likeCnt=" + likeCnt + ", adptCnt=" + adptCnt + ", area=" + area + ", parentArea="
+				+ parentArea + "]";
+	}
+
+	 public List<String> getArea() {
+		 return this.area;
+	 }
+
+	 public void setArea(List<String> area) {
+		 this.area = area;
+	 }
+
+	 public String getParentArea() {
+		 return this.parentArea;
+	 }
+
+	 public void setParentArea(String parentArea) {
+		 this.parentArea = parentArea;
+	 }
 	 
 	 
 

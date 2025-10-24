@@ -29,13 +29,22 @@ public class CampaignServiceImpl implements CampaignService {
 
     @Autowired
     private CampaignDao campaignDao;
-
+    
+    /**
+     * 캠페인 메인
+     * 켐페인 상세 조회
+     * 조회조건 : 캠페인 아이디
+     */
 	@Override
-	public CampaignVO readCampaignDetail(String campaignId) {
-		CampaignVO detail = campaignDao.selectCampaignDetailById(campaignId);
+	public ResponseCampaignVO readCampaignDetail(String campaignId) {
+		ResponseCampaignVO detail = campaignDao.selectCampaignDetailById(campaignId);
 		return detail;
 	}
-
+	/**
+	 * 캠페인 메인 
+	 * 캠페인 목록 조회
+	 * 조회조건 : 카테고리, 검색어, 정렬순
+	 */
 	@Override
 	public ResponseCampaignListVO readCampaignListAndCategory (RequestSearchCampaignVO requestSearchCampaignVO) {
 		
@@ -60,10 +69,6 @@ public class CampaignServiceImpl implements CampaignService {
 		// Level 3 조회
 		responseCampaignListVO.setResponseCampaignList(campaignDao.selectCampaignListCategoryAndSortBy(requestSearchCampaignVO));
 			
-			
-			
-		
-		
 		return responseCampaignListVO;
 	}
 

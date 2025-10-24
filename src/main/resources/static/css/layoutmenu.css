@@ -14,22 +14,85 @@ ul{
 
   flex-direction: column;
   height: 100vh;
+  
+
 
   & > .top-menu {
-    height: 72px;
+    position: sticky;
+    top: 0px;
+    display : inline-block;
+    z-index : 999;
+    background-color : #F1F2F7;
+    & > .top-menu-content{
+        display: flex;
+        flex-direction: row;
+        height: 100px;
+        flex-direction: row;
+    }
+    
   }
   & > .application-main {
-    flex-grow: 1;
     display: flex;
     flex-direction: row;
-    height: 100px;
-    width: 100vw;
-
-    & > .side-menu {
-      width: 270px;
-    }
+    & > .side-menu{
+		position: sticky;
+		top: 100px;
+		width: 270px;
+		height : 100vh;
+		align-self: flex-start; 
+		background-color : #F1F2F7;
+    }   
   }
 }
+.menu-nav {
+	z-index : 999;
+	padding : 56px 27px 0 43px;
+	& > .common-menu{
+	   margin : 0;
+	}
+}
+.menu-content {
+	& > li > a {
+	     padding-left : 55px;
+	     display: block; 
+		 text-decoration: none;
+		 color: #616161;
+	}
+}
+.menu-content-my{
+         padding: 0 0 0 55px;
+         display: block; 
+         text-decoration: none;
+         color: #616161;	
+}
+.menu-my-campaign-content{
+	& > li > a {
+         padding : 0 0 0 38px;
+         display: block; 
+         text-decoration: none;
+         color: #616161;
+    }
+}
+.last-item{
+	padding-bottom : 15px;
+}
+.sub-menu{
+	display:none;
+}
+.common-menu{
+	position: relative;
+}
+.others-menu {
+    position: absolute;
+    top : 512px;
+    left : 0px;
+    }
+ul { padding: 0; }
+li {
+  list-style: none;
+  line-height: 34px;
+}
+a {
 
-
+}
 

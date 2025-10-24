@@ -29,7 +29,7 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
     }
 
 	@Override
-	public CampaignVO selectCampaignDetailById(String campaignId) {
+	public ResponseCampaignVO selectCampaignDetailById(String campaignId) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignDetailById", campaignId);
 	}
 

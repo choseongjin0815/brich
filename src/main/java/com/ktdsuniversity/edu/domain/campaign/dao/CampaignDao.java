@@ -14,7 +14,7 @@ import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 public interface CampaignDao {
 
-	CampaignVO selectCampaignDetailById(String campaignId);
+	ResponseCampaignVO selectCampaignDetailById(String campaignId);
 
 	List<CommonCodeVO> selectCategoryList();
 
