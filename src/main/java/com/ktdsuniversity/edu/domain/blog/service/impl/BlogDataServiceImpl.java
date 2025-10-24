@@ -26,6 +26,7 @@ public class BlogDataServiceImpl implements BlogDataService{
 		ResponseExpireSoonListVO result = new ResponseExpireSoonListVO();
 
 		result.setList(list);
+		
 		return result;
 	}
 

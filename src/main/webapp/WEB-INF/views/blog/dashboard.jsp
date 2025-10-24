@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <jsp:include page="/WEB-INF/views/layout/menu.jsp">
     <jsp:param name='css' value="
@@ -21,10 +22,10 @@
                  				 <c:when test="${not empty list.list}">
 									<c:forEach items="${list.list}" var="recommend">
                           				<tr>
-                              				<td>${recommend.profile}</td>
-                              				<td>${recommend.name}</td>
-                              				<td>${recommend.expiredate}</td>
-                            				<td>${recommend.reward}</td>
+                              				<td>${recommend.cmpnId}</td>
+                              				<td>${recommend.cmpnTitle}</td>
+                              				<td>${recommend.rcrtEndDt}</td>
+                            				<td>${recommend.offrCn}</td>
                           				</tr>
                       				</c:forEach>
                   </c:when>
