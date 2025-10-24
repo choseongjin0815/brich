@@ -12,6 +12,12 @@ import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
 import com.ktdsuniversity.edu.domain.campaign.vo.ApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseApplicantListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
@@ -63,22 +69,46 @@ public class CampaignServiceImpl implements CampaignService {
 		return responseCampaignListVO;
 	}
 
-	public ResponseApplicantListVO readApplicantListById(String cmpnId) {
-		List<ApplicantVO> applicant = this.campaignDao.selectApplicantListByCmpnId(cmpnId);
-		String cmpnState = this.campaignDao.selectCmpnStateByCmpnId(cmpnId);
+	public ResponseApplicantListVO readApplicantListById(RequestApplicantVO requestApplicantVO) {
+		int applicantCount = this.campaignDao.selectApplicantCountByCmpnId(requestApplicantVO);
+		requestApplicantVO.setPageCount(applicantCount);
+		
+		List<ResponseApplicantVO> applicant = this.campaignDao.selectApplicantListByCmpnId(requestApplicantVO);
+		int adoptCount = this.campaignDao.selectAdoptCountByCmpnId(requestApplicantVO.getCmpnId());
+		CampaignVO campaignInfo = this.campaignDao.selectCampaignInfoByCmpnId(requestApplicantVO.getCmpnId());
 		
 		ResponseApplicantListVO applicantList = new ResponseApplicantListVO();
 		applicantList.setApplicantList(applicant);
-		applicantList.setCmpnState(cmpnState);
+		applicantList.setAdoptCount(adoptCount);
+		applicantList.setCampaignInfo(campaignInfo);
+		
 		return applicantList;
+	}
+	
+	@Override
+	@Transactional
+	public boolean updateAdptYnBycmpnApplyId(RequestApplicantVO requestApplicantVO) {
+		String cmpnState = this.campaignDao.selectCampaignStateByCmpnPstAdptId(requestApplicantVO.getCmpnPstAdptId());
+		if (!cmpnState.equals("2006")) {
+			// TODO : Ajax 에러 처리 하기
+			throw new IllegalArgumentException("선정 단계가 아닙니다.");
+		}
+		
+		int updateCount = this.campaignDao.updateAdptYnByCmpnPstAdptId(requestApplicantVO);
+		
+		return updateCount > 0;
 	}
 
 	@Override
-	@Transactional
-	public boolean updateAdptYnBycmpnApplyId(ApplicantVO applicantVO) {
-		int updateCount = this.campaignDao.updateAdptYnBycmpnApplyId(applicantVO);
+	public ResponseAdoptListVO readResponseAdoptListByCmpnId(RequestApplicantVO requestApplicantVO) {
+		List<ResponseAdoptVO> adopt = this.campaignDao.selectAdoptListByCmpnId(requestApplicantVO);
+		CampaignVO campaign = this.campaignDao.selectCampaignInfoByCmpnId(requestApplicantVO.getCmpnId());
 		
-		return updateCount > 0;
+		ResponseAdoptListVO adoptList = new ResponseAdoptListVO();
+		adoptList.setAdoptList(adopt);
+		adoptList.setCampaignInfo(campaign);
+		
+		return adoptList;
 	}
 
 }
