@@ -9,44 +9,35 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
         <script type='text/javascript' src='/js/campaign/campaignmain.js'></script>
     " />    
 </jsp:include>
-
-
         <div class="main">
             <div>캠페인</div>
-            <div>카테고리
-            
-            <form class="search__section">
-                    <label class="category__radio noview">
-                        <input type="radio" name="sortBy" value="ALL" checked />
-                    </label>  
+            <div>카테고리</div>
+            <form class="search_section"> 
                 <c:forEach items="${category}" var="category">
                     <label class="category__radio">
-                        <input type="radio" name="sortBy" value="${category.cdNm}"/>
-                        <span>${category.cdNm} </span>
+                        <input type="radio" name="category" value="${category.cdNm}" 
+						 ${category.cdId eq search.category ? 'checked' : ''} />
+                        <span>${category.cdNm}</span>
                     </label>    
                 </c:forEach>
-                </div>
                 <div>필터&검색</div>
                 <div>목록</div>
                 <input type="text" name="searchKeyword" value="${search.searchKeyword}" />
-                <button type="button" class="search-button">검색</button>              
-                <div class="filter__label">SORT BY:</div>
-                <label class="filter__radio">
-                    <input type="radio" name="sortBy" value="latest" checked/>
-                    <span>최신순</span>
-                </label>
-                <label class="filter__radio">
-                    <input type="radio" name="sortBy" value="deadline" />
-                    <span>마감임박순</span>
-                </label>
-                <label class="filter__radio">
-                    <input type="radio" name="sortBy" value="popular" />
-                    <span>인기순</span>
-                </label>
+                <button type="button" class="search-button">검색</button>
+                <div>SORT BY:</div>
+                <select name="sortBy">
+                    <option value="latest" ${search.sortBy eq "latest" ? "selected" : ""}>최신순</option>
+                    <option value="deadline" ${search.sortBy eq "deadline" ? "selected" : ""}>마감임박순</option>
+                    <option value="popular" ${search.sortBy eq "popular" ? "selected" : ""}>인기순</option>
+                </select>
             </form> 
             
           <div>
-            <a href="/campaigndetail/CMPN-20250919-000004">dd</a>
+             <c:forEach items="${campaignList}" var="campaignList">
+  				<div>
+					<a href="/campaigndetail/${campaignList.cmpnId}">${campaignList.cmpnTitle}</a>
+				</div>
+             </c:forEach>
           </div>
         </div>
       </div>
