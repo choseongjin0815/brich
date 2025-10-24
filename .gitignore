@@ -5,10 +5,7 @@ target/
 !**/src/test/**/target/
 /src/main/resources/application.yml
 /target/classes/application.yml
-<<<<<<< HEAD
 bin/
-=======
->>>>>>> dev
 
 ### STS ###
 .apt_generated
@@ -47,8 +44,5 @@ build/
 ### Metadata ###
 .metadata
 
-<<<<<<< HEAD
 ### Bin ###
 bin/
-=======
->>>>>>> dev
