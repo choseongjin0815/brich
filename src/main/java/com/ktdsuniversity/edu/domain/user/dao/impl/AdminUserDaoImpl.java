@@ -13,9 +13,10 @@ import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
 import com.ktdsuniversity.edu.domain.user.dao.AdminUserDao;
 import com.ktdsuniversity.edu.domain.user.vo.AdminAdvertiserDetailVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerAreaInfoVO;
-import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerCatagoryInfoVO;
+import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerCategoryInfoVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerDetailVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminUserListVO;
+import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 @Repository
 public class AdminUserDaoImpl extends SqlSessionDaoSupport implements AdminUserDao {
@@ -31,6 +32,16 @@ public class AdminUserDaoImpl extends SqlSessionDaoSupport implements AdminUserD
 	@Override
 	public List<AdminUserListVO> selectAdminUserList() {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdminUserList");
+	}
+	
+	@Override
+	public List<AdminUserListVO> selectAdminBloggerList() {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdminBloggerList");
+	}
+
+	@Override
+	public List<AdminUserListVO> selectAdminAdvertiserList() {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdminAdvertiserList");
 	}
 
 	@Override
@@ -59,7 +70,7 @@ public class AdminUserDaoImpl extends SqlSessionDaoSupport implements AdminUserD
 	}
 
 	@Override
-	public List<AdminBloggerCatagoryInfoVO> selectBloggerCategoryList(String usrId) {
+	public List<AdminBloggerCategoryInfoVO> selectBloggerCategoryList(String usrId) {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectBloggerCategoryList", usrId);
 	}
 	
@@ -85,8 +96,18 @@ public class AdminUserDaoImpl extends SqlSessionDaoSupport implements AdminUserD
 	}
 
 	@Override
-	public int updateAdvertiserRegistAuthCode(Map<String, String> requestData) {
-		return super.getSqlSession().update(this.NAME_SPACE + "updateAdvertiserRegistAuthCode", requestData);
+	public int updateAdvertiserAuthCodeByApprove(Map<String, String> requestData) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateAdvertiserAuthCodeByApprove", requestData);
+	}
+
+	@Override
+	public int updateAdvertiserAuthCodeByReject(Map<String, String> requestData) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateAdvertiserAuthCodeByReject", requestData);
+	}
+
+	@Override
+	public List<CommonCodeVO> selectBlogCategoryList() {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectBlogCategoryList");
 	}
 
 }

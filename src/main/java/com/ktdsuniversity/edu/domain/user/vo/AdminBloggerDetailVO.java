@@ -16,10 +16,12 @@ public class AdminBloggerDetailVO extends AdminUserBaseInfoVO {
     private String blgAddrs;
     private String rcntBlgCrtfctnDt;
     private List<AdminBloggerAreaInfoVO> usrAr;
-    private List<AdminBloggerCatagoryInfoVO> usrBlgCtg;
+    private List<AdminBloggerCategoryInfoVO> usrBlgCtg;
     private int avrgVstrCnt;
     private int blgNghbrCnt;
     private int scrpCnt;
+
+    private List<String> checkedBlgCtg;
     
 	public int getCmpnProgressCnt() {
 		return this.cmpnProgressCnt;
@@ -69,10 +71,10 @@ public class AdminBloggerDetailVO extends AdminUserBaseInfoVO {
 	public void setUsrAr(List<AdminBloggerAreaInfoVO> usrAr) {
 		this.usrAr = usrAr;
 	}
-	public List<AdminBloggerCatagoryInfoVO> getUsrBlgCtg() {
+	public List<AdminBloggerCategoryInfoVO> getUsrBlgCtg() {
 		return this.usrBlgCtg;
 	}
-	public void setUsrBlgCtg(List<AdminBloggerCatagoryInfoVO> usrBlgCtg) {
+	public void setUsrBlgCtg(List<AdminBloggerCategoryInfoVO> usrBlgCtg) {
 		this.usrBlgCtg = usrBlgCtg;
 	}
 	public int getAvrgVstrCnt() {
@@ -92,6 +94,12 @@ public class AdminBloggerDetailVO extends AdminUserBaseInfoVO {
 	}
 	public void setScrpCnt(int scrpCnt) {
 		this.scrpCnt = scrpCnt;
+	}
+	public List<String> getCheckedBlgCtg() {
+		return this.checkedBlgCtg;
+	}
+	public void setCheckedBlgCtg(List<String> checkedBlgCtg) {
+		this.checkedBlgCtg = checkedBlgCtg;
 	}
     
 }

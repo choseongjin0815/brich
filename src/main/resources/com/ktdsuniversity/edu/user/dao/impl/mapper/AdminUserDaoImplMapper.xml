@@ -4,7 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ktdsuniversity.edu.domain.user.dao.impl.AdminUserDaoImpl">
 
-    <!-- 회원 관리 - 전체 회원 목록 -->
+    <!-- 회원 관리 - 회원 전체 목록 -->
     <resultMap type="com.ktdsuniversity.edu.domain.user.vo.AdminUserListVO" id="AdminUserListVOMap" autoMapping="true">
         <id column="USR_ID" property="usrId" />
         <result column="CMPN_ALL_CNT" property="cmpnAllCnt" />
@@ -70,9 +70,87 @@
           FROM USR U
           WHERE U.DLT_YN = 'N'
             AND U.AUTR NOT IN ('1001', '1005', '1008')
+          ORDER BY
+				   CASE
+				       WHEN U.AUTR = '1007'
+				       THEN 0
+				       ELSE 1
+				   END, 
+				       U.CRT_DT DESC
+    </select>
+    
+    <!-- 회원 관리 - 블로거 목록 -->
+    <select id="selectAdminBloggerList" resultMap="AdminUserListVOMap">
+        SELECT U.USR_ID 
+             , U.LOG_ID
+             , U.EML
+             , U.NM
+             , U.AUTR
+             , U.BLG_ADDRS
+             , U.RCNT_BLG_CRTFCTN_DT
+             , (SELECT COUNT(C_ADPT.BLG_USR_ID)
+                  FROM CMPN_PST_ADPT C_ADPT
+                 INNER JOIN CMPN C
+                    ON C.CMPN_ID = C_ADPT.CMPN_ID
+                 WHERE C.DLT_YN = 'N'
+                   AND C_ADPT.DLT_YN = 'N'
+                   AND C_ADPT.BLG_USR_ID = U.USR_ID
+                   AND C.STTS_CD = '2007'
+                   AND C_ADPT.ADPT_YN = 'Y') AS CMPN_PRGRSS_CNT
+             , (SELECT COUNT(C_ADPT.BLG_USR_ID)
+                   FROM CMPN_PST_ADPT C_ADPT
+                  INNER JOIN CMPN C
+                     ON C.CMPN_ID = C_ADPT.CMPN_ID
+                  WHERE C.DLT_YN = 'N'
+                    AND C_ADPT.DLT_YN = 'N'
+                    AND C_ADPT.BLG_USR_ID = U.USR_ID
+                    AND C.STTS_CD = '2007'
+                    AND C_ADPT.ADPT_YN = 'Y') AS CMPN_ALL_CNT
+             , U.RCNT_LGN_SCS_DT
+             , U.PNLT_CNT
+             , U.SBSCRPTN_EXPRS_DT
+             , U.CRT_DT
+          FROM USR U
+          WHERE U.DLT_YN = 'N'
+            AND U.AUTR IN ('1002', '1003')
           ORDER BY U.CRT_DT DESC
     </select>
-        
+    
+    <!-- 회원 관리 - 광고주 목록 -->
+    <select id="selectAdminAdvertiserList" resultMap="AdminUserListVOMap">
+        SELECT U.USR_ID 
+             , U.LOG_ID
+             , U.NM
+             , U.AUTR
+             , CASE
+                   WHEN U.AUTR = '1007'
+                   THEN 'N'
+                   WHEN U.AUTR = '1004'
+                   THEN 'Y'
+                   ELSE '-'
+                END AS REGIST_ACPT
+             , (SELECT COUNT(C.CMPN_ID)
+                  FROM CMPN C
+                 WHERE C.DLT_YN = 'N'
+                   AND C.STTS_CD = '2007'
+                   AND C.USR_ID = U.USR_ID) AS CMPN_PROGRESS_CNT
+             , (SELECT COUNT(C.CMPN_ID)
+                  FROM CMPN C
+                 INNER JOIN CMPN_PYMNT CP
+                    ON CP.CMPN_ID = C.CMPN_ID
+                 WHERE C.DLT_YN = 'N'
+                   AND C.USR_ID = U.USR_ID
+                   AND C.STTS_CD IN ('2005', '2006', '2007', '2009')) AS CMPN_ALL_CNT
+             , U.RCNT_LGN_SCS_DT
+             , U.PNLT_CNT
+             , U.CRT_DT
+          FROM USR U
+         WHERE U.DLT_YN = 'N'
+           AND U.AUTR IN ('1004', '1007')
+         ORDER BY U.CRT_DT DESC
+             , U.AUTR DESC
+    </select>
+    
     <!-- 분기 처리를 위한 아이디로 권한 찾기 -->
     <select id="selectAdminUserAutrById" parameterType="string">
         SELECT AUTR
@@ -162,10 +240,12 @@
     <!-- 상세 정보 - 블로거의 지역 정보 -->
     <resultMap type="com.ktdsuniversity.edu.domain.user.vo.AdminBloggerAreaInfoVO" id="AdminBloggerAreaInfoVOMap" autoMapping="true">
         <id column="USR_AR_ID" property="usrArId" />
+        <result column="AR_ID" property="arId" />
         <result column="CD_NM" property="cdNm" />
     </resultMap>
     <select id="selectBloggerAreaList" parameterType="string" resultMap="AdminBloggerAreaInfoVOMap">
         SELECT U_AR.USR_AR_ID AS USR_AR_ID
+             , U_AR.AR_ID AS AR_ID
 		     , A.CD_NM AS CD_NM
 		  FROM USR_AR U_AR
 		  LEFT OUTER JOIN USR U
@@ -177,12 +257,14 @@
     </select>
     
     <!-- 상세 정보 - 블로거의 카테고리 -->
-    <resultMap type="com.ktdsuniversity.edu.domain.user.vo.AdminBloggerCatagoryInfoVO" id="AdminBloggerCatagoryInfoVOMap" autoMapping="true">
+    <resultMap type="com.ktdsuniversity.edu.domain.user.vo.AdminBloggerCategoryInfoVO" id="AdminBloggerCategoryInfoVOMap" autoMapping="true">
         <id column="USR_ID" property="usrId" />
+        <result column="CD_ID" property="cdId" />
         <result column="CD_NM" property="cdNm" />
     </resultMap>
-    <select id="selectBloggerCategoryList" parameterType="string" resultMap="AdminBloggerCatagoryInfoVOMap">
+    <select id="selectBloggerCategoryList" parameterType="string" resultMap="AdminBloggerCategoryInfoVOMap">
         SELECT BC.USR_ID AS USR_ID
+             , BC.CD_ID AS CD_ID
 		     , C.CD_NM AS CD_NM
 		  FROM BLG_CTG BC
 		 INNER JOIN USR U
@@ -255,12 +337,35 @@
 		 ORDER BY C.CRT_DT DESC
     </select>
     
-    <!-- 상세 정보 - 광고주 가입 승인/반려 -->
-    <update id="updateAdvertiserRegistAuthCode" parameterType="map">
+    <!-- 상세 정보 - 광고주 가입 승인 -->
+    <update id="updateAdvertiserAuthCodeByApprove" parameterType="map">
         UPDATE USR
 		   SET AUTR = #{autr}
 		 WHERE USR_ID = #{usrId}
 		   AND DLT_YN = 'N'
     </update>
+    
+    <!-- 상세 정보 - 광고주 가입 반려 -->
+    <update id="updateAdvertiserAuthCodeByReject" parameterType="map">
+        UPDATE USR
+           SET AUTR = #{autr}
+             , DLT_YN = 'Y'
+         WHERE USR_ID = #{usrId}
+           AND DLT_YN = 'N'
+    </update>
+    
+    <select id="selectBlogCategoryList" resultType="com.ktdsuniversity.edu.global.common.CommonCodeVO">
+        SELECT CD_ID
+             , CD_NM
+          FROM CM_CD
+         WHERE DLT_YN = 'N'
+           AND USE_YN = 'Y'
+           AND (CASE 
+                    WHEN REGEXP_LIKE(CD_ID, '^[0-9]+$') 
+                    THEN TO_NUMBER(CD_ID)
+                    ELSE -1 
+                END) 
+           BETWEEN 3001 AND 3999
+    </select>
         
 </mapper>

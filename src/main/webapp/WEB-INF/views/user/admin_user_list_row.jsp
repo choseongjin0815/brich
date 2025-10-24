@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <td>
     <a href="/admin/user_detail/${rowItem.usrId}">${rowItem.logId}</a>
 </td>
@@ -11,7 +11,7 @@
         <td>${empty rowItem.sbscrptnExprsDt ? '-' : rowItem.sbscrptnExprsDt}</td>
     </c:when>
 
-    <c:when test="${isAdtr}">
+    <c:when test="${isAdvertiser}">
 		<td>${rowItem.registAcpt}</td>
 	</c:when>
 </c:choose>

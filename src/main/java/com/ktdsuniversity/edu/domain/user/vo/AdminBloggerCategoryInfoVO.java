@@ -1,6 +1,6 @@
 package com.ktdsuniversity.edu.domain.user.vo;
 
-public class AdminBloggerCatagoryInfoVO {
+public class AdminBloggerCategoryInfoVO {
 
 	private String usrId;
 	private String cdId;

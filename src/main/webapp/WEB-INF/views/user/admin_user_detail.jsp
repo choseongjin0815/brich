@@ -5,12 +5,12 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>회원 관리 - 회원 상세 정보</title>
+		<title>회원 관리 - 상세 정보</title>
         <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
         <c:if test="${classType eq 'AdminAdvertiserDetailVO' && userInfo.autr eq '1007'}">
             <script type="text/javascript" src="/js/user/admin_advertiser_regist_process.js"></script>
         </c:if>
-        <!-- <link type="text/css" rel="stylesheet" href="/css/user/admin_user_detail.css"/>  -->
+        <link type="text/css" rel="stylesheet" href="/css/user/admin_user_detail.css"/>
     </head>
     <body>
        <div class="wrapper">
@@ -71,14 +71,17 @@
 		          <c:if test="${(classType eq 'AdminBloggerDetailVO') || 
 		                        (classType eq 'AdminAdvertiserDetailVO' && userInfo.autr eq '1004')}">
 		                        
-		              <label for="warning-process">경고</label>
+		              <label for="warning">경고</label>
                       <input type="radio" id="warning" name="penalty-option" class="option_item"/>
                       
-                      <label for="ban-process">정지</label>
+                      <label for="ban">정지</label>
                       <input type="radio" id="ban" name="penalty-option" class="option_item"/>
                       
-                      <button type="button" class="user-info-update-btn">처리</button>
-                      <button type="button" class="user-info-update-btn">수정</button>
+                      <button type="button" class="panalty-btn">처리</button>
+                      
+                      <a href="/admin/user_modify/${usrId}">
+                          <button type="button" class="modify-btn">수정</button>
+                      </a>
                   </c:if>
 		      
 		          <c:if test="${classType eq 'AdminAdvertiserDetailVO' && userInfo.autr eq '1007'}">

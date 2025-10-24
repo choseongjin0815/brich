@@ -7,13 +7,18 @@ import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminAdvertiserDetailVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerAreaInfoVO;
-import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerCatagoryInfoVO;
+import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerCategoryInfoVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerDetailVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminUserListVO;
+import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 public interface AdminUserDao {
 
 	List<AdminUserListVO> selectAdminUserList();
+	
+	List<AdminUserListVO> selectAdminBloggerList();
+
+	List<AdminUserListVO> selectAdminAdvertiserList();
 
 	String selectAdminUserAutrById(String usrId);
 
@@ -27,7 +32,7 @@ public interface AdminUserDao {
 
 	List<AdminBloggerAreaInfoVO> selectBloggerAreaList(String usrId);
 
-	List<AdminBloggerCatagoryInfoVO> selectBloggerCategoryList(String usrId);
+	List<AdminBloggerCategoryInfoVO> selectBloggerCategoryList(String usrId);
 
 	List<CampaignVO> selectAdvertiserCmpnProgressList(String usrId);
 
@@ -35,6 +40,10 @@ public interface AdminUserDao {
 
 	List<FileGroupVO> selectAdminUserFileList(String usrId);
 
-	int updateAdvertiserRegistAuthCode(Map<String, String> requestData);
+	int updateAdvertiserAuthCodeByApprove(Map<String, String> requestData);
+
+	int updateAdvertiserAuthCodeByReject(Map<String, String> requestData);
+
+	List<CommonCodeVO> selectBlogCategoryList();
 
 }

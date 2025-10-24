@@ -13,19 +13,27 @@
 	<body>
 	   <div class="wrapper">
 		   <h1>회원 관리</h1>
-		   <div class="tab">
-		       <label for="all-user">전체</label>
-		       <input type="radio" id="all-user" name="admin-user-tab" class="tab-item" checked="checked"/>
-		       <label for="blogger">블로거</label>
-		       <input type="radio" id="blogger" name="admin-user-tab" class="tab-item"/>
-		       <label for="adtr">광고주</label>
-		       <input type="radio" id="adtr" name="admin-user-tab" class="tab-item"/>
-		   </div>
+		      <input type="hidden" id="current-tab" value="${currentTab}"/>
 		   
+            <div class="tab">
+			    <label for="all-user">전체</label>
+			    <input type="radio" id="all" data-tab-value="all" name="admin-user-tab" class="tab-item"
+			        <c:if test="${currentTab == 'all' || empty currentTab}">checked="checked"</c:if>
+			    />
+	    
+			    <label for="blogger">블로거</label>
+			    <input type="radio" id="blogger" data-tab-value="blogger" name="admin-user-tab" class="tab-item"
+			        <c:if test="${currentTab == 'blogger'}">checked="checked"</c:if>
+			    />
+			    <label for="advertiser">광고주</label>
+			    <input type="radio" id="advertiser" data-tab-value="advertiser" name="admin-user-tab" class="tab-item"
+			        <c:if test="${currentTab == 'advertiser'}">checked="checked"</c:if>
+		    />
+			</div>
 		   <div class="container">
            
 		       <!-- 전체 회원 -->
-		       <table id="all-user-tbl" class="list-tbl">
+		       <table id="all-tbl" class="list-tbl">
 		           <colgroup>
 		               <col/>
 		               <col/>
@@ -118,20 +126,20 @@
 	                       <c:forEach items="${userList}" var="items">
 	                       <c:if test="${items.autr == '1002' || items.autr == '1003'}">
 	                            <tr>
-	                                <c:set var="isAdtr" value="false" scope="request"/>
+	                                <c:set var="isAdvertiser" value="false" scope="request"/>
 	                                <c:set var="isBlogger" value="true" scope="request"/>
 	                                <c:set var="rowItem" value="${items}" scope="request"/>
 	                                <jsp:include page="../user/admin_user_list_row.jsp"></jsp:include>
 	                            </tr>
-	                       </c:if>
-	                       </c:forEach>
+	                        </c:if>
+	                        </c:forEach>
 	                   </c:when>
 	               </c:choose>
 	               </tbody>
 		       </table>
 		       
 		       <!-- 광고주 -->
-		       <table id="adtr-tbl" class="list-tbl">
+		       <table id="advertiser-tbl" class="list-tbl">
 		           <colgroup>
 	                   <col/>
 	                   <col/>
@@ -162,7 +170,7 @@
 	                       <c:if test="${items.autr == '1004' || items.autr == '1007'}">
 	                            <tr>
 	                                <c:set var="isBlogger" value="false" scope="request"/>
-	                                <c:set var="isAdtr" value="true" scope="request"/>
+	                                <c:set var="isAdvertiser" value="true" scope="request"/>
 	                                <c:set var="rowItem" value="${items}" scope="request"/>
 	                                <jsp:include page="../user/admin_user_list_row.jsp"></jsp:include>
 	                            </tr>
