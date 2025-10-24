@@ -235,7 +235,7 @@
       FROM CMPN
     </select>
     
-</mapper>
+
     <resultMap type="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO" 
                id="RequestSearchCampaignVOMap"
                autoMapping="true">
