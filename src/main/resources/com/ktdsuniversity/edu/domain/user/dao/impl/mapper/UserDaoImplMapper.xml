@@ -50,6 +50,7 @@
         , NM
         , SALT
         , AUTR
+        , CMPNY
         , FL_GRP_ID
         , CRT_DT
         , CRTR
@@ -64,6 +65,7 @@
         , #{nm}
         , #{salt}
         , #{autr}
+        , #{cmpny}
         , #{flGrpId}
         , SYSDATE
         , #{usrId}
@@ -133,4 +135,12 @@
 		     , SALT = #{salt}
 		 WHERE LOG_ID = #{logId}
     </update>
+    
+    <select id="selectUserIdByLogId"
+            parameterType="string"
+            resultType="string">
+        SELECT USR_ID
+		  FROM USR 
+		 WHERE LOG_ID = #{logId}
+    </select>
 </mapper>

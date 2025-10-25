@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.domain.user.dao.BlogCategoryDao;
+import com.ktdsuniversity.edu.domain.user.vo.BlogCategoryVO;
 
 @Repository
 public class BlogCategoryDaoImpl extends SqlSessionDaoSupport implements BlogCategoryDao {
@@ -17,6 +18,13 @@ public class BlogCategoryDaoImpl extends SqlSessionDaoSupport implements BlogCat
     public void setSqlSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {
         super.setSqlSessionTemplate(sqlSessionTemplate);
     }
+
+	@Override
+	public int insertBlogCategory(BlogCategoryVO blogCategoryVO) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertBlogCategory", blogCategoryVO);
+	}
+
+
 
 
 }

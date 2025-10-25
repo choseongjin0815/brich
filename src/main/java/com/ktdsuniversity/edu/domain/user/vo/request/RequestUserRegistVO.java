@@ -5,31 +5,31 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 
 public class RequestUserRegistVO{
 	
 	private String usrId;
 	
-	@NotEmpty(message="필수 입력입니다.")
+	@NotBlank(message="필수 입력입니다.")
 	private String logId;
 	
-	@NotEmpty(message="필수 입력입니다.")
+	@NotBlank(message="필수 입력입니다.")
 	private String nm;
 	
 	@Email(message="이메일 형식으로 작성하세요.")
-	@NotEmpty(message="필수 입력입니다.")
+	@NotBlank(message="필수 입력입니다.")
 	private String eml;
 	
 //	@Size(min=8, max=16, message="8자리에서 16자리까지 입력 가능합니다.")
-	@NotEmpty(message="필수 입력입니다.")
+	@NotBlank(message="필수 입력입니다.")
 	private String pswrd;
 	
-	@NotEmpty(message="필수 입력입니다.")
+	@NotBlank(message="필수 입력입니다.")
 	private String pswrdConfirm;
 	
-	@NotEmpty(message="필수 입력입니다.")
+	@NotBlank(message="필수 입력입니다.")
 	private String emailConfirm;
 	
 	private String autr;
@@ -39,6 +39,8 @@ public class RequestUserRegistVO{
 	private String salt;
 	
 	private String flGrpId;
+	
+	private List<String> cdIdList;
 	
 	private List<MultipartFile> file;
 
@@ -138,12 +140,20 @@ public class RequestUserRegistVO{
 		this.file = file;
 	}
 
+	public List<String> getCdIdList() {
+		return this.cdIdList;
+	}
+
+	public void setCdIdList(List<String> cdIdList) {
+		this.cdIdList = cdIdList;
+	}
+
 	@Override
 	public String toString() {
 		return "RequestUserRegistVO [usrId=" + usrId + ", logId=" + logId + ", nm=" + nm + ", eml=" + eml + ", pswrd="
 				+ pswrd + ", pswrdConfirm=" + pswrdConfirm + ", emailConfirm=" + emailConfirm + ", autr=" + autr
-				+ ", cmpny=" + cmpny + ", salt=" + salt + ", flGrpId=" + flGrpId + ", file=" + file + ", toString()="
-				+ super.toString() + "]";
+				+ ", cmpny=" + cmpny + ", salt=" + salt + ", flGrpId=" + flGrpId + ", cdIdList=" + cdIdList + ", file="
+				+ file + ", toString()=" + super.toString() + "]";
 	}
 
 }

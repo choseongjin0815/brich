@@ -10,18 +10,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ktdsuniversity.edu.domain.blog.controller.SearchBlogController;
+import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.file.dao.FileDao;
 import com.ktdsuniversity.edu.domain.file.dao.FileGroupDao;
 import com.ktdsuniversity.edu.domain.file.util.MultipartFileHandler;
 import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
 import com.ktdsuniversity.edu.domain.file.vo.FileVO;
+import com.ktdsuniversity.edu.domain.user.dao.BlogCategoryDao;
 import com.ktdsuniversity.edu.domain.user.dao.UserDao;
 import com.ktdsuniversity.edu.domain.user.service.UserService;
+import com.ktdsuniversity.edu.domain.user.vo.BlogCategoryVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserFindIdVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserLoginVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserResetPasswordVO;
+import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 import com.ktdsuniversity.edu.global.util.SHAEncrypter;
 
 
@@ -36,6 +40,10 @@ public class UserServiceImpl implements UserService {
 	private FileGroupDao fileGroupDao;
 	@Autowired
 	private FileDao fileDao;
+	@Autowired
+	private CampaignDao campaignDao;
+	@Autowired 
+	private BlogCategoryDao blogCategoryDao;
     
 	private static final Logger log = LoggerFactory.getLogger(SearchBlogController.class);
 
@@ -113,6 +121,7 @@ public class UserServiceImpl implements UserService {
 			requestUserRegistVO.setFlGrpId(fileGroupVO.getFlGrpId());
 			
 		}
+    
     	
     	if(logIdCount == 1) {
     		//추후 Custom Exception으로 전환 예정
@@ -133,6 +142,18 @@ public class UserServiceImpl implements UserService {
     	requestUserRegistVO.setSalt(salt);
     	
 		int insertResult= this.userDao.insertNewUser(requestUserRegistVO);
+		
+		//블로거가 카테고리를 선택했을 떄의 로직
+		if(insertResult == 1 && requestUserRegistVO.getCdIdList() != null) {
+			String createdUserId = this.userDao.selectUserIdByLogId(requestUserRegistVO.getLogId());
+			BlogCategoryVO blogCategoryVO = new BlogCategoryVO();
+			blogCategoryVO.setUsrId(createdUserId);
+    		for(String cdId : requestUserRegistVO.getCdIdList()) {
+    			blogCategoryVO.setCdId(cdId);
+    			int insertCategoryResult = this.blogCategoryDao.insertBlogCategory(blogCategoryVO);
+    		}
+    	}
+		
 		return insertResult > 0;
 	}
 
@@ -162,6 +183,12 @@ public class UserServiceImpl implements UserService {
 		int count = this.userDao.updatePswrdByLogIdAndPswrd(resetPasswordInfo);
 		return count > 0;
 	}
+
+	@Override
+	public List<CommonCodeVO> readCategoryList() {
+		return this.campaignDao.selectCategoryList();
+	}
+
 
 
 

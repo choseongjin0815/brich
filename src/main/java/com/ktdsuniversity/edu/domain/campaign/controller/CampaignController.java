@@ -91,6 +91,7 @@ public class CampaignController {
     @GetMapping("/adv/adopt/{cmpnId}")
     public String readAdoptList(Model model, @PathVariable String cmpnId,
     		RequestApplicantVO requestApplicantVO) {
+    	log.info("com");
     	requestApplicantVO.setCmpnId(cmpnId);
     	
     	ResponseAdoptListVO adoptList = this.campaignService.readResponseAdoptListByCmpnId(requestApplicantVO);
