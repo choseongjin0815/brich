@@ -12,13 +12,14 @@ import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
 @Controller
 public class BlogDataController {
 
-	@Autowired BlogDataService blodDataService;
+	@Autowired BlogDataService blogDataService;
 	
-	@GetMapping("/blog/dashboard")
+	@GetMapping("/blog/dashboard/{usrId}")
 	public String viewBlogDashBoard(Model model, RequestExpireSoonCampaignVO requestExpireSoonCampaignVO){
 		requestExpireSoonCampaignVO.setListSize(4);
+		requestExpireSoonCampaignVO.setPageCount(1);
 		ResponseExpireSoonListVO result = 
-				this.blodDataService.readExpireSoonCampaignList(requestExpireSoonCampaignVO);
+				this.blogDataService.readExpireSoonCampaignList(requestExpireSoonCampaignVO);
 		model.addAttribute("list", result);
 		
 		model.addAttribute("search", requestExpireSoonCampaignVO);
