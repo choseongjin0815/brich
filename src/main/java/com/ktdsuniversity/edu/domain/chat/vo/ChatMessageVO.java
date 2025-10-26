@@ -108,6 +108,7 @@ public class ChatMessageVO {
    private String cmpnId;
    private String cmpnTitle;
    private List<FileVO> fileList;
+   
    public String getChtMsgId() {
 	return this.chtMsgId;
    }
