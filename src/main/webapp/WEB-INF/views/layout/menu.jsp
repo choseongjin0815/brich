@@ -16,8 +16,20 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
     <div class="wrapper">
       <div class="top-menu">
         <div class="top-menu-content">
-	       <div>로고</div>
-           <div>brich</div>
+        	<div class="top-menu-left flex-row">
+        		<div class="main-logo"></div>
+        		<div class="brich-title height-center">
+        			<a href="#">Brich</a>
+        		</div>
+        	</div>
+        	<div class="top-menu-right flex-row">
+		        <div class="top-menu-search-area">search Bar</div>
+	            <div class="top-menu-profile-area flex-row">
+	            	<div class="menu-profile"></div>
+	            	<div class="menu-profilename height-center">${sessionScope.__LOGIN_USER__.logId}</div>
+	            	<div class="menu-alert"></div>
+				</div>
+        	</div>
         </div>
       </div>
       <div class="application-main">
@@ -28,32 +40,27 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
                 <li class="logout-menu">
                   <span>MENU</span>
                   <ul class="menu-content">
-                    <li><a href="">Dashboard</a></li>
-                    <li><a href="">캠페인</a></li>
+                    <li><a href="" class="dashboard-font">Dashboard</a></li>
+                    <li class="menu-campaignmain-selected"><a href="/campaignmain">캠페인</a></li>
                   </ul>
                 </li>
               </c:if>
               <c:if test="${sessionScope.__LOGIN_USER__ ne null 
                   and (sessionScope.__LOGIN_USER__.autr == 1002 
                     or sessionScope.__LOGIN_USER__.autr == 1003)}">
-                    
-                    
-                    
                 <li class="blg-menu">
                   <span>MENU</span>
                   <ul class="menu-content">
-                    <li><a href="">Dashboard</a></li>
-                    <li><a href="">캠페인</a></li>
-                    <li>
-                      <li class="my-campaign menu-content-my">MY 캠페인
-	                      <ul class="sub-menu menu-my-campaign-content">
+                    <li ><a id="menu-image" href="" class="dashboard-font"> Dashboard</a></li> 
+                    <li class="menu-campaignmain-selected"><a href="/campaignmain">캠페인</a></li>
+                    <li class="my-campaign">MY 캠페인 
+	                      <ul class="my-sub-menu">
 	                        <li><a href="">신청한 캠페인</a></li>
 	                        <li><a href="">진행중 캠페인</a></li>
 	                        <li><a href="">마감된 캠페인</a></li>
 	                        <li class="last-item"><a href="">관심 캠페인</a></li>
 	                      </ul>
-	                  </li>
-                    </li>
+	                </li>
                     <li><a href="">블로그 관리</a></li>
                     <li><a href="">메세지</a></li>
                   </ul>
@@ -66,7 +73,7 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
                 <li class="advertiser-menu">
                   <span>MENU</span>
                   <ul class="menu-content">
-                    <li><a href="">캠페인</a></li>
+                    <li class="menu-campaignmain-selected"><a href="/campaignmain">캠페인</a></li>
                     <li><a href="">MY 캠페인</a></li>
                     <li><a href="">캠페인 만들기</a></li>
                     <li><a href="">메세지</a></li>
@@ -76,6 +83,8 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
               <c:if test="${sessionScope.__LOGIN_USER__ ne null 
                   and sessionScope.__LOGIN_USER__.autr == 1001}">
                 <li class="admin-menu">
+                  <span>MENU</span>
+                  <li class="menu-campaignmain-selected"><a href="/campaignmain">캠페인</a></li>
                   <span>ADMIN MENU</span>
                   <ul class="menu-content">
                     <li><a href="">캠페인 관리</a></li>

@@ -32,9 +32,6 @@ public class CampaignController {
     							 @SessionAttribute(value = "__LOGIN_USER__", required = false) UserVO loginUser ) {
     	ResponseCampaignVO detail = campaignService.readCampaignDetail(campaignId);
     	
-    	// 부모지역명 자르기 // 서울특별시 -> 서울
-    	detail.setParentArea(detail.getParentArea().substring(0, 2));
-    	
     	log.info( "캠페인 상세조회 결과 : " + detail.toString());
     	model.addAttribute("detail", detail);
     	return "campaign/campaigndetail";

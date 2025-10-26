@@ -168,7 +168,7 @@
     <select id="selectCampaignDetailById"
             parameterType="string"
             resultMap="RequestCampaignVOMap">
-SELECT  CMPN.CMPN_ID
+			SELECT  CMPN.CMPN_ID
                   , CMPN.USR_ID
                   , CMPN.CTG_CD
                   , CMPN.STTS_CD
@@ -177,12 +177,12 @@ SELECT  CMPN.CMPN_ID
                   , CMPN.PRSNN_DSCNT
                   , CMPN.DRTN_DSCNT
                   , CMPN.CMPN_PRNT_ID
-                  , CMPN.RCRT_STRT_DT
+                  , TO_CHAR(CMPN.RCRT_STRT_DT, 'MM-DD') AS RCRT_STRT_DT
                   , CMPN.RCRT_PRSNN
                   , CMPN.PRGRSS_DRTN
-                  , CMPN.RCRT_END_DT
-                  , CMPN.PST_END_DT
-                  , CMPN.CMPN_END_DT
+                  , TO_CHAR(CMPN.RCRT_END_DT, 'MM-DD')  AS RCRT_END_DT
+                  , TO_CHAR(CMPN.PST_END_DT,  'MM-DD')  AS PST_END_DT
+                  , TO_CHAR(CMPN.CMPN_END_DT, 'MM-DD')  AS CMPN_END_DT
                   , CMPN.RTRN_RSN
                   , CMPN.ADDRS
                   , CMPN.ATTCH_GRP_ID
@@ -194,16 +194,16 @@ SELECT  CMPN.CMPN_ID
                   , CMPN.HSTG
                   , CMPN.NTFCN
                   , CMPN."VIEW"
-                  , CMPN.CNFM_DT
-                  , CMPN.CRT_DT
+                  , TO_CHAR(CMPN.CNFM_DT, 'MM-DD')       AS CNFM_DT
+                  , TO_CHAR(CMPN.CRT_DT,  'MM-DD')       AS CRT_DT
                   , CMPN.CRTR
-                  , CMPN.UPDT_DT
+                  , TO_CHAR(CMPN.UPDT_DT, 'MM-DD')       AS UPDT_DT
                   , CMPN.MTTR
-                  , CMPN.DLT_YN              
-                  , NVL(LIKE_TABLE.LIKE_CNT,0) AS LIKE_CNT 
-                  , NVL(ADPT_TABLE.ADPT_CNT,0) AS ADPT_CNT 
-                  , ARCD.CD_NM      AS AREA
-                  , PARCD.CD_NM     AS PARENT_AREA      
+                  , CMPN.DLT_YN
+                  , NVL(LIKE_TABLE.LIKE_CNT, 0)               AS LIKE_CNT
+                  , NVL(ADPT_TABLE.ADPT_CNT, 0)               AS ADPT_CNT
+                  , ARCD.CD_NM                                 AS AREA
+                  , PARCD.CD_NM                                AS PARENT_AREA   
               FROM CMPN CMPN 
               LEFT JOIN ( SELECT FAV.CMPN_ID  
                                , COUNT(FAV.CMPN_ID) AS LIKE_CNT
@@ -351,6 +351,15 @@ SELECT  CMPN.CMPN_ID
 			     CONNECT BY PRIOR PRNT_CD_ID = CD_ID ) CTG
 			WHERE lv = max_lv - 1
     </select>
+    
+	
+	<select id="selectCampaignChangeSttsCd"
+			parameterType="string"
+			resultType="string">
+			SELECT CD_NM
+			  FROM CM_CD
+			 WHERE CD_ID = #{_parameter} 
+	</select>
 </mapper>
 
 

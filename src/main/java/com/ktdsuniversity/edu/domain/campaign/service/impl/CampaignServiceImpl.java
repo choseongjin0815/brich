@@ -17,7 +17,6 @@ import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantVO;
-import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
@@ -38,6 +37,16 @@ public class CampaignServiceImpl implements CampaignService {
 	@Override
 	public ResponseCampaignVO readCampaignDetail(String campaignId) {
 		ResponseCampaignVO detail = campaignDao.selectCampaignDetailById(campaignId);
+		
+		// 공통코드 이름 출력
+		String changeSttsCd = campaignDao.selectCampaignChangeSttsCd(detail.getSttsCd());
+		detail.setSttsCd(changeSttsCd);
+		
+    	// 부모지역명 자르기 // 서울특별시 -> 서울
+    	if(detail.getParentArea() != null) {
+    		detail.setParentArea(detail.getParentArea().substring(0, 2));
+    	}
+		
 		return detail;
 	}
 	/**

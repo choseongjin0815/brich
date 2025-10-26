@@ -4,21 +4,23 @@
 
 
   * {
-    box-sizing: border box;
-    border: 1px solid black;
+    box-sizing: border-box;
     margin : 0;
     padding : 0;
   }
 
   & > .campaign-detail-wrapper {
-    padding: 43px 37px 0 43px;
+    padding: 45px 65px 0 65px;
 
     & > .cmpn-top-area {
-      height: 150px;
+      height: 130px;
       font-size: 24px;
       border-bottom: 1px solid black;
+	  margin-bottom: 10px;
+	  padding-left: 10px;
       & > .cmpn-title {
         font-size: 36px;
+		padding-bottom: 10px;
       }
     }
 
@@ -30,19 +32,19 @@
         flex-grow: 1;
         height: 12000px;
         font-size : 24px;
-        & > .list-table {
-            
+		width: 1020px;
+        & > .campaign-detail-table {
+            display: flex;
+			flex-direction: column;
             li {
-                display : block;
-                padding : 10px 0 10px 0;
-                label, div {
-                    display : inline-block;
-                }
+                display : flex;
+                padding : 15px 0 10px 0;
+				flex-direction: row;
                 label {
-                    width : 277px;
+					flex: 0 0 277px;
                 }
                 div {
-                    width : 830px;
+					flex-grow: 1;
                 }
             }
             
@@ -51,18 +53,47 @@
 
       & > .cmpn-rightbar-area {
         width: 423px;
-        padding: 25px 0 62px 60px;
-
         & > .right-bar {
-          position: sticky;
-          top: 289px;
-          right: 60px;
+			border: 1px solid black;
+			margin: 0px 0 0px 90px;
+			width: 330px;
+		  	border-radius: 10px;
+          	position: sticky;
+          	top : 260px;
+          	right: 60px;
+			& > .right-bar-top{
+				& > .right-bor-top-wrapper{
+					padding : 13px 33px 0 33px;
+					& > .right-bar-detail-table{
+						display: flex;
+						border-bottom: 1px solid black;
+						flex-direction: column;
+						padding-bottom: 20px;
+						li {
+						    display : flex;
+							flex-direction: row;
+							height: 25px;
+						    label {
+								flex: 0 0 130px;
+						    }
+						    div {
+								flex-grow: 1;
+						    }
+						}					
+					}
+				}
+				
+			}
         }
       }
     }
   }
+  
+  .flex-space-between {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
-.noview {
-  display: none;
-}
+
+

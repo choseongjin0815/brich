@@ -38,4 +38,7 @@ public interface CampaignDao {
 
 	List<CampaignVO> selectExpireSoonCampaign();
 
+	String selectCampaignChangeSttsCd(String sttsCd);
+
+
 }

@@ -86,4 +86,14 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	public List<ResponseAdoptVO> selectAdoptListByCmpnId(RequestApplicantVO requestApplicantVO) {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdoptListByCmpnId", requestApplicantVO);
 	}
+	
+	/**
+	 * 공통코드 이름 출력
+	 */
+	@Override
+	public String selectCampaignChangeSttsCd(String sttsCd) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignChangeSttsCd", sttsCd);
+	}
+	
+
 }

@@ -13,7 +13,6 @@ ul{
   display: flex;
 
   flex-direction: column;
-  height: 100vh;
   
 
 
@@ -22,12 +21,51 @@ ul{
     top: 0px;
     display : inline-block;
     z-index : 999;
-    background-color : #F1F2F7;
     & > .top-menu-content{
         display: flex;
         flex-direction: row;
-        height: 100px;
-        flex-direction: row;
+        height: 73px;
+        border-bottom: 1px solid #D9D9D9;
+        & > .top-menu-left{
+        	background-color : #F1F2F7;
+        	flex-basis: 290px;
+        	padding : 23px 0 23px 45px;
+        	& > .main-logo{
+        		width : 31px;
+        		height : 27px ;
+        		background-color : #5A67BA;
+        	}
+        	& >.brich-title{
+        		padding-left :15px; 
+        		font-size : 16px;
+        		font-weight : bold; 
+        		color :  #5A67BA;	
+        	}
+        }
+        & > .top-menu-right{
+        	display:flex;
+        	flex-grow: 1;
+        	background-color:white;
+        	& > .top-menu-search-area{
+	        		flex-grow : 1;
+        	}
+        	& > .top-menu-profile-area{
+        		flex-basis: 310px;
+        		padding: 20px 29px 20px 29px;
+        		& > .menu-profile{
+        			flex-basis : 32px;
+        			background-color : #5A67BA;
+        		}
+        		& > .menu-profilename{
+        			flex-grow : 1;
+        			padding : 9px 0 9px 12px;
+        		}
+        		& > .menu-alert{
+        			flex-basis : 41px;
+        			background-color : #5A67BA;
+        		}
+        	}	
+        }
     }
     
   }
@@ -36,63 +74,107 @@ ul{
     flex-direction: row;
     & > .side-menu{
 		position: sticky;
-		top: 100px;
-		width: 270px;
+		top: 73px;
+		flex-basis: 290px;
 		height : 100vh;
 		align-self: flex-start; 
 		background-color : #F1F2F7;
+		.menu-nav {
+			z-index : 999;
+			padding : 50px 27px 0 45px;
+			& > .common-menu{
+			   margin : 0;
+			}
+		}	
+		
+		.menu-content {
+			& > li > a {
+			     padding-left : 55px;
+			}
+		}
+		
+		.menu-content-my{
+		         padding: 0 0 0 55px;
+		         
+		}
+		.my-campaign{
+			padding-left: 55px;
+			& > .my-sub-menu{
+				display:none;
+				& > .last-item{
+					padding-bottom : 15px;
+				}
+				& > li > a {
+			         padding : 0 0 0 38px;
+			    }
+			}
+		}
+
+		
+		.common-menu{
+			position: relative;
+		}
+		
+		.others-menu {
+		    position: absolute;
+		    top : 512px;
+		    left : 0px;
+		    }
+		    
+		ul { 
+			padding: 0;
+			color: #616161; 
+		}
+		li {
+		  	line-height: 42px;
+		  	display: block;
+			a {
+				text-decoration: none;
+				color: #616161;
+			}
+		}
+		#menu-image {
+			padding-left : 18px;
+			display : flex;
+			gap : 15px;
+		}
+		#menu-image::before{
+			 content: "🔗";
+		}
+			
     }   
   }
-}
-.menu-nav {
-	z-index : 999;
-	padding : 56px 27px 0 43px;
-	& > .common-menu{
-	   margin : 0;
-	}
-}
-.menu-content {
-	& > li > a {
-	     padding-left : 55px;
-	     display: block; 
-		 text-decoration: none;
-		 color: #616161;
-	}
-}
-.menu-content-my{
-         padding: 0 0 0 55px;
-         display: block; 
-         text-decoration: none;
-         color: #616161;	
-}
-.menu-my-campaign-content{
-	& > li > a {
-         padding : 0 0 0 38px;
-         display: block; 
-         text-decoration: none;
-         color: #616161;
-    }
-}
-.last-item{
-	padding-bottom : 15px;
-}
-.sub-menu{
-	display:none;
-}
-.common-menu{
-	position: relative;
-}
-.others-menu {
-    position: absolute;
-    top : 512px;
-    left : 0px;
-    }
-ul { padding: 0; }
-li {
-  list-style: none;
-  line-height: 34px;
-}
-a {
+  
+  .flex-row {
+     display : flex;
+     flex-direction: row;
+  }
+  .flex-column {
+     display : flex;
+     flex-direction: column;
+  }  
+  
+  
+  .height-center {
+    display: flex;
+	align-items: center;
+  }
+  
+  .menu-selected {
+  	background-color : #E9EBF6;
+  	border-radius: 5px;
+  	font-weight : bold;
+  	color : black ;
+  	a {
+  		color : #0A66DD !important;
+  	}
+  }
+  .dashboard-font{
+  	font-weight : bold;
+  }
 
 }
+
+
+
 
