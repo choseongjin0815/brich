@@ -53,9 +53,11 @@ public class CampaignController {
     }
     
     @GetMapping("/submittedmycampaign")
-    public String submittedmycampaign(RequestSearchCampaignVO requestSearchCampaignVO, Model model,
-    		@SessionAttribute(value = "__LOGIN_USER__") UserVO loginUser) {
-    	
+    public String submittedmycampaign(Model model,@SessionAttribute(value = "__LOGIN_USER__") 
+    						UserVO loginUser) {
+    	String blgId = loginUser.getUsrId();
+    	ResponseCampaignListVO CampaignListAndCategory = campaignService.readSubmittedMyCampaignByBlgId(blgId);
+    	model.addAttribute("campaignList", CampaignListAndCategory.getResponseCampaignList());
     	return "campaign/submittedmycampaign";
     }
     

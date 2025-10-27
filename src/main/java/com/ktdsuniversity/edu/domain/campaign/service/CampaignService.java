@@ -22,4 +22,6 @@ public interface CampaignService {
 
 	ResponseAdoptListVO readResponseAdoptListByCmpnId(RequestApplicantVO requestApplicantVO);
 
+	ResponseCampaignListVO readSubmittedMyCampaignByBlgId(String blgId);
+
 }

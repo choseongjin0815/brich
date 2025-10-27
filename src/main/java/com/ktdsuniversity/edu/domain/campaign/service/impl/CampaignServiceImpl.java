@@ -89,6 +89,14 @@ public class CampaignServiceImpl implements CampaignService {
 		
 		return responseCampaignListVO;
 	}
+	
+	@Override
+	public ResponseCampaignListVO readSubmittedMyCampaignByBlgId(String blgId) {
+		ResponseCampaignListVO responseCampaignListVO = new ResponseCampaignListVO();
+		
+		responseCampaignListVO.setResponseCampaignList(campaignDao.selectSubmittedMyCampaignByBlgId(blgId));
+		return responseCampaignListVO;
+	}
 
 	public ResponseApplicantListVO readApplicantListById(RequestApplicantVO requestApplicantVO) {
 		int applicantCount = this.campaignDao.selectApplicantCountByCmpnId(requestApplicantVO);
@@ -131,5 +139,6 @@ public class CampaignServiceImpl implements CampaignService {
 		
 		return adoptList;
 	}
+
 
 }

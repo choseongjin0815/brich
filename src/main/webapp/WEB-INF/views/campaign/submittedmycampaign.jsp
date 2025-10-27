@@ -13,10 +13,10 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
                     <div class="cmpn-title-content">신청한 캠페인</div>
                 </div>
               </div>
-              <div class="cmpn-bottom-area">
-                <div class="cmpn-profile-area flex-row flex-space-between text-align height-center"> 
-                    <div class="px24 profile-start">${sessionScope.__LOGIN_USER__.logId}</div>
-                    <div class="profile-middle">
+              <div class="cmpn-bottom-area flex-column">
+                <div class="cmpn-profile-area flex-row flex-space-between text-align"> 
+                    <div class="px24 profile-star middle-center">${sessionScope.__LOGIN_USER__.logId}</div>
+                    <div class="profile-middle middle-center">
 				      <c:choose>
 				         <c:when test = "${sessionScope.__LOGIN_USER__.autr == 1002}">
 				            <div class="green-24px  ">멤버쉽 ON</div>
@@ -26,9 +26,23 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 				         </c:when>
 				      </c:choose>
 				    </div>
-                    <div class="profile-end">블로그이름 들어갈 자리</div>
+                    <div class="profile-end middle-center flex-column">
+                    	<span>연결 계정</span> 
+                    	<div>블로그이름 들어갈 자리</div>
+                    </div>
                 </div>
-               
+		          <div class="campaign-main-list-area">
+		             <c:forEach items="${campaignList}" var="campaignList">
+		  				<a class="campaign-main-block" href="/campaigndetail/${campaignList.cmpnId}">
+		  				    <div class="campaign-thumbnail">${campaignList.attchGrpId}</div>
+		  				    <div class="campaign-one-title padding-10px"> 
+		  				      <c:if test="${not empty campaignList.parentArea}">[ ${campaignList.parentArea} ]</c:if>  
+		  				      ${campaignList.cmpnTitle}</div>
+		  				    <div class="campaign-one-offrcn padding-10px">${campaignList.offrCn}</div>
+		  				    <div class="campaign-one-adptcnt padding-10px">신청 ${campaignList.adptCnt } / ${campaignList.rcrtPrsnn }</div>
+						</a>
+		             </c:forEach>
+		          </div>               		
               </div>
           </div>
         </div>

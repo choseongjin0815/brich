@@ -40,5 +40,7 @@ public interface CampaignDao {
 
 	String selectCampaignChangeSttsCd(String sttsCd);
 
+	List<ResponseCampaignVO> selectSubmittedMyCampaignByBlgId(String blgId);
+
 
 }

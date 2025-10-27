@@ -121,7 +121,7 @@ ul {
 
       .my-campaign {
         padding-left: 55px;
-
+		cursor : pointer;
         & > .my-sub-menu {
           & > .last-item {
             padding-bottom: 15px;
@@ -183,6 +183,10 @@ ul {
     display: flex;
     align-items: center;
   }
+  .middle-center{
+    display: flex;
+  	align-items: center;
+  	justify-content: center;}
 
   .text-align {
     text-align: center;

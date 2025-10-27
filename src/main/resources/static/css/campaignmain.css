@@ -64,7 +64,7 @@
     }
     & > .campaign-main-block{
         display:inline-block;
-        width: 357px;
+        width: 353px;
         padding: 0 25px 20px 0;
         gap:50px;
         & > .campaign-thumbnail{
@@ -106,9 +106,11 @@
 
     & > .cmpn-bottom-area {
       display: flex;
-      flex-direction: row;
       padding : 0 25px 0 25px;
+      height: 100px;
       & > .cmpn-profile-area{
+        border : 1px solid black;
+        border-radius : 5px;
         flex-grow: 1;
         & > div {
             width : 100%;
@@ -118,6 +120,12 @@
             & > div {
                flex-grow: 1;
             }
+        }
+        & > .profile-middle::after{
+        	content: "|"
+        }
+        & > .profile-middle::before{
+        	content: "|"
         }
       }
       

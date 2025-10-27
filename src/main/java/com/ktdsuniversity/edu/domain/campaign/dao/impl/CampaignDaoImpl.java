@@ -94,6 +94,11 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	public String selectCampaignChangeSttsCd(String sttsCd) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignChangeSttsCd", sttsCd);
 	}
+
+	@Override
+	public List<ResponseCampaignVO> selectSubmittedMyCampaignByBlgId(String blgId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectSubmittedMyCampaignByBlgId", blgId);
+	}
 	
 
 }
