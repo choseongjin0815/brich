@@ -26,7 +26,7 @@ public class BlogDataServiceImpl implements BlogDataService{
 		
 		ResponseExpireSoonListVO result = new ResponseExpireSoonListVO();
 		result.setList(list);
-		int totalCount = 8;
+		int totalCount = 50;
 		requestExpireSoonCampaignVO.setPageCount(totalCount);;
 		return result;
 	}

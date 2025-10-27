@@ -37,17 +37,11 @@
                </c:choose>
 						</tbody>
 					</table>
-					<jsp:include page="/WEB-INF/views/layout/paginator.jsp">
-            <jsp:param value="${search.listSize}" name="listSize"/>
-            <jsp:param value="${search.havePrevPageGroup}" name="havePrevPageGroup"/>
-            <jsp:param value="${search.prevGroupStartPageNo}" name="prevGroupStartPageNo"/>
-            <jsp:param value="${search.groupStartPageNo}" name="groupStartPageNo"/>
-            <jsp:param value="${search.groupEndPageNo}" name="groupEndPageNo"/>
-            <jsp:param value="${search.pageNo}" name="pageNo"/>
-            <jsp:param value="${search.haveNextPageGroup}" name="haveNextPageGroup"/>
-            <jsp:param value="${search.nextGroupStartPageNo}" name="nextGroupStartPageNo"/>
-            <jsp:param value="${search.pageCount}" name="pageCount"/>
-        </jsp:include>
+					<jsp:include page="/WEB-INF/views/layout/paginator-simple.jsp">
+					  <jsp:param name="havePrevPageGroup" value="${search.havePrevPageGroup}" />
+					  <jsp:param name="pageNo" value="${search.pageNo}" />
+					  <jsp:param name="haveNextPageGroup" value="${search.haveNextPageGroup}" />
+					</jsp:include>
 				</div>
 				<div>추천 캠페인</div>
 				<div>핵심 황금 키워드</div>
