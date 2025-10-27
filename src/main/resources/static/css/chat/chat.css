@@ -1,0 +1,135 @@
+
+.chat-main {
+	display:flex;
+	flex-direction: column;
+	align-content: center;
+	margin:0 auto;
+}
+.header-title{
+    font-size: 36px;
+    font-weight: 700;
+    color: #5A6ACF;
+}
+.content-box{
+	marign-left: 50px;
+	width: 1600px;
+	height: 970px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.15);
+}
+.content-title{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 70px;
+	font-size: 24px;
+	color: #5A6ACF;
+	font-weight: 700;
+	border-bottom: 1px solid #C8CBD9;
+}
+.progress-check {
+	align-items: center;
+	height: 45px;
+	display: flex;
+	gap: 20px;
+    border-bottom: 1px solid #C8CBD9;
+    
+    & > .progress:first-child {
+        margin-left: 30px;
+    }
+   
+}
+.progress {
+	font-weight: 500;
+	color: #5A6ACF;
+	cursor: pointer;
+	
+}
+.content-list {
+	height: 800px;
+}
+.campaign-content-item {
+	display:flex;
+	padding: 0 90px;
+    align-items: center;
+    justify-content: space-between;
+	height: 160px;
+	border-bottom: 1px solid #C8CBD9;
+}
+.campaign-item, .chatroom-campaign-title {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+.campaign-title-c {
+	font-weight: bold;
+	font-size: 24px;
+	color: #5A6ACF;
+}
+.campaign-status {
+	border-radius: 15px;
+	text-align: center;
+	width: 42px;
+	height: 19px;
+	line-height: 19px;
+	font-size: 14px;
+	color: #D30000;
+	background-color: #FFE0E0;
+}
+.campaign-link {
+	border-radius: 15px;
+	color: #fff;
+	text-decoration: none;
+	width: 110px;
+	height: 60px;
+	background-color: #7B61FF;
+	line-height: 60px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+.chatroom-content-item {
+    display:flex;
+    justify-content: space-between;
+    padding: 0 90px;
+    align-items: center;
+    height: 160px;
+    border-bottom: 1px solid #C8CBD9;
+}
+.chatroom-info {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+.campaign-title {
+	font-size: 18px;
+	font-weight: 700;	
+}
+.chatroom-extra-info {
+	display:flex;
+	gap: 70px;
+	
+}
+.chat-latest-info {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+}
+.latest-time {
+	font-weight: 700;
+	color: #777373;
+}
+.unread-count {
+	border-radius: 30px;
+	width: 30px;
+	height: 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #fff;
+	font-size: 18px;
+	font-weight: 700;
+	background-color: #F80000;
+}
+

@@ -11,6 +11,7 @@ import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.chat.dao.ChatDao;
 import com.ktdsuniversity.edu.domain.chat.vo.ChatParticipantVO;
 import com.ktdsuniversity.edu.domain.chat.vo.ChatRoomVO;
+import com.ktdsuniversity.edu.domain.chat.vo.request.RequestChatRoomFindVO;
 import com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatCampaignListVO;
 import com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatRoomInfoVO;
 
@@ -55,6 +56,11 @@ public class ChatDaoImpl extends SqlSessionDaoSupport implements ChatDao {
 	@Override
 	public String selectUserName(String usrId) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUserName", usrId);
+	}
+
+	@Override
+	public List<ResponseChatRoomInfoVO> selectCampaignChatRooms(RequestChatRoomFindVO find) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectCampaignChatRooms", find);
 	}
 
 }

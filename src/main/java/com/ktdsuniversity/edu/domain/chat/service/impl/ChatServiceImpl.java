@@ -19,6 +19,7 @@ import com.ktdsuniversity.edu.domain.chat.service.ChatService;
 import com.ktdsuniversity.edu.domain.chat.vo.ChatMessageVO;
 import com.ktdsuniversity.edu.domain.chat.vo.ChatParticipantVO;
 import com.ktdsuniversity.edu.domain.chat.vo.request.RequestChatMessageVO;
+import com.ktdsuniversity.edu.domain.chat.vo.request.RequestChatRoomFindVO;
 import com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatCampaignListVO;
 import com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatRoomInfoVO;
 
@@ -42,9 +43,23 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public List<ResponseChatRoomInfoVO> readAllChatRoomList(String usrId) {
+	public List<ResponseChatRoomInfoVO> readAllChatRoomList(String usrId, String auth, String cmpnId) {
 		// 1. Oracle에서 사용자가 참여 중인 채팅방 목록 조회
-		List<ResponseChatRoomInfoVO> chatRooms = chatDao.selectUserChatRooms(usrId);
+		//블로거일 때 리스트 
+		List<ResponseChatRoomInfoVO> chatRooms = null;
+		log.info("service {}", auth);
+		if(!auth.equals("1004")) {
+			 chatRooms = this.chatDao.selectUserChatRooms(usrId);
+			 log.info("블로거로 리스트!");
+		}
+		else if(auth.equals("1004")) {
+			 log.info("광고주로 리스트!{}", cmpnId);
+			 
+			RequestChatRoomFindVO find = new RequestChatRoomFindVO();
+			find.setCmpnId(cmpnId);
+			find.setUsrId(usrId);
+			chatRooms = this.chatDao.selectCampaignChatRooms(find);
+		}
 
 		// 2. MongoDB에서 각 채팅방의 최신 메시지 및 안읽은 수 조회
 		for (ResponseChatRoomInfoVO chatRoom : chatRooms) {
@@ -69,9 +84,9 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public List<ResponseChatRoomInfoVO> readUnreadChatRoomList(String usrId) {
+	public List<ResponseChatRoomInfoVO> readUnreadChatRoomList(String usrId, String auth, String cmpnId) {
 		// 일단 전부 읽은 채팅을 불러오고
-		List<ResponseChatRoomInfoVO> allRooms = readAllChatRoomList(usrId);
+		List<ResponseChatRoomInfoVO> allRooms = readAllChatRoomList(usrId, auth, cmpnId);
 
 		// 안읽은 메시지가 있는 채팅방만 필터링
 		List<ResponseChatRoomInfoVO> unreadRooms = new ArrayList<>();

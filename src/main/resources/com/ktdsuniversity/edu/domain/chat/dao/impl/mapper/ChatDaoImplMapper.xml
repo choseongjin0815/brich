@@ -22,11 +22,11 @@
 		    ON CR.CMPN_ID = C.CMPN_ID
 		INNER JOIN CM_CD CD
 		    ON CD.CD_ID = C.STTS_CD
-		INNER JOIN CHT_PRTCPNT CP2
+		LEFT JOIN CHT_PRTCPNT CP2            
 		    ON CP2.CHT_RM_ID = CR.CHT_RM_ID
-		    AND CP2.USR_ID != #{usrId} 
+		    AND CP2.USR_ID != #{usrId}
 		    AND CP2.LFT_YN = 'N'       
-		INNER JOIN USR U
+		LEFT JOIN USR U                      
 		    ON CP2.USR_ID = U.USR_ID 
 		WHERE CP.USR_ID = #{usrId}
 		  AND CP.LFT_YN = 'N'
@@ -38,26 +38,24 @@
             parameterType="string" 
             resultType="com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatCampaignListVO">
         SELECT C.CMPN_TITLE AS cmpnTitle
-             , C.CMPN_ID AS cmpnId
-             , C.STTS_CD AS sttsCd
-             , CD.CD_NM AS cdNm
-          FROM CHT_RM CR
-         INNER JOIN CMPN C
-            ON CR.CMPN_ID = C.CMPN_ID
-         INNER JOIN CM_CD CD 
-            ON CD.CD_ID = C.STTS_CD 
-         WHERE C.USR_ID = #{usrId}
+		     , C.CMPN_ID AS cmpnId
+		     , C.STTS_CD AS sttsCd
+		     , CD.CD_NM AS cdNm
+		  FROM CMPN C
+		 INNER JOIN CM_CD CD 
+		    ON CD.CD_ID = C.STTS_CD 
+		 WHERE C.USR_ID = #{usrId}
     </select>
 
     <!-- 광고주용 채팅방 캠페인 목록 종료 -->
-    <select id="selectEndedCampaignList" parameterType="string" resultType="com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatCampaignListVO">
+    <select id="selectEndedCampaignList" 
+            parameterType="string" 
+            resultType="com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatCampaignListVO">
         SELECT C.CMPN_TITLE AS cmpnTitle
              , C.CMPN_ID AS cmpnId
              , C.STTS_CD AS sttsCd
              , CD.CD_NM AS cdNm
-          FROM CHT_RM CR
-         INNER JOIN CMPN C
-            ON CR.CMPN_ID = C.CMPN_ID
+          FROM CMPN C
          INNER JOIN CM_CD CD 
             ON CD.CD_ID = C.STTS_CD 
          WHERE C.USR_ID = #{usrId}
@@ -65,14 +63,14 @@
     </select>
 
     <!-- 광고주용 채팅방 캠페인 목록 진행중 -->
-    <select id="selectOngoingCampaignList" parameterType="string" resultType="com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatCampaignListVO">
+    <select id="selectOngoingCampaignList" 
+            parameterType="string" 
+            resultType="com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatCampaignListVO">
         SELECT C.CMPN_TITLE AS cmpnTitle
              , C.CMPN_ID AS cmpnId
              , C.STTS_CD AS sttsCd
              , CD.CD_NM AS cdNm
-          FROM CHT_RM CR
-         INNER JOIN CMPN C
-            ON CR.CMPN_ID = C.CMPN_ID
+          FROM CMPN C
          INNER JOIN CM_CD CD 
             ON CD.CD_ID = C.STTS_CD 
          WHERE C.USR_ID = #{usrId}
@@ -80,7 +78,8 @@
     </select>
 
     <!-- 채팅방 나가기 -->
-    <update id="updateChatRoomLeave" parameterType="com.ktdsuniversity.edu.domain.chat.vo.ChatParticipantVO">
+    <update id="updateChatRoomLeave" 
+            parameterType="com.ktdsuniversity.edu.domain.chat.vo.ChatParticipantVO">
         UPDATE CHT_PRTCPNT
            SET LFT_YN = 'Y',
                UPDT_DT = SYSDATE,
@@ -90,9 +89,37 @@
     </update>
 
     <!-- 사용자 이름 조회 -->
-    <select id="selectUserName" parameterType="string" resultType="string">
+    <select id="selectUserName" 
+            parameterType="string" 
+            resultType="string">
         SELECT NM
           FROM USR
          WHERE USR_ID = #{usrId}
+    </select>
+    
+    <select id="selectCampaignChatRooms"
+            parameterType="com.ktdsuniversity.edu.domain.chat.vo.request.RequestChatRoomFindVO"
+            resultType="com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatRoomInfoVO">
+       SELECT CR.CHT_RM_ID AS chtRmId
+		    , C.CMPN_TITLE AS cmpnTitle
+		    , C.CMPN_ID AS cmpnId
+		    , C.STTS_CD AS sttsCd
+		    , CD.CD_NM AS cdNm
+		    , U.NM AS nm
+		    , U.LOG_ID AS logId
+		FROM CHT_RM CR
+		INNER JOIN CMPN C 
+		    ON CR.CMPN_ID = C.CMPN_ID
+		INNER JOIN CM_CD CD 
+		    ON CD.CD_ID = C.STTS_CD
+		LEFT JOIN CHT_PRTCPNT CP2 
+		    ON CP2.CHT_RM_ID = CR.CHT_RM_ID
+		    AND CP2.USR_ID != #{usrId}
+		    AND CP2.LFT_YN = 'N'
+		LEFT JOIN USR U 
+		    ON CP2.USR_ID = U.USR_ID
+		WHERE CR.CMPN_ID = #{cmpnId}
+		  AND CR.DLT_YN = 'N'          
+		ORDER BY CR.CRT_DT DESC
     </select>
 </mapper>

@@ -1,13 +1,48 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>채팅방 목록</title>
-    <link rel="stylesheet" href="/css/chat/chat.css">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-</head>
-<body>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<jsp:include page="/WEB-INF/views/layout/menu.jsp">
+	<jsp:param name='chatCss'
+		value="
+        <link type='text/css' rel='stylesheet' href='/css/chat/chat.css' />
+    " />
+	<jsp:param name="chatroomscripts"
+		value="
+        <script type='text/javascript' src='/js/chat/chatRoomList.js'></script>
+    " />
+</jsp:include>
+<div class="chat-main" data-cmpn = "${cmpnId}">
+	<div class="header-title">메시지</div>
+	<div class="content-box" data-auth = "${sessionScope.__LOGIN_USER__.autr}">
+		<div class="content-title">채팅방 목록</div>
+		<div class="progress-check">
+			<div class="progress readall">전체</div>
+			<div class="progress not">안읽음</div>
+		</div>
+		<div class="content-list"></div>
+		<div class="page-list">1 2 3 4 5</div>
+	</div>
+</div>
+</div>
+</div>
+<template id="chat-room-list">
+	<div class="chatroom-content-item">
+		<div class="chatroom-info">
+			<div class="chatroom-campaign-title">
+				<div class="campaign-title camp">#campaigntitle#</div>
+				<div class="campaign-title bloger-name">#blogername#</div>
+				<div class="campaign-status">#campaignstatus#</div>
+			</div>
+			<div class="last-chat-message">#lastmessage#</div>
+		</div>
+		<div class="chatroom-extra-info">
+			<div class="chat-latest-info">
+				<div class="latest-time">#latesttime#</div>
+				<div class="unread-count">#unreadcount#</div>
+			</div>
+			<div class="chat-levae-btn">xxx</div>
+		</div>
+	</div>
+</template>
 </body>
 </html>

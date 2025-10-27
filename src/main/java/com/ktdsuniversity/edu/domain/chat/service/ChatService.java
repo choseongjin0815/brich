@@ -20,12 +20,12 @@ public interface ChatService {
 	/**
      * 채팅방 목록 전체 조회
      */
-	public List<ResponseChatRoomInfoVO> readAllChatRoomList(String usrId);
+	public List<ResponseChatRoomInfoVO> readAllChatRoomList(String usrId, String auth, String cmpnId);
 
     /**
      * 채팅방 목록 안읽은 것만 조회
      */
-	public List<ResponseChatRoomInfoVO> readUnreadChatRoomList(String usrId);
+	public List<ResponseChatRoomInfoVO> readUnreadChatRoomList(String usrId, String auth, String cmpnId);
 
     /**
      * 광고주용 채팅방 캠페인 목록 전체

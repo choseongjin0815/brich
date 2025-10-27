@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.ktdsuniversity.edu.domain.blog.controller.SearchBlogController;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.chat.service.ChatService;
 import com.ktdsuniversity.edu.domain.chat.vo.ChatMessageVO;
@@ -44,6 +47,7 @@ public class ChatController {
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
 	
+	private static final Logger log = LoggerFactory.getLogger(SearchBlogController.class);
 	
 	/**
 	 * 연결 테스트 : 추후 삭제 예정
@@ -79,10 +83,12 @@ public class ChatController {
      */
     @GetMapping("/rooms")
     public String viewChatRoomListPage(@SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser
-    		                     , Model model) {
+    		                     , Model model
+    		                     , @RequestParam(required=false) String cmpnId) {
         String usrId = loginUser.getUsrId();
-            
+        log.info(cmpnId);
         model.addAttribute("usrId", usrId);
+        model.addAttribute("cmpnId", cmpnId);
         return "chat/chatRoomList";
     }
 
@@ -105,11 +111,15 @@ public class ChatController {
      */
     @GetMapping("/rooms/all")
     @ResponseBody
-    public AjaxResponse getAllChatRoomList(@SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser) {
+    public AjaxResponse getAllChatRoomList(@SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser
+    									 , @RequestParam(required=false) String cmpnId) {
         
     	String usrId = loginUser.getUsrId();
+    	String auth = loginUser.getAutr();
+    	log.info("{} auth", auth);
+
     	
-        List<ResponseChatRoomInfoVO> chatRoomList = chatService.readAllChatRoomList(usrId);
+        List<ResponseChatRoomInfoVO> chatRoomList = chatService.readAllChatRoomList(usrId, auth, cmpnId);
         
         AjaxResponse ajaxResponse = new AjaxResponse();
         
@@ -126,10 +136,12 @@ public class ChatController {
      */
     @GetMapping("/rooms/unread")
     @ResponseBody
-    public AjaxResponse getUnreadChatRoomList(@SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser) {
+    public AjaxResponse getUnreadChatRoomList(@SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser
+    										, @RequestParam(required=false) String cmpnId) {
     	String usrId = loginUser.getUsrId();
+    	String auth = loginUser.getAutr();
 
-        List<ResponseChatRoomInfoVO> chatRoomList = chatService.readUnreadChatRoomList(usrId);
+        List<ResponseChatRoomInfoVO> chatRoomList = chatService.readUnreadChatRoomList(usrId, auth, cmpnId);
         
         AjaxResponse ajaxResponse = new AjaxResponse();
         

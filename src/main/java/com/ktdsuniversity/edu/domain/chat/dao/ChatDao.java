@@ -5,6 +5,7 @@ import java.util.List;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.chat.vo.ChatParticipantVO;
 import com.ktdsuniversity.edu.domain.chat.vo.ChatRoomVO;
+import com.ktdsuniversity.edu.domain.chat.vo.request.RequestChatRoomFindVO;
 import com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatCampaignListVO;
 import com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatRoomInfoVO;
 
@@ -38,4 +39,6 @@ public interface ChatDao {
     * 사용자 이름 조회
     */
    public String selectUserName(String usrId);
+
+   public List<ResponseChatRoomInfoVO> selectCampaignChatRooms(RequestChatRoomFindVO find);
 }
