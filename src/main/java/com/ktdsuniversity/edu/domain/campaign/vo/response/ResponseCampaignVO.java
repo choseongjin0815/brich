@@ -44,7 +44,7 @@ public class ResponseCampaignVO extends CampaignVO{
 	 @Override
 	public String toString() {
 		return "ResponseCampaignVO [likeCnt=" + likeCnt + ", adptCnt=" + adptCnt + ", area=" + area + ", parentArea="
-				+ parentArea + "]";
+				+ parentArea + "] " + super.toString();
 	}
 
 	 public List<String> getArea() {

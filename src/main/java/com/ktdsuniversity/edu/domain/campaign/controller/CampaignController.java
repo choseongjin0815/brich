@@ -52,6 +52,13 @@ public class CampaignController {
     	return "campaign/campaignmain";
     }
     
+    @GetMapping("/submittedmycampaign")
+    public String submittedmycampaign(RequestSearchCampaignVO requestSearchCampaignVO, Model model,
+    		@SessionAttribute(value = "__LOGIN_USER__") UserVO loginUser) {
+    	
+    	return "campaign/submittedmycampaign";
+    }
+    
     
     @GetMapping("/adv/applicant/{cmpnId}")
     public String readApplicantList(Model model, @PathVariable String cmpnId,

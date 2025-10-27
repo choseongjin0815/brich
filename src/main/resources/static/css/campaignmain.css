@@ -2,11 +2,91 @@
   width: 100vh;
   flex-grow: 1;
 
-
   * {
     box-sizing: border-box;
-    margin : 0;
-    padding : 0;
+    margin: 0;
+    padding: 0;
+    
+  }
+
+  .campaign-title-area {
+    height: 100px;
+  }
+
+  .search-section {
+    & > .category-area {
+      justify-content: space-between;
+      height: 75px;
+      background-color: #F9F9F9;
+      border-bottom: 1px solid #CAC4D0;
+
+      & > label {
+        display: flex;
+        flex-grow: 1;
+
+        & > input {
+          display: none;
+        }
+
+        & > span {
+          width: 100%;
+          height: 100%;
+          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+
+          & > .category-seleted-box {
+            width: 30px;
+            height: 5px;
+            background-color: #6750A4;
+            border-radius: 5px 5px 0 0;
+          }
+        }
+      }
+    }
+
+    & > .search-area {
+      justify-content: flex-end;
+      height: 50px;
+      padding: 10px 0 10px 0;
+      gap: 20px;
+      & > .sortBy{
+      
+      }
+    }
+  }
+  
+  & > .campaign-main-list-area{
+    padding-top : 25px;
+    & > .campaign-main-block:visited{
+        color : #333;
+    }
+    & > .campaign-main-block{
+        display:inline-block;
+        width: 357px;
+        padding: 0 25px 20px 0;
+        gap:50px;
+        & > .campaign-thumbnail{
+            height:200px;
+            width:320px;
+            background-color : #DDE1FF;
+            border-radius : 15px;
+        }
+        
+        & > .campaign-one-offrcn {
+            font-size:14px;
+        }
+        & >.campaign-one-adptcnt{
+            font-size:14px;
+        }
+    }
+  }
+  .padding-10px{
+    padding-left:10px;
+  }
+  .campaign-hover-blue:hover {
+    background-color: #DDE1FF;
   }
 
   & > .campaign-detail-wrapper {
@@ -16,11 +96,12 @@
       height: 130px;
       font-size: 24px;
       border-bottom: 1px solid black;
-	  margin-bottom: 10px;
-	  padding-left: 10px;
+      margin-bottom: 10px;
+      padding-left: 10px;
+
       & > .cmpn-title {
         font-size: 36px;
-		padding-bottom: 10px;
+        padding-bottom: 10px;
       }
     }
 
@@ -31,69 +112,79 @@
       & > .cmpn-content-area {
         flex-grow: 1;
         height: 12000px;
-        font-size : 24px;
-		width: 1020px;
+        font-size: 24px;
+        width: 1020px;
+
         & > .campaign-detail-table {
+          display: flex;
+          flex-direction: column;
+
+          li {
             display: flex;
-			flex-direction: column;
-            li {
-                display : flex;
-                padding : 15px 0 10px 0;
-				flex-direction: row;
-                label {
-					flex: 0 0 277px;
-                }
-                div {
-					flex-grow: 1;
-                }
+            padding: 15px 0 10px 0;
+            flex-direction: row;
+
+            label {
+              flex: 0 0 277px;
             }
-            
+
+            div {
+              flex-grow: 1;
+            }
+          }
         }
       }
 
       & > .cmpn-rightbar-area {
         width: 423px;
+
         & > .right-bar {
-			border: 1px solid black;
-			margin: 0px 0 0px 90px;
-			width: 330px;
-		  	border-radius: 10px;
-          	position: sticky;
-          	top : 260px;
-          	right: 60px;
-			& > .right-bar-top{
-				& > .right-bor-top-wrapper{
-					padding : 13px 33px 0 33px;
-					& > .right-bar-detail-table{
-						display: flex;
-						border-bottom: 1px solid black;
-						flex-direction: column;
-						padding-bottom: 20px;
-						li {
-						    display : flex;
-							flex-direction: row;
-							height: 25px;
-						    label {
-								flex: 0 0 130px;
-						    }
-						    div {
-								flex-grow: 1;
-						    }
-						}					
-					}
-				}
-				
-			}
+          border: 1px solid black;
+          margin: 0 0 0 90px;
+          width: 330px;
+          border-radius: 10px;
+          position: sticky;
+          top: 260px;
+          right: 60px;
+
+          & > .right-bar-top {
+            & > .right-bor-top-wrapper {
+              padding: 13px 33px 0 33px;
+
+              & > .right-bar-detail-table {
+                display: flex;
+                border-bottom: 1px solid black;
+                flex-direction: column;
+                padding-bottom: 20px;
+
+                li {
+                  display: flex;
+                  flex-direction: row;
+                  height: 25px;
+
+                  label {
+                    flex: 0 0 130px;
+                  }
+
+                  div {
+                    flex-grow: 1;
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
   }
-  
-  .flex-space-between {
-    display: flex;
-    justify-content: space-between;
+
+  .px36blue {
+    font-size: 36px;
+    font-weight: bold;
+    color: #5A67BA;
   }
 }
 
-
-
+.side-padding {
+  padding: 0 100px 0 75px;
+}

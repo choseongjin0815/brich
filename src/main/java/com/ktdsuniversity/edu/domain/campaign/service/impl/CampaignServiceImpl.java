@@ -36,6 +36,7 @@ public class CampaignServiceImpl implements CampaignService {
      */
 	@Override
 	public ResponseCampaignVO readCampaignDetail(String campaignId) {
+		// 상세조회
 		ResponseCampaignVO detail = campaignDao.selectCampaignDetailById(campaignId);
 		
 		// 공통코드 이름 출력
@@ -78,6 +79,14 @@ public class CampaignServiceImpl implements CampaignService {
 		// Level 3 조회
 		responseCampaignListVO.setResponseCampaignList(campaignDao.selectCampaignListCategoryAndSortBy(requestSearchCampaignVO));
 			
+    	// 부모지역명 자르기 // 서울특별시 -> 서울
+		List<ResponseCampaignVO> list = responseCampaignListVO.getResponseCampaignList();
+		for(ResponseCampaignVO vo : list) {
+			if(vo.getParentArea() != null) {
+				vo.setParentArea(vo.getParentArea().substring(0, 2));				
+			}
+		}
+		
 		return responseCampaignListVO;
 	}
 

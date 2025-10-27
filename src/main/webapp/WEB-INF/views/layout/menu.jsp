@@ -4,7 +4,7 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Document</title>
+    <title>Brich</title>
     <link type="text/css" rel="stylesheet" href="/css/layoutmenu.css" />
     <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="/js/common/layoutmenu.js"></script>
@@ -19,11 +19,13 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
         	<div class="top-menu-left flex-row">
         		<div class="main-logo"></div>
         		<div class="brich-title height-center">
-        			<a href="#">Brich</a>
+        			<a href="/campaignmain">Brich</a>
         		</div>
         	</div>
         	<div class="top-menu-right flex-row">
-		        <div class="top-menu-search-area">search Bar</div>
+		        <div class="top-menu-search-area">
+		          <input class="search-input" type="text" name="searchKeyword" value="${search.searchKeyword}" placeholder="Search" />
+		        </div>
 	            <div class="top-menu-profile-area flex-row">
 	            	<div class="menu-profile"></div>
 	            	<div class="menu-profilename height-center">${sessionScope.__LOGIN_USER__.logId}</div>
@@ -53,9 +55,12 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
                   <ul class="menu-content">
                     <li ><a id="menu-image" href="" class="dashboard-font"> Dashboard</a></li> 
                     <li class="menu-campaignmain-selected"><a href="/campaignmain">캠페인</a></li>
-                    <li class="my-campaign">MY 캠페인 
+                    <li class="my-campaign "><div class="flex-row flex-space-between height-center">MY 캠페인
+                        <div class="caret-down"></div>
+                        <div class="caret-up display-none"></div>
+                        </div> 
 	                      <ul class="my-sub-menu">
-	                        <li><a href="">신청한 캠페인</a></li>
+	                        <li><a href="/submittedmycampaign">신청한 캠페인</a></li>
 	                        <li><a href="">진행중 캠페인</a></li>
 	                        <li><a href="">마감된 캠페인</a></li>
 	                        <li class="last-item"><a href="">관심 캠페인</a></li>
@@ -74,7 +79,7 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
                   <span>MENU</span>
                   <ul class="menu-content">
                     <li class="menu-campaignmain-selected"><a href="/campaignmain">캠페인</a></li>
-                    <li><a href="">MY 캠페인</a></li>
+                    <li><a href="">MY 캠페인</a></li> 
                     <li><a href="">캠페인 만들기</a></li>
                     <li><a href="">메세지</a></li>
                   </ul>

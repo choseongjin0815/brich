@@ -216,7 +216,6 @@
                                , COUNT(ADPT.CMPN_ID) AS ADPT_CNT
                             FROM CMPN_PST_ADPT ADPT 
                            WHERE ADPT.CMPN_ID = #{_parameter}
-                             AND ADPT.ADPT_YN = 'Y'
                              AND ADPT.DLT_YN = 'N'
                            GROUP BY ADPT.CMPN_ID) ADPT_TABLE
                      ON CMPN.CMPN_ID = ADPT_TABLE.CMPN_ID 
@@ -311,7 +310,6 @@
                                                                          CONNECT BY PRIOR CD_ID = PRNT_CD_ID)
 			                                        AND CMPN.STTS_CD = '2005'
 			                                     )
-			                 AND ADPT.ADPT_YN = 'Y'
 			                 AND ADPT.DLT_YN = 'N'
 			               GROUP BY ADPT.CMPN_ID) ADPT_TABLE
 			         ON CMPN.CMPN_ID = ADPT_TABLE.CMPN_ID 
