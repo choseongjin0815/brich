@@ -5,9 +5,9 @@
 <mapper namespace="com.ktdsuniversity.edu.domain.blog.dao.impl.PostDataDaoImpl">
     
     <insert id="insertPostData"
-    		parameterType="com.ktdsuniversity.edu.domain.blog.vo.PostDataVO">
+    		parameterType="com.ktdsuniversity.edu.domain.blog.vo.PostDataInsertVO">
     <selectKey keyProperty="pstDaId" order="BEFORE" resultType="string">
-    SELECT 'PST-DA-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_PST_DA_PK.NEXTVAL, 6, 0)
+    SELECT 'PST-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_PST_DA_PK.NEXTVAL, 6, 0)
            FROM DUAL
     </selectKey>
     INSERT INTO TEAM_A.PST_DA
@@ -23,15 +23,15 @@
          , MTTR
          , DLT_YN)
     VALUES(#{pstDaId}
-         , #{usrId}
+         , (SELECT U.USR_ID FROM TEAM_A.USR U WHERE U.BLG_ADDRS = #{blgAddrs})
          , #{pstUrl}
          , #{pstCmnt}
          , #{pstLk}
-         , TO_DATE(#{pstdDt}, 'YYYY-MM-DD')
+         , TO_DATE(#{pstdDt}, 'YYYY-MM-DD HH24:MI:SS')
          , SYSDATE
-         , #{usrId}
+         , 'SYSTEM'
          , SYSDATE
-         , #{usrId}
+         , 'SYSTEM'
          , 'N'	)
     
     </insert>

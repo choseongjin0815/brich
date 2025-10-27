@@ -10,6 +10,7 @@ import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
+import com.ktdsuniversity.edu.domain.user.dao.UserDao;
 
 
 
@@ -18,6 +19,8 @@ public class BlogDataServiceImpl implements BlogDataService{
 
 	@Autowired
 	private CampaignDao campaignDao;
+	@Autowired
+	private UserDao userDao;
 	
 	@Override
 	public ResponseExpireSoonListVO readExpireSoonCampaignList(RequestExpireSoonCampaignVO requestExpireSoonCampaignVO) {
@@ -30,5 +33,8 @@ public class BlogDataServiceImpl implements BlogDataService{
 		requestExpireSoonCampaignVO.setPageCount(totalCount);;
 		return result;
 	}
+
+
+	
 
 }

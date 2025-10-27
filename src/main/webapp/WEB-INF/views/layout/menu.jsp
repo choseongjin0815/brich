@@ -34,7 +34,10 @@ pageEncoding="UTF-8"%>
                 <li class="blg-menu">
                   <span>MENU</span>
                   <ul>
-                    <li><a href="">Dashboard</a></li>
+                  	<c:if test="${not empty sessionScope.__LOGIN_USER__}">
+                  		<li><a href="/blog/${sessionScope.__LOGIN_USER__.usrId}/dashboard">Dashboard</a></li>
+                  	</c:if>
+                    
                     <li><a href="">캠페인</a></li>
                     <li>
                       <button>MY 캠페인</button>
@@ -45,7 +48,10 @@ pageEncoding="UTF-8"%>
                         <li><a href="">관심 캠페인</a></li>
                       </ul>
                     </li>
-                    <li><a href="">블로그 관리</a></li>
+                    <c:if test="${not empty sessionScope.__LOGIN_USER__}">
+                    	<li><a href="/blog/${sessionScope.__LOGIN_USER__.usrId}/manage">블로그 관리</a></li>
+                    </c:if>
+                    
                     <li><a href="">메세지</a></li>
                   </ul>
                 </li>

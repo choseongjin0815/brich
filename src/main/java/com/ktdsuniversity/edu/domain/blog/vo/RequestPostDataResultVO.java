@@ -4,20 +4,20 @@ import java.util.List;
 
 public class RequestPostDataResultVO {
 
-	private String usrId;
-	private List<PostDataVO> postList;
+	private String blgAddrs;
+	private List<PostDataInsertVO> postList;
 	
 	
-	public String getUsrId() {
-		return usrId;
+	public String getBlgAddrs() {
+		return blgAddrs;
 	}
-	public void setUsrId(String usrId) {
-		this.usrId = usrId;
+	public void setBlgAddrs(String usrId) {
+		this.blgAddrs = usrId;
 	}
-	public List<PostDataVO> getPostList() {
+	public List<PostDataInsertVO> getPostList() {
 		return postList;
 	}
-	public void setPostList(List<PostDataVO> postList) {
+	public void setPostList(List<PostDataInsertVO> postList) {
 		this.postList = postList;
 	}
 	

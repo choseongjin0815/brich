@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ktdsuniversity.edu.domain.blog.dao.PostDataDao;
-import com.ktdsuniversity.edu.domain.blog.vo.PostDataVO;
+import com.ktdsuniversity.edu.domain.blog.vo.PostDataInsertVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestPostDataResultVO;
 
 @RestController
@@ -18,13 +18,14 @@ public class CrawlingController {
 	private PostDataDao postDataDao;
 	
 	@PostMapping("/results")
-	public String ResponseInitPostData(@RequestBody RequestPostDataResultVO request){
-		
-		for(PostDataVO post: request.getPostList()) {
-			post.setUsrId(request.getUsrId());
-			postDataDao.insertPostData(post);
-		}
-		
-		return "success";
+	public String ResponseInitPostData(@RequestBody RequestPostDataResultVO request) {
+	    
+	    for (PostDataInsertVO post : request.getPostList()) {
+	        post.setBlgAddrs(request.getBlgAddrs()); 
+
+	        postDataDao.insertPostData(post);
+	    }
+
+	    return "success";
 	}
 }

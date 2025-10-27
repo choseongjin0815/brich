@@ -20,3 +20,9 @@
 	color: #5A6ACF;
 	font-weight: bold;
 }
+
+.verification-container{
+	display: flex;
+	flex-direction: column;
+	justify-items: center;
+}
