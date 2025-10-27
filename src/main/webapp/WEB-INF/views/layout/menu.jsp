@@ -55,12 +55,13 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
                   <ul class="menu-content">
                     <li ><a id="menu-image" href="" class="dashboard-font"> Dashboard</a></li> 
                     <li class="menu-campaignmain-selected"><a href="/campaignmain">캠페인</a></li>
-                    <li class="my-campaign "><div class="flex-row flex-space-between height-center">MY 캠페인
+                    <li class="my-campaign "><div class="flex-row flex-space-between height-center">
+                        MY 캠페인
                         <div class="caret-down"></div>
                         <div class="caret-up display-none"></div>
                         </div> 
-	                      <ul class="my-sub-menu">
-	                        <li><a href="/submittedmycampaign">신청한 캠페인</a></li>
+	                      <ul class="my-sub-menu display-none">
+	                        <li class="menu-my-submitted-campaign-selected"><a href="/submittedmycampaign">신청한 캠페인</a></li>
 	                        <li><a href="">진행중 캠페인</a></li>
 	                        <li><a href="">마감된 캠페인</a></li>
 	                        <li class="last-item"><a href="">관심 캠페인</a></li>
