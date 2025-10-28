@@ -1,6 +1,7 @@
 package com.ktdsuniversity.edu.domain.campaign.dao.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
@@ -97,8 +98,34 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	}
 
 	@Override
-	public List<ResponseCampaignVO> selectSubmittedMyCampaignByBlgId(String blgId) {
-		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectSubmittedMyCampaignByBlgId", blgId);
+	public List<ResponseCampaignVO> selectMyCampaignByBlgId(Map<String, Object> param) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectMyCampaignByBlgId", param);
+	}
+
+	
+	@Override
+	public String selectFavCamapignExists(Map<String, String> param) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectFavCamapignExists", param);
+	}
+
+	@Override
+	public int insertFavCamapign(Map<String, String> param) {
+		return super.getSqlSession().insert(this.NAME_SPACE +"insertFavCamapign", param);
+	}
+
+	@Override
+	public int updateFavCamapignOn(Map<String, String> param) {
+		return super.getSqlSession().update(this.NAME_SPACE +"updateFavCamapignOn", param);
+	}
+
+	@Override
+	public int updateFavCamapignOff(Map<String, String> param) {
+		return super.getSqlSession().update(this.NAME_SPACE +"updateFavCamapignOff", param);
+	}
+
+	@Override
+	public String selectFavDltYn(Map<String, String> param) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectFavDltYn" , param);
 	}
 	
 

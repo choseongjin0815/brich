@@ -24,4 +24,6 @@ public interface CampaignService {
 
 	ResponseCampaignListVO readSubmittedMyCampaignByBlgId(String blgId);
 
+	boolean favCampaignDo(String blgId, String campaignId);
+
 }

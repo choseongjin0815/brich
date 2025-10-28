@@ -40,7 +40,7 @@ public class CampaignController {
     @GetMapping("/campaignmain")
     public String campaignMainPage(RequestSearchCampaignVO requestSearchCampaignVO, Model model,
     						   @SessionAttribute(value = "__LOGIN_USER__", required = false) UserVO loginUser){
-    	
+    	requestSearchCampaignVO.setLoginId(loginUser.getUsrId());
     	log.info( "입력 파라미터 값 : " + requestSearchCampaignVO.toString());
     	ResponseCampaignListVO CampaignListAndCategory = campaignService.readCampaignListAndCategory(requestSearchCampaignVO);
     	
@@ -59,6 +59,14 @@ public class CampaignController {
     	ResponseCampaignListVO CampaignListAndCategory = campaignService.readSubmittedMyCampaignByBlgId(blgId);
     	model.addAttribute("campaignList", CampaignListAndCategory.getResponseCampaignList());
     	return "campaign/submittedmycampaign";
+    }
+    
+    @GetMapping("/blgr/love/{campaignId}")
+    public String favCampaignDo(@SessionAttribute(value = "__LOGIN_USER__") UserVO loginUser, 
+    						@PathVariable String campaignId) {
+    	String blgId = loginUser.getUsrId();
+    	boolean update = campaignService.favCampaignDo(blgId, campaignId);
+    	return "redirect:/campaignmain";
     }
     
     

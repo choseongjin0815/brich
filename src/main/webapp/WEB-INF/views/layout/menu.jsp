@@ -25,6 +25,7 @@ pageEncoding="UTF-8"%>
         		<div class="brich-title height-center">
         			<a href="/campaignmain">Brich</a>
         		</div>
+        		<a href="/login"> 로그인 돌아가기</a>
         	</div>
         	<div class="top-menu-right flex-row">
 		        <div class="top-menu-search-area">
@@ -107,10 +108,9 @@ pageEncoding="UTF-8"%>
                   </ul>
                 </li>
               </c:if>
-                <li class="others-menu">
               <c:if test="${sessionScope.__LOGIN_USER__ ne null 
                   and sessionScope.__LOGIN_USER__.autr != 1001}">
-                <li>
+                <li class="others-menu">
                   <span>OTHERS</span>
                   <ul class="menu-content">
                     <li><a href="">계정 관리</a></li>

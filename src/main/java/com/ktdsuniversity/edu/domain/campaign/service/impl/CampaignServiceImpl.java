@@ -1,6 +1,9 @@
 package com.ktdsuniversity.edu.domain.campaign.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,7 +97,16 @@ public class CampaignServiceImpl implements CampaignService {
 	public ResponseCampaignListVO readSubmittedMyCampaignByBlgId(String blgId) {
 		ResponseCampaignListVO responseCampaignListVO = new ResponseCampaignListVO();
 		
-		responseCampaignListVO.setResponseCampaignList(campaignDao.selectSubmittedMyCampaignByBlgId(blgId));
+		// ('2005', '2006')  -- 모집중 캠페인
+		List<String> code = List.of("2005","2006");
+		Map<String, Object> param = new HashMap<>();
+		param.put("blgId", blgId);
+		param.put("statuses", code);
+
+		
+		
+		responseCampaignListVO.setResponseCampaignList(campaignDao.selectMyCampaignByBlgId(param));
+		
 		return responseCampaignListVO;
 	}
 
@@ -138,6 +150,37 @@ public class CampaignServiceImpl implements CampaignService {
 		adoptList.setCampaignInfo(campaign);
 		
 		return adoptList;
+	}
+	/**
+	 * 사랑해요
+	 */
+	@Override
+	public boolean favCampaignDo(String blgId, String campaignId) {
+		int updateCount = 0 ;
+		Map<String, String> param = new HashMap<>();
+		param.put("blgId",blgId);
+		param.put("campaignId",campaignId);
+		
+		// 최초 생성인지 확인
+		String favExists = this.campaignDao.selectFavCamapignExists(param);
+		if(favExists.equals("0")) { 
+			// 없다면 최초 생성
+			updateCount = this.campaignDao.insertFavCamapign(param);			
+		} else {
+			// 하트가 제거되었는지 확인
+			String favDltYn = this.campaignDao.selectFavDltYn(param);
+			if(favDltYn.equals("N")) {
+				// 있다면 하트제거
+				updateCount = this.campaignDao.updateFavCamapignOff(param);				
+			}else {
+				// 있는데 삭제라면 하트생성
+				updateCount = this.campaignDao.updateFavCamapignOn(param);							
+			}
+		}
+		
+		
+		
+		return updateCount > 0 ;
 	}
 
 

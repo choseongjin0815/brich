@@ -3,6 +3,7 @@ $().ready(function() {
     var sortBy = $("select[name='sortBy']");
     var searchKeyword = $("input[name='searchKeyword']");
     var searchButton = $(".search-button");
+    var campaignFav = $(".campaign-fav");
     var hereCategory = new URLSearchParams(window.location.search).get('category') || '';
     $('.category-seleted-box').each(function () {
       if($(this).data('category-menu') === hereCategory){
@@ -32,4 +33,8 @@ $().ready(function() {
 	    searchParam = "?" + searchParam 
 	    window.location.href = window.location.pathname + searchParam;
 	});
+    campaignFav.on("click", function() {
+        var cmpnId = $(this).data("cmpn-id");
+        window.location.href = "/blgr/love/"+ cmpnId ;
+    })
 });

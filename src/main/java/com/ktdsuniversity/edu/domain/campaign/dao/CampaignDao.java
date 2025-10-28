@@ -2,7 +2,7 @@ package com.ktdsuniversity.edu.domain.campaign.dao;
 
 
 import java.util.List;
-
+import java.util.Map;
 
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostAdoptVO;
@@ -42,7 +42,17 @@ public interface CampaignDao {
 
 	String selectCampaignChangeSttsCd(String sttsCd);
 
-	List<ResponseCampaignVO> selectSubmittedMyCampaignByBlgId(String blgId);
+	List<ResponseCampaignVO> selectMyCampaignByBlgId(Map<String, Object> param);
+
+	String selectFavCamapignExists(Map<String, String> param);
+
+	int insertFavCamapign(Map<String, String> param);
+
+	int updateFavCamapignOn(Map<String, String> param);
+
+	int updateFavCamapignOff(Map<String, String> param);
+
+	String selectFavDltYn(Map<String, String> param);
 
 
 }

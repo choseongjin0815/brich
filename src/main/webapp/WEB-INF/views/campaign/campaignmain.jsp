@@ -38,8 +38,13 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
             
           <div class="campaign-main-list-area">
              <c:forEach items="${campaignList}" var="campaignList">
+                      <div class="campaign-fav" data-usr-id="${sessionScope.__LOGIN_USER__.usrId}" data-cmpn-id="${campaignList.cmpnId}">
+                          <c:if test="${campaignList.favYn eq 'Y'}">하트 on</c:if>
+                          <c:if test="${campaignList.favYn eq 'N'}">하트 off</c:if>
+                      </div>             
   				<a class="campaign-main-block" href="/campaigndetail/${campaignList.cmpnId}">
-  				    <div class="campaign-thumbnail">${campaignList.attchGrpId}</div>
+  				    <div class="campaign-thumbnail">
+  				    </div>
   				    <div class="campaign-one-title padding-10px"> 
   				      <c:if test="${not empty campaignList.parentArea}">[ ${campaignList.parentArea} ]</c:if>  
   				      ${campaignList.cmpnTitle}</div>
