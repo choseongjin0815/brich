@@ -9,5 +9,7 @@ public interface BlogDataService {
 
 	ResponseExpireSoonListVO readExpireSoonCampaignList(RequestExpireSoonCampaignVO requestExpireSoonCampaignVO);
 
+	boolean runPythonVerification(String blogUrl, String usrId);
+
 
 }

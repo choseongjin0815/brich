@@ -34,6 +34,13 @@ public class BlogDataServiceImpl implements BlogDataService{
 		return result;
 	}
 
+	@Override
+	public boolean runPythonVerification(String blogUrl, String usrId) {
+		
+		
+		return true;
+	}
+
 
 	
 

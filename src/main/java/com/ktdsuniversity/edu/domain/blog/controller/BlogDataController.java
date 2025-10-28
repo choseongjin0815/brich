@@ -38,7 +38,7 @@ public class BlogDataController {
 				this.blogDataService.readExpireSoonCampaignList(requestExpireSoonCampaignVO);
 		model.addAttribute("list", result);
 		model.addAttribute("user", loginUser);
-		model.addAttribute("search", requestExpireSoonCampaignVO);
+		model.addAttribute("paginator", requestExpireSoonCampaignVO);
 		return "blog/dashboard";
 	}
 	
