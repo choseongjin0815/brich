@@ -27,7 +27,7 @@
 				<div class="modal-content">
 					<span class="close">&times;</span>
 					<h3>블로그 인증</h3>
-					<span>블로그 주소: <input type="text"></span>
+					<span>블로그 주소: <input id="blog-url" type="text"></span>
 					<p>아래 버튼을 눌러 블로그 인증을 진행하세요.</p>
 					<button id="runVerification" class="btn-green">인증 시작</button>
 					<div id="verifyResult" class="result"></div>

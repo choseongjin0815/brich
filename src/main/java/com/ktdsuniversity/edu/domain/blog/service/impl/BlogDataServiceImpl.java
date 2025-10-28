@@ -11,6 +11,7 @@ import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
 import com.ktdsuniversity.edu.domain.user.dao.UserDao;
+import com.ktdsuniversity.edu.global.util.PythonExecutor;
 
 
 
@@ -36,7 +37,7 @@ public class BlogDataServiceImpl implements BlogDataService{
 
 	@Override
 	public boolean runPythonVerification(String blogUrl, String usrId) {
-		
+		PythonExecutor.runPython("", blogUrl);
 		
 		return true;
 	}

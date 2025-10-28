@@ -46,6 +46,7 @@ public class BlogDataController {
 	public String viewBlogManagePage(@PathVariable String usrId, HttpSession session, Model model) {
 		UserVO loginUser = (UserVO) session.getAttribute("__LOGIN_USER__");
 		if (loginUser == null || !loginUser.getUsrId().equals(usrId)) {
+			System.out.println(usrId);
 	        return "redirect:/access-denied";
 	    }
 		if(loginUser.getBlgAddrs() == null) {
@@ -65,23 +66,5 @@ public class BlogDataController {
 		return "/blog/verification";
 	}
 	
-	@PostMapping("/blog/{usrId}/verification")
-	public String doVerifyBlog(@PathVariable String usrId, HttpSession session, Model model){
-		UserVO loginUser = (UserVO) session.getAttribute("__LOGIN_USER__");
-		String verificationCode ="";
-		model.addAttribute("verification_code", verificationCode);
 
-		String scriptPath ="";
-		try {
-			scriptPath = new ClassPathResource("static/crawler/verification-crawler.py")
-			                .getFile()
-			                .getAbsolutePath();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		PythonExecutor.runPython(scriptPath,loginUser.getBlgAddrs(),verificationCode);
-		
-		return "redirect:/blog/"+ loginUser.getUsrId() + "/manage";
-	}
 }
