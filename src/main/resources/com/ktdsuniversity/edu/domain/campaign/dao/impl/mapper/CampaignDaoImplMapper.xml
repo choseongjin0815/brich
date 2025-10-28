@@ -50,18 +50,21 @@
        <if test='sortCol != null and sortCol != ""'>
 		  ORDER BY NVL(${sortCol}, 0) ${order}  
        </if>
-       <include refid="Common.paginationFooter"></include>
+       <include refid="Common.paginationFooter" />
     </select>
     
     <select id="selectCampaignInfoByCmpnId"
             parameterType="string"
             resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
-        SELECT STTS_CD
-		     , RCRT_PRSNN
-		     , TO_CHAR(RCRT_END_DT, 'YYYY-MM-DD') AS RCRT_END_DT
-		     , CMPN_TITLE
-		     , TO_CHAR(CMPN_END_DT, 'YYYY-MM-DD') AS CMPN_END_DT
-		  FROM CMPN
+        SELECT C.STTS_CD
+		     , C.RCRT_PRSNN
+		     , C.CMPN_TITLE
+		     , TO_CHAR(C.CNFM_DT + 3, 'YYYY-MM-DD') AS CNFM_DT
+		     , TO_CHAR(C.RCRT_STRT_DT, 'YYYY-MM-DD') AS RCRT_STRT_DT
+		     , TO_CHAR(C.RCRT_END_DT, 'YYYY-MM-DD') AS RCRT_END_DT
+		     , TO_CHAR(C.PST_END_DT, 'YYYY-MM-DD') AS PST_END_DT
+		     , TO_CHAR(C.CMPN_END_DT, 'YYYY-MM-DD') AS CMPN_END_DT
+		  FROM CMPN C
          WHERE CMPN_ID = #{_parameter}
     </select>
     
@@ -127,6 +130,14 @@
 		    ON C.CMPN_ID = CPA.CMPN_ID
 		 WHERE CPA.CMPN_PST_ADPT_ID  = #{_parameter}
     </select>
+
+    <select id="selectStateNameByStateCode"
+            parameterType="string"
+            resultType="string">
+        SELECT CD_NM
+          FROM CM_CD
+         WHERE CD_ID = #{_parameter}
+    </select>
     
     <resultMap id="ResponseAdoptVOMap"
                type="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO"
@@ -141,16 +152,22 @@
     <select id="selectAdoptListByCmpnId"
             resultMap="ResponseAdoptVOMap"
             parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO">
+        <include refid="Common.paginationHeader" />
         SELECT CPA.CMPN_PST_ADPT_ID
 		     , CPA.PST_URL
 		     , CPA.PST_STTS_CD
-		     , CC.CD_NM
+		     , CC.CD_NM AS POST_CD_NM
 		     , TO_CHAR(CPA.PST_DDLN, 'YYYY-MM-DD') AS PST_DDLN
 		     , U.USR_ID
 		     , U.LOG_ID
 		     , U.BLG_ADDRS
 		  FROM CMPN_PST_ADPT CPA
-		 INNER JOIN USR U
+		 INNER JOIN (SELECT USR_ID
+                          , LOG_ID
+                          , BLG_ADDRS
+		               FROM USR
+                      WHERE DLT_YN  = 'N'
+                        AND AUTR != '1005') U
 		    ON CPA.BLG_USR_ID = U.USR_ID
 		 INNER JOIN CM_CD CC
 		    ON CPA.PST_STTS_CD = CC.CD_ID 
@@ -163,7 +180,45 @@
        <if test='sortCol != null and sortCol != ""'>
           ORDER BY NVL(${sortCol}, 0) ${order}  
        </if>
+       <include refid="Common.paginationFooter" />
     </select>
+    
+    <select id="selectAdoptPaginationCount"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO"
+            resultType="_int">
+        SELECT COUNT(CPA.BLG_USR_ID)
+          FROM CMPN_PST_ADPT CPA
+         INNER JOIN (SELECT *
+                       FROM USR
+                      WHERE DLT_YN  = 'N'
+                        AND AUTR != '1005') U
+            ON CPA.BLG_USR_ID = U.USR_ID
+         INNER JOIN CM_CD CC
+            ON CPA.PST_STTS_CD = CC.CD_ID 
+         WHERE CPA.CMPN_ID = #{cmpnId}
+           AND CPA.ADPT_YN = 'Y'
+           AND CPA.DLT_YN = 'N'
+        <if test="searchId != null and searchId != ''">
+           AND U.LOG_ID LIKE '%' || #{searchId} || '%'
+       </if>
+       <if test='sortCol != null and sortCol != ""'>
+          ORDER BY NVL(${sortCol}, 0) ${order}  
+       </if>
+    </select>
+    
+    <update id="updatePstSttsApproveByCmpnPstAdoptId"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO">
+        UPDATE CMPN_PST_ADPT
+		   SET PST_STTS_CD = '6004'
+		     , UPDT_DT = SYSDATE
+		     , MTTR = 'USR-20230813-000001'
+		 WHERE CMPN_PST_ADPT_ID = #{cmpnPstAdptId}
+		   AND DLT_YN = 'N'
+		   AND PST_DDLN >= SYSDATE
+		   AND ADPT_YN = 'Y'
+		   AND PST_URL IS NOT NULL
+		   AND PST_STTS_CD = '6002'
+    </update>
     
     <select id="selectCampaignDetailById"
             parameterType="string"

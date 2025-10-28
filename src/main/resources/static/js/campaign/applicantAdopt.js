@@ -1,17 +1,18 @@
 $().ready(function() {
-    $(".disabled").on("click", function() {
+    $("button[name='adopt'].disabled").on("click", function() {
         alert("선정 단계가 아닙니다.");
     });
     
     $("button[name='adopt']").on("click", function() {
-        var cmpnPstAdptId = $(this).closest(".apllicant").children(".user").children(".logId").data("cmpn-apply-id");
+        var cmpnPstAdptId = $(this).closest(".applicant").children(".user").children(".logId").data("cmpn-apply-id");
+        console.log(cmpnPstAdptId);
         var adpt = $(this).attr("class");
         that = $(this);
         
         if (!adpt.includes("disabled")) {
             adpt = adpt.includes("unadopted") ? "unadopted" : "adopted";
             if (adpt === "unadopted" && 
-                    $(".adopt-count").text() === $(".total-adopt-count").text()){
+                    parseInt($(".adopt-count").text()) >= parseInt($(".total-adopt-count").text())){
                             alert("더 이상 채택할 수 없습니다.");
                     }
             
@@ -33,7 +34,6 @@ $().ready(function() {
                   }
             }
         })
-        .off('mouseenter mouseleave');
     
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("sortCol") !== null) {
@@ -82,4 +82,53 @@ $().ready(function() {
          }
          window.location.href = url;
     })
+    
+    $(".view-post").on("click", function() {
+        postState = $(this).closest("div.applicant").children("button[name=postState]").text();
+        postId = $(this).closest(".applicant").children(".user").children(".logId").data("cmpn-apply-id");
+        if (postState === "검토중") {
+            approveButton = $("<button type='button'></button>")
+            approveButton.addClass("button_120_50");
+            approveButton.addClass("post-approve");
+            approveButton.text("승인");
+            approveButton.on("click", function() {
+                    nowUrl = window.location.href;
+                    
+                    $.get("/adv/postapprove/" + postId, function(response) {
+                        if (response) {
+                            window.location.href = nowUrl;
+                        }
+                    });
+                });
+            
+            denyButton = $("<button></button>")
+            denyButton.addClass("button_120_50");
+            denyButton.addClass("post-deny");
+            denyButton.on("click", function() {
+                    $(".deny-container").css("display", "block");
+                });
+            denyButton.text("반려");
+            
+            $(".button-list").append(approveButton);
+            $(".button-list").append(denyButton);
+        }
+        
+        $(".modal").css("display", "flex");
+        
+        var url = $(this).data("post-url");
+        var postUrl = $("<a></a>");
+        postUrl.text(url);
+        postUrl.attr("href", url);
+        postUrl.attr("target", "_blank");
+
+        $(".post-url").append(postUrl);
+    });
+    
+    $(".modal-close").on("click", function() {
+        $(".modal").css("display", "none");
+        $(".deny-container").css("display", "none");
+        $(".post-url").children("a").remove();
+        $(".button-list").empty();
+    });
+    
 });

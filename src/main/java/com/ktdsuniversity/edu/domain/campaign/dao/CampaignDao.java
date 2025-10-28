@@ -44,5 +44,9 @@ public interface CampaignDao {
 
 	List<ResponseCampaignVO> selectSubmittedMyCampaignByBlgId(String blgId);
 
+	int updatePstSttsApproveByCmpnPstAdoptId(RequestApplicantVO requestApplicantVO);
 
+	int selectAdoptPaginationCount(RequestApplicantVO requestApplicantVO);
+
+	String selectStateNameByStateCode(String sttsCd);
 }
