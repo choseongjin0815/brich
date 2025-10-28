@@ -4,9 +4,10 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Document</title>
+    <title>Brich</title>
     <link type="text/css" rel="stylesheet" href="/css/layoutmenu.css" />
     <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" src="/js/common/layoutmenu.js"></script>
     
     ${param.css }
     ${param.chatCss}
@@ -16,49 +17,73 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
   </head>
   <body>
     <div class="wrapper">
-      <div class="top-menu"></div>
+      <div class="top-menu">
+        <div class="top-menu-content">
+        	<div class="top-menu-left flex-row">
+        		<div class="main-logo"></div>
+        		<div class="brich-title height-center">
+        			<a href="/campaignmain">Brich</a>
+        		</div>
+        	</div>
+        	<div class="top-menu-right flex-row">
+		        <div class="top-menu-search-area">
+		          <input class="search-input" type="text" name="searchKeyword" value="${search.searchKeyword}" placeholder="Search" />
+		        </div>
+	            <div class="top-menu-profile-area flex-row">
+	            	<div class="menu-profile"></div>
+	            	<div class="menu-profilename height-center">${sessionScope.__LOGIN_USER__.logId}</div>
+	            	<div class="menu-alert"></div>
+				</div>
+        	</div>
+        </div>
+      </div>
       <div class="application-main">
         <div class="side-menu">
-          <nav>
-            <ul>
+          <nav class="menu-nav">
+            <ul class="common-menu">
               <c:if test="${empty sessionScope.__LOGIN_USER__ }">
                 <li class="logout-menu">
                   <span>MENU</span>
-                  <ul>
-                    <li><a href="">Dashboard</a></li>
-                    <li><a href="">캠페인</a></li>
+                  <ul class="menu-content">
+                    <li><a href="" class="dashboard-font">Dashboard</a></li>
+                    <li class="menu-campaignmain-selected"><a href="/campaignmain">캠페인</a></li>
                   </ul>
-                </li> 
+                </li>
               </c:if>
               <c:if test="${sessionScope.__LOGIN_USER__ ne null 
                   and (sessionScope.__LOGIN_USER__.autr == 1002 
                     or sessionScope.__LOGIN_USER__.autr == 1003)}">
                 <li class="blg-menu">
                   <span>MENU</span>
-                  <ul>
-                    <li><a href="">Dashboard</a></li>
-                    <li><a href="">캠페인</a></li>
-                    <li>
-                      <button>MY 캠페인</button>
-                      <ul>
-                        <li><a href="">신청한 캠페인</a></li>
-                        <li><a href="">진행중 캠페인</a></li>
-                        <li><a href="">마감된 캠페인</a></li>
-                        <li><a href="">관심 캠페인</a></li>
-                      </ul>
-                    </li>
+                  <ul class="menu-content">
+                    <li ><a id="menu-image" href="" class="dashboard-font"> Dashboard</a></li> 
+                    <li class="menu-campaignmain-selected"><a href="/campaignmain">캠페인</a></li>
+                    <li class="my-campaign "><div class="flex-row flex-space-between height-center">
+                        MY 캠페인
+                        <div class="caret-down"></div>
+                        <div class="caret-up display-none"></div>
+                        </div> 
+	                      <ul class="my-sub-menu display-none">
+	                        <li class="menu-my-submitted-campaign-selected"><a href="/submittedmycampaign">신청한 캠페인</a></li>
+	                        <li><a href="">진행중 캠페인</a></li>
+	                        <li><a href="">마감된 캠페인</a></li>
+	                        <li class="last-item"><a href="">관심 캠페인</a></li>
+	                      </ul>
+	                </li>
                     <li><a href="">블로그 관리</a></li>
                     <li><a href="">메세지</a></li>
                   </ul>
                 </li>
+                
+                
               </c:if>
               <c:if test="${sessionScope.__LOGIN_USER__ ne null 
                   and sessionScope.__LOGIN_USER__.autr == 1004}">
                 <li class="advertiser-menu">
                   <span>MENU</span>
-                  <ul>
-                    <li><a href="">캠페인</a></li>
-                    <li><a href="">MY 캠페인</a></li>
+                  <ul class="menu-content">
+                    <li class="menu-campaignmain-selected"><a href="/campaignmain">캠페인</a></li>
+                    <li><a href="">MY 캠페인</a></li> 
                     <li><a href="">캠페인 만들기</a></li>
                     <li><a href="">메세지</a></li>
                   </ul>
@@ -67,8 +92,11 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
               <c:if test="${sessionScope.__LOGIN_USER__ ne null 
                   and sessionScope.__LOGIN_USER__.autr == 1001}">
                 <li class="admin-menu">
+                  <span>MENU</span>
+                  <li class="menu-campaignmain-selected"><a href="/campaignmain">캠페인</a></li>
                   <span>ADMIN MENU</span>
-                  <ul>
+                  <ul class="menu-content">
+                  
                     <li><a href="/admin/user_list">회원 관리</a></li>
                     <li><a href="">캠페인 관리</a></li>
                     <li><a href="">문의 관리</a></li>
@@ -78,11 +106,12 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
                   </ul>
                 </li>
               </c:if>
+                <li class="others-menu">
               <c:if test="${sessionScope.__LOGIN_USER__ ne null 
                   and sessionScope.__LOGIN_USER__.autr != 1001}">
                 <li>
                   <span>OTHERS</span>
-                  <ul>
+                  <ul class="menu-content">
                     <li><a href="">계정 관리</a></li>
                     <li><a href="">Help</a></li>
                     <li><a href="">신고</a></li>

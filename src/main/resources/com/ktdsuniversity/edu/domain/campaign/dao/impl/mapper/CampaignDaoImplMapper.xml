@@ -167,41 +167,65 @@
     
     <select id="selectCampaignDetailById"
             parameterType="string"
-            resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
-    SELECT CMPN_ID
-         , USR_ID
-         , CTG_CD
-         , STTS_CD
-         , PRSNN_PRC
-         , DRTN_PRC
-         , PRSNN_DSCNT
-         , DRTN_DSCNT
-         , CMPN_PRNT_ID
-         , RCRT_STRT_DT
-         , RCRT_PRSNN
-         , PRGRSS_DRTN
-         , RCRT_END_DT
-         , PST_END_DT
-         , CMPN_END_DT
-         , RTRN_RSN
-         , ADDRS
-         , ATTCH_GRP_ID
-         , CMPN_TITLE
-         , CMPN_CN
-         , OFFR_CN
-         , OFFR_PRC
-         , PST_MSSN
-         , HSTG
-         , NTFCN
-         , "VIEW"
-         , CNFM_DT
-         , CRT_DT
-         , CRTR
-         , UPDT_DT
-         , MTTR
-         , DLT_YN
-    FROM CMPN
-    WHERE CMPN_ID = #{_parameter}
+            resultMap="RequestCampaignVOMap">
+			SELECT  CMPN.CMPN_ID
+                  , CMPN.USR_ID
+                  , CMPN.CTG_CD
+                  , CMPN.STTS_CD
+                  , CMPN.PRSNN_PRC
+                  , CMPN.DRTN_PRC
+                  , CMPN.PRSNN_DSCNT
+                  , CMPN.DRTN_DSCNT
+                  , CMPN.CMPN_PRNT_ID
+                  , TO_CHAR(CMPN.RCRT_STRT_DT, 'MM-DD') AS RCRT_STRT_DT
+                  , CMPN.RCRT_PRSNN
+                  , CMPN.PRGRSS_DRTN
+                  , TO_CHAR(CMPN.RCRT_END_DT, 'MM-DD')  AS RCRT_END_DT
+                  , TO_CHAR(CMPN.PST_END_DT,  'MM-DD')  AS PST_END_DT
+                  , TO_CHAR(CMPN.CMPN_END_DT, 'MM-DD')  AS CMPN_END_DT
+                  , CMPN.RTRN_RSN
+                  , CMPN.ADDRS
+                  , CMPN.ATTCH_GRP_ID
+                  , CMPN.CMPN_TITLE
+                  , CMPN.CMPN_CN
+                  , CMPN.OFFR_CN
+                  , CMPN.OFFR_PRC
+                  , CMPN.PST_MSSN
+                  , CMPN.HSTG
+                  , CMPN.NTFCN
+                  , CMPN."VIEW"
+                  , TO_CHAR(CMPN.CNFM_DT, 'MM-DD')       AS CNFM_DT
+                  , TO_CHAR(CMPN.CRT_DT,  'MM-DD')       AS CRT_DT
+                  , CMPN.CRTR
+                  , TO_CHAR(CMPN.UPDT_DT, 'MM-DD')       AS UPDT_DT
+                  , CMPN.MTTR
+                  , CMPN.DLT_YN
+                  , NVL(LIKE_TABLE.LIKE_CNT, 0)               AS LIKE_CNT
+                  , NVL(ADPT_TABLE.ADPT_CNT, 0)               AS ADPT_CNT
+                  , ARCD.CD_NM                                 AS AREA
+                  , PARCD.CD_NM                                AS PARENT_AREA   
+              FROM CMPN CMPN 
+              LEFT JOIN ( SELECT FAV.CMPN_ID  
+                               , COUNT(FAV.CMPN_ID) AS LIKE_CNT
+                            FROM FAV_CMPN FAV
+                           WHERE FAV.CMPN_ID = #{_parameter}
+                             AND FAV.DLT_YN = 'N'
+                           GROUP BY  FAV.CMPN_ID) LIKE_TABLE
+                     ON CMPN.CMPN_ID = LIKE_TABLE.CMPN_ID 
+              LEFT JOIN ( SELECT ADPT.CMPN_ID 
+                               , COUNT(ADPT.CMPN_ID) AS ADPT_CNT
+                            FROM CMPN_PST_ADPT ADPT 
+                           WHERE ADPT.CMPN_ID = #{_parameter}
+                             AND ADPT.DLT_YN = 'N'
+                           GROUP BY ADPT.CMPN_ID) ADPT_TABLE
+                     ON CMPN.CMPN_ID = ADPT_TABLE.CMPN_ID 
+             LEFT JOIN CMPN_AR CMPNAR
+               ON CMPN.CMPN_ID = CMPNAR.CMPN_ID 
+             LEFT JOIN AR_CD ARCD
+               ON CMPNAR.AR_CD = ARCD.CD_ID
+             LEFT JOIN AR_CD PARCD
+               ON PARCD.CD_ID = ARCD.PRNT_CD_ID 
+            WHERE CMPN.CMPN_ID = #{_parameter}
     </select>
     
     
@@ -237,7 +261,7 @@
     
 
     <resultMap type="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO" 
-               id="RequestSearchCampaignVOMap"
+               id="RequestCampaignVOMap"
                autoMapping="true">
                <id column="CMPN_ID" property="cmpnId"/>
                <collection property="area"
@@ -247,7 +271,7 @@
     </resultMap>
     
     <select id="selectCampaignListCategoryAndSortBy"
-            resultMap="RequestSearchCampaignVOMap"
+            resultMap="RequestCampaignVOMap"
             parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO">
             
 			SELECT CMPN.CMPN_ID 
@@ -267,7 +291,10 @@
 			               WHERE FAV.CMPN_ID IN (SELECT CMPN_ID 
 			                                           FROM CMPN
 			                                      WHERE CMPN.CTG_CD  = '3001'   
-			                                        AND CMPN.STTS_CD = '2005'
+			                                        AND CMPN.STTS_CD IN ( SELECT CD_ID
+									                                        FROM CM_CD
+									                                       START WITH CD_ID= NVL(#{category, jdbcType=VARCHAR}, '3000')        
+									                                     CONNECT BY PRIOR CD_ID = PRNT_CD_ID)
 			                                    )
 			                 AND FAV.DLT_YN = 'N'
 			               GROUP BY  FAV.CMPN_ID) LIKE_TABLE
@@ -277,10 +304,12 @@
 			                FROM CMPN_PST_ADPT ADPT 
 			               WHERE ADPT.CMPN_ID IN (SELECT CMPN_ID 
 			                                           FROM CMPN
-			                                      WHERE CMPN.CTG_CD  = '3001'   
+			                                      WHERE CMPN.CTG_CD  IN ( SELECT CD_ID
+                                                                            FROM CM_CD
+                                                                           START WITH CD_ID= NVL(#{category, jdbcType=VARCHAR}, '3000')        
+                                                                         CONNECT BY PRIOR CD_ID = PRNT_CD_ID)
 			                                        AND CMPN.STTS_CD = '2005'
 			                                     )
-			                 AND ADPT.ADPT_YN = 'Y'
 			                 AND ADPT.DLT_YN = 'N'
 			               GROUP BY ADPT.CMPN_ID) ADPT_TABLE
 			         ON CMPN.CMPN_ID = ADPT_TABLE.CMPN_ID 
@@ -295,7 +324,10 @@
 			                            FROM CM_CD
 			                           START WITH CD_ID= NVL(#{category, jdbcType=VARCHAR}, '3000')        
 			                         CONNECT BY PRIOR CD_ID = PRNT_CD_ID)
-			  AND CMPN.CTG_CD  = '3001'  
+			  AND CMPN.CTG_CD IN ( SELECT CD_ID
+                                     FROM CM_CD
+                                    START WITH CD_ID= NVL(#{category, jdbcType=VARCHAR}, '3000')        
+                                  CONNECT BY PRIOR CD_ID = PRNT_CD_ID)  
 			  AND CMPN.STTS_CD = '2005'   
 			  ORDER BY
 		        CASE WHEN #{sortBy} = 'latest'   THEN CMPN.RCRT_STRT_DT END  DESC ,
@@ -317,6 +349,15 @@
 			     CONNECT BY PRIOR PRNT_CD_ID = CD_ID ) CTG
 			WHERE lv = max_lv - 1
     </select>
+    
+	
+	<select id="selectCampaignChangeSttsCd"
+			parameterType="string"
+			resultType="string">
+			SELECT CD_NM
+			  FROM CM_CD
+			 WHERE CD_ID = #{_parameter} 
+	</select>
 </mapper>
 
 

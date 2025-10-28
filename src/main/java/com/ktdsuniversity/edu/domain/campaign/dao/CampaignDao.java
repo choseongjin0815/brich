@@ -14,7 +14,7 @@ import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 public interface CampaignDao {
 
-	CampaignVO selectCampaignDetailById(String campaignId);
+	ResponseCampaignVO selectCampaignDetailById(String campaignId);
 
 	List<CommonCodeVO> selectCategoryList();
 
@@ -37,5 +37,10 @@ public interface CampaignDao {
 	String selectCategoryParent(String selectCategroy);
 
 	List<CampaignVO> selectExpireSoonCampaign();
+
+	String selectCampaignChangeSttsCd(String sttsCd);
+
+	List<ResponseCampaignVO> selectSubmittedMyCampaignByBlgId(String blgId);
+
 
 }
