@@ -26,6 +26,8 @@ public interface UserDao {
 
 	public int updatePswrdByLogIdAndPswrd(RequestUserResetPasswordVO resetPasswordInfo);
 
+	public String selectUserIdByLogId(String logId);
+
 
 
 }

@@ -7,6 +7,8 @@ import com.ktdsuniversity.edu.domain.user.vo.BlogCategoryVO;
 
 public interface BlogCategoryDao {
 
+	public int insertBlogCategory(BlogCategoryVO blogCategoryVO);
+
 	List<BlogCategoryVO> selectUserBlogCategoryById(String usrId);
 
 	int updateBlogCategoryAsDelete(Map<String, Object> deleteParamMap);

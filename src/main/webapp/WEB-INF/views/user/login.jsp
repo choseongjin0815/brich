@@ -12,7 +12,7 @@
 <script type="text/javascript" src="/js/common/login.js"></script>
 <script type="text/javascript" src="/js/common/validate.js"></script>
 </head>
-<body>
+<body class="login-body">
     <div class="login-wrapper">
 	    <div class="login-area">
 		    <form method="post" id="login">

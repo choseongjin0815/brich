@@ -23,6 +23,12 @@ public class BlogCategoryDaoImpl extends SqlSessionDaoSupport implements BlogCat
     }
 
 	@Override
+	public int insertBlogCategory(BlogCategoryVO blogCategoryVO) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertBlogCategory", blogCategoryVO);
+	}
+
+
+
 	public List<BlogCategoryVO> selectUserBlogCategoryById(String usrId) {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectUserBlogCategoryById", usrId);
 	}

@@ -4,7 +4,9 @@ $().ready(function() {
         var value = $(this).val();
         $(this).next(".validate-require").remove();
         if (value === "") {
-            $(".duplicate-id-check").remove();
+            if($(this).attr("class") === "logId"){
+                $(".duplicate-id-check").remove();
+            }
             $(this).after($("<span class='validate-require'>필수 입력입니다!</span>"));
             $(this).next(".validate-require").css({
                 "color": "#FF0000",   // 빨강
@@ -14,7 +16,6 @@ $().ready(function() {
     });
 
     $("#password-confirm").on("keyup", function() {
-
         $(this).next(".validate-password-confirm").remove();
         if ($(this).closest(".input-flex").children("#password").val() !== $(this).val()) {
             $(this).after($("<span class='validate-password-confirm'>비밀번호가 일치하지 않습니다.</span>"));
@@ -31,6 +32,27 @@ $().ready(function() {
             });
         }
     });
+    
+    $("#password").on("keyup", function() {
+            $(this).next().next(".validate-password-confirm").remove();
+            if($("#password-confirm").val() !== "") {
+                if ($(this).closest(".input-flex").children("#password-confirm").val() !== $(this).val()) {
+                    $(this).next().after($("<span class='validate-password-confirm'>비밀번호가 일치하지 않습니다.</span>"));
+                    $(this).next().next(".validate-password-confirm").css({
+                        "color": "#FF0000",   // 빨강
+                        "font-size": "14px"   // 14px
+                    });
+                }
+                else {
+                    $(this).next().after($("<span class='validate-password-confirm'>비밀번호가 일치합니다.</span>"));
+                    $(this).next().next(".validate-password-confirm").css({
+                        "color": "#FF0000",   // 빨강
+                        "font-size": "14px"   // 14px
+                    });
+                }
+            }
+        });
+    
     $(".duplicate-id").on("click", function() {
         var url = $(".logId").val();
         var btn = $(this);

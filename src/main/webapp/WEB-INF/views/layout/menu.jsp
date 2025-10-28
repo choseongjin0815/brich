@@ -9,7 +9,10 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
     <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
     
     ${param.css }
+    ${param.chatCss}
     ${param.scripts}
+    ${param.chatroomscripts}
+    ${param.chatscripts}
   </head>
   <body>
     <div class="wrapper">
