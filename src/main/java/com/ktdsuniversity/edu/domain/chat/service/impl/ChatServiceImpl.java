@@ -18,6 +18,7 @@ import com.ktdsuniversity.edu.domain.chat.dao.ChatMessageRepository;
 import com.ktdsuniversity.edu.domain.chat.service.ChatService;
 import com.ktdsuniversity.edu.domain.chat.vo.ChatMessageVO;
 import com.ktdsuniversity.edu.domain.chat.vo.ChatParticipantVO;
+import com.ktdsuniversity.edu.domain.chat.vo.SearchChatVO;
 import com.ktdsuniversity.edu.domain.chat.vo.request.RequestChatMessageVO;
 import com.ktdsuniversity.edu.domain.chat.vo.request.RequestChatRoomFindVO;
 import com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatCampaignListVO;
@@ -43,30 +44,34 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public List<ResponseChatRoomInfoVO> readAllChatRoomList(String usrId, String auth, String cmpnId) {
-		// 1. Oracle에서 사용자가 참여 중인 채팅방 목록 조회
-		//블로거일 때 리스트 
+	public SearchChatVO readAllChatRoomList(SearchChatVO searchChatVO) {
+		String auth = searchChatVO.getAuth();
+		
+		// 1. 총 개수 조회
+		int totalCount = 0;
 		List<ResponseChatRoomInfoVO> chatRooms = null;
-		log.info("service {}", auth);
+		
 		if(!auth.equals("1004")) {
-			 chatRooms = this.chatDao.selectUserChatRooms(usrId);
-			 log.info("블로거로 리스트!");
+			// 블로거용
+			totalCount = chatDao.selectUserChatRoomsCount(searchChatVO);
+			chatRooms = chatDao.selectUserChatRooms(searchChatVO);
+			log.info("블로거로 리스트!");
+		} else {
+			// 광고주용
+			log.info("광고주로 리스트!{}", searchChatVO.getCmpnId());
+			totalCount = chatDao.selectCampaignChatRoomsCount(searchChatVO);
+			chatRooms = chatDao.selectCampaignChatRooms(searchChatVO);
 		}
-		else if(auth.equals("1004")) {
-			 log.info("광고주로 리스트!{}", cmpnId);
-			 
-			RequestChatRoomFindVO find = new RequestChatRoomFindVO();
-			find.setCmpnId(cmpnId);
-			find.setUsrId(usrId);
-			chatRooms = this.chatDao.selectCampaignChatRooms(find);
-		}
+		
+		// 2. 페이지 정보 설정
+		searchChatVO.setPageCount(totalCount);
 
-		// 2. MongoDB에서 각 채팅방의 최신 메시지 및 안읽은 수 조회
+		// 3. MongoDB에서 각 채팅방의 최신 메시지 및 안읽은 수 조회
 		for (ResponseChatRoomInfoVO chatRoom : chatRooms) {
 			// 최신 메시지 조회
 			Sort sort = Sort.by(Sort.Direction.DESC, "CRT_DT");
-			List<ChatMessageVO> messages = chatMessageRepository.findByChtRmIdOrderByCrtDtDesc(chatRoom.getChtRmId(),
-					sort);
+			List<ChatMessageVO> messages = chatMessageRepository.findByChtRmIdOrderByCrtDtDesc(
+					chatRoom.getChtRmId(), sort);
 
 			if (messages != null && !messages.isEmpty()) {
 				ChatMessageVO lastMessage = messages.get(0);
@@ -76,46 +81,137 @@ public class ChatServiceImpl implements ChatService {
 			}
 
 			// 안읽은 메시지 수 조회
-			long unreadCount = chatMessageRepository.countUnreadMessages(chatRoom.getChtRmId(), usrId);
+			long unreadCount = chatMessageRepository.countUnreadMessages(
+					chatRoom.getChtRmId(), searchChatVO.getUsrId());
 			chatRoom.setUnreadCnt((int) unreadCount);
 		}
 
-		return chatRooms;
+		// 4. 결과 목록을 SearchChatVO에 설정
+		searchChatVO.setChatRoomList(chatRooms);
+
+		return searchChatVO;
 	}
 
 	@Override
-	public List<ResponseChatRoomInfoVO> readUnreadChatRoomList(String usrId, String auth, String cmpnId) {
-		// 일단 전부 읽은 채팅을 불러오고
-		List<ResponseChatRoomInfoVO> allRooms = readAllChatRoomList(usrId, auth, cmpnId);
+	public SearchChatVO readUnreadChatRoomList(SearchChatVO searchChatVO) {
+		// 안읽은 메시지 조회는 전체 데이터를 가져와서 필터링해야 함
+		// MongoDB에서 unreadCnt를 확인한 후 필터링하기 때문
+		
+		String auth = searchChatVO.getAuth();
+		
+		// 1. 전체 채팅방 목록 조회 (페이징 없이 전체)
+		SearchChatVO tempSearch = new SearchChatVO();
+		tempSearch.setUsrId(searchChatVO.getUsrId());
+		tempSearch.setAuth(searchChatVO.getAuth());
+		tempSearch.setCmpnId(searchChatVO.getCmpnId());
+		tempSearch.setPageNo(0);
+		tempSearch.setListSize(Integer.MAX_VALUE); // 전체 조회
+		
+		List<ResponseChatRoomInfoVO> allChatRooms = null;
+		
+		if(!auth.equals("1004")) {
+			// 블로거용
+			allChatRooms = chatDao.selectUserChatRooms(tempSearch);
+			log.info("블로거로 안읽은 메시지 리스트!");
+		} else {
+			// 광고주용
+			log.info("광고주로 안읽은 메시지 리스트!{}", searchChatVO.getCmpnId());
+			allChatRooms = chatDao.selectCampaignChatRooms(tempSearch);
+		}
 
-		// 안읽은 메시지가 있는 채팅방만 필터링
+		// 2. MongoDB에서 각 채팅방의 안읽은 메시지 수 조회 및 필터링
 		List<ResponseChatRoomInfoVO> unreadRooms = new ArrayList<>();
-		for (ResponseChatRoomInfoVO room : allRooms) {
-			if (room.getUnreadCnt() > 0) {
-				unreadRooms.add(room);
+		
+		for (ResponseChatRoomInfoVO chatRoom : allChatRooms) {
+			// 최신 메시지 조회
+			Sort sort = Sort.by(Sort.Direction.DESC, "CRT_DT");
+			List<ChatMessageVO> messages = chatMessageRepository.findByChtRmIdOrderByCrtDtDesc(
+					chatRoom.getChtRmId(), sort);
+
+			if (messages != null && !messages.isEmpty()) {
+				ChatMessageVO lastMessage = messages.get(0);
+				chatRoom.setLastMsgCn(lastMessage.getMsgCn());
+				chatRoom.setLastMsgUsrId(lastMessage.getUsrId());
+				chatRoom.setLastMsgCrtDt(lastMessage.getCrtDt());
+			}
+
+			// 안읽은 메시지 수 조회
+			long unreadCount = chatMessageRepository.countUnreadMessages(
+					chatRoom.getChtRmId(), searchChatVO.getUsrId());
+			chatRoom.setUnreadCnt((int) unreadCount);
+			
+			// 안읽은 메시지가 있는 채팅방만 추가
+			if (unreadCount > 0) {
+				unreadRooms.add(chatRoom);
 			}
 		}
 
-		return unreadRooms;
+		// 3. 필터링된 결과에서 페이징 적용
+		int startIndex = searchChatVO.getPageNo() * searchChatVO.getListSize();
+		int endIndex = Math.min(startIndex + searchChatVO.getListSize(), unreadRooms.size());
+		
+		List<ResponseChatRoomInfoVO> pagedRooms = new ArrayList<>();
+		if (startIndex < unreadRooms.size()) {
+			pagedRooms = unreadRooms.subList(startIndex, endIndex);
+		}
+		
+		// 4. 결과 설정
+		searchChatVO.setChatRoomList(pagedRooms);
+		searchChatVO.setPageCount(unreadRooms.size());
+		
+		return searchChatVO;
 	}
 
-	/**
-	 * TODO 캠페인 목록 뽑기 나중에 페이징 추가 , 중복으로 사용할 수 있는 쿼리 있으면 그거 가져올 예정임
-	 * 	    ResponseChatCampaignListVO 만들어야 함
-	 */
 	@Override
-	public List<ResponseChatCampaignListVO> readAllCampaignList(String usrId) {
-		return chatDao.selectAllCampaignList(usrId);
+	public SearchChatVO readAllCampaignList(SearchChatVO searchChatVO) {
+		// 1. 총 개수 조회
+		int totalCount = chatDao.selectAllCampaignListCount(searchChatVO);
+		log.info("TOTALCOUNT {}", totalCount);
+		
+		// 2. 목록 조회
+		List<ResponseChatCampaignListVO> campaigns = chatDao.selectAllCampaignList(searchChatVO);
+		
+		// 3. 페이지 정보 설정
+		searchChatVO.setPageCount(totalCount);
+		
+		// 4. 결과 목록을 SearchChatVO에 설정
+		searchChatVO.setCampaignList(campaigns);
+		
+		return searchChatVO;
 	}
 
 	@Override
-	public List<ResponseChatCampaignListVO> readEndedCampaignList(String usrId) {
-		return chatDao.selectEndedCampaignList(usrId);
+	public SearchChatVO readEndedCampaignList(SearchChatVO searchChatVO) {
+		// 1. 총 개수 조회
+		int totalCount = chatDao.selectEndedCampaignListCount(searchChatVO);
+		
+		// 2. 목록 조회
+		List<ResponseChatCampaignListVO> campaigns = chatDao.selectEndedCampaignList(searchChatVO);
+		
+		// 3. 페이지 정보 설정
+		searchChatVO.setPageCount(totalCount);
+		
+		// 4. 결과 목록을 SearchChatVO에 설정
+		searchChatVO.setCampaignList(campaigns);
+		
+		return searchChatVO;
 	}
 
 	@Override
-	public List<ResponseChatCampaignListVO> readOngoingCampaignList(String usrId) {
-		return chatDao.selectOngoingCampaignList(usrId);
+	public SearchChatVO readOngoingCampaignList(SearchChatVO searchChatVO) {
+		// 1. 총 개수 조회
+		int totalCount = chatDao.selectOngoingCampaignListCount(searchChatVO);
+		
+		// 2. 목록 조회
+		List<ResponseChatCampaignListVO> campaigns = chatDao.selectOngoingCampaignList(searchChatVO);
+		
+		// 3. 페이지 정보 설정
+		searchChatVO.setPageCount(totalCount);
+		
+		// 4. 결과 목록을 SearchChatVO에 설정
+		searchChatVO.setCampaignList(campaigns);
+		
+		return searchChatVO;
 	}
 
 	@Transactional
@@ -131,13 +227,11 @@ public class ChatServiceImpl implements ChatService {
 		// MongoDB에서 메시지 목록 조회
 		List<ChatMessageVO> messages = chatMessageRepository.findByChtRmIdOrderByCrtDtAsc(chtRmId);
 
-		// 각 메시지에 사용자 이름 및 파일 정보 추가 (Oracle에서)
+		// 각 메시지에 사용자 이름 추가 (Oracle에서)
 		for (ChatMessageVO message : messages) {
 			// 사용자 이름 조회
 			String userName = chatDao.selectUserName(message.getUsrId());
 			message.setUsrNm(userName);
-
-		
 		}
 
 		// 3. 읽음 처리
@@ -146,8 +240,6 @@ public class ChatServiceImpl implements ChatService {
 		return messages;
 	}
 
-	
-	//TODO 날짜를 형식 변환해서 삽입
 	@Transactional
 	@Override
 	public ChatMessageVO sendMessage(RequestChatMessageVO requestChatMessageVO) {
@@ -187,11 +279,8 @@ public class ChatServiceImpl implements ChatService {
 		}
 	}
 
-	//TODO CHT_MSG_ID, "CHT-MSG-yyyymmdd-000001" 형태 시퀀스 포함된 아이디 생성하기
 	private String generateMessageId() {
-		
 		return "CHT_MSG-" + "-";
 	}
-
 
 }

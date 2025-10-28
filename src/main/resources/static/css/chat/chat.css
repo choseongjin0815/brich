@@ -1,3 +1,34 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    color: #333;
+    margin: 0;
+}
+
+ul{
+    list-style: none;
+}
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+
+& > .top-menu {
+    height: 72px;
+}
+& > .application-main {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: row;
+	height: 100px;
+	width: 100vw;
+	
+	& > .side-menu {
+	    width: 270px;
+    }
+    }
+}
 
 .chat-main {
 	display:flex;
@@ -6,15 +37,15 @@
 	margin:0 auto;
 }
 .header-title{
-    font-size: 36px;
-    font-weight: 700;
-    color: #5A6ACF;
+	font-size: 36px;
+	font-weight: 700;
+	color: #5A6ACF;
 }
 .content-box{
-	marign-left: 50px;
+	margin-left: 50px;
 	width: 1600px;
 	height: 970px;
-    box-shadow: 0 0 12px rgba(0,0,0,0.15);
+	box-shadow: 0 0 12px rgba(0,0,0,0.15);
 }
 .content-title{
 	display: flex;
@@ -31,29 +62,34 @@
 	height: 45px;
 	display: flex;
 	gap: 20px;
-    border-bottom: 1px solid #C8CBD9;
-    
-    & > .progress:first-child {
-        margin-left: 30px;
-    }
-   
+	border-bottom: 1px solid #C8CBD9;
+
+	& > .progress:first-child {
+	margin-left: 30px;
+	}
+
 }
 .progress {
 	font-weight: 500;
 	color: #5A6ACF;
 	cursor: pointer;
-	
 }
 .content-list {
-	height: 800px;
+	height: 750px;
+	
 }
 .campaign-content-item {
 	display:flex;
 	padding: 0 90px;
-    align-items: center;
-    justify-content: space-between;
-	height: 160px;
+	align-items: center;
+	justify-content: space-between;
+	height: 150px;
 	border-bottom: 1px solid #C8CBD9;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+.campaign-content-item:hover {
+	background-color: #f5f5f5;
 }
 .campaign-item, .chatroom-campaign-title {
 	display: flex;
@@ -89,12 +125,17 @@
 }
 
 .chatroom-content-item {
-    display:flex;
-    justify-content: space-between;
-    padding: 0 90px;
-    align-items: center;
-    height: 160px;
-    border-bottom: 1px solid #C8CBD9;
+	display:flex;
+	justify-content: space-between;
+	padding: 0 90px;
+	align-items: center;
+	height: 150px;
+	border-bottom: 1px solid #C8CBD9;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+.chatroom-content-item:hover {
+    background-color: #f5f5f5;
 }
 .chatroom-info {
 	display: flex;
@@ -103,12 +144,12 @@
 }
 .campaign-title {
 	font-size: 18px;
-	font-weight: 700;	
+	font-weight: 700;
 }
 .chatroom-extra-info {
 	display:flex;
 	gap: 70px;
-	
+
 }
 .chat-latest-info {
 	display: flex;
@@ -133,3 +174,62 @@
 	background-color: #F80000;
 }
 
+/* 페이징 스타일 */
+.page-list {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 80px;
+	gap: 10px;
+	padding: 20px;
+	border-top: 1px solid #C8CBD9;
+}
+
+.page-item,
+.page-prev-group,
+.page-next-group {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	min-width: 35px;
+	height: 35px;
+	padding: 0 10px;
+	border: 1px solid #C8CBD9;
+	border-radius: 5px;
+	background-color: #fff;
+	color: #5A6ACF;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s;
+	user-select: none;
+}
+
+.page-item:hover,
+.page-prev-group:hover,
+.page-next-group:hover {
+	background-color: #5A6ACF;
+	color: #fff;
+	border-color: #5A6ACF;
+}
+
+.page-item.active {
+	background-color: #5A6ACF;
+	color: #fff;
+	border-color: #5A6ACF;
+	font-weight: 700;
+}
+
+.page-prev-group,
+.page-next-group {
+	font-weight: 700;
+	font-size: 16px;
+}
+
+.no-data {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	color: #999;
+	font-size: 18px;
+}

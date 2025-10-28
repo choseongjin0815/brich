@@ -25,18 +25,13 @@ import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.chat.service.ChatService;
 import com.ktdsuniversity.edu.domain.chat.vo.ChatMessageVO;
 import com.ktdsuniversity.edu.domain.chat.vo.ChatParticipantVO;
+import com.ktdsuniversity.edu.domain.chat.vo.SearchChatVO;
 import com.ktdsuniversity.edu.domain.chat.vo.request.RequestChatMessageVO;
 import com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatCampaignListVO;
 import com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatRoomInfoVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.global.common.AjaxResponse;
 
-
-
-/**
- * TODO 페이징 적용
- *      세션에 있는 사용자가 채팅방에 접근하려 할 때 해당 채팅방에 등록되어 있는지 검증 
- */
 @Controller
 @RequestMapping("/{auth}/chat")
 public class ChatController {
@@ -107,112 +102,114 @@ public class ChatController {
     }
 
     /**
-     * 채팅방 목록 전체 조회
+     * 채팅방 목록 전체 조회 (페이징)
      */
     @GetMapping("/rooms/all")
     @ResponseBody
     public AjaxResponse getAllChatRoomList(@SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser
-    									 , @RequestParam(required=false) String cmpnId) {
+    									 , @RequestParam(required=false) String cmpnId
+    									 , @RequestParam(defaultValue = "0") int pageNo) {
         
     	String usrId = loginUser.getUsrId();
     	String auth = loginUser.getAutr();
     	log.info("{} auth", auth);
 
+    	SearchChatVO searchChatVO = new SearchChatVO();
+    	searchChatVO.setUsrId(usrId);
+    	searchChatVO.setAuth(auth);
+    	searchChatVO.setCmpnId(cmpnId);
+    	searchChatVO.setPageNo(pageNo);
     	
-        List<ResponseChatRoomInfoVO> chatRoomList = chatService.readAllChatRoomList(usrId, auth, cmpnId);
+        SearchChatVO result = chatService.readAllChatRoomList(searchChatVO);
         
         AjaxResponse ajaxResponse = new AjaxResponse();
-        
-        Map<String, Object> result = new HashMap<>();
-        result.put("success", true);
-        result.put("data", chatRoomList);
-        
         ajaxResponse.setBody(result);        
         return ajaxResponse;
     }
 
     /**
-     * 채팅방 목록 안읽은 것만 조회
+     * 채팅방 목록 안읽은 것만 조회 (페이징)
      */
     @GetMapping("/rooms/unread")
     @ResponseBody
     public AjaxResponse getUnreadChatRoomList(@SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser
-    										, @RequestParam(required=false) String cmpnId) {
+    										, @RequestParam(required=false) String cmpnId
+    										, @RequestParam(defaultValue = "0") int pageNo) {
     	String usrId = loginUser.getUsrId();
     	String auth = loginUser.getAutr();
 
-        List<ResponseChatRoomInfoVO> chatRoomList = chatService.readUnreadChatRoomList(usrId, auth, cmpnId);
+    	SearchChatVO searchChatVO = new SearchChatVO();
+    	searchChatVO.setUsrId(usrId);
+    	searchChatVO.setAuth(auth);
+    	searchChatVO.setCmpnId(cmpnId);
+    	searchChatVO.setPageNo(pageNo);
+    	
+        SearchChatVO result = chatService.readUnreadChatRoomList(searchChatVO);
         
         AjaxResponse ajaxResponse = new AjaxResponse();
-        
-        Map<String, Object> result = new HashMap<>();
-        result.put("success", true);
-        result.put("data", chatRoomList);
-        
         ajaxResponse.setBody(result);
         
         return ajaxResponse;
     }
 
-    //TODO 메소드를 세개로 나눴는데 생각해보니 하나로 처리할 수 있음 하나로 합치기 
     /**
-     * 광고주용 채팅방 캠페인 목록 전체
+     * 광고주용 채팅방 캠페인 목록 전체 (페이징)
      */
     @GetMapping("/campaigns/all")
     @ResponseBody
-    public AjaxResponse getAllCampaignList(@SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser) {
+    public AjaxResponse getAllCampaignList(@SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser
+    									  , @RequestParam(defaultValue = "0") int pageNo) {
     	String usrId = loginUser.getUsrId();
 
-        List<ResponseChatCampaignListVO> campaignList = chatService.readAllCampaignList(usrId);
+    	SearchChatVO searchChatVO = new SearchChatVO();
+    	searchChatVO.setUsrId(usrId);
+    	searchChatVO.setPageNo(pageNo);
+    	
+        SearchChatVO result = chatService.readAllCampaignList(searchChatVO);
         
         AjaxResponse ajaxResponse = new AjaxResponse();
-        
-        Map<String, Object> result = new HashMap<>();
-        result.put("success", true);
-        result.put("data", campaignList);
-        
         ajaxResponse.setBody(result);
         
         return ajaxResponse;
     }
 
     /**
-     * 광고주용 채팅방 캠페인 목록 종료
+     * 광고주용 채팅방 캠페인 목록 종료 (페이징)
      */
     @GetMapping("/campaigns/ended")
     @ResponseBody
-    public AjaxResponse getEndedCampaignList(@SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser) {
+    public AjaxResponse getEndedCampaignList(@SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser
+    									   , @RequestParam(defaultValue = "0") int pageNo) {
     	String usrId = loginUser.getUsrId();
 
-        List<ResponseChatCampaignListVO> campaignList = chatService.readEndedCampaignList(usrId);
+    	SearchChatVO searchChatVO = new SearchChatVO();
+    	searchChatVO.setUsrId(usrId);
+    	searchChatVO.setPageNo(pageNo);
+    	
+        SearchChatVO result = chatService.readEndedCampaignList(searchChatVO);
         
         AjaxResponse ajaxResponse = new AjaxResponse();
-        
-        Map<String, Object> result = new HashMap<>();
-        result.put("success", true);
-        result.put("data", campaignList);
-        
         ajaxResponse.setBody(result);
         
         return ajaxResponse;
     }
 
     /**
-     * 광고주용 채팅방 캠페인 목록 진행중
+     * 광고주용 채팅방 캠페인 목록 진행중 (페이징)
      */
     @GetMapping("/campaigns/ongoing")
     @ResponseBody
-    public AjaxResponse getOngoingCampaignList(@SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser) {
+    public AjaxResponse getOngoingCampaignList(@SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser
+    										  , @RequestParam(defaultValue = "0") int pageNo) {
     	String usrId = loginUser.getUsrId();
 
-        List<ResponseChatCampaignListVO> campaignList = chatService.readOngoingCampaignList(usrId);
+    	SearchChatVO searchChatVO = new SearchChatVO();
+    	searchChatVO.setUsrId(usrId);
+    	searchChatVO.setPageNo(pageNo);
+    	
+        SearchChatVO result = chatService.readOngoingCampaignList(searchChatVO);
         
         AjaxResponse ajaxResponse = new AjaxResponse();
-        
-        Map<String, Object> result = new HashMap<>();
-        result.put("success", true);
-        result.put("data", campaignList);
-        
         ajaxResponse.setBody(result);
  
         return ajaxResponse;
@@ -289,6 +286,8 @@ public class ChatController {
         Map<String, Object> result = new HashMap<>();
         result.put("success", true);
         result.put("data", savedMessage);
+        
+        ajaxResponse.setBody(result);
         
         return ajaxResponse;
     }

@@ -11,6 +11,7 @@ import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.chat.dao.ChatDao;
 import com.ktdsuniversity.edu.domain.chat.vo.ChatParticipantVO;
 import com.ktdsuniversity.edu.domain.chat.vo.ChatRoomVO;
+import com.ktdsuniversity.edu.domain.chat.vo.SearchChatVO;
 import com.ktdsuniversity.edu.domain.chat.vo.request.RequestChatRoomFindVO;
 import com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatCampaignListVO;
 import com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatRoomInfoVO;
@@ -26,41 +27,66 @@ public class ChatDaoImpl extends SqlSessionDaoSupport implements ChatDao {
     public void setSqlSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {
         super.setSqlSessionTemplate(sqlSessionTemplate);
     }
+
+
+    @Override
+    public int selectUserChatRoomsCount(SearchChatVO searchChatVO) {
+        return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUserChatRoomsCount", searchChatVO);
+    }
+
+    @Override
+    public List<ResponseChatRoomInfoVO> selectUserChatRooms(SearchChatVO searchChatVO) {
+        return super.getSqlSession().selectList(this.NAME_SPACE + "selectUserChatRooms", searchChatVO);
+    }
+
+    @Override
+    public int selectCampaignChatRoomsCount(SearchChatVO searchChatVO) {
+        return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignChatRoomsCount", searchChatVO);
+    }
+
+    @Override
+    public List<ResponseChatRoomInfoVO> selectCampaignChatRooms(SearchChatVO searchChatVO) {
+        return super.getSqlSession().selectList(this.NAME_SPACE + "selectCampaignChatRooms", searchChatVO);
+    }
+
+    @Override
+    public int selectAllCampaignListCount(SearchChatVO searchChatVO) {
+        return super.getSqlSession().selectOne(this.NAME_SPACE + "selectAllCampaignListCount", searchChatVO);
+    }
+
+    @Override
+    public List<ResponseChatCampaignListVO> selectAllCampaignList(SearchChatVO searchChatVO) {
+        return super.getSqlSession().selectList(this.NAME_SPACE + "selectAllCampaignList", searchChatVO);
+    }
+
+    @Override
+    public int selectEndedCampaignListCount(SearchChatVO searchChatVO) {
+        return super.getSqlSession().selectOne(this.NAME_SPACE + "selectEndedCampaignListCount", searchChatVO);
+    }
+
+    @Override
+    public List<ResponseChatCampaignListVO> selectEndedCampaignList(SearchChatVO searchChatVO) {
+        return super.getSqlSession().selectList(this.NAME_SPACE + "selectEndedCampaignList", searchChatVO);
+    }
+
+    @Override
+    public int selectOngoingCampaignListCount(SearchChatVO searchChatVO) {
+        return super.getSqlSession().selectOne(this.NAME_SPACE + "selectOngoingCampaignListCount", searchChatVO);
+    }
+
+    @Override
+    public List<ResponseChatCampaignListVO> selectOngoingCampaignList(SearchChatVO searchChatVO) {
+        return super.getSqlSession().selectList(this.NAME_SPACE + "selectOngoingCampaignList", searchChatVO);
+    }
+
+    @Override
+    public int updateChatRoomLeave(ChatParticipantVO participant) {
+        return super.getSqlSession().update(this.NAME_SPACE + "updateChatRoomLeave", participant);
+    }
+
+    @Override
+    public String selectUserName(String usrId) {
+        return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUserName", usrId);
+    }
     
-	@Override
-	public List<ResponseChatRoomInfoVO> selectUserChatRooms(String usrId) {
-		return super.getSqlSession().selectList(this.NAME_SPACE + "selectUserChatRooms", usrId);
-	}
-
-	@Override
-	public List<ResponseChatCampaignListVO> selectAllCampaignList(String usrId) {
-		// TODO Auto-generated method stub
-		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAllCampaignList", usrId);
-	}
-
-	@Override
-	public List<ResponseChatCampaignListVO> selectEndedCampaignList(String usrId) {
-		return super.getSqlSession().selectList(this.NAME_SPACE + "selectEndedCampaignList", usrId);
-	}
-
-	@Override
-	public List<ResponseChatCampaignListVO> selectOngoingCampaignList(String usrId) {
-		return super.getSqlSession().selectList(this.NAME_SPACE + "selectOngoingCampaignList", usrId);
-	}
-
-	@Override
-	public int updateChatRoomLeave(ChatParticipantVO participant) {
-		return super.getSqlSession().update(this.NAME_SPACE + "updateChatRoomLeave", participant);
-	}
-
-	@Override
-	public String selectUserName(String usrId) {
-		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUserName", usrId);
-	}
-
-	@Override
-	public List<ResponseChatRoomInfoVO> selectCampaignChatRooms(RequestChatRoomFindVO find) {
-		return super.getSqlSession().selectList(this.NAME_SPACE + "selectCampaignChatRooms", find);
-	}
-
 }
