@@ -88,7 +88,6 @@ public class CampaignController {
     public boolean doUpdateAdptYnAction(RequestApplicantVO requestApplicantVO,
     									@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
     	requestApplicantVO.setUsrId(loginUser.getUsrId());
-    	System.out.println(requestApplicantVO);
     	boolean update = this.campaignService.updateAdptYnByCmpnPstAdptId(requestApplicantVO);
     	
     	if (update) {
