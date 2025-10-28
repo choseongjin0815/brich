@@ -66,8 +66,8 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
                 <li class="admin-menu">
                   <span>ADMIN MENU</span>
                   <ul>
+                    <li><a href="/admin/user_list">회원 관리</a></li>
                     <li><a href="">캠페인 관리</a></li>
-                    <li><a href="">회원 관리</a></li>
                     <li><a href="">문의 관리</a></li>
                     <li><a href="">신고 관리</a></li>
                     <li><a href="">카테고리 관리</a></li>
@@ -75,6 +75,8 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
                   </ul>
                 </li>
               </c:if>
+              <c:if test="${sessionScope.__LOGIN_USER__ ne null 
+                  and sessionScope.__LOGIN_USER__.autr != 1001}">
                 <li>
                   <span>OTHERS</span>
                   <ul>
@@ -83,6 +85,7 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
                     <li><a href="">신고</a></li>
                   </ul>
                 </li>
+            </c:if>
             </ul>
           </nav>
         </div>

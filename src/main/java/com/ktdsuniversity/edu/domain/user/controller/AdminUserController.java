@@ -3,19 +3,24 @@ package com.ktdsuniversity.edu.domain.user.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ktdsuniversity.edu.domain.user.service.AdminUserService;
 import com.ktdsuniversity.edu.domain.user.vo.AdminUserBaseInfoVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminUserListVO;
+import com.ktdsuniversity.edu.domain.user.vo.AdminUserModifyInfoVO;
 import com.ktdsuniversity.edu.global.common.AjaxResponse;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
@@ -23,6 +28,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class AdminUserController {
+	
+	private static final Logger log = LoggerFactory.getLogger(AdminUserController.class);
 
 	@Autowired
 	private AdminUserService adminUserService;
@@ -69,13 +76,13 @@ public class AdminUserController {
 	}
 	
 	/**
-	 * 회원 관리 
+	 * 회원 관리 - 광고주 가입 승인/반려 처리
 	 * @param requestData
 	 * @return Map<usrId, autr>
 	 */
 	@ResponseBody
 	@PostMapping("/admin/advertiser_regist_process")
-    public AjaxResponse doAdminUpdateAdvertiserRegistProcessAction(@RequestBody Map<String, String> requestData) {
+    public AjaxResponse doAdminAdvertiserRegistProcessAction(@RequestBody Map<String, String> requestData) {
 		
     	boolean isSuccess = this.adminUserService.updateAdvertiserRegistAuthCode(requestData);
     	
@@ -103,6 +110,22 @@ public class AdminUserController {
 		model.addAttribute("BlogcategoryList", BlogcategoryList);
 		
 		return "/user/admin_user_info_modify";
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/user_modify/{usrId}")
+	public AjaxResponse doAdminUserInfoModifyAction(@PathVariable String usrId, 
+													@ModelAttribute AdminUserModifyInfoVO adminUserModifyInfoVO,
+													@RequestParam(name="file", required=false) List<MultipartFile> newFiles) {
+		
+		log.info("호출 전");
+		boolean isSuccess = this.adminUserService.updateUserInfo(adminUserModifyInfoVO, newFiles);
+		log.info("호출 후");
+		
+		AjaxResponse ajaxResponse = new AjaxResponse();
+		ajaxResponse.setBody(isSuccess);
+		
+		return ajaxResponse;
 	}
 	
 }

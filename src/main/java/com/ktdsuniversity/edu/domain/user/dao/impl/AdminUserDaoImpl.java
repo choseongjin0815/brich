@@ -9,13 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
-import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
 import com.ktdsuniversity.edu.domain.user.dao.AdminUserDao;
 import com.ktdsuniversity.edu.domain.user.vo.AdminAdvertiserDetailVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerAreaInfoVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerCategoryInfoVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerDetailVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminUserListVO;
+import com.ktdsuniversity.edu.domain.user.vo.AdminUserModifyInfoVO;
+import com.ktdsuniversity.edu.domain.user.vo.UserUpdateHistoryVO;
+import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 @Repository
@@ -90,12 +92,6 @@ public class AdminUserDaoImpl extends SqlSessionDaoSupport implements AdminUserD
 	}
 
 	@Override
-	public List<FileGroupVO> selectAdminUserFileList(String usrId) {
-		// TODO 업로드 가능한 사진 수 정하고 하는 걸로 (수정 필요할 수도 있음)
-		return null;
-	}
-
-	@Override
 	public int updateAdvertiserAuthCodeByApprove(Map<String, String> requestData) {
 		return super.getSqlSession().update(this.NAME_SPACE + "updateAdvertiserAuthCodeByApprove", requestData);
 	}
@@ -108,6 +104,26 @@ public class AdminUserDaoImpl extends SqlSessionDaoSupport implements AdminUserD
 	@Override
 	public List<CommonCodeVO> selectBlogCategoryList() {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectBlogCategoryList");
+	}
+
+	@Override
+	public UserVO selectUserInfoById(String usrId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUserInfoById", usrId);
+	}
+
+	@Override
+	public int updateUserInfo(AdminUserModifyInfoVO adminUserModifyInfoVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateUserInfo", adminUserModifyInfoVO);
+	}
+
+	@Override
+	public int updateAdvertiserInfo(AdminUserModifyInfoVO adminUserModifyInfoVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateAdvertiserInfo", adminUserModifyInfoVO);
+	}
+
+	@Override
+	public int insertUpdateHistory(List<UserUpdateHistoryVO> historyList) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertUpdateHistory", historyList);
 	}
 
 }
