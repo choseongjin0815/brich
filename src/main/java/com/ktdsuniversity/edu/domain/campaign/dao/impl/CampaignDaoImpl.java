@@ -30,7 +30,7 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
     }
 
 	@Override
-	public CampaignVO selectCampaignDetailById(String campaignId) {
+	public ResponseCampaignVO selectCampaignDetailById(String campaignId) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignDetailById", campaignId);
 	}
 
@@ -87,4 +87,19 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	public List<ResponseAdoptVO> selectAdoptListByCmpnId(RequestApplicantVO requestApplicantVO) {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdoptListByCmpnId", requestApplicantVO);
 	}
+	
+	/**
+	 * 공통코드 이름 출력
+	 */
+	@Override
+	public String selectCampaignChangeSttsCd(String sttsCd) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignChangeSttsCd", sttsCd);
+	}
+
+	@Override
+	public List<ResponseCampaignVO> selectSubmittedMyCampaignByBlgId(String blgId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectSubmittedMyCampaignByBlgId", blgId);
+	}
+	
+
 }

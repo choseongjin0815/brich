@@ -8,7 +8,7 @@ public class AjaxResponse {
 	private Object body;
 
 	public Map<String, Object> getError() {
-		return error;
+		return this.error;
 	}
 
 	public void setError(Map<String, Object> error) {
@@ -16,7 +16,7 @@ public class AjaxResponse {
 	}
 
 	public Object getBody() {
-		return body;
+		return this.body;
 	}
 
 	public void setBody(Object body) {

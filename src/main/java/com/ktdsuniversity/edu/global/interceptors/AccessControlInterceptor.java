@@ -24,6 +24,16 @@ public class AccessControlInterceptor implements HandlerInterceptor{
             response.sendRedirect("/not-admin");
             return false;
         }
+        //광고주 고유 권한은 광고주, 관리자(1004, 1001) 접근가능
+        if(uri.startsWith("/adv") && (!"1001".equals(auth) && !"1004".equals(auth))) {
+        	return false;
+        }
+        //블로거 고유 권한은 블로거, 관리자(1002, 1003, 1004) 접근 가능 
+        //추후 이야기 해봐야 할 사항있는거 같아서 일단 주석 
+//        if((uri.startsWith("/blog") || uri.startsWith("/blgr")) 
+//            && (!"1002".equals(auth) && !"1003".equals(auth) && !"1004".equals(auth))) {
+//        	return false;
+//        }
         return true;
 	}
 	

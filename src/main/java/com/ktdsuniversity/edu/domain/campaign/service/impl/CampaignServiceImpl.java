@@ -17,7 +17,6 @@ import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantVO;
-import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
@@ -29,13 +28,33 @@ public class CampaignServiceImpl implements CampaignService {
 
     @Autowired
     private CampaignDao campaignDao;
-
+    
+    /**
+     * 캠페인 메인
+     * 켐페인 상세 조회
+     * 조회조건 : 캠페인 아이디
+     */
 	@Override
-	public CampaignVO readCampaignDetail(String campaignId) {
-		CampaignVO detail = campaignDao.selectCampaignDetailById(campaignId);
+	public ResponseCampaignVO readCampaignDetail(String campaignId) {
+		// 상세조회
+		ResponseCampaignVO detail = campaignDao.selectCampaignDetailById(campaignId);
+		
+		// 공통코드 이름 출력
+		String changeSttsCd = campaignDao.selectCampaignChangeSttsCd(detail.getSttsCd());
+		detail.setSttsCd(changeSttsCd);
+		
+    	// 부모지역명 자르기 // 서울특별시 -> 서울
+    	if(detail.getParentArea() != null) {
+    		detail.setParentArea(detail.getParentArea().substring(0, 2));
+    	}
+		
 		return detail;
 	}
-
+	/**
+	 * 캠페인 메인 
+	 * 캠페인 목록 조회
+	 * 조회조건 : 카테고리, 검색어, 정렬순
+	 */
 	@Override
 	public ResponseCampaignListVO readCampaignListAndCategory (RequestSearchCampaignVO requestSearchCampaignVO) {
 		
@@ -60,10 +79,22 @@ public class CampaignServiceImpl implements CampaignService {
 		// Level 3 조회
 		responseCampaignListVO.setResponseCampaignList(campaignDao.selectCampaignListCategoryAndSortBy(requestSearchCampaignVO));
 			
-			
-			
+    	// 부모지역명 자르기 // 서울특별시 -> 서울
+		List<ResponseCampaignVO> list = responseCampaignListVO.getResponseCampaignList();
+		for(ResponseCampaignVO vo : list) {
+			if(vo.getParentArea() != null) {
+				vo.setParentArea(vo.getParentArea().substring(0, 2));				
+			}
+		}
 		
+		return responseCampaignListVO;
+	}
+	
+	@Override
+	public ResponseCampaignListVO readSubmittedMyCampaignByBlgId(String blgId) {
+		ResponseCampaignListVO responseCampaignListVO = new ResponseCampaignListVO();
 		
+		responseCampaignListVO.setResponseCampaignList(campaignDao.selectSubmittedMyCampaignByBlgId(blgId));
 		return responseCampaignListVO;
 	}
 
@@ -108,5 +139,6 @@ public class CampaignServiceImpl implements CampaignService {
 		
 		return adoptList;
 	}
+
 
 }

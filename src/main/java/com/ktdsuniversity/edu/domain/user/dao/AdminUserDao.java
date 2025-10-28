@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
-import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminAdvertiserDetailVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerAreaInfoVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerCategoryInfoVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerDetailVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminUserListVO;
+import com.ktdsuniversity.edu.domain.user.vo.AdminUserModifyInfoVO;
+import com.ktdsuniversity.edu.domain.user.vo.UserUpdateHistoryVO;
+import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 public interface AdminUserDao {
@@ -38,12 +40,18 @@ public interface AdminUserDao {
 
 	List<CampaignVO> selectAdvertiserCmpnCompletedList(String usrId);
 
-	List<FileGroupVO> selectAdminUserFileList(String usrId);
-
 	int updateAdvertiserAuthCodeByApprove(Map<String, String> requestData);
 
 	int updateAdvertiserAuthCodeByReject(Map<String, String> requestData);
 
 	List<CommonCodeVO> selectBlogCategoryList();
+	
+	UserVO selectUserInfoById(String usrId);
+
+	int updateUserInfo(AdminUserModifyInfoVO adminUserModifyInfoVO);
+
+	int updateAdvertiserInfo(AdminUserModifyInfoVO adminUserModifyInfoVO);
+
+	int insertUpdateHistory(List<UserUpdateHistoryVO> historyList);
 
 }

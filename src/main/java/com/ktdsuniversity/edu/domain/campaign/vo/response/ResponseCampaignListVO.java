@@ -18,8 +18,7 @@ public class ResponseCampaignListVO {
 	 */
 	public List<CommonCodeVO> CategoryList;
 	
-
-
+	
 	
 
 	public List<CommonCodeVO> getCategoryList() {

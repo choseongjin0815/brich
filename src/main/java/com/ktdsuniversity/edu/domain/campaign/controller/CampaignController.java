@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
-import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
-import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 
 @Controller
@@ -30,7 +30,9 @@ public class CampaignController {
     @GetMapping("/campaigndetail/{campaignId}")
     public String campaignDetailPage(@PathVariable String campaignId, Model model,
     							 @SessionAttribute(value = "__LOGIN_USER__", required = false) UserVO loginUser ) {
-    	CampaignVO detail = campaignService.readCampaignDetail(campaignId);
+    	ResponseCampaignVO detail = campaignService.readCampaignDetail(campaignId);
+    	
+    	log.info( "캠페인 상세조회 결과 : " + detail.toString());
     	model.addAttribute("detail", detail);
     	return "campaign/campaigndetail";
     }
@@ -48,6 +50,15 @@ public class CampaignController {
     	
     	log.info( "캠페인 리스트 조회결과 : " + CampaignListAndCategory.getResponseCampaignList().toString());
     	return "campaign/campaignmain";
+    }
+    
+    @GetMapping("/submittedmycampaign")
+    public String submittedmycampaign(Model model,@SessionAttribute(value = "__LOGIN_USER__") 
+    						UserVO loginUser) {
+    	String blgId = loginUser.getUsrId();
+    	ResponseCampaignListVO CampaignListAndCategory = campaignService.readSubmittedMyCampaignByBlgId(blgId);
+    	model.addAttribute("campaignList", CampaignListAndCategory.getResponseCampaignList());
+    	return "campaign/submittedmycampaign";
     }
     
     

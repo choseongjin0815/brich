@@ -8,18 +8,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ktdsuniversity.edu.domain.blog.controller.SearchBlogController;
 import com.ktdsuniversity.edu.domain.user.service.UserService;
+import com.ktdsuniversity.edu.domain.user.vo.BlogCategoryVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserFindIdVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserLoginVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserResetPasswordVO;
 import com.ktdsuniversity.edu.global.common.AjaxResponse;
+import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -73,6 +78,8 @@ public class UserController {
     	if(loginUser != null) {
     		httpSession.setAttribute("__LOGIN_USER__", loginUser);
     	}
+    	log.info("nextURL : {}", nextUrl);
+    	
     	return "redirect:" + nextUrl;
     }
 
@@ -122,7 +129,10 @@ public class UserController {
      */
     @GetMapping("/regist/{role}")
     public String viewRegistPage(@PathVariable String role, Model model) {
+    	List<CommonCodeVO> blogCategory = this.userService.readCategoryList();
+    	log.info("{}" ,blogCategory);
     	if(role.equals("blogger") || role.equals("advertiser")) {
+    		model.addAttribute("categoryList", blogCategory);
     		model.addAttribute("role", role);
     	} else {
     		return null;
@@ -139,6 +149,9 @@ public class UserController {
     public String doUserRegistAction(@Valid RequestUserRegistVO requestUserRegistVO
     							   , BindingResult bindingResult
     							   , Model model) {
+    	
+	   	log.info("requestUserRegistVO: {}", requestUserRegistVO);
+
     	//서버단 Validation
     	if(bindingResult.hasErrors()) {
     	   	log.info("requestUserRegistVO: {}", requestUserRegistVO);
@@ -178,6 +191,11 @@ public class UserController {
     	return "redirect:/login";
     }
     
+    /**
+     * 이미 등록된 아이디인지 체크
+     * @param logId
+     * @return 0: 일치하는 아이디 없음(성공), 1: 일치하는 아이디 있음(실패), 2: 요구하는 형식에 부합하지 않음
+     */
     @GetMapping("/duplicate-id/check")
     @ResponseBody
     public AjaxResponse doDuplicateEmailCheckAction (@RequestParam String logId) {
