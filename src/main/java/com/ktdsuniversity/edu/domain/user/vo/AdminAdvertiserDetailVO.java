@@ -13,8 +13,8 @@ public class AdminAdvertiserDetailVO extends AdminUserBaseInfoVO {
     private List<CampaignVO> cmpnCompletedList;
 	
 	// 광고주 전용 데이터
-	private String cmpny;
-	private List<FileGroupVO> flGrpId;
+	private String flGrpId;
+	private FileGroupVO fileGroupVO;
 	private String registAcpt;
 	
 	public int getCmpnProgressCnt() {
@@ -41,17 +41,17 @@ public class AdminAdvertiserDetailVO extends AdminUserBaseInfoVO {
 	public void setCmpnCompletedList(List<CampaignVO> cmpnCompletedList) {
 		this.cmpnCompletedList = cmpnCompletedList;
 	}
-	public String getCmpny() {
-		return this.cmpny;
-	}
-	public void setCmpny(String cmpny) {
-		this.cmpny = cmpny;
-	}
-	public List<FileGroupVO> getFlGrpId() {
+	public String getFlGrpId() {
 		return this.flGrpId;
 	}
-	public void setFlGrpId(List<FileGroupVO> flGrpId) {
+	public void setFlGrpId(String flGrpId) {
 		this.flGrpId = flGrpId;
+	}
+	public FileGroupVO getFileGroupVO() {
+		return this.fileGroupVO;
+	}
+	public void setFileGroupVO(FileGroupVO fileGroupVO) {
+		this.fileGroupVO = fileGroupVO;
 	}
 	public String getRegistAcpt() {
 		return this.registAcpt;

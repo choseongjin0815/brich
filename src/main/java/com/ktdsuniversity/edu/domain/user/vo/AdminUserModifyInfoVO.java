@@ -1,23 +1,30 @@
 package com.ktdsuniversity.edu.domain.user.vo;
 
-public class AdminUserBaseInfoVO {
+import java.util.List;
+
+public class AdminUserModifyInfoVO {
 	
+	// 관리자 아이디
 	private String adminId;
 	
+	// 회원 테이블 공용 데이터
 	private String usrId;
 	private String logId;
 	private String eml;
 	private String nm;
 	private String autr;
 	
+	// 블로거 전용 블로그 카테고리 테이블 데이터
+    private List<String> usrBlgCtg;
+	
+	// 광고주 전용 데이터
 	private String cmpny;
 	private String flGrpId;
+	private List<String> existFileIds;
+	private List<String> deleteFileIds;
 	
-	private String rcntLgnScsDt;
-	private int pnltCnt;
-	private String crtDt;
-	private String updtDt;
-	private String mttr;
+	// 수정 이력 테이블 전용 데이터
+	private String updtRsn;
 	
 	public String getAdminId() {
 		return this.adminId;
@@ -55,6 +62,12 @@ public class AdminUserBaseInfoVO {
 	public void setAutr(String autr) {
 		this.autr = autr;
 	}
+	public List<String> getUsrBlgCtg() {
+		return this.usrBlgCtg;
+	}
+	public void setUsrBlgCtg(List<String> usrBlgCtg) {
+		this.usrBlgCtg = usrBlgCtg;
+	}
 	public String getCmpny() {
 		return this.cmpny;
 	}
@@ -67,35 +80,23 @@ public class AdminUserBaseInfoVO {
 	public void setFlGrpId(String flGrpId) {
 		this.flGrpId = flGrpId;
 	}
-	public String getRcntLgnScsDt() {
-		return this.rcntLgnScsDt;
+	public List<String> getExistFileIds() {
+		return this.existFileIds;
 	}
-	public void setRcntLgnScsDt(String rcntLgnScsDt) {
-		this.rcntLgnScsDt = rcntLgnScsDt;
+	public void setExistFileIds(List<String> existFileIds) {
+		this.existFileIds = existFileIds;
 	}
-	public int getPnltCnt() {
-		return this.pnltCnt;
+	public List<String> getDeleteFileIds() {
+		return this.deleteFileIds;
 	}
-	public void setPnltCnt(int pnltCnt) {
-		this.pnltCnt = pnltCnt;
+	public void setDeleteFileIds(List<String> deleteFileIds) {
+		this.deleteFileIds = deleteFileIds;
 	}
-	public String getCrtDt() {
-		return this.crtDt;
+	public String getUpdtRsn() {
+		return this.updtRsn;
 	}
-	public void setCrtDt(String crtDt) {
-		this.crtDt = crtDt;
-	}
-	public String getUpdtDt() {
-		return this.updtDt;
-	}
-	public void setUpdtDt(String updtDt) {
-		this.updtDt = updtDt;
-	}
-	public String getMttr() {
-		return this.mttr;
-	}
-	public void setMttr(String mttr) {
-		this.mttr = mttr;
+	public void setUpdtRsn(String updtRsn) {
+		this.updtRsn = updtRsn;
 	}
 	
 }
