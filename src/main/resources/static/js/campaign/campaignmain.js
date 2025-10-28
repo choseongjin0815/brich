@@ -10,26 +10,26 @@ $().ready(function() {
        }
     });
     
-	category.on("change", function() {
-	    var searchParam = $(".search-section").serialize();
-	    searchParam = "?" + searchParam ;
-	    window.location.href = window.location.pathname + searchParam;
-	});
-	sortBy.on("change", function() {
-	    var searchParam = $(".search-section").serialize();
-	    searchParam = "?" + searchParam ;
-	    window.location.href = window.location.pathname + searchParam;
-	});
-	searchKeyword.on("keyup", function(event) {
-	    if (event.keyCode === 13) {
-	        var searchParam = $(".search-section").serialize();
-	        searchParam = "?" + searchParam ;
-	        window.location.href = window.location.pathname + searchParam;
-	    }
-	});
-	searchButton.on("click", function() {
-	    var searchParam = $(".search-section").serialize();
-	    searchParam = "?" + searchParam 
-	    window.location.href = window.location.pathname + searchParam;
-	});
+    category.on("change", function() {
+        var searchParam = $(".search-section").serialize();
+        searchParam = "?" + searchParam ;
+        window.location.href = window.location.pathname + searchParam;
+    });
+    sortBy.on("change", function() {
+        var searchParam = $(".search-section").serialize();
+        searchParam = "?" + searchParam ;
+        window.location.href = window.location.pathname + searchParam;
+    });
+    searchKeyword.on("keyup", function(event) {
+        if (event.keyCode === 13) {
+            var searchParam = $(".search-section").serialize();
+            searchParam = "?" + searchParam ;
+            window.location.href = window.location.pathname + searchParam;
+        }
+    });
+    searchButton.on("click", function() {
+        var searchParam = $(".search-section").serialize();
+        searchParam = "?" + searchParam 
+        window.location.href = window.location.pathname + searchParam;
+    });
 });

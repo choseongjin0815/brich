@@ -18,10 +18,12 @@ public interface CampaignService {
 
 	ResponseApplicantListVO readApplicantListById(RequestApplicantVO requestApplicantVO);
 
-	boolean updateAdptYnBycmpnApplyId(RequestApplicantVO requestApplicantVO);
+	boolean updateAdptYnByCmpnPstAdptId(RequestApplicantVO requestApplicantVO);
 
 	ResponseAdoptListVO readResponseAdoptListByCmpnId(RequestApplicantVO requestApplicantVO);
 
 	ResponseCampaignListVO readSubmittedMyCampaignByBlgId(String blgId);
 
+	boolean updatePstSttsApproveByCmpnPstAdoptId(RequestApplicantVO requestApplicantVO);
+	
 }

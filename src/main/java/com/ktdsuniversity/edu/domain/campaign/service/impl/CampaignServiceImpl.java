@@ -116,7 +116,7 @@ public class CampaignServiceImpl implements CampaignService {
 	
 	@Override
 	@Transactional
-	public boolean updateAdptYnBycmpnApplyId(RequestApplicantVO requestApplicantVO) {
+	public boolean updateAdptYnByCmpnPstAdptId(RequestApplicantVO requestApplicantVO) {
 		String cmpnState = this.campaignDao.selectCampaignStateByCmpnPstAdptId(requestApplicantVO.getCmpnPstAdptId());
 		if (!cmpnState.equals("2006")) {
 			// TODO : Ajax 에러 처리 하기
@@ -131,14 +131,22 @@ public class CampaignServiceImpl implements CampaignService {
 	@Override
 	public ResponseAdoptListVO readResponseAdoptListByCmpnId(RequestApplicantVO requestApplicantVO) {
 		List<ResponseAdoptVO> adopt = this.campaignDao.selectAdoptListByCmpnId(requestApplicantVO);
+		int adoptCount = this.campaignDao.selectAdoptPaginationCount(requestApplicantVO);
+		requestApplicantVO.setPageCount(adoptCount);
+		
 		CampaignVO campaign = this.campaignDao.selectCampaignInfoByCmpnId(requestApplicantVO.getCmpnId());
 		
 		ResponseAdoptListVO adoptList = new ResponseAdoptListVO();
 		adoptList.setAdoptList(adopt);
 		adoptList.setCampaignInfo(campaign);
+		adoptList.setCmpnCdNm(this.campaignDao.selectStateNameByStateCode(adoptList.getCampaignInfo().getSttsCd()));
 		
 		return adoptList;
 	}
 
-
+	@Override
+	public boolean updatePstSttsApproveByCmpnPstAdoptId(RequestApplicantVO requestApplicantVO) {
+		int updateCount = this.campaignDao.updatePstSttsApproveByCmpnPstAdoptId(requestApplicantVO);
+		return updateCount == 1;
+	}
 }
