@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
-import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
-import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 
 @Controller
@@ -30,7 +30,9 @@ public class CampaignController {
     @GetMapping("/campaigndetail/{campaignId}")
     public String campaignDetailPage(@PathVariable String campaignId, Model model,
     							 @SessionAttribute(value = "__LOGIN_USER__", required = false) UserVO loginUser ) {
-    	CampaignVO detail = campaignService.readCampaignDetail(campaignId);
+    	ResponseCampaignVO detail = campaignService.readCampaignDetail(campaignId);
+    	
+    	log.info( "캠페인 상세조회 결과 : " + detail.toString());
     	model.addAttribute("detail", detail);
     	return "campaign/campaigndetail";
     }
@@ -50,6 +52,15 @@ public class CampaignController {
     	return "campaign/campaignmain";
     }
     
+    @GetMapping("/submittedmycampaign")
+    public String submittedmycampaign(Model model,@SessionAttribute(value = "__LOGIN_USER__") 
+    						UserVO loginUser) {
+    	String blgId = loginUser.getUsrId();
+    	ResponseCampaignListVO CampaignListAndCategory = campaignService.readSubmittedMyCampaignByBlgId(blgId);
+    	model.addAttribute("campaignList", CampaignListAndCategory.getResponseCampaignList());
+    	return "campaign/submittedmycampaign";
+    }
+    
     
     @GetMapping("/adv/applicant/{cmpnId}")
     public String readApplicantList(Model model, @PathVariable String cmpnId,
@@ -58,13 +69,14 @@ public class CampaignController {
 //    	if (!board.getEmail().equals(loginUser.getEmail())) {
 //			throw new HelloSpringException("잘못된 접근입니다.", "error/403");
 //		}
-    	
+    	requestApplicantVO.setListSize(10);
+    	requestApplicantVO.setPageCountInGroup(10);
     	requestApplicantVO.setCmpnId(cmpnId);
+
     	if (requestApplicantVO.getOrder() != null) {
     		requestApplicantVO.setOrder(requestApplicantVO.getOrder().toUpperCase());
     	}
     	ResponseApplicantListVO applicantList = this.campaignService.readApplicantListById(requestApplicantVO);
-    	
     	model.addAttribute("applicantList", applicantList);
     	model.addAttribute("search", requestApplicantVO);
     	
@@ -76,8 +88,7 @@ public class CampaignController {
     public boolean doUpdateAdptYnAction(RequestApplicantVO requestApplicantVO,
     									@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
     	requestApplicantVO.setUsrId(loginUser.getUsrId());
-    	System.out.println(requestApplicantVO);
-    	boolean update = this.campaignService.updateAdptYnBycmpnApplyId(requestApplicantVO);
+    	boolean update = this.campaignService.updateAdptYnByCmpnPstAdptId(requestApplicantVO);
     	
     	if (update) {
     		return true;
@@ -91,11 +102,30 @@ public class CampaignController {
     @GetMapping("/adv/adopt/{cmpnId}")
     public String readAdoptList(Model model, @PathVariable String cmpnId,
     		RequestApplicantVO requestApplicantVO) {
-    	requestApplicantVO.setCmpnId(cmpnId);
+    	requestApplicantVO.setListSize(10);
+    	requestApplicantVO.setPageCountInGroup(10);
+		requestApplicantVO.setCmpnId(cmpnId);
     	
     	ResponseAdoptListVO adoptList = this.campaignService.readResponseAdoptListByCmpnId(requestApplicantVO);
     	model.addAttribute("adoptList", adoptList);
-    	System.out.println(adoptList);
+    	model.addAttribute("search",requestApplicantVO);
     	return "campaign/adopt";
+    }
+
+	@GetMapping("/adv/postapprove/{cmpnPstAdoptId}")
+    @ResponseBody
+    public boolean doUpdatePstSttsApproveAction(@PathVariable String cmpnPstAdoptId,
+    											@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
+    	RequestApplicantVO requestApplicantVO = new RequestApplicantVO();
+    	requestApplicantVO.setCmpnPstAdptId(cmpnPstAdoptId);
+    	requestApplicantVO.setUsrId(loginUser.getUsrId());
+    	boolean update = this.campaignService.updatePstSttsApproveByCmpnPstAdoptId(requestApplicantVO);
+    	
+    	if (update) {
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
     }
 }

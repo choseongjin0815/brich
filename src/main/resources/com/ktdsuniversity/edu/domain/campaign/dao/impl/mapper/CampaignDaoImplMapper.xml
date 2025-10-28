@@ -50,18 +50,21 @@
        <if test='sortCol != null and sortCol != ""'>
 		  ORDER BY NVL(${sortCol}, 0) ${order}  
        </if>
-       <include refid="Common.paginationFooter"></include>
+       <include refid="Common.paginationFooter" />
     </select>
     
     <select id="selectCampaignInfoByCmpnId"
             parameterType="string"
             resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
-        SELECT STTS_CD
-		     , RCRT_PRSNN
-		     , TO_CHAR(RCRT_END_DT, 'YYYY-MM-DD') AS RCRT_END_DT
-		     , CMPN_TITLE
-		     , TO_CHAR(CMPN_END_DT, 'YYYY-MM-DD') AS CMPN_END_DT
-		  FROM CMPN
+        SELECT C.STTS_CD
+		     , C.RCRT_PRSNN
+		     , C.CMPN_TITLE
+		     , TO_CHAR(C.CNFM_DT + 3, 'YYYY-MM-DD') AS CNFM_DT
+		     , TO_CHAR(C.RCRT_STRT_DT, 'YYYY-MM-DD') AS RCRT_STRT_DT
+		     , TO_CHAR(C.RCRT_END_DT, 'YYYY-MM-DD') AS RCRT_END_DT
+		     , TO_CHAR(C.PST_END_DT, 'YYYY-MM-DD') AS PST_END_DT
+		     , TO_CHAR(C.CMPN_END_DT, 'YYYY-MM-DD') AS CMPN_END_DT
+		  FROM CMPN C
          WHERE CMPN_ID = #{_parameter}
     </select>
     
@@ -127,6 +130,14 @@
 		    ON C.CMPN_ID = CPA.CMPN_ID
 		 WHERE CPA.CMPN_PST_ADPT_ID  = #{_parameter}
     </select>
+
+    <select id="selectStateNameByStateCode"
+            parameterType="string"
+            resultType="string">
+        SELECT CD_NM
+          FROM CM_CD
+         WHERE CD_ID = #{_parameter}
+    </select>
     
     <resultMap id="ResponseAdoptVOMap"
                type="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO"
@@ -141,16 +152,22 @@
     <select id="selectAdoptListByCmpnId"
             resultMap="ResponseAdoptVOMap"
             parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO">
+        <include refid="Common.paginationHeader" />
         SELECT CPA.CMPN_PST_ADPT_ID
 		     , CPA.PST_URL
 		     , CPA.PST_STTS_CD
-		     , CC.CD_NM
+		     , CC.CD_NM AS POST_CD_NM
 		     , TO_CHAR(CPA.PST_DDLN, 'YYYY-MM-DD') AS PST_DDLN
 		     , U.USR_ID
 		     , U.LOG_ID
 		     , U.BLG_ADDRS
 		  FROM CMPN_PST_ADPT CPA
-		 INNER JOIN USR U
+		 INNER JOIN (SELECT USR_ID
+                          , LOG_ID
+                          , BLG_ADDRS
+		               FROM USR
+                      WHERE DLT_YN  = 'N'
+                        AND AUTR != '1005') U
 		    ON CPA.BLG_USR_ID = U.USR_ID
 		 INNER JOIN CM_CD CC
 		    ON CPA.PST_STTS_CD = CC.CD_ID 
@@ -163,45 +180,107 @@
        <if test='sortCol != null and sortCol != ""'>
           ORDER BY NVL(${sortCol}, 0) ${order}  
        </if>
+       <include refid="Common.paginationFooter" />
     </select>
+    
+    <select id="selectAdoptPaginationCount"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO"
+            resultType="_int">
+        SELECT COUNT(CPA.BLG_USR_ID)
+          FROM CMPN_PST_ADPT CPA
+         INNER JOIN (SELECT *
+                       FROM USR
+                      WHERE DLT_YN  = 'N'
+                        AND AUTR != '1005') U
+            ON CPA.BLG_USR_ID = U.USR_ID
+         INNER JOIN CM_CD CC
+            ON CPA.PST_STTS_CD = CC.CD_ID 
+         WHERE CPA.CMPN_ID = #{cmpnId}
+           AND CPA.ADPT_YN = 'Y'
+           AND CPA.DLT_YN = 'N'
+        <if test="searchId != null and searchId != ''">
+           AND U.LOG_ID LIKE '%' || #{searchId} || '%'
+       </if>
+       <if test='sortCol != null and sortCol != ""'>
+          ORDER BY NVL(${sortCol}, 0) ${order}  
+       </if>
+    </select>
+    
+    <update id="updatePstSttsApproveByCmpnPstAdoptId"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO">
+        UPDATE CMPN_PST_ADPT
+		   SET PST_STTS_CD = '6004'
+		     , UPDT_DT = SYSDATE
+		     , MTTR = 'USR-20230813-000001'
+		 WHERE CMPN_PST_ADPT_ID = #{cmpnPstAdptId}
+		   AND DLT_YN = 'N'
+		   AND PST_DDLN >= SYSDATE
+		   AND ADPT_YN = 'Y'
+		   AND PST_URL IS NOT NULL
+		   AND PST_STTS_CD = '6002'
+    </update>
     
     <select id="selectCampaignDetailById"
             parameterType="string"
-            resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
-    SELECT CMPN_ID
-         , USR_ID
-         , CTG_CD
-         , STTS_CD
-         , PRSNN_PRC
-         , DRTN_PRC
-         , PRSNN_DSCNT
-         , DRTN_DSCNT
-         , CMPN_PRNT_ID
-         , RCRT_STRT_DT
-         , RCRT_PRSNN
-         , PRGRSS_DRTN
-         , RCRT_END_DT
-         , PST_END_DT
-         , CMPN_END_DT
-         , RTRN_RSN
-         , ADDRS
-         , ATTCH_GRP_ID
-         , CMPN_TITLE
-         , CMPN_CN
-         , OFFR_CN
-         , OFFR_PRC
-         , PST_MSSN
-         , HSTG
-         , NTFCN
-         , "VIEW"
-         , CNFM_DT
-         , CRT_DT
-         , CRTR
-         , UPDT_DT
-         , MTTR
-         , DLT_YN
-    FROM CMPN
-    WHERE CMPN_ID = #{_parameter}
+            resultMap="RequestCampaignVOMap">
+			SELECT  CMPN.CMPN_ID
+                  , CMPN.USR_ID
+                  , CMPN.CTG_CD
+                  , CMPN.STTS_CD
+                  , CMPN.PRSNN_PRC
+                  , CMPN.DRTN_PRC
+                  , CMPN.PRSNN_DSCNT
+                  , CMPN.DRTN_DSCNT
+                  , CMPN.CMPN_PRNT_ID
+                  , TO_CHAR(CMPN.RCRT_STRT_DT, 'MM-DD') AS RCRT_STRT_DT
+                  , CMPN.RCRT_PRSNN
+                  , CMPN.PRGRSS_DRTN
+                  , TO_CHAR(CMPN.RCRT_END_DT, 'MM-DD')  AS RCRT_END_DT
+                  , TO_CHAR(CMPN.PST_END_DT,  'MM-DD')  AS PST_END_DT
+                  , TO_CHAR(CMPN.CMPN_END_DT, 'MM-DD')  AS CMPN_END_DT
+                  , CMPN.RTRN_RSN
+                  , CMPN.ADDRS
+                  , CMPN.ATTCH_GRP_ID
+                  , CMPN.CMPN_TITLE
+                  , CMPN.CMPN_CN
+                  , CMPN.OFFR_CN
+                  , CMPN.OFFR_PRC
+                  , CMPN.PST_MSSN
+                  , CMPN.HSTG
+                  , CMPN.NTFCN
+                  , CMPN."VIEW"
+                  , TO_CHAR(CMPN.CNFM_DT, 'MM-DD')       AS CNFM_DT
+                  , TO_CHAR(CMPN.CRT_DT,  'MM-DD')       AS CRT_DT
+                  , CMPN.CRTR
+                  , TO_CHAR(CMPN.UPDT_DT, 'MM-DD')       AS UPDT_DT
+                  , CMPN.MTTR
+                  , CMPN.DLT_YN
+                  , NVL(LIKE_TABLE.LIKE_CNT, 0)               AS LIKE_CNT
+                  , NVL(ADPT_TABLE.ADPT_CNT, 0)               AS ADPT_CNT
+                  , ARCD.CD_NM                                 AS AREA
+                  , PARCD.CD_NM                                AS PARENT_AREA   
+              FROM CMPN CMPN 
+              LEFT JOIN ( SELECT FAV.CMPN_ID  
+                               , COUNT(FAV.CMPN_ID) AS LIKE_CNT
+                            FROM FAV_CMPN FAV
+                           WHERE FAV.CMPN_ID = #{_parameter}
+                             AND FAV.DLT_YN = 'N'
+                           GROUP BY  FAV.CMPN_ID) LIKE_TABLE
+                     ON CMPN.CMPN_ID = LIKE_TABLE.CMPN_ID 
+              LEFT JOIN ( SELECT ADPT.CMPN_ID 
+                               , COUNT(ADPT.CMPN_ID) AS ADPT_CNT
+                            FROM CMPN_PST_ADPT ADPT 
+                           WHERE ADPT.CMPN_ID = #{_parameter}
+                             AND ADPT.DLT_YN = 'N'
+                           GROUP BY ADPT.CMPN_ID) ADPT_TABLE
+                     ON CMPN.CMPN_ID = ADPT_TABLE.CMPN_ID 
+             LEFT JOIN CMPN_AR CMPNAR
+               ON CMPN.CMPN_ID = CMPNAR.CMPN_ID 
+             LEFT JOIN AR_CD ARCD
+               ON CMPNAR.AR_CD = ARCD.CD_ID
+             LEFT JOIN AR_CD PARCD
+               ON PARCD.CD_ID = ARCD.PRNT_CD_ID 
+            WHERE CMPN.CMPN_ID = #{_parameter}
     </select>
     
     
@@ -251,7 +330,7 @@ ORDER BY RCRT_END_DT ASC
     
 
     <resultMap type="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO" 
-               id="RequestSearchCampaignVOMap"
+               id="RequestCampaignVOMap"
                autoMapping="true">
                <id column="CMPN_ID" property="cmpnId"/>
                <collection property="area"
@@ -261,7 +340,7 @@ ORDER BY RCRT_END_DT ASC
     </resultMap>
     
     <select id="selectCampaignListCategoryAndSortBy"
-            resultMap="RequestSearchCampaignVOMap"
+            resultMap="RequestCampaignVOMap"
             parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO">
             
 			SELECT CMPN.CMPN_ID 
@@ -281,7 +360,10 @@ ORDER BY RCRT_END_DT ASC
 			               WHERE FAV.CMPN_ID IN (SELECT CMPN_ID 
 			                                           FROM CMPN
 			                                      WHERE CMPN.CTG_CD  = '3001'   
-			                                        AND CMPN.STTS_CD = '2005'
+			                                        AND CMPN.STTS_CD IN ( SELECT CD_ID
+									                                        FROM CM_CD
+									                                       START WITH CD_ID= NVL(#{category, jdbcType=VARCHAR}, '3000')        
+									                                     CONNECT BY PRIOR CD_ID = PRNT_CD_ID)
 			                                    )
 			                 AND FAV.DLT_YN = 'N'
 			               GROUP BY  FAV.CMPN_ID) LIKE_TABLE
@@ -291,10 +373,12 @@ ORDER BY RCRT_END_DT ASC
 			                FROM CMPN_PST_ADPT ADPT 
 			               WHERE ADPT.CMPN_ID IN (SELECT CMPN_ID 
 			                                           FROM CMPN
-			                                      WHERE CMPN.CTG_CD  = '3001'   
+			                                      WHERE CMPN.CTG_CD  IN ( SELECT CD_ID
+                                                                            FROM CM_CD
+                                                                           START WITH CD_ID= NVL(#{category, jdbcType=VARCHAR}, '3000')        
+                                                                         CONNECT BY PRIOR CD_ID = PRNT_CD_ID)
 			                                        AND CMPN.STTS_CD = '2005'
 			                                     )
-			                 AND ADPT.ADPT_YN = 'Y'
 			                 AND ADPT.DLT_YN = 'N'
 			               GROUP BY ADPT.CMPN_ID) ADPT_TABLE
 			         ON CMPN.CMPN_ID = ADPT_TABLE.CMPN_ID 
@@ -309,7 +393,10 @@ ORDER BY RCRT_END_DT ASC
 			                            FROM CM_CD
 			                           START WITH CD_ID= NVL(#{category, jdbcType=VARCHAR}, '3000')        
 			                         CONNECT BY PRIOR CD_ID = PRNT_CD_ID)
-			  AND CMPN.CTG_CD  = '3001'  
+			  AND CMPN.CTG_CD IN ( SELECT CD_ID
+                                     FROM CM_CD
+                                    START WITH CD_ID= NVL(#{category, jdbcType=VARCHAR}, '3000')        
+                                  CONNECT BY PRIOR CD_ID = PRNT_CD_ID)  
 			  AND CMPN.STTS_CD = '2005'   
 			  ORDER BY
 		        CASE WHEN #{sortBy} = 'latest'   THEN CMPN.RCRT_STRT_DT END  DESC ,
@@ -331,6 +418,15 @@ ORDER BY RCRT_END_DT ASC
 			     CONNECT BY PRIOR PRNT_CD_ID = CD_ID ) CTG
 			WHERE lv = max_lv - 1
     </select>
+    
+	
+	<select id="selectCampaignChangeSttsCd"
+			parameterType="string"
+			resultType="string">
+			SELECT CD_NM
+			  FROM CM_CD
+			 WHERE CD_ID = #{_parameter} 
+	</select>
 </mapper>
 
 

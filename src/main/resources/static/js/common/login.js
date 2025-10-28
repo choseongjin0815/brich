@@ -8,5 +8,9 @@ $().ready(function () {
             currentUrl = "/main";//게시글 목록
         }
         $("#login").attr("action", "/login?nextUrl=" + currentUrl).submit();
-    })
+    });
+    
+    const initialHeight = $(window).height(
+    $(".login-body").css("background-size", "auto ${initialHeight}px"));
+    
 })

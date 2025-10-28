@@ -22,7 +22,15 @@ $().ready(function() {
             $("#check-all").prop("checked", false);
         }
     });
+    $("#fileInput").on("change", function() {
+            var files = this.files;
+            var $fileList = $("#fileList");
+            $fileList.empty(); // 초기화
 
+            $.each(files, function(index, file) {
+                $fileList.append("<div>" + file.name + "</div>");
+            });
+        });
     $(".regist-btn").on("click", function() {
         if($("#email-confirm").val() === "OK") {
             $(".user-regist-form").submit();

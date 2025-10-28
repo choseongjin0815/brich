@@ -9,38 +9,45 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
         <script type='text/javascript' src='/js/campaign/campaignmain.js'></script>
     " />    
 </jsp:include>
-        <div class="main">
-            <div>캠페인</div>
-            <div>카테고리</div>
-            <form class="search_section"> 
-                <c:forEach items="${category}" var="category">
-                    <label class="category__radio">
-                        <input type="radio" name="category" value="${category.cdNm}" 
-						 ${category.cdId eq search.category ? 'checked' : ''} />
-                        <span>${category.cdNm}</span>
-                    </label>    
-                </c:forEach>
-                <div>필터&검색</div>
-                <div>목록</div>
-                <input type="text" name="searchKeyword" value="${search.searchKeyword}" />
-                <button type="button" class="search-button">검색</button>
-                <div>SORT BY:</div>
-                <select name="sortBy">
-                    <option value="latest" ${search.sortBy eq "latest" ? "selected" : ""}>최신순</option>
-                    <option value="deadline" ${search.sortBy eq "deadline" ? "selected" : ""}>마감임박순</option>
-                    <option value="popular" ${search.sortBy eq "popular" ? "selected" : ""}>인기순</option>
-                </select>
+        <div class="main flex-column side-padding">
+            <div class="px36blue campaign-title-area height-center">캠페인</div>
+            <form class="search-section"> 
+                <div class="category-area flex-row text-align">
+	                <c:forEach items="${category}" var="category">
+	                    <label class="category-radio ">
+	                        <input type="radio" name="category" value="${category.cdNm}" 
+							 ${category.cdId eq search.category ? 'checked' : ''}/>
+							<span class="text-align height-center flex-center campaign-hover-blue">
+							    <div></div>
+							    <div> ${category.cdNm}</div>
+							    <div class="category-seleted-box-${category.cdNm} visibility-hidden category-seleted-box" data-category-menu="${category.cdNm}"></div>
+							</span>
+	                        
+	                    </label>    
+	                </c:forEach>
+	            </div>
+                <div class="search-area flex-row">
+	                <input class="search-input" type="text" name="searchKeyword" value="${search.searchKeyword}" placeholder="Search" />
+	                <select class="sortBy" name="sortBy">
+	                    <option value="latest" ${search.sortBy eq "latest" ? "selected" : ""}>최신순</option>
+	                    <option value="deadline" ${search.sortBy eq "deadline" ? "selected" : ""}>마감임박순</option>
+	                    <option value="popular" ${search.sortBy eq "popular" ? "selected" : ""}>인기순</option>
+	                </select>
+	            </div>
             </form> 
             
-          <div>
+          <div class="campaign-main-list-area">
              <c:forEach items="${campaignList}" var="campaignList">
-  				<div>
-					<a href="/campaigndetail/${campaignList.cmpnId}">${campaignList.cmpnTitle}</a>
-				</div>
+  				<a class="campaign-main-block" href="/campaigndetail/${campaignList.cmpnId}">
+  				    <div class="campaign-thumbnail">${campaignList.attchGrpId}</div>
+  				    <div class="campaign-one-title padding-10px"> 
+  				      <c:if test="${not empty campaignList.parentArea}">[ ${campaignList.parentArea} ]</c:if>  
+  				      ${campaignList.cmpnTitle}</div>
+  				    <div class="campaign-one-offrcn padding-10px">${campaignList.offrCn}</div>
+  				    <div class="campaign-one-adptcnt padding-10px">신청 ${campaignList.adptCnt } / ${campaignList.rcrtPrsnn }</div>
+				</a>
              </c:forEach>
           </div>
         </div>
-      </div>
-    </div>
-  </body>
-</html>
+        
+<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>

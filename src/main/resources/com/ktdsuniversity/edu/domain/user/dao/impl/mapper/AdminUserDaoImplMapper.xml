@@ -147,8 +147,13 @@
           FROM USR U
          WHERE U.DLT_YN = 'N'
            AND U.AUTR IN ('1004', '1007')
-         ORDER BY U.CRT_DT DESC
-             , U.AUTR DESC
+         ORDER BY
+                 CASE
+                     WHEN U.AUTR = '1007'
+                     THEN 0
+                     ELSE 1
+                 END, 
+                     U.CRT_DT DESC
     </select>
     
     <!-- 분기 처리를 위한 아이디로 권한 찾기 -->
@@ -197,6 +202,8 @@
              , U.BLG_NGHBR_CNT
              , U.SCRP_CNT
              , U.CRT_DT
+             , U.UPDT_DT
+             , U.MTTR
           FROM USR U
           WHERE U.DLT_YN = 'N'
             AND U.USR_ID = #{_parameter}
@@ -280,6 +287,18 @@
         <id column="USR_ID" property="usrId" />
         <result column="CMPN_PROGRESS_CNT" property="cmpnProgressCnt" />
         <result column="CMPN_COMPLETED_CNT" property="cmpnCompletedCnt" />
+        
+        <association property="fileGroupVO"
+                     javaType="com.ktdsuniversity.edu.domain.file.vo.FileGroupVO"
+                     autoMapping="true">
+            <id column="FL_GRP_ID" property="flGrpId" />
+            <collection property="file"
+                        javaType="list" 
+                        ofType="com.ktdsuniversity.edu.domain.file.vo.FileVO"
+                        autoMapping="true">
+                <id column="FL_ID" property="flId" />
+            </collection>
+        </association>
     </resultMap>
     <select id="selectAdminAdvertiserDetailById" parameterType="string" resultMap="AdminAdvertiserDetailVOMap">
         SELECT U.USR_ID 
@@ -288,7 +307,6 @@
              , U.NM
              , U.AUTR
              , U.CMPNY 
-             , U.FL_GRP_ID 
              , CASE
                    WHEN U.AUTR = '1007'
                    THEN 'N'
@@ -309,7 +327,26 @@
              , U.RCNT_LGN_SCS_DT
              , U.PNLT_CNT
              , U.CRT_DT
+             , U.UPDT_DT
+             , U.MTTR
+             , F.FL_GRP_ID
+             , F.FL_ID
+             , F.FL_NM
+             , F.FL_PTH
+             , F.OBFSCTIN_FL_NM
           FROM USR U
+          LEFT OUTER JOIN (SELECT FG.FL_GRP_ID 
+                                , F.FL_ID
+                                , F.FL_NM
+                                , F.FL_SZ 
+                                , F.FL_PTH 
+                                , F.FL_TYP 
+                                , F.OBFSCTIN_FL_NM 
+                             FROM FL_GRP FG
+                            INNER JOIN FL F
+                               ON FG.FL_GRP_ID = F.FL_GRP_ID
+                            WHERE F.DLT_YN = 'N') F
+            ON U.FL_GRP_ID = F.FL_GRP_ID
          WHERE U.DLT_YN = 'N'
            AND U.AUTR IN ('1004', '1007')
            AND U.USR_ID = #{_parameter}
@@ -354,6 +391,7 @@
            AND DLT_YN = 'N'
     </update>
     
+    <!-- 블로거가 선택할 수 있는 카테고리 리스트 받아오기 -->
     <select id="selectBlogCategoryList" resultType="com.ktdsuniversity.edu.global.common.CommonCodeVO">
         SELECT CD_ID
              , CD_NM
@@ -367,5 +405,96 @@
                 END) 
            BETWEEN 3001 AND 3999
     </select>
-        
+    
+    <!-- UserVO 정보 조회 (회원 정보 수정 시 기존 정보 비교를 위함) -->
+    <select id="selectUserInfoById" parameterType="string" resultType="com.ktdsuniversity.edu.domain.user.vo.UserVO">
+        SELECT USR_ID
+             , LOG_ID
+             , EML
+             , PSWRD
+             , NM
+             , SALT
+             , LGN_PL_CNT
+             , BLCK_YN
+             , RCNT_LGN_BLCK_DT
+             , RCNT_LGN_FL_DT
+             , RCNT_LGN_SCS_DT
+             , AUTR
+             , SBSCRPTN_EXPRS_DT
+             , PNLT_CNT
+             , RCNT_BLG_CRTFCTN_DT
+             , BLG_ADDRS
+             , CRTFD_ADMIN
+             , TTL_VSTR_CNT
+             , AVRG_VSTR_CNT
+             , BLG_NGHBR_CNT
+             , SCRP_CNT
+             , CMPNY
+             , FL_GRP_ID
+             , CRT_DT
+             , CRTR
+             , UPDT_DT
+             , MTTR
+             , DLT_YN
+         FROM USR
+        WHERE DLT_YN = 'N'
+          AND USR_ID = #{_parameter}
+    </select>
+    
+    <!-- 사용자 기본 정보 수정 -->
+    <update id="updateUserInfo" parameterType="map">
+        UPDATE USR
+           SET LOG_ID = #{logId}
+             , EML = #{eml}
+             , NM = #{nm}
+             , UPDT_DT = SYSDATE
+             , MTTR = #{adminId}
+         WHERE USR_ID = #{usrId}
+           AND DLT_YN = 'N'
+    </update>
+    
+    <!-- 광고주 전용 정보 수정 (회사명) -->
+    <update id="updateAdvertiserInfo" parameterType="com.ktdsuniversity.edu.domain.user.vo.AdminUserModifyInfoVO">
+        UPDATE USR
+           SET CMPNY = #{cmpny}
+             , UPDT_DT = SYSDATE
+             , MTTR = #{adminId}
+         WHERE USR_ID = #{usrId}
+           AND DLT_YN = 'N'
+    </update>
+    
+    <!-- 회원 정보 수정 이력 테이블 데이터 INSERT -->
+    <insert id="insertUpdateHistory" parameterType="list">
+        INSERT INTO USR_UPDT_HIST (USR_UPDA_HIST_ID
+                                 , USR_ID
+                                 , UPDT_ITEM
+                                 , BEF_UPDT_CN
+                                 , AFT_UPDT_CN
+                                 , UPDT_ADMIN
+                                 , UPDT_RSN
+                                 , CRT_DT
+                                 , CRTR
+                                 , UPDT_DT
+                                 , MTTR
+                                 , DLT_YN)
+                    SELECT 'USR_UPDT_HIST-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_USR_UPDT_HIST_PK.NEXTVAL, 6, '0')
+                         , T.*
+                      FROM (
+                          <foreach collection="list" item="historyData" separator="UNION ALL">
+                            SELECT #{historyData.usrId} AS USR_ID
+                                 , #{historyData.updtItem} AS UPDT_ITEM
+                                 , #{historyData.befUpdtCn} AS BEF_UPDT_CN
+                                 , #{historyData.aftUpdtCn} AS AFT_UPDT_CN
+                                 , #{historyData.updtAdmin} AS UPDT_ADMIN
+                                 , #{historyData.updtRsn} AS UPDT_RSN
+                                 , SYSDATE AS CRT_DT
+                                 , #{historyData.updtAdmin} AS CRTR
+                                 , SYSDATE AS UPDT_DT
+                                 , #{historyData.updtAdmin} AS MTTR
+                                 , 'N' AS DLT_YN
+                              FROM DUAL
+                          </foreach>
+                          ) T
+    </insert>
+    
 </mapper>

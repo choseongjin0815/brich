@@ -5,14 +5,14 @@ import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 
 public class ResponseAdoptVO extends CampaignPostAdoptVO {
 
-	private String cdNm;
+	private String postCdNm;
 	private UserVO userInfo;
 	
-	public String getCdNm() {
-		return this.cdNm;
+	public String getPostCdNm() {
+		return this.postCdNm;
 	}
-	public void setCdNm(String cdNm) {
-		this.cdNm = cdNm;
+	public void setPostCdNm(String postCdNm) {
+		this.postCdNm = postCdNm;
 	}
 	public UserVO getUserInfo() {
 		return this.userInfo;
@@ -23,6 +23,6 @@ public class ResponseAdoptVO extends CampaignPostAdoptVO {
 	
 	@Override
 	public String toString() {
-		return "ResponseAdoptVO [cdMn=" + cdNm + ", userInfo=" + userInfo + super.toString() + "]";
+		return "ResponseAdoptVO [postCdNm=" + postCdNm + ", userInfo=" + userInfo + "]";
 	}
 }

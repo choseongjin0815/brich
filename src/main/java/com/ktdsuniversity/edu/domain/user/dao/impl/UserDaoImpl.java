@@ -55,7 +55,7 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
 
 	@Override
 	public int updateLoginSuccessByLogId(String logId) {
-		return super.getSqlSession().update(this.NAME_SPACE + "updateLoginSuccessByLogId");
+		return super.getSqlSession().update(this.NAME_SPACE + "updateLoginSuccessByLogId", logId);
 	}
 
 	@Override
@@ -66,6 +66,11 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
 	@Override
 	public int updatePswrdByLogIdAndPswrd(RequestUserResetPasswordVO resetPasswordInfo) {
 		return super.getSqlSession().update(this.NAME_SPACE + "updatePswrdByLogIdAndPswrd", resetPasswordInfo);
+	}
+
+	@Override
+	public String selectUserIdByLogId(String logId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUserIdByLogId", logId);
 	}
 
 

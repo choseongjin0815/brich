@@ -6,7 +6,7 @@
     <jsp:param name='css' value="
        	<link type='text/css' rel='stylesheet' href='/css/campaignmain.css' />
     	<link type='text/css' rel='stylesheet' href='/css/blog/dashboard.css' />
-       	
+       	<link typr='text/css' rel='stylesheet' href='/css/paginator-simple.css'/>
    	" />
    	<jsp:param name="scripts" value="
        	

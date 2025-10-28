@@ -1,15 +1,28 @@
 package com.ktdsuniversity.edu.domain.user.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.domain.file.dao.FileDao;
+import com.ktdsuniversity.edu.domain.file.util.MultipartFileHandler;
+import com.ktdsuniversity.edu.domain.file.vo.FileVO;
+import com.ktdsuniversity.edu.domain.user.controller.AdminUserController;
 import com.ktdsuniversity.edu.domain.user.dao.AdminUserDao;
+import com.ktdsuniversity.edu.domain.user.dao.BlogCategoryDao;
 import com.ktdsuniversity.edu.domain.user.service.AdminUserService;
 import com.ktdsuniversity.edu.domain.user.vo.AdminAdvertiserDetailVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerAreaInfoVO;
@@ -17,13 +30,28 @@ import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerCategoryInfoVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerDetailVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminUserBaseInfoVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminUserListVO;
+import com.ktdsuniversity.edu.domain.user.vo.AdminUserModifyInfoVO;
+import com.ktdsuniversity.edu.domain.user.vo.BlogCategoryVO;
+import com.ktdsuniversity.edu.domain.user.vo.UserUpdateHistoryVO;
+import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 @Service
 public class AdminUserServiceImpl implements AdminUserService {
 
+	private static final Logger log = LoggerFactory.getLogger(AdminUserController.class);
+	
 	@Autowired
 	private AdminUserDao adminUserDao;
+	
+	@Autowired
+	private BlogCategoryDao blogCategoryDao;
+	
+	@Autowired
+	private FileDao fileDao;
+	
+	@Autowired
+	private MultipartFileHandler multipartFileHandler;
 	
 	@Override
 	public List<AdminUserListVO> readAdminUserList(String tab) {
@@ -87,11 +115,9 @@ public class AdminUserServiceImpl implements AdminUserService {
 			
 			List<CampaignVO> progressList = adminUserDao.selectAdvertiserCmpnProgressList(usrId);
 		    List<CampaignVO> completedList = adminUserDao.selectAdvertiserCmpnCompletedList(usrId);
-		    // List<FileGroupVO> fileList = adminUserDao.selectAdminUserFileList(usrId);
 		    
 		    info.setCmpnProgressList(progressList);
 		    info.setCmpnCompletedList(completedList);
-		    // info.setFlGrpId(fileList);
 			
 			return info;
 		}
@@ -125,4 +151,318 @@ public class AdminUserServiceImpl implements AdminUserService {
 		return this.adminUserDao.selectBlogCategoryList();
 	}
 
+	@Transactional
+	@Override
+	public boolean updateUserInfo(AdminUserModifyInfoVO adminUserModifyInfoVO, List<MultipartFile> newFiles) {
+		
+		String adminId = adminUserModifyInfoVO.getAdminId();
+		String usrId = adminUserModifyInfoVO.getUsrId();
+		
+		// 수정 전 회원 정보 백업
+		UserVO beforeInfo = adminUserDao.selectUserInfoById(usrId);
+
+		// 회원 정보 UPDATE (기본 정보만)
+		int updateCount = adminUserDao.updateUserInfo(adminUserModifyInfoVO);
+		daoValidate(updateCount, "updateUserInfo");
+		
+		// 업데이트된 회원 정보를 UserVO로 변환 (기존 정보와 비교할 준비)
+	    UserVO afterInfo = convertToUserVO(adminUserModifyInfoVO);
+		
+		// 수정할 회원의 권한 가져오기
+		String modifyUserAutr = beforeInfo.getAutr();
+		
+		// 블로거/광고주 분기 처리
+		if(modifyUserAutr.equals("1002") || modifyUserAutr.equals("1003")) {
+			
+			updateOrInsertBlogCategories(adminUserModifyInfoVO.getUsrBlgCtg(), usrId, adminId);
+		}
+		else if(modifyUserAutr.equals("1004")) {
+			
+			// 상호명
+			updateCount = adminUserDao.updateAdvertiserInfo(adminUserModifyInfoVO);
+			daoValidate(updateCount, "updateAdvertiserInfo");
+			
+			// 사업자 등록증 파일 INSERT or UPDATE 구분 처리
+			updateOrInsertFiles(adminUserModifyInfoVO, newFiles);
+		}
+		
+		// UPDATE 전 데이터와, UPDATE 후 데이터를 비교하여 변경 목록 추출?
+	    List<UserUpdateHistoryVO> historyList = compareBeforeAndAfterData(beforeInfo, afterInfo, adminUserModifyInfoVO.getUpdtRsn(), adminId);
+	    
+	    // UPDATE 될 데이터가 있다면, 
+	    if(!historyList.isEmpty()) {
+	    	
+	    	// 회원 정보 수정 이력 테이블에 INSERT
+	    	updateCount = adminUserDao.insertUpdateHistory(historyList);
+	    	daoValidate(updateCount, "insertUpdateHistory");
+	    }
+	    
+	    return true;
+	}
+	
+	/**
+	 * 수정될 회원 정보 UserVO에 매핑 시키기 (수정 전/수정 후 비교를 위해)
+	 * (UPDATE 후의 UserVO ==> afterInfo)
+	 * @param adminUserModifyInfoVO
+	 * @return
+	 */
+	public UserVO convertToUserVO(AdminUserModifyInfoVO adminUserModifyInfoVO) {
+		
+		UserVO userVO = new UserVO();
+		
+		// 수정 정보 매핑
+		userVO.setUsrId(adminUserModifyInfoVO.getUsrId());
+		userVO.setLogId(adminUserModifyInfoVO.getLogId());
+		userVO.setEml(adminUserModifyInfoVO.getEml());
+		userVO.setNm(adminUserModifyInfoVO.getNm());
+		userVO.setAutr(adminUserModifyInfoVO.getAutr());
+		userVO.setMttr(adminUserModifyInfoVO.getAdminId());
+		
+		// 광고주 전용 정보 매핑
+		if(adminUserModifyInfoVO.getAutr().equals("1004")) {
+			userVO.setCmpny(adminUserModifyInfoVO.getCmpny());
+			userVO.setFlGrpId(adminUserModifyInfoVO.getFlGrpId());
+		}
+		
+		return userVO;
+	}
+
+	/**
+	 * 블로거 카테고리 추가/삭제/재활성화 대상 판별 후 UPATE/INSERT
+	 * @param usrBlgCtg
+	 * @param usrId
+	 * @param adminId
+	 */
+	public void updateOrInsertBlogCategories(List<String> usrBlgCtg, String usrId, String adminId) {
+		
+		int updateAndInsertCount = 0;
+		
+		// 비교할 때 순서 상관없는 Set이 나을 것 같아서 Set 사용 (+ 중복 제거)
+		// UPDATE될 블로거의 블로그 카테고리 (checkbox에서 체크된 항목들)
+		Set<String> newCategorySet = new HashSet<>(usrBlgCtg);
+		
+		// 현재 블로거의 블로그 카테고리 가져오기 (UPDATE 전)
+		List<BlogCategoryVO> existBlogCategoryList = blogCategoryDao.selectUserBlogCategoryById(usrId);
+		
+		// UPDATE될 블로거의 카테고리 ID Set (cdId)
+		Set<String> existIdSet = new HashSet<>();
+		
+		// 삭제될 카테고리 ID List
+		List<String> deleteTargetList = new ArrayList<>();
+		
+		// 삭제될 카테고리 찾기
+		for(BlogCategoryVO existBlogCategoryVO : existBlogCategoryList) {
+			
+			// UPDATE 전 블로그 카테고리 코드 아이디를
+			String categoryId = existBlogCategoryVO.getCdId();
+			
+			// UPDATE될 블로그 카테고리 코드에 추가
+			existIdSet.add(categoryId.trim());
+			
+			// DB엔 있지만, 변경 정보 VO에 없는 경우
+			// ==> UPDATE 전엔 있는 카테고리지만, 
+			//     UPDATE 될 카테고리 목록에 해당 카테고리가 존재하지 않을 경우
+			if(!newCategorySet.contains(categoryId.trim())) {
+				
+				// 삭제 대상으로 간주하여 해당 카테고리 아이디를 List에 담음
+				deleteTargetList.add(categoryId.trim());
+			}
+		}
+		
+		// 삭제 대상이 있다면,
+		if(!deleteTargetList.isEmpty()) {
+			
+			Map<String, Object> deleteParamMap = new HashMap<>();
+			deleteParamMap.put("deleteList", deleteTargetList);
+			deleteParamMap.put("usrId", usrId);
+			deleteParamMap.put("adminId", adminId);
+			
+			// 해당 ROW -> DLT_YN = 'Y' (UPDATE)
+			updateAndInsertCount = blogCategoryDao.updateBlogCategoryAsDelete(deleteParamMap);
+		}
+		
+		// 추가될 카테고리 혹은 재활성화 카테고리 찾기
+		List<String> insertOrReactiveTarget = new ArrayList<>();
+		
+		// 기존에 있던 카테고리와 UPDATE될 카테고리를 비교
+		for(String newCategoryId : newCategorySet) {
+			
+			// UPDATE될 카테고리에 기존 카테고리가 존재하지 않는다면,
+			if(!existIdSet.contains(newCategoryId)) {
+				
+				// 추가(INSERT) or 재활성화(UPDATE) 대상으로 간주
+				insertOrReactiveTarget.add(newCategoryId);
+			}
+		}
+		
+		// 추가 or 재활성화 대상이 있는 경우,
+		if(!insertOrReactiveTarget.isEmpty()) {
+			
+			Map<String, Object> searchParamMap = new HashMap<>();
+			searchParamMap.put("searchList", insertOrReactiveTarget);
+			searchParamMap.put("usrId", usrId);
+			
+			// 추가/재활성화 대상 중 비활성화(DLT_YN = 'Y') 상태인 카테고리 조회
+			List<String> deletedList = blogCategoryDao.selectDeletedCategoryById(searchParamMap);
+			
+			// 재활성화(DLT_YN = 'N' UPDATE 예정) 대상으로 간주
+			List<String> reactiveCategoryList = new ArrayList<>(deletedList);
+			
+			// 새롭게 추가(INSERT)될 대상 (추가/재활성화 카테고리에서 재활성화 대상만 제외)
+			Set<String> insertCategorySet = new HashSet<>(insertOrReactiveTarget);
+			insertCategorySet.removeAll(reactiveCategoryList);
+			
+			// 재활성화 대상이 있다면, ROW UPDATE (DLT_YN = 'N')
+			if(!reactiveCategoryList.isEmpty()) {
+				
+				Map<String, Object> reactiveParamMap = new HashMap<>();
+				reactiveParamMap.put("reactiveList", reactiveCategoryList);
+				reactiveParamMap.put("usrId", usrId);
+				reactiveParamMap.put("adminId", adminId);
+				
+				updateAndInsertCount = blogCategoryDao.updateCategoryAsReactive(reactiveParamMap);
+				daoValidate(updateAndInsertCount, "updateCategoryAsReactive");
+			}
+			
+			// 새롭게 추가될 대상이 있다면, ROW INSERT
+			if(!insertCategorySet.isEmpty()) {
+				for(String insertId : insertCategorySet) {
+					
+					Map<String, Object> insertParamMap = new HashMap<>();
+					insertParamMap.put("insertId", insertId);
+					insertParamMap.put("usrId", usrId);
+					insertParamMap.put("adminId", adminId);
+					
+					updateAndInsertCount = blogCategoryDao.insertNewBlogCategory(insertParamMap);
+				}
+			}
+		}
+		
+	}
+
+	/**
+	 * 기존 파일 추가/삭제 구분 및 새 파일 업로드 처리 (UPDATE/INSERT)
+	 * @param adminUserModifyInfoVO
+	 * @param newFiles
+	 */
+	public void updateOrInsertFiles(AdminUserModifyInfoVO adminUserModifyInfoVO, List<MultipartFile> newFiles) {
+
+		int updateAndInsertCount = 0;
+		
+		String adminId = adminUserModifyInfoVO.getAdminId();
+		
+		// 기존 파일 중 삭제될 파일의 flId를 가져옴
+		List<String> deleteFiles = adminUserModifyInfoVO.getDeleteFileIds();
+		
+		// 기존 파일 중 삭제될 항목이 있다면, UPDATE (DLT_YN = 'Y')
+		if(deleteFiles != null && !deleteFiles.isEmpty()) {
+			
+			Map<String, Object> deleteParamMap = new HashMap<>();
+			deleteParamMap.put("deleteFiles", deleteFiles);
+			deleteParamMap.put("adminId", adminId);
+			
+			updateAndInsertCount = fileDao.updateFilesAsDelete(deleteParamMap);
+			// daoValidate(updateAndInsertCount, "updateFilesAsDelete");
+		}
+		
+		// 추가된 파일이 있다면 INSERT
+		if(newFiles != null && !newFiles.isEmpty()) {
+			List<FileVO> insertResult = this.multipartFileHandler.upload(newFiles);
+			
+			// 해당 사용자의 flGrpId를 가져옴
+			String flGrpId = adminUserModifyInfoVO.getFlGrpId();
+			
+			// flGrpId가 없다면 새로 발급 (...근데 이건 굳이 없어도 될 것 같아서 일단 비울게요)
+			
+			// 업로드 된 파일의 flGrpId를 지정
+			for(FileVO fileVO : insertResult) {
+				fileVO.setFlGrpId(flGrpId);
+				updateAndInsertCount = fileDao.insertFile(fileVO);
+				daoValidate(updateAndInsertCount, "insertFile");
+			}
+		}
+		
+	}
+	
+	/**
+	 * 기존 정보와 수정 후 정보를 비교하여, 
+	 * 변경된 정보에 대한 데이터를 UserUpdateHistoryVO에 매핑해 주기 위한 메소드
+	 * @param beforeInfo
+	 * @param afterInfo
+	 * @param updtRsn
+	 * @param adminId
+	 * @return
+	 */
+	public List<UserUpdateHistoryVO> compareBeforeAndAfterData(UserVO beforeInfo, UserVO afterInfo, String updtRsn, String adminId) {
+		
+		List<UserUpdateHistoryVO> historyList = new ArrayList<>();
+		String usrId = afterInfo.getUsrId();
+
+		// Objects
+		// 두 값이 같으면 !true ==> false 
+		// 두 값이 다르거나 null이 하나라도 있다면 !false ==> true
+		
+		// logId 비교
+		if(!Objects.equals(beforeInfo.getLogId(), afterInfo.getLogId())) {
+			historyList.add(createHistory(usrId, "LOG_ID", beforeInfo.getLogId(), afterInfo.getLogId(), adminId, updtRsn));
+		}
+		
+		// eml 비교
+		if(!Objects.equals(beforeInfo.getEml(), afterInfo.getEml())) {
+			historyList.add(createHistory(usrId, "EML", beforeInfo.getEml(), afterInfo.getEml(), adminId, updtRsn));
+		}
+		
+		// nm 비교
+		if(!Objects.equals(beforeInfo.getNm(), afterInfo.getNm())) {
+			historyList.add(createHistory(usrId, "NM", beforeInfo.getNm(), afterInfo.getNm(), adminId, updtRsn));
+		}
+		
+		// 광고주의 경우
+		if(afterInfo.getAutr().equals("1004")) {
+			
+			// cmpny 비교
+			if(!Objects.equals(beforeInfo.getCmpny(), afterInfo.getCmpny())) {
+				historyList.add(createHistory(usrId, "CMPNY", beforeInfo.getCmpny(), afterInfo.getCmpny(), adminId, updtRsn));
+			}
+			
+			// flGrpId 비교 (이거 굳이 안 해도 될 것 같아서 그냥 안 넣을 게요...)
+		}
+		
+		return historyList;
+	}
+
+	/**
+	 * 수정 기록 테이블에 INSERT할 데이터를 매핑해 주는 메소드
+	 * @param usrId
+	 * @param updtItem
+	 * @param befUpdtCn
+	 * @param aftUpdtCn
+	 * @param updtAdmin
+	 * @param updtRsn
+	 * @return
+	 */
+	public UserUpdateHistoryVO createHistory(String usrId, String updtItem, String befUpdtCn, String aftUpdtCn, String updtAdmin, String updtRsn) {
+		
+		UserUpdateHistoryVO updateHistory = new UserUpdateHistoryVO();
+		
+		updateHistory.setUsrId(usrId);
+		updateHistory.setUpdtItem(updtItem);
+		updateHistory.setBefUpdtCn(befUpdtCn);
+		updateHistory.setAftUpdtCn(aftUpdtCn);
+		updateHistory.setUpdtAdmin(updtAdmin);
+		updateHistory.setUpdtRsn(updtRsn);
+		
+		return updateHistory;
+	}
+	
+	/**
+	 * INSERT/UPDATE Exception 처리 (임시)
+	 * @param rows
+	 * @param message
+	 */
+	private void daoValidate(int rows, String message) {
+		if(rows == 0) {
+			throw new RuntimeException("Database error: " + message + " 작업 결과 0건");
+		}
+	}
 }
