@@ -1,4 +1,6 @@
 $().ready(function() {
+    submitAutoActive();
+    
     $("button[name='adopt'].disabled").on("click", function() {
         alert("선정 단계가 아닙니다.");
     });
@@ -120,6 +122,8 @@ $().ready(function() {
         postUrl.text(url);
         postUrl.attr("href", url);
         postUrl.attr("target", "_blank");
+        postUrl.data("cmpn-apply-id", postId);
+        console.log(postUrl.data());
 
         $(".post-url").append(postUrl);
     });
@@ -131,4 +135,19 @@ $().ready(function() {
         $(".button-list").empty();
     });
     
+    $("#add-file").on("change", function() {
+        var files = this.files;
+        var $fileList = $("#fileList");
+        $fileList.empty(); // 초기화
+    
+        $.each(files, function(index, file) {
+            $fileList.append("<div>" + file.name + "</div>");
+        });
+    });
+    
+    $(".modal-submit").on("click", function() {
+        id = $(".post-url").children("a").data("cmpn-apply-id");
+        $(".deny-form").attr("action", "/adv/deny/" + id);
+        $(".deny-form").submit();
+    });
 });

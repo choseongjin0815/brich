@@ -502,20 +502,10 @@ body {
     }
   }
 
-  & > .deny-container {
-    & > div {
-      margin: 10px 0;
-    }
-
-    & > textarea {
-      width: 1200px;
-      height: 150px;
-      padding: 10px;
-      box-sizing: border-box;
-      resize: none;
-      font-size: 1rem;
-    }
-  }
+	.text-input {
+		border-radius: 5px;
+		border: 1px solid #9F9C9C;
+	}
 
   & > .close-mark {
     position: absolute;
@@ -527,12 +517,37 @@ body {
   }
 }
 
-.add-file {
-  background-color: #e7e9ed;
-  width: 100px;
-  height: 30px;
-  border-radius: 10px;
+.deny-container {
+  & > div {
+    margin: 10px 0;
+  }
+
+  & > textarea {
+    width: 1200px;
+    height: 150px;
+    padding: 10px;
+    box-sizing: border-box;
+    resize: none;
+    font-size: 1rem;
+  }
 }
+
+/*
+.add-file-flex {
+	& > .add-file {
+	  background-color: #e7e9ed;
+	  width: 100px;
+	  height: 30px;
+	  border-radius: 10px;
+	  font-size: 1rem;
+	  display: inline-block;
+	  text-align: center;
+	}
+	
+	& > #add-file {
+	   display: none;
+	}
+}*/
 
 .button_120_50 {
   width: 120px;
@@ -558,6 +573,12 @@ body {
     background-color: #1a62f8;
     color: #fff;
   }
+  
+  & > button[disabled="disabled"] {
+    background-color: #eee;
+    color: #ccc;
+    border: 0;
+}
 }
 
 .campaign-block {

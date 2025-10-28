@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -9,6 +10,7 @@
 		<link type="text/css" rel="stylesheet" href="/css/brich.css" />
 		<script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
 		<script type="text/javascript" src="/js/campaign/applicantAdopt.js"></script>
+		<script type="text/javascript" src="/js/common/validate.js"></script>
 		<script type="text/javascript" src="/js/common/paginator.js"></script>
 	</head>
 	<body>
@@ -104,16 +106,24 @@
 				    <div class="button-list">
 				    </div>
 		            
-		            <div class="deny-container">
-                        <textarea name="reason" placeholder="반려 사유를 입력하세요."></textarea>
-                        <div>
-                            <button type="button" class="add-file">첨부파일 +</button>
-                        </div>
-                        <div class="modal-button-list">
-                            <button type="button" class="modal-close">닫기</button>
-                            <button type="button" class="modal-submit">제출</button>
-                        </div>
-                    </div>
+		            <form:form modelAttribute="RequestDenyVO"
+		                       method="post"
+		                       action="/adv/deny"
+		                       enctype="multipart/form-data"
+		                       class="deny-form">
+			            <div class="deny-container">
+	                        <textarea name="reason" id="reason" class="text-input require-input empty" placeholder="반려 사유를 입력하세요."></textarea>
+	                        <div class="add-file-flex">
+	                            <!-- <button type="button" class="add-file">첨부파일 +</button> -->
+	                            <input id="add-file" type="file" name="file" multiple />
+	                            <div id="fileList"></div>
+	                        </div>
+	                        <div class="modal-button-list">
+	                            <button type="button" class="modal-close">닫기</button>
+	                            <button type="button" class="modal-submit auto-active">제출</button>
+	                        </div>
+	                    </div>
+	                </form:form>
                     <button type="button" class="modal-close close-mark">X</button>
 	            </div>
 	        </div>

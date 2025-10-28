@@ -8,6 +8,7 @@ import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostAdoptVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantVO;
@@ -49,4 +50,6 @@ public interface CampaignDao {
 	int selectAdoptPaginationCount(RequestApplicantVO requestApplicantVO);
 
 	String selectStateNameByStateCode(String sttsCd);
+
+	boolean insertDenyByCmpnPstAdoptId(RequestDenyVO requestDenyVO);
 }

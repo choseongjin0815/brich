@@ -7,11 +7,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListVO;
@@ -128,4 +130,13 @@ public class CampaignController {
     		return false;
     	}
     }
+
+	@PostMapping("/adv/deny/{cmpnPstAdoptId}")
+	public String doCreateDenyAction(@PathVariable String cmpnPstAdoptId,
+									 RequestDenyVO requestDenyVO) {
+		requestDenyVO.setCmpnPstAdptId(cmpnPstAdoptId);
+		boolean insert = this.campaignService.insertDenyByCmpnPstAdoptId(requestDenyVO);
+		
+		return "";
+	}
 }

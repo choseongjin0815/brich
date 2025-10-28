@@ -3,6 +3,7 @@ package com.ktdsuniversity.edu.domain.campaign.service;
 
 
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListVO;
@@ -25,5 +26,6 @@ public interface CampaignService {
 	ResponseCampaignListVO readSubmittedMyCampaignByBlgId(String blgId);
 
 	boolean updatePstSttsApproveByCmpnPstAdoptId(RequestApplicantVO requestApplicantVO);
-	
+
+	boolean insertDenyByCmpnPstAdoptId(RequestDenyVO requestDenyVO);
 }
