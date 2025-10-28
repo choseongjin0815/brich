@@ -13,9 +13,16 @@
         <link type="text/css" rel="stylesheet" href="/css/user/admin_user_detail.css"/>
     </head>
     <body>
+        <jsp:include page="/WEB-INF/views/layout/menu.jsp">
+           <jsp:param name='css' value="
+        <link type='text/css' rel='stylesheet' href='/css/campaignmain.css' />
+            " />
+       </jsp:include>
+       
        <div class="wrapper">
            <h1>회원 관리</h1>
 		   <div class="container">
+		      <input type="hidden" id="login_usrId" value="${sessionScope.__LOGIN_USER__.usrId}"/>
 		      <input type="hidden" id="usrId" value="${userInfo.usrId}"/>
 		      <input type="hidden" id="autr" value="${userInfo.autr}"/>
 		   <table>
@@ -36,6 +43,23 @@
                       <th>이름</th>
                       <td>${userInfo.nm}</td>
                    </tr>
+                   
+                   <c:if test="${classType eq 'AdminAdvertiserDetailVO'}">
+                   <tr>
+                      <th>상호명</th>
+                      <td>
+                          <c:choose>
+                              <c:when test="${not empty userInfo.cmpny}">
+                                  ${userInfo.cmpny}
+                              </c:when>
+                              
+                              <c:otherwise>
+                                  -
+                              </c:otherwise>
+                          </c:choose>
+                      </td>
+                   </tr>
+                   </c:if>
                    
                    <tr>
                       <!-- include -->
@@ -77,16 +101,16 @@
                       <label for="ban">정지</label>
                       <input type="radio" id="ban" name="penalty-option" class="option_item"/>
                       
-                      <button type="button" class="panalty-btn">처리</button>
+                      <button class="panalty-btn">처리</button>
                       
                       <a href="/admin/user_modify/${usrId}">
-                          <button type="button" class="modify-btn">수정</button>
+                          <button class="modify-btn">수정</button>
                       </a>
                   </c:if>
 		      
 		          <c:if test="${classType eq 'AdminAdvertiserDetailVO' && userInfo.autr eq '1007'}">
-		              <button type="button" class="regist-yn-group-btn" data-action="reject">가입 반려</button>
-		              <button type="button" class="regist-yn-group-btn" data-action="approve">가입 승인</button>
+		              <button class="regist-yn-group-btn" data-action="reject">가입 반려</button>
+		              <button class="regist-yn-group-btn" data-action="approve">가입 승인</button>
 		          </c:if>
 		      </div>
 		   </div>

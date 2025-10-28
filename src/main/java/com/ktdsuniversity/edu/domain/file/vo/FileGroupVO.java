@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.domain.file.vo;
 
+import java.util.List;
+
 import com.ktdsuniversity.edu.global.common.BaseVO;
 
 /**
@@ -22,6 +24,7 @@ public class FileGroupVO extends BaseVO{
      */
     private int flCnt;
 
+    private List<FileVO> file;
 
     public String getFlGrpId() {
         return this.flGrpId;
@@ -38,11 +41,17 @@ public class FileGroupVO extends BaseVO{
     public void setFlCnt(int flCnt) {
         this.flCnt = flCnt;
     }
+	public List<FileVO> getFile() {
+		return this.file;
+	}
+
+	public void setFile(List<FileVO> file) {
+		this.file = file;
+	}
 
 	@Override
 	public String toString() {
-		return "FileGroupVO [flGrpId=" + flGrpId + ", flCnt=" + flCnt + ", toString()=" + super.toString() + "]";
+		return "FileGroupVO [flGrpId=" + flGrpId + ", flCnt=" + flCnt + ", file=" + file + "]";
 	}
-    
-    
+
 }
