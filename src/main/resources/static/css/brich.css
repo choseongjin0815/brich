@@ -96,6 +96,33 @@ body {
 		  margin-top: 50px;
 		  text-align: center;
       }
+      
+      
+      & > .file-input-flex {
+        & > #password-confirm {
+          margin-top: 5px;
+        }
+        display: flex;
+        flex-direction: column;
+        margin: 10px 0;
+        & > input {
+          width: 550px;
+          height: 30px;
+          border-radius: 3px;
+        }
+        & > label {
+          font-size: 14px;
+          font-weight: 400;
+          margin-bottom: 5px;
+        }
+      }
+      & > .short {
+        & > input {
+          width: 400px;
+        }
+      }
+      
+       
       & > .input-flex {
         & > #password-confirm {
           margin-top: 5px;
@@ -120,20 +147,25 @@ body {
           width: 400px;
         }
       }
-
-      & > .right-flex {
+     
+      & > .right-flex{
         display: flex;
         justify-content: space-between;
         & > .input-flex {
           display: flex;
           flex-direction: column;
           margin: 10px 0;
+          
+          
           & > input {
             border: 1px solid #11111333;
             width: 550px;
             height: 30px;
             border-radius: 3px;
           }
+          
+          
+          
           & > label {
             font-size: 14px;
             font-weight: 400;
@@ -189,17 +221,6 @@ body {
 .term-content {
   color: #828282;
 }
-
-.login-wrapper {
-    background-color: #5275C1;
-    height: 100vh;
-    background-image: url('/img/image13.png');
-    background-size: contain; /* 비율 유지하면서 영역 안에 맞춤 */
-    background-position: left center;
-    background-repeat: no-repeat;
-}
-
-
 
 .campaign-tab {
     display: flex;
@@ -409,4 +430,7 @@ body {
 .validate-require {
 	color: #FF0000;
 	font-size: 14px;
+}
+.login-body {
+	background-color: #5275c1;
 }

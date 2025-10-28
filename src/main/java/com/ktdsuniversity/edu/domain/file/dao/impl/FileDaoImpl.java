@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.domain.file.dao.impl;
 
+import java.util.Map;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +37,9 @@ public class FileDaoImpl extends SqlSessionDaoSupport implements FileDao {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectFileVO", requestDownloadVO);
 	}
 
+	@Override
+	public int updateFilesAsDelete(Map<String, Object> deleteParamMap) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateFilesAsDelete", deleteParamMap);
+	}
 
 }

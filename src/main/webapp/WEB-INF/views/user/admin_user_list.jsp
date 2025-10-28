@@ -11,6 +11,11 @@
 		<link type="text/css" rel="stylesheet" href="/css/user/admin_user_list.css"/>
 	</head>
 	<body>
+	   <jsp:include page="/WEB-INF/views/layout/menu.jsp">
+	       <jsp:param name='css' value="
+        <link type='text/css' rel='stylesheet' href='/css/campaignmain.css' />
+            " />
+	   </jsp:include>
 	   <div class="wrapper">
 		   <h1>회원 관리</h1>
 		      <input type="hidden" id="current-tab" value="${currentTab}"/>
@@ -181,7 +186,17 @@
 	               </tbody>
 		       </table>
 		       
-		       <!-- 페이지네이션 -->
+		    <jsp:include page="/WEB-INF/views/layout/paginator.jsp">
+	            <jsp:param value="${search.listSize}" name="listSize"/>
+	            <jsp:param value="${search.havePrevPageGroup}" name="havePrevPageGroup"/>
+	            <jsp:param value="${search.prevGroupStartPageNo}" name="prevGroupStartPageNo"/>
+	            <jsp:param value="${search.groupStartPageNo}" name="groupStartPageNo"/>
+	            <jsp:param value="${search.groupEndPageNo}" name="groupEndPageNo"/>
+	            <jsp:param value="${search.pageNo}" name="pageNo"/>
+	            <jsp:param value="${search.haveNextPageGroup}" name="haveNextPageGroup"/>
+	            <jsp:param value="${search.nextGroupStartPageNo}" name="nextGroupStartPageNo"/>
+	            <jsp:param value="${search.pageCount}" name="pageCount"/>
+            </jsp:include>
 		   </div>
 	   </div>
 	</body>

@@ -61,4 +61,20 @@
          WHERE FL_ID = #{flId}
            AND FL_GRP_ID =  #{flGrpId}
     </select>
+    
+    <!-- 광고주가 등록한 사업자 등록증 파일 삭제 (UPDATE, DLT_YN = 'Y') -->
+    <update id="updateFilesAsDelete" parameterType="map">
+        UPDATE FL
+           SET DLT_YN = 'Y'
+             , UPDT_DT = SYSDATE
+             , MTTR = #{adminId}
+         WHERE DLT_YN = 'N'
+        <if test="deleteFiles != null and !deleteFiles.isEmpty()">
+           AND FL_ID IN 
+        <foreach collection="deleteFiles" item="flId" open="(" separator="," close=")">
+           #{flId}
+        </foreach>
+        </if>
+    </update>
+    
 </mapper>

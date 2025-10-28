@@ -27,7 +27,7 @@
                            class="user-regist-form">
                     <div class="right-flex">
                         <div class="input-flex short"> 
-                            <label for="id" class="require">아이디</label>
+                            <label for="id" class="require" id="regist-id">아이디</label>
                             <input type="text" id="id" name="logId" class="logId" value="${registData.logId}" placeholder="아이디를 입력해주세요"/>
                             <form:errors path="logId" cssClass="validate-require" />
                         </div>
@@ -39,11 +39,16 @@
                          <form:errors path="nm" cssClass="validate-require" />
                     </div>
                     <div class="input-flex">
-                        <label for="company" class="require">사업자명</label>
+                        <label for="company" class="require">회사명</label>
                         <input type="text" id="company" name="cmpny" placeholder="사업자명을 입력해주세요"/>
                     </div>
-                    <div>사업자 등록증</div>
-                    <input id="file" type="file" name="file" />
+                    <div class="file-input-flex">
+                        <label for="company" class="require">사업자 등록증</label>
+                        <input id="fileInput" type="file" name="file" multiple="multiple" />
+                        <div id="fileList"></div>
+                    </div>
+                
+         
                     <div class="right-flex">
                         <div class="input-flex short">
                             <label for="email" class="require" >이메일</label>
@@ -122,16 +127,15 @@
                     <div class="input-flex">
                         <label>카테고리</label>
                         <div>
-                            <input type="checkbox"/>맛집
-                            <input type="checkbox"/>여행
-                            <input type="checkbox"/>레저
-                            <input type="checkbox"/>뷰티
+                            <c:forEach items="${categoryList}" var="category">
+                                <input name="cdIdList" type="checkbox" value="${category.cdId}"/>${category.cdNm}
+                            </c:forEach>
                         </div>
                     </div>
                     <div class="input-flex">
                         <label>지역</label>
                     </div>
-                    <input type="hidden" name="autr" value="1002"/>
+                    <input type="hidden" name="autr" value="1003"/>
                     
                     <button type="button" class="regist-btn">회원가입</button>
                 </form:form>   

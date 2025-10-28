@@ -1,5 +1,8 @@
 package com.ktdsuniversity.edu.global.interceptors;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
@@ -14,6 +17,8 @@ public class CheckSessionInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		
+		String[] canLoginList = { "1001", "1002", "1003", "1004" };
 		
 		HttpSession httpSession = request.getSession();
 		UserVO loginUser = (UserVO) httpSession.getAttribute("__LOGIN_USER__");
