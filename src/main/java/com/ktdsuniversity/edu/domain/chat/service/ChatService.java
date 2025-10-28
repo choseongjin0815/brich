@@ -12,9 +12,6 @@ import com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatCampaignListVO
 import com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatRoomInfoVO;
 
 public interface ChatService {
-	
-	// 테스트용 (추후 삭제)
-    public List<ChatMessageVO> readChatMessageByRmId(String chtrmId);
     
     // 채팅방 목록 조회 (페이징)
     public SearchChatVO readAllChatRoomList(SearchChatVO searchChatVO);

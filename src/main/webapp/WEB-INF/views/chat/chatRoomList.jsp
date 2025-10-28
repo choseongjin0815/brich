@@ -6,14 +6,15 @@
 		value="
         <link type='text/css' rel='stylesheet' href='/css/chat/chat.css' />
     " />
-	<jsp:param name="chatroomscripts"
+	<jsp:param name="chatroomListscripts"
 		value="
         <script type='text/javascript' src='/js/chat/chatRoomList.js'></script>
     " />
 </jsp:include>
-<div class="chat-main" data-cmpn = "${cmpnId}">
+<div class="chat-main" data-cmpn="${cmpnId}">
 	<div class="header-title">메시지</div>
-	<div class="content-box" data-auth = "${sessionScope.__LOGIN_USER__.autr}">
+	<div class="content-box"
+		data-auth="${sessionScope.__LOGIN_USER__.autr}">
 		<div class="content-title">채팅방 목록</div>
 		<div class="progress-check">
 			<div class="progress readall">전체</div>
@@ -26,7 +27,7 @@
 </div>
 </div>
 <template id="chat-room-list">
-	<div class="chatroom-content-item">
+	<div class="chatroom-content-item" data-chat-room="#chatroomid#">
 		<div class="chatroom-info">
 			<div class="chatroom-campaign-title">
 				<div class="campaign-title camp">#campaigntitle#</div>
@@ -40,7 +41,9 @@
 				<div class="latest-time">#latesttime#</div>
 				<div class="unread-count">#unreadcount#</div>
 			</div>
-			<div class="chat-levae-btn">xxx</div>
+			<img src="/img/more-horizontal.png" class="chat-leave-btn">
+			<div class="report-btn">신고하기</div>
+			<div class="leave-chat-btn">채팅방 나가기</div>
 		</div>
 	</div>
 </template>

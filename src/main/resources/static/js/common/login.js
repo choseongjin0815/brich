@@ -5,7 +5,7 @@ $().ready(function () {
         var currentUrl = window.location.pathname;
         //로그인 버튼 눌러서 로그인 페이지에 접근한 경우 
         if(currentUrl === "/login") {
-            currentUrl = "/main";//게시글 목록
+            currentUrl = "";//게시글 목록
         }
         $("#login").attr("action", "/login?nextUrl=" + currentUrl).submit();
     });

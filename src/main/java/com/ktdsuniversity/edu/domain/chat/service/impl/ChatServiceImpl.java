@@ -23,6 +23,7 @@ import com.ktdsuniversity.edu.domain.chat.vo.request.RequestChatMessageVO;
 import com.ktdsuniversity.edu.domain.chat.vo.request.RequestChatRoomFindVO;
 import com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatCampaignListVO;
 import com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatRoomInfoVO;
+import com.ktdsuniversity.edu.global.util.TimeFormatUtil;
 
 @Service
 public class ChatServiceImpl implements ChatService {
@@ -34,14 +35,6 @@ public class ChatServiceImpl implements ChatService {
 
 	@Autowired
 	private ChatDao chatDao;
-
-	/**
-	 * 연결 테스트 : 추후 삭제 예정
-	 */
-	@Override
-	public List<ChatMessageVO> readChatMessageByRmId(String chtrmId) {
-		return this.chatMessageRepository.findByChtRmIdOrderByCrtDtAsc(chtrmId);
-	}
 
 	@Override
 	public SearchChatVO readAllChatRoomList(SearchChatVO searchChatVO) {
@@ -77,7 +70,7 @@ public class ChatServiceImpl implements ChatService {
 				ChatMessageVO lastMessage = messages.get(0);
 				chatRoom.setLastMsgCn(lastMessage.getMsgCn());
 				chatRoom.setLastMsgUsrId(lastMessage.getUsrId());
-				chatRoom.setLastMsgCrtDt(lastMessage.getCrtDt());
+				chatRoom.setLastMsgCrtDt(TimeFormatUtil.format(lastMessage.getCrtDt()));
 			}
 
 			// 안읽은 메시지 수 조회
