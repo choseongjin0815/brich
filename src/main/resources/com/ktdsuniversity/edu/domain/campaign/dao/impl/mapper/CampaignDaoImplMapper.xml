@@ -253,10 +253,13 @@
     
      
     <select id="selectExpireSoonCampaign"
-    		resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
+    		resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO"
+    		parameterType="com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO">
+        <include refid="Common.paginationHeader" />
     
     SELECT *
       FROM CMPN
+    <include refid="Common.paginationFooter"></include>
     </select>
     
 

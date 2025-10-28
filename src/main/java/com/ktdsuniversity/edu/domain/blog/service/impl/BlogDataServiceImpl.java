@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
+import com.ktdsuniversity.edu.domain.user.dao.UserDao;
 
 
 
@@ -17,16 +19,22 @@ public class BlogDataServiceImpl implements BlogDataService{
 
 	@Autowired
 	private CampaignDao campaignDao;
+	@Autowired
+	private UserDao userDao;
 	
 	@Override
-	public ResponseExpireSoonListVO readExpireSoonCampaignList() {
+	public ResponseExpireSoonListVO readExpireSoonCampaignList(RequestExpireSoonCampaignVO requestExpireSoonCampaignVO) {
 		
-		List<CampaignVO> list = this.campaignDao.selectExpireSoonCampaign();
+		List<CampaignVO> list = this.campaignDao.selectExpireSoonCampaign(requestExpireSoonCampaignVO);
 		
 		ResponseExpireSoonListVO result = new ResponseExpireSoonListVO();
-
 		result.setList(list);
+		int totalCount = 50;
+		requestExpireSoonCampaignVO.setPageCount(totalCount);;
 		return result;
 	}
+
+
+	
 
 }

@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <jsp:include page="/WEB-INF/views/layout/menu.jsp">
     <jsp:param name='css' value="
        	<link type='text/css' rel='stylesheet' href='/css/campaignmain.css' />
     	<link type='text/css' rel='stylesheet' href='/css/blog/dashboard.css' />
-       	
+       	<link typr='text/css' rel='stylesheet' href='/css/paginator-simple.css'/>
    	" />
    	<jsp:param name="scripts" value="
        	
@@ -21,10 +22,10 @@
                  				 <c:when test="${not empty list.list}">
 									<c:forEach items="${list.list}" var="recommend">
                           				<tr>
-                              				<td>${recommend.profile}</td>
-                              				<td>${recommend.name}</td>
-                              				<td>${recommend.expiredate}</td>
-                            				<td>${recommend.reward}</td>
+                              				<td>${recommend.cmpnId}</td>
+                              				<td>${recommend.cmpnTitle}</td>
+                              				<td>${recommend.rcrtEndDt}</td>
+                            				<td>${recommend.offrCn}</td>
                           				</tr>
                       				</c:forEach>
                   </c:when>
@@ -36,6 +37,11 @@
                </c:choose>
 						</tbody>
 					</table>
+					<jsp:include page="/WEB-INF/views/layout/paginator-simple.jsp">
+					  <jsp:param name="havePrevPageGroup" value="${search.havePrevPageGroup}" />
+					  <jsp:param name="pageNo" value="${search.pageNo}" />
+					  <jsp:param name="haveNextPageGroup" value="${search.haveNextPageGroup}" />
+					</jsp:include>
 				</div>
 				<div>추천 캠페인</div>
 				<div>핵심 황금 키워드</div>

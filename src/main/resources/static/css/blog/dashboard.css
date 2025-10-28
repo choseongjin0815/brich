@@ -10,10 +10,19 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-template-rows: 1fr 1fr;
+	& > tr {
+		text-align: center;
+	}
 }
 .title{
 	display: flex;
 	font-size: 2.25rem;
 	color: #5A6ACF;
 	font-weight: bold;
+}
+
+.verification-container{
+	display: flex;
+	flex-direction: column;
+	justify-items: center;
 }

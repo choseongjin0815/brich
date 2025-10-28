@@ -7,6 +7,7 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
@@ -72,8 +73,8 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	}
 
 	@Override
-	public List<CampaignVO> selectExpireSoonCampaign() {
-		return super.getSqlSession().selectList(this.NAME_SPACE + "selectExpireSoonCampaign");
+	public List<CampaignVO> selectExpireSoonCampaign(RequestExpireSoonCampaignVO requestExpireSoonCampaignVO) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectExpireSoonCampaign", requestExpireSoonCampaignVO);
 	}
 
 

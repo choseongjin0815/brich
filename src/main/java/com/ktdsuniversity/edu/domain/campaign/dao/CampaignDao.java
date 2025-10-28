@@ -3,6 +3,8 @@ package com.ktdsuniversity.edu.domain.campaign.dao;
 
 import java.util.List;
 
+
+import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostAdoptVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
@@ -36,7 +38,7 @@ public interface CampaignDao {
 
 	String selectCategoryParent(String selectCategroy);
 
-	List<CampaignVO> selectExpireSoonCampaign();
+	List<CampaignVO> selectExpireSoonCampaign(RequestExpireSoonCampaignVO requestExpireSoonCampaignVO);
 
 	String selectCampaignChangeSttsCd(String sttsCd);
 

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -56,7 +57,7 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
                 <li class="blg-menu">
                   <span>MENU</span>
                   <ul class="menu-content">
-                    <li ><a id="menu-image" href="" class="dashboard-font"> Dashboard</a></li> 
+                    <li ><a id="menu-image" href="/blog/${sessionScope.__LOGIN_USER__.usrId}/dashboard" class="dashboard-font"> Dashboard</a></li> 
                     <li class="menu-campaignmain-selected"><a href="/campaignmain">캠페인</a></li>
                     <li class="my-campaign "><div class="flex-row flex-space-between height-center">
                         MY 캠페인
@@ -70,7 +71,7 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 	                        <li class="last-item"><a href="">관심 캠페인</a></li>
 	                      </ul>
 	                </li>
-                    <li><a href="">블로그 관리</a></li>
+                    <li><a href="/blog/${sessionScope.__LOGIN_USER__.usrId}/manage">블로그 관리</a></li>
                     <li><a href="">메세지</a></li>
                   </ul>
                 </li>
