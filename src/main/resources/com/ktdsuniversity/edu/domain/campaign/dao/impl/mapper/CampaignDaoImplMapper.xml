@@ -312,8 +312,19 @@
     		parameterType="com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO">
         <include refid="Common.paginationHeader" />
     
-    SELECT *
-      FROM CMPN
+    SELECT
+      CMPN_ID,
+      CMPN_TITLE,
+      RCRT_END_DT,
+      USR_ID,
+      STTS_CD,
+      CNFM_DT,
+      OFFR_PRC
+ FROM CMPN
+WHERE DLT_YN = 'N'
+  AND RCRT_END_DT <![CDATA[>]]> SYSDATE          
+  AND RCRT_END_DT <![CDATA[<=]]> SYSDATE + 7     
+ORDER BY RCRT_END_DT ASC
     <include refid="Common.paginationFooter"></include>
     </select>
     

@@ -5,6 +5,7 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.ktdsuniversity.edu.domain.blog.vo.RequestModifyBlogAddrsVO;
 import com.ktdsuniversity.edu.domain.user.dao.UserDao;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserFindIdVO;
@@ -71,6 +72,11 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
 	@Override
 	public String selectUserIdByLogId(String logId) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUserIdByLogId", logId);
+	}
+
+	@Override
+	public int updateBlgAddrsById(RequestModifyBlogAddrsVO requestModifyBlogAddrsVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateBlgAddrsById" , requestModifyBlogAddrsVO);
 	}
 
 
