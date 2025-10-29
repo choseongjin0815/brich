@@ -12,7 +12,9 @@ import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestUpdatePstSttsVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
@@ -64,6 +66,7 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	public int selectApplicantCountByCmpnId(RequestApplicantVO requestApplicantVO) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectApplicantCountByCmpnId", requestApplicantVO);
 	}
+	
 	public List<ResponseCampaignVO> selectCampaignListCategoryAndSortBy(RequestSearchCampaignVO requestSearchCampaignVO) {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectCampaignListCategoryAndSortBy", requestSearchCampaignVO);
 	}
@@ -87,6 +90,21 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	@Override
 	public List<ResponseAdoptVO> selectAdoptListByCmpnId(RequestApplicantVO requestApplicantVO) {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdoptListByCmpnId", requestApplicantVO);
+	}
+
+	@Override
+	public int selectAdoptPaginationCount(RequestApplicantVO requestApplicantVO) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectAdoptPaginationCount", requestApplicantVO);
+	}
+
+	@Override
+	public String selectStateNameByStateCode(String sttsCd) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectStateNameByStateCode", sttsCd);
+	}
+
+	@Override
+	public int updatePstSttsByCmpnPstAdoptId(RequestUpdatePstSttsVO requestUpdatePstSttsVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updatePstSttsByCmpnPstAdoptId", requestUpdatePstSttsVO);
 	}
 	
 	/**
@@ -138,6 +156,14 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 		
 		return super.getSqlSession().insert(this.NAME_SPACE + "applyCampaign", param);
 	}
-	
 
+	@Override
+	public int insertDenyByCmpnPstAdoptId(RequestDenyVO requestDenyVO) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertDenyByCmpnPstAdoptId", requestDenyVO);
+	}
+
+	@Override
+	public List<CommonCodeVO> selectDoAndCityList() {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectDoAndCityList");
+	}
 }

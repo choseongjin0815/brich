@@ -9,6 +9,7 @@ public class ResponseAdoptListVO {
 
 	private List<ResponseAdoptVO> adoptList;
 	private CampaignVO campaignInfo;
+	private String cmpnCdNm;
 	
 	public List<ResponseAdoptVO> getAdoptList() {
 		return this.adoptList;
@@ -22,9 +23,16 @@ public class ResponseAdoptListVO {
 	public void setCampaignInfo(CampaignVO campaignInfo) {
 		this.campaignInfo = campaignInfo;
 	}
+	public String getCmpnCdNm() {
+		return this.cmpnCdNm;
+	}
+	public void setCmpnCdNm(String cmpnCdNm) {
+		this.cmpnCdNm = cmpnCdNm;
+	}
 	
 	@Override
 	public String toString() {
-		return "ResponseAdoptListVO [adoptList=" + adoptList + ", campaignInfo=" + campaignInfo + "]";
+		return "ResponseAdoptListVO [adoptList=" + adoptList + ", campaignInfo=" + campaignInfo + ", cmpnCdNm="
+				+ cmpnCdNm + "]";
 	}
 }

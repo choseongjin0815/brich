@@ -143,4 +143,11 @@
 		  FROM USR 
 		 WHERE LOG_ID = #{logId}
     </select>
+    
+    <update id="updateBlgAddrsById"
+    		parameterType="com.ktdsuniversity.edu.domain.blog.vo.RequestModifyBlogAddrsVO">
+	   UPDATE USR
+          SET BLG_ADDRS=#{blgAddrs}, UPDT_DT=SYSDATE, MTTR='SYSTEM'
+        WHERE USR_ID=#{id}
+	</update>
 </mapper>

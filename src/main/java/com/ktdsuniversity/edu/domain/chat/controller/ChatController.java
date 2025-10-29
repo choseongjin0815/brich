@@ -45,22 +45,6 @@ public class ChatController {
 	private static final Logger log = LoggerFactory.getLogger(SearchBlogController.class);
 	
 	/**
-	 * 연결 테스트 : 추후 삭제 예정
-	 */
-	@GetMapping("/test")
-	@ResponseBody 
-	public AjaxResponse test() {
-		
-		List<ChatMessageVO> messageList = this.chatService.readChatMessageByRmId("CHT_RM-20250919-000001");
-		
-		AjaxResponse ajaxResponse = new AjaxResponse();
-		
-		ajaxResponse.setBody(messageList);		
-		
-		return ajaxResponse;
-	}
-	
-	/**
 	 * 광고주 - 캠페인 목록 페이지
 	 */
 	@GetMapping("/campaigns")
@@ -95,9 +79,12 @@ public class ChatController {
     		                 , @SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser
     		                 , Model model) {
     	String usrId = loginUser.getUsrId();
-              
+        String auth = loginUser.getAutr();
+        
         model.addAttribute("chtRmId", chtRmId);
         model.addAttribute("usrId", usrId);
+        model.addAttribute("auth", auth);
+        
         return "chat/chatRoom";
     }
 

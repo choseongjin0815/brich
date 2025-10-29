@@ -5,10 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
-import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostAdoptVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestUpdatePstSttsVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
@@ -58,5 +59,13 @@ public interface CampaignDao {
 
 	int insertApplyCampaign(Map<String, String> param);
 
+	int updatePstSttsByCmpnPstAdoptId(RequestUpdatePstSttsVO requestUpdatePstSttsVO);
 
+	int selectAdoptPaginationCount(RequestApplicantVO requestApplicantVO);
+
+	String selectStateNameByStateCode(String sttsCd);
+
+	int insertDenyByCmpnPstAdoptId(RequestDenyVO requestDenyVO);
+
+	List<CommonCodeVO> selectDoAndCityList();
 }

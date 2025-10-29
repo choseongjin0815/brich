@@ -38,6 +38,6 @@ public class ResponseApplicantListVO {
 
 	@Override
 	public String toString() {
-		return "ApplicantListVO [applicantList=" + this.applicantList + "]";
+		return "ApplicantListVO [applicantList=" + this.applicantList + campaignInfo + "]";
 	}
 }

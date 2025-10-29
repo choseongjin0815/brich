@@ -55,7 +55,6 @@ public class UserController {
     }
     
     /**
-     * 
      * @param httpSession 로그인 정보를 담아줄 세션 
      * @param nextUrl 로그인 이후 원래 보려 했던 페이지로 이동하기 위한 url정보
      * @param requestUserLoginVO 로그인에 필요한 아이디와 이메일
@@ -78,6 +77,26 @@ public class UserController {
     	if(loginUser != null) {
     		httpSession.setAttribute("__LOGIN_USER__", loginUser);
     	}
+    	//권한 별 redirect를 위한 auth 변수
+    	String auth = loginUser.getAutr();
+    	//dashboard로 redirect해주기 위한 usrId
+    	String usrId = loginUser.getUsrId();
+  
+    	if(nextUrl.equals("")) {
+    		//관리자라면 관리자 메인 페이지 
+    		if(auth.equals("1001")) {
+    			return "redirect:/admin/user_list";
+    		}
+    		//블로거라면 대쉬보드 페이지
+    		if(auth.equals("1002") || auth.equals("1003")) {
+    			return "redirect:/blog/" + usrId + "/dashboard";
+    		}
+    		//광고주라면 캠페인 메인 페이지
+    		if(auth.equals("1004")) {
+    			return "redirect:/campaignmain";
+    		}
+    	}
+    	
     	log.info("nextURL : {}", nextUrl);
     	
     	return "redirect:" + nextUrl;

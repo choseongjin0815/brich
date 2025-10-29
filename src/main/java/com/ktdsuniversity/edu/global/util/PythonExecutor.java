@@ -6,8 +6,9 @@ import java.io.InputStreamReader;
 
 public class PythonExecutor {
 
-    public static void runPython(String scriptPath, String... args) {
-        try {
+    public static String runPython(String scriptPath, String... args) {
+        String output = "";
+    	try {
             ProcessBuilder pb = new ProcessBuilder("python", scriptPath);
             for (String arg : args) {
                 pb.command().add(arg);
@@ -21,6 +22,7 @@ public class PythonExecutor {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     System.out.println("[PYTHON] " + line);
+                    output = output + line;
                 }
             }
 
@@ -30,5 +32,6 @@ public class PythonExecutor {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+    	return output;
     }
 }

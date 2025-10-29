@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.domain.campaign.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +15,16 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignwriteVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.global.common.AjaxResponse;
+import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 @Controller
 public class CampaignController {
@@ -140,13 +145,14 @@ public class CampaignController {
 //    	if (!board.getEmail().equals(loginUser.getEmail())) {
 //			throw new HelloSpringException("잘못된 접근입니다.", "error/403");
 //		}
-    	
+    	requestApplicantVO.setListSize(10);
+    	requestApplicantVO.setPageCountInGroup(10);
     	requestApplicantVO.setCmpnId(cmpnId);
+
     	if (requestApplicantVO.getOrder() != null) {
     		requestApplicantVO.setOrder(requestApplicantVO.getOrder().toUpperCase());
     	}
     	ResponseApplicantListVO applicantList = this.campaignService.readApplicantListById(requestApplicantVO);
-    	
     	model.addAttribute("applicantList", applicantList);
     	model.addAttribute("search", requestApplicantVO);
     	
@@ -158,8 +164,7 @@ public class CampaignController {
     public boolean doUpdateAdptYnAction(RequestApplicantVO requestApplicantVO,
     									@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
     	requestApplicantVO.setUsrId(loginUser.getUsrId());
-    	System.out.println(requestApplicantVO);
-    	boolean update = this.campaignService.updateAdptYnBycmpnApplyId(requestApplicantVO);
+    	boolean update = this.campaignService.updateAdptYnByCmpnPstAdptId(requestApplicantVO);
     	
     	if (update) {
     		return true;
@@ -173,11 +178,55 @@ public class CampaignController {
     @GetMapping("/adv/adopt/{cmpnId}")
     public String readAdoptList(Model model, @PathVariable String cmpnId,
     		RequestApplicantVO requestApplicantVO) {
-    	requestApplicantVO.setCmpnId(cmpnId);
+    	requestApplicantVO.setListSize(10);
+    	requestApplicantVO.setPageCountInGroup(10);
+		requestApplicantVO.setCmpnId(cmpnId);
     	
     	ResponseAdoptListVO adoptList = this.campaignService.readResponseAdoptListByCmpnId(requestApplicantVO);
     	model.addAttribute("adoptList", adoptList);
-    	System.out.println(adoptList);
+    	model.addAttribute("search",requestApplicantVO);
     	return "campaign/adopt";
     }
+
+	@GetMapping("/adv/postapprove/{cmpnPstAdoptId}")
+    @ResponseBody
+    public boolean doUpdatePstSttsApproveAction(@PathVariable String cmpnPstAdoptId,
+    											@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
+    	RequestApplicantVO requestApplicantVO = new RequestApplicantVO();
+    	requestApplicantVO.setCmpnPstAdptId(cmpnPstAdoptId);
+    	requestApplicantVO.setUsrId(loginUser.getUsrId());
+    	boolean update = this.campaignService.updatePstSttsApproveByCmpnPstAdoptId(requestApplicantVO);
+    	
+    	if (update) {
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+    }
+
+	@PostMapping("/adv/deny/{cmpnPstAdptId}")
+	@ResponseBody
+	public boolean doCreateDenyAction(@PathVariable String cmpnPstAdptId,
+									  RequestDenyVO requestDenyVO,
+									  @SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
+		requestDenyVO.setCmpnPstAdptId(cmpnPstAdptId);
+		requestDenyVO.setAdvId(loginUser.getUsrId());
+		System.out.println("controller: " + requestDenyVO);
+		boolean insert = this.campaignService.createDenyByCmpnPstAdoptId(requestDenyVO);
+		
+		if (insert) {
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+	}
+	
+	@GetMapping("/adv/campaignwrite")
+	public String doCreateCampaignAction(Model model) {
+		ResponseCampaignwriteVO common = this.campaignService.createCampaign();
+		model.addAttribute("common", common);
+		return "campaign/campaignWrite";
+	}
 }
