@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,7 +19,6 @@ import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.file.dao.FileDao;
 import com.ktdsuniversity.edu.domain.file.util.MultipartFileHandler;
 import com.ktdsuniversity.edu.domain.file.vo.FileVO;
-import com.ktdsuniversity.edu.domain.user.controller.AdminUserController;
 import com.ktdsuniversity.edu.domain.user.dao.AdminUserDao;
 import com.ktdsuniversity.edu.domain.user.dao.BlogCategoryDao;
 import com.ktdsuniversity.edu.domain.user.service.AdminUserService;
@@ -39,7 +37,7 @@ import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 @Service
 public class AdminUserServiceImpl implements AdminUserService {
 
-	private static final Logger log = LoggerFactory.getLogger(AdminUserController.class);
+	private static final Logger log = LoggerFactory.getLogger(AdminUserServiceImpl.class);
 	
 	@Autowired
 	private AdminUserDao adminUserDao;
@@ -105,7 +103,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 	            				 .collect(Collectors.toList());
 	            info.setCheckedBlgCtg(checkedCategory);
 	            
-	            // System.out.println("기존 카테고리 " + info.getCheckedBlgCtg());
+	            // log.info("기존 카테고리 " + info.getCheckedBlgCtg());
 	        }
 	        
 			return info;
@@ -397,31 +395,27 @@ public class AdminUserServiceImpl implements AdminUserService {
 		
 		List<UserUpdateHistoryVO> historyList = new ArrayList<>();
 		String usrId = afterInfo.getUsrId();
-
-		// Objects
-		// 두 값이 같으면 !true ==> false 
-		// 두 값이 다르거나 null이 하나라도 있다면 !false ==> true
 		
 		// logId 비교
-		if(!Objects.equals(beforeInfo.getLogId(), afterInfo.getLogId())) {
+		if(!(afterInfo.getLogId().equals(beforeInfo.getLogId()))) {
 			historyList.add(createHistory(usrId, "LOG_ID", beforeInfo.getLogId(), afterInfo.getLogId(), adminId, updtRsn));
 		}
 		
 		// eml 비교
-		if(!Objects.equals(beforeInfo.getEml(), afterInfo.getEml())) {
+		if(!(afterInfo.getEml().equals(beforeInfo.getEml()))) {
 			historyList.add(createHistory(usrId, "EML", beforeInfo.getEml(), afterInfo.getEml(), adminId, updtRsn));
 		}
 		
 		// nm 비교
-		if(!Objects.equals(beforeInfo.getNm(), afterInfo.getNm())) {
+		if(!(afterInfo.getNm().equals(beforeInfo.getNm()))) {
 			historyList.add(createHistory(usrId, "NM", beforeInfo.getNm(), afterInfo.getNm(), adminId, updtRsn));
 		}
 		
 		// 광고주의 경우
-		if(afterInfo.getAutr().equals("1004")) {
+		if(beforeInfo.getAutr().equals("1004")) {
 			
 			// cmpny 비교
-			if(!Objects.equals(beforeInfo.getCmpny(), afterInfo.getCmpny())) {
+			if(!(afterInfo.getCmpny().equals(beforeInfo.getCmpny()))) {
 				historyList.add(createHistory(usrId, "CMPNY", beforeInfo.getCmpny(), afterInfo.getCmpny(), adminId, updtRsn));
 			}
 			
@@ -465,4 +459,34 @@ public class AdminUserServiceImpl implements AdminUserService {
 			throw new RuntimeException("Database error: " + message + " 작업 결과 0건");
 		}
 	}
+
+	@Transactional
+	@Override
+	public boolean updateBlogAddress(AdminUserModifyInfoVO adminUserModifyInfoVO) {
+		
+		if(adminUserModifyInfoVO.getIsBlogAddressChange()) {
+			
+			int updateCount = adminUserDao.updateBlogAddress(adminUserModifyInfoVO);
+			
+			UserUpdateHistoryVO updateHistory = new UserUpdateHistoryVO();
+			
+			updateHistory.setUsrId(adminUserModifyInfoVO.getUsrId());
+			updateHistory.setUpdtItem("BLG_ADDRS");
+			updateHistory.setBefUpdtCn(adminUserModifyInfoVO.getBefAddrs());
+			updateHistory.setAftUpdtCn(adminUserModifyInfoVO.getBlgAddrs());
+			updateHistory.setUpdtAdmin(adminUserModifyInfoVO.getAdminId());
+			updateHistory.setUpdtRsn("[블로그 수동 인증]");
+			updateCount = adminUserDao.insertHistoryToBlogAddress(updateHistory);
+			
+			updateHistory.setUpdtItem("RCNT_BLG_CRTFCTN_DT");
+			updateHistory.setBefUpdtCn(adminUserModifyInfoVO.getBefBlgCrtfctnDt());
+			updateCount = adminUserDao.insertHistoryToBlogAddress(updateHistory);
+			
+			return updateCount > 0;
+		}
+		else {
+			throw new IllegalArgumentException("error");
+		}
+	}
+
 }

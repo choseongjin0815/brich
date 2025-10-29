@@ -8,6 +8,7 @@
 <input type="hidden" id="usrId" value="${userInfo.usrId}"/>
 <input type="hidden" id="autr" value="${userInfo.autr}"/>
 <input type="hidden" id="flGrpId" value="${userInfo.flGrpId}"/>
+
 <tr>
 	<th>진행 중인 캠페인 수</th>
 	<td>${userInfo.cmpnProgressCnt}</td>

@@ -8,7 +8,7 @@
 		<title>회원 관리 - 리스트</title>
 		<script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
 		<script type="text/javascript" src="/js/user/admin_user_list.js"></script>
-		<link type="text/css" rel="stylesheet" href="/css/user/admin_user_list.css"/>
+		<link type="text/css" rel="stylesheet" href="/css/admin/admin_list.css"/>
 	</head>
 	<body>
 	   <jsp:include page="/WEB-INF/views/layout/menu.jsp">
@@ -186,17 +186,6 @@
 	               </tbody>
 		       </table>
 		       
-		    <jsp:include page="/WEB-INF/views/layout/paginator.jsp">
-	            <jsp:param value="${search.listSize}" name="listSize"/>
-	            <jsp:param value="${search.havePrevPageGroup}" name="havePrevPageGroup"/>
-	            <jsp:param value="${search.prevGroupStartPageNo}" name="prevGroupStartPageNo"/>
-	            <jsp:param value="${search.groupStartPageNo}" name="groupStartPageNo"/>
-	            <jsp:param value="${search.groupEndPageNo}" name="groupEndPageNo"/>
-	            <jsp:param value="${search.pageNo}" name="pageNo"/>
-	            <jsp:param value="${search.haveNextPageGroup}" name="haveNextPageGroup"/>
-	            <jsp:param value="${search.nextGroupStartPageNo}" name="nextGroupStartPageNo"/>
-	            <jsp:param value="${search.pageCount}" name="pageCount"/>
-            </jsp:include>
 		   </div>
 	   </div>
 	</body>

@@ -9,10 +9,10 @@
 		<title>회원 관리 - 정보 수정</title>
 		<script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
 		<script type="text/javascript" src="/js/user/admin_user_info_modify.js"></script>
-		<link type="text/css" rel="stylesheet" href="/css/user/admin_user_detail.css"/>
+		<link type="text/css" rel="stylesheet" href="/css/admin/admin_detail.css"/>
 	</head>
 	<body>
-	    <jsp:include page="../layout/menu.jsp">
+	    <jsp:include page="/WEB-INF/views/layout/menu.jsp">
            <jsp:param name='css' value="
         <link type='text/css' rel='stylesheet' href='/css/campaignmain.css' />
             " />

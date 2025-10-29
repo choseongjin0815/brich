@@ -112,15 +112,39 @@ public class AdminUserController {
 		return "/user/admin_user_info_modify";
 	}
 	
+	/**
+	 * 회원 관리 - 회원 정보 수정(UPDATE/INSERT) 처리
+	 * @param usrId
+	 * @param adminUserModifyInfoVO
+	 * @param newFiles
+	 * @return
+	 */
 	@ResponseBody
 	@PostMapping("/admin/user_modify/{usrId}")
 	public AjaxResponse doAdminUserInfoModifyAction(@PathVariable String usrId, 
 													@ModelAttribute AdminUserModifyInfoVO adminUserModifyInfoVO,
 													@RequestParam(name="file", required=false) List<MultipartFile> newFiles) {
 		
-		log.info("호출 전");
 		boolean isSuccess = this.adminUserService.updateUserInfo(adminUserModifyInfoVO, newFiles);
-		log.info("호출 후");
+		
+		AjaxResponse ajaxResponse = new AjaxResponse();
+		ajaxResponse.setBody(isSuccess);
+		
+		return ajaxResponse;
+	}
+	
+	/**
+	 * 회원 관리 - 블로그 주소 수동 인증
+	 * @param usrId
+	 * @param adminUserModifyInfoVO
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping("/admin/blog_passivity_certify/{usrId}")
+	public AjaxResponse doAdminBlogAddressCertifyAction(@PathVariable String usrId, 
+														@RequestBody AdminUserModifyInfoVO adminUserModifyInfoVO) {
+		
+		boolean isSuccess = this.adminUserService.updateBlogAddress(adminUserModifyInfoVO);
 		
 		AjaxResponse ajaxResponse = new AjaxResponse();
 		ajaxResponse.setBody(isSuccess);

@@ -16,6 +16,10 @@ public class AdminUserModifyInfoVO {
 	
 	// 블로거 전용 블로그 카테고리 테이블 데이터
     private List<String> usrBlgCtg;
+	private String befAddrs;
+	private String blgAddrs;
+	private String befBlgCrtfctnDt;
+	private boolean isBlogAddressChange;
 	
 	// 광고주 전용 데이터
 	private String cmpny;
@@ -67,6 +71,33 @@ public class AdminUserModifyInfoVO {
 	}
 	public void setUsrBlgCtg(List<String> usrBlgCtg) {
 		this.usrBlgCtg = usrBlgCtg;
+	}
+	public String getBefAddrs() {
+		return this.befAddrs;
+	}
+	public void setBefAddrs(String befAddrs) {
+		this.befAddrs = befAddrs;
+	}
+	public String getBlgAddrs() {
+		return this.blgAddrs;
+	}
+	public void setBlgAddrs(String blgAddrs) {
+		this.blgAddrs = blgAddrs;
+	}
+	public boolean getIsBlogAddressChange() {
+		return this.isBlogAddressChange;
+	}
+	public void setIsBlogAddressChange(boolean isBlogAddressChange) {
+		this.isBlogAddressChange = isBlogAddressChange;
+	}
+	public void setBlogAddressChange(boolean isBlogAddressChange) {
+		this.isBlogAddressChange = isBlogAddressChange;
+	}
+	public String getBefBlgCrtfctnDt() {
+		return this.befBlgCrtfctnDt;
+	}
+	public void setBefBlgCrtfctnDt(String befBlgCrtfctnDt) {
+		this.befBlgCrtfctnDt = befBlgCrtfctnDt;
 	}
 	public String getCmpny() {
 		return this.cmpny;

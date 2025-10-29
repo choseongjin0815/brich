@@ -26,7 +26,7 @@
 	                   
 	                       <%-- 기존에 첨부되어 있던 파일들 --%>
 	                       <span class="file-item">
-		                       [${fileList.flNm}]
+		                       ${fileList.flNm} 
 		                       
 			                   <%-- 기존에 첨부되어 있던 파일 삭제 버튼 --%>
 			                   <button type="button" class="file-remove-btn" data-file-id="${fileList.flId}">X</button>
@@ -43,7 +43,7 @@
 	                <div id="newAddedFileList"></div>
 	                
 	                <%-- 새 파일 첨부 버튼 --%>
-	                <button type="button" id="addNewFileBtn" class="add-new-file-btn">+ 새 파일 추가</button>
+	                <button type="button" id="addNewFileBtn" class="add-new-file-btn">첨부 파일 +</button>
 	                
 	                <%-- 새 파일 첨부 버튼으로 추가되는 첨부 파일을 담아주는 영역 --%>
 	                <div id="fileInputList" style="display: none;"></div>

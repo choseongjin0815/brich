@@ -126,4 +126,14 @@ public class AdminUserDaoImpl extends SqlSessionDaoSupport implements AdminUserD
 		return super.getSqlSession().insert(this.NAME_SPACE + "insertUpdateHistory", historyList);
 	}
 
+	@Override
+	public int updateBlogAddress(AdminUserModifyInfoVO adminUserModifyInfoVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateBlogAddress", adminUserModifyInfoVO);
+	}
+
+	@Override
+	public int insertHistoryToBlogAddress(UserUpdateHistoryVO updateHistory) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertHistoryToBlogAddress", updateHistory);
+	}
+
 }

@@ -54,4 +54,8 @@ public interface AdminUserDao {
 
 	int insertUpdateHistory(List<UserUpdateHistoryVO> historyList);
 
+	int updateBlogAddress(AdminUserModifyInfoVO adminUserModifyInfoVO);
+
+	int insertHistoryToBlogAddress(UserUpdateHistoryVO updateHistory);
+
 }

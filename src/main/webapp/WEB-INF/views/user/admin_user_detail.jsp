@@ -10,7 +10,7 @@
         <c:if test="${classType eq 'AdminAdvertiserDetailVO' && userInfo.autr eq '1007'}">
             <script type="text/javascript" src="/js/user/admin_advertiser_regist_process.js"></script>
         </c:if>
-        <link type="text/css" rel="stylesheet" href="/css/user/admin_user_detail.css"/>
+        <link type="text/css" rel="stylesheet" href="/css/admin/admin_detail.css"/>
     </head>
     <body>
         <jsp:include page="/WEB-INF/views/layout/menu.jsp">
@@ -25,6 +25,7 @@
 		      <input type="hidden" id="login_usrId" value="${sessionScope.__LOGIN_USER__.usrId}"/>
 		      <input type="hidden" id="usrId" value="${userInfo.usrId}"/>
 		      <input type="hidden" id="autr" value="${userInfo.autr}"/>
+		      <input type="hidden" id="rcntBlgCrtfctnDt" value="${userInfo.rcntBlgCrtfctnDt}"/>
 		   <table>
 		      <c:choose>
 		        <c:when test="${not empty userInfo}">
