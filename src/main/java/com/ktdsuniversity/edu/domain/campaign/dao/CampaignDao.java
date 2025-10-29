@@ -56,5 +56,7 @@ public interface CampaignDao {
 
 	List<ResponseCampaignVO> selectMyFavCampaignByBlgId(Map<String, Object> param);
 
+	int insertApplyCampaign(Map<String, String> param);
+
 
 }

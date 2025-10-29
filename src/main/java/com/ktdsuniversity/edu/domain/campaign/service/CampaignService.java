@@ -32,4 +32,6 @@ public interface CampaignService {
 
 	ResponseCampaignListVO readFavMyCampaignByBlgId(String blgId);
 
+	int applyCampaign(String campaignId, String blgId);
+
 }

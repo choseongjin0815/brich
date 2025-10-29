@@ -508,6 +508,36 @@
 				      #{statuses}
 				    </foreach>                   
     </select>
+        
+    <insert id="applyCampaign"
+            parameterType="map">
+			INSERT INTO CMPN_PST_ADPT
+			( CMPN_PST_ADPT_ID
+			, BLG_USR_ID
+			, CMPN_ID
+			, PST_URL
+			, PST_STTS_CD
+			, PST_DDLN
+			, PST_SBMT_DT
+			, PST_TITLE
+			, CRT_DT
+			, CRTR
+			, UPDT_DT
+			, MTTR)
+			VALUES
+			( 'CMPN-PST-ADPT-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_PST_DA_PK.NEXTVAL, 6, 0)
+			, #{blgId}
+			, #{campaignId}
+			, NULL
+			, NULL
+			, NULL
+			, NULL
+			, NULL
+			, SYSDATE
+			, #{blgId}
+			, SYSDATE
+			, #{blgId} )    
+    </insert>
 	
 </mapper>
 

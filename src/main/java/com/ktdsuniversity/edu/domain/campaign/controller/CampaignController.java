@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
@@ -18,6 +19,7 @@ import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListV
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
+import com.ktdsuniversity.edu.global.common.AjaxResponse;
 
 @Controller
 public class CampaignController {
@@ -108,6 +110,25 @@ public class CampaignController {
     	String blgId = loginUser.getUsrId();
     	boolean update = campaignService.favCampaignDo(blgId, campaignId);
     	return "redirect:/campaignmain";
+    }
+    
+    /**
+     * 캠페인 신청하기
+     * @param loginUser
+     * @param campaignId
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/blgr/apply/{campaignId}")
+    public AjaxResponse applyCampaign(@SessionAttribute(value = "__LOGIN_USER__") UserVO loginUser, 
+    						@PathVariable String campaignId) {
+    	String blgId = loginUser.getUsrId();
+    	int count = this.campaignService.applyCampaign(campaignId, blgId);
+    	
+    	AjaxResponse ajaxResponse = new AjaxResponse();
+    	ajaxResponse.setBody(count);
+    	
+    	return ajaxResponse;
     }
     
 

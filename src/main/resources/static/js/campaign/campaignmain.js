@@ -7,6 +7,7 @@ $().ready(function() {
     var hereCategory = new URLSearchParams(window.location.search).get('category') || '';
     var campaignMainBlock = $(".campaign-main-block");
     var here = location.pathname.replace(/^\/+|\/+$/g, '').split('/');    
+    var applyBlg = $(".apply-blg");
     
     if (here.includes('campaignmain')) {
       $('.campaign-status').removeClass('display-none');
@@ -51,5 +52,13 @@ $().ready(function() {
     campaignMainBlock.on("click", function() {
         var cmpnId = $(this).data("cmpn-id");
         window.location.href = "/campaigndetail/"+ cmpnId ;
+    })
+    applyBlg.on("click", function(){
+        var campaignId = $(".apply-blg").data("campaign-id");
+        $.post("/blgr/apply/" + campaignId ,function() {
+            alert("신청완료!");
+            $(".apply-blg").addClass('display-none')
+            $(".apply-cancel-blg").removeClass('display-none')
+        })
     })
 });

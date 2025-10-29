@@ -25,4 +25,12 @@
                     </div>
                   </div>
                   <div class="right-bar-bottom">2</div>
-                  <div class="right-bar-bottom">버튼</div>
+                  
+                  <!-- 신청 버튼 영역 -->
+                  <c:if test="${sessionScope.__LOGIN_USER__ ne null 
+			               and (sessionScope.__LOGIN_USER__.autr == 1002 
+			                or  sessionScope.__LOGIN_USER__.autr == 1003)}">
+                    
+                        <div class="right-bar-bottom apply-blg" data-campaign-id="${detail.cmpnId }">신청하기</div>
+                        <div class="right-bar-bottom apply-cancel-blg display-none" data-campaign-id="${detail.cmpnId }">신청취소</div>
+                  </c:if>

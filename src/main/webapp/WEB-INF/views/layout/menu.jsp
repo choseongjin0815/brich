@@ -76,9 +76,8 @@ pageEncoding="UTF-8"%>
                     <li><a href="">메세지</a></li>
                   </ul>
                 </li>
-                
-                
               </c:if>
+              
               <c:if test="${sessionScope.__LOGIN_USER__ ne null 
                   and sessionScope.__LOGIN_USER__.autr == 1004}">
                 <li class="advertiser-menu">

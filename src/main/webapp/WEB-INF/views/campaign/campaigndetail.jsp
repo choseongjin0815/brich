@@ -6,6 +6,9 @@
     <jsp:param name='css' value="
         <link type='text/css' rel='stylesheet' href='/css/campaignmain.css' />
     " />
+    <jsp:param name="scripts" value="
+        <script type='text/javascript' src='/js/campaign/campaignmain.js'></script>
+    " />
 </jsp:include>
         <div class="main">
           <div class="campaign-detail-wrapper">
@@ -76,12 +79,13 @@
 	            <div class="cmpn-rightbar-area">
 	              <div class="right-bar">
 	              
-	              <!-- 여기 스티키바 자를부분 -->
-	              
-	              
-					<jsp:include page="/WEB-INF/views/campaign/campaigndetailrightbar.jsp"/>
-	              
-	              <!-- 여기 스티키바 자를부분 -->
+	              <!-- 오른쪽 창 -->
+					<jsp:include page="/WEB-INF/views/campaign/campaigndetailrightbar.jsp">
+					    <jsp:param name="scripts" value="
+					        <script type='text/javascript' src='/js/campaign/campaignmain.js'></script>
+					    " />					   
+	                </jsp:include>
+	              <!-- 오른쪽 창 -->
 	              
 	              </div>
 	            </div>

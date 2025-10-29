@@ -1,6 +1,5 @@
 package com.ktdsuniversity.edu.domain.campaign.service.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -224,9 +223,40 @@ public class CampaignServiceImpl implements CampaignService {
 		
 		return updateCount > 0 ;
 	}
-
-
-
-
-
+	
+	/**
+	 * 캠페인 신청하기
+	 */
+	@Override
+	public int applyCampaign(String campaignId, String blgId) {
+		
+		Map<String, String> param = new HashMap<>();
+		param.put("blgId",blgId);
+		param.put("campaignId",campaignId);
+		
+		//캠페인 모집중 여부 확인	
+		ResponseCampaignVO detail = campaignDao.selectCampaignDetailById(campaignId);
+		if(detail.getSttsCd().equals("2005")) {
+			// 캠페인 신청 이력 여부 확인
+				// 없다면 캠페인 생성 (insert)
+			
+				int count = this.campaignDao.insertApplyCampaign(param);
+			
+				// 있다면 신청상태(삭제여부 확인)
+					// 신청
+					// 신청취소
+		} else {
+			return 0;
+		}
+			
+		
+	}
 }
+
+
+
+
+
+
+
+
