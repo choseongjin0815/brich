@@ -47,11 +47,13 @@ $().ready(function() {
         alert("새 블로그 주소를 입력해 주세요.");
         $(inputBlogAddr).prop("readonly", false);
         
-        // 2. 기존 버튼은 hide, 취소/인증 완료 버튼 show, 칸은 비워두기
+        // 2. 기존 버튼은 hide
+        //    취소/인증 완료 버튼 show, 칸은 비워두기 + focus
         activeBtn.hide();
         $(".crtctn-cancel-btn").show();
         $(".crtctn-save-btn").show();
         inputBlogAddr.val("");
+        inputBlogAddr.focus();
     });
     
     // 3-1. 취소 클릭 시 버튼/readonly/value 원래대로 되돌리기
@@ -65,6 +67,8 @@ $().ready(function() {
         $(".crtctn-save-btn").hide();
     });
     
+    var isBlogAddressChange = false;
+    
     // 3-2. 인증 완료 클릭 시 로그인 된 관리자 ID와 결과를 보여주며 값 업데이트
     // 값 업데이트 시 블로그 주소, 최근 인증일, 수정일 총 세 가지 정보 업데이트 
     $(".crtctn-save-btn").on("click", function() {
@@ -72,31 +76,52 @@ $().ready(function() {
         // 새로 입력한 값 가져오기
         var newBlogAddr = inputBlogAddr.val();
         
+        // 이전 블로그 인증 일시 가져오기
+        var befBlgCrtfctnDt = $("#rcntBlgCrtfctnDt").val();
+        
         // 비어있으면...
-        if (newBlogAddr === "") {
-            alert("블로그 주소를 입력해 주세요.");
-            return;
+        if (newBlogAddr.trim() === "") {
+            
+            if(!confirm("블로그 주소가 비어있습니다.\n이대로 진행하시겠습니까?")) {
+                return false;
+            }
+            else {
+                // 예
+            }
         }
+        else if(currentBlogAddr === newBlogAddr) {
+            
+            alert("이전과 같은 값으로 변경할 수 없습니다.\n다시 입력해 주세요.");
+            
+            inputBlogAddr.val("");
+            inputBlogAddr.focus();
+            
+            return false;
+        }
+        
+        isBlogAddressChange = true;
         
         // Ajax로 보낼 객체 생성
         var requestData = {
             usrId: usrId, 
-            blgAddrs: newBlogAddr, 
+            isBlogAddressChange: isBlogAddressChange,
+            blgAddrs: newBlogAddr,
+            befAddrs: currentBlogAddr, 
+            befBlgCrtfctnDt: befBlgCrtfctnDt,
             adminId: sessionUserId
         };
         
         $.ajax({
-            url: "/admin/blog_passivity_certify/" + usrId,
+            url: "/admin/blog_passivity_certify/" + usrId, 
             method: "POST", 
             contentType: "application/json", 
             data: JSON.stringify(requestData), 
-            // TODO
+            
             success: function(response) {
                 alert("블로그 수동 인증 완료" + "\n수동 인증 처리자: " + sessionUserId + "\n새 블로그 주소: " + newBlogAddr);
                 
                 // 복원
                 $(inputBlogAddr).prop("readonly", true);
-                inputBlogAddr.val(currentBlogAddr);
                 
                 // 버튼 복원
                 activeBtn.show();
@@ -131,19 +156,19 @@ $().ready(function() {
             
             // 두 번 뜨는데 일단 넣음
             if(!confirm("기존 파일을 삭제하시겠습니까?")) {
-            } else {
-                // 기존 파일 요소 제거 (<span> 태그)
-                $(this).closest(".file-item").remove();
-
-                // 삭제할 파일의 flId를 담고 있는 input 태그 또한 제거
-                $("input[name='existFileIds'][value='"+ deleteFileId +"']").remove();
-
-                // 삭제할 flId를 hidden 값으로 추가 (서버에 보낼 때 필요)
-                $(FILE_CONTAINER).append("<input type='hidden' name='deleteFileIds' value='" + deleteFileId + "'/>");
-
                 return false;
             }
             
+            // 기존 파일 요소 제거 (<span> 태그)
+            $(this).closest(".file-item").remove();
+
+            // 삭제할 파일의 flId를 담고 있는 input 태그 또한 제거
+            $("input[name='existFileIds'][value='"+ deleteFileId +"']").remove();
+
+            // 삭제할 flId를 hidden 값으로 추가 (서버에 보낼 때 필요)
+            $(FILE_CONTAINER).append("<input type='hidden' name='deleteFileIds' value='" + deleteFileId + "'/>");
+            
+            return false;
         }
         // 클릭한 버튼의 data가 input-id일 경우 (새로 추가된 파일인 경우)
         else if(clickedBtn.data("input-id")) {
@@ -303,7 +328,7 @@ $().ready(function() {
             contentType: false, 
             complete: function() {
                 // 요청 완료 시 버튼 다시 활성화 (페이지 이동 직전에만)
-                // location.href가 있으므로 여기서는 비활성화 해제 로직을 제거하는 것이 안전합니다.
+                // location.href 있으니까 여기서 비활성화 해제 로직 제거
             },
             success: function(response) {
                 alert("회원 정보 수정 완료: " + response);

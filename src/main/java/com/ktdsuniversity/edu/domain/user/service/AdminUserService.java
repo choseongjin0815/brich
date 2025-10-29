@@ -23,4 +23,6 @@ public interface AdminUserService {
 
 	boolean updateUserInfo(AdminUserModifyInfoVO adminUserModifyInfoVO, List<MultipartFile> newFiles);
 
+	boolean updateBlogAddress(AdminUserModifyInfoVO adminUserModifyInfoVO);
+
 }

@@ -497,4 +497,52 @@
                           ) T
     </insert>
     
+    <!-- 블로그 수동 인증 (UPDATE) -->
+    <update id="updateBlogAddress" parameterType="com.ktdsuniversity.edu.domain.user.vo.AdminUserModifyInfoVO">
+        UPDATE USR
+          SET BLG_ADDRS = #{blgAddrs}
+            , RCNT_BLG_CRTFCTN_DT = SYSDATE
+            , UPDT_DT = SYSDATE
+            , MTTR = #{adminId}
+        WHERE DLT_YN = 'N'
+          AND USR_ID = #{usrId}
+    </update>
+    
+    <!-- 블로그 수동 인증 -> 수정 이력 테이블에 INSERT -->
+    <insert id="insertHistoryToBlogAddress" parameterType="com.ktdsuniversity.edu.domain.user.vo.UserUpdateHistoryVO">
+	    <selectKey keyProperty="usrUpdaHistId" order="BEFORE" resultType="string">
+	        SELECT 'USR_UPDT_HIST-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_USR_UPDT_HIST_PK.NEXTVAL, 6, '0')
+	          FROM DUAL
+	    </selectKey>
+        INSERT INTO USR_UPDT_HIST (USR_UPDA_HIST_ID
+                                 , USR_ID
+                                 , UPDT_ITEM
+                                 , BEF_UPDT_CN
+                                 , AFT_UPDT_CN
+                                 , UPDT_ADMIN
+                                 , UPDT_RSN
+                                 , CRT_DT
+                                 , CRTR
+                                 , UPDT_DT
+                                 , MTTR
+                                 , DLT_YN)
+                           VALUES (#{usrUpdaHistId}
+                                 , #{usrId}
+                                 , #{updtItem}
+                                 , #{befUpdtCn}
+                                 <if test="updtItem.equals('BLG_ADDRS')">
+                                 , #{aftUpdtCn}
+                                 </if>
+                                 <if test="updtItem.equals('RCNT_BLG_CRTFCTN_DT')">
+                                 , TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS')
+                                 </if>
+                                 , #{updtAdmin}
+                                 , #{updtRsn}
+                                 , SYSDATE
+                                 , #{updtAdmin}
+                                 , SYSDATE
+                                 , #{updtAdmin}
+                                 , 'N')
+    </insert>
+    
 </mapper>
