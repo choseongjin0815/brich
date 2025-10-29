@@ -1,7 +1,6 @@
 .main {
   width: 100vh;
   flex-grow: 1;
-
   * {
     box-sizing: border-box;
     margin: 0;
@@ -57,7 +56,7 @@
     }
   }
   
-  & > .campaign-main-list-area{
+  .campaign-main-list-area{
     padding-top : 25px;
     & > .campaign-main-block:visited{
         color : #333;
@@ -72,12 +71,28 @@
             width:320px;
             background-color : #DDE1FF;
             border-radius : 15px;
+            & > .love-Y {
+                width:35px;
+                height:35px;
+                background-image : url("/img/heartOn.png");
+                background-repeat: no-repeat;
+                background-size: cover;
+                z-index :99;
+            }
+            & > .love-N {
+                width:40px;
+                height:40px;
+                background-image : url("/img/heartOff.png");
+                background-repeat: no-repeat;
+                background-size: cover;
+                z-index :99;            
+            }
         }
         
         & > .campaign-one-offrcn {
             font-size:14px;
         }
-        & >.campaign-one-adptcnt{
+        .campaign-one-adptcnt{
             font-size:14px;
         }
     }
@@ -107,7 +122,6 @@
     & > .cmpn-bottom-area {
       display: flex;
       padding : 0 25px 0 25px;
-      height: 100px;
       & > .cmpn-profile-area{
         border : 1px solid black;
         border-radius : 5px;
@@ -133,7 +147,6 @@
       
       & > .cmpn-content-area {
         flex-grow: 1;
-        height: 12000px;
         font-size: 24px;
         width: 1020px;
 
@@ -166,7 +179,7 @@
           width: 330px;
           border-radius: 10px;
           position: sticky;
-          top: 260px;
+          top: 270px;
           right: 60px;
 
           & > .right-bar-top {
@@ -215,6 +228,36 @@
   .red-24px{
     color: red;
   }
+   .campaign-now-status-2005, .campaign-now-status-2006{
+    color : #AEB400;
+    font-weight : bold;
+    padding-right:8px;
+   }  
+   .campaign-pst-status-6001{
+    color : blue;
+    font-weight : bold;
+    padding-right:8px;
+   }  
+   .campaign-pst-status-6002{
+    color : #AEB400;
+    font-weight : bold;
+    padding-right:8px;
+   }  
+   .campaign-pst-status-6003{
+    color : red;
+    font-weight : bold;
+    padding-right:8px;
+   }  
+   .campaign-pst-status-6004{
+    color : #00A906;
+    font-weight : bold;
+    padding-right:8px;
+   }
+   .campaign-now-status-2009{
+    color : gray;
+    font-weight : bold;
+    padding-right:8px;   
+   }
 }
 
 .side-padding {

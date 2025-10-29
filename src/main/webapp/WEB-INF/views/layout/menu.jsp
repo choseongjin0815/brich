@@ -28,6 +28,7 @@ pageEncoding="UTF-8"%>
         		<div class="brich-title height-center">
         			<a href="/campaignmain">Brich</a>
         		</div>
+        		<a href="/login"> 로그인 돌아가기</a>
         	</div>
         	<div class="top-menu-right flex-row">
 		        <div class="top-menu-search-area">
@@ -68,19 +69,18 @@ pageEncoding="UTF-8"%>
                         <div class="caret-up display-none"></div>
                         </div> 
 	                      <ul class="my-sub-menu display-none">
-	                        <li class="menu-my-submitted-campaign-selected"><a href="/submittedmycampaign">신청한 캠페인</a></li>
-	                        <li><a href="">진행중 캠페인</a></li>
-	                        <li><a href="">마감된 캠페인</a></li>
-	                        <li class="last-item"><a href="">관심 캠페인</a></li>
+	                        <li class="menu-my-submitted-campaign-selected"><a href="/blgr/submittedmycampaign">신청한 캠페인</a></li>
+	                        <li class="menu-my-ongoing-campaign-selected"><a href="/blgr/campaignongoing">진행중 캠페인</a></li>
+	                        <li class="menu-my-closed-campaign-selected"><a href="/blgr/closedcampaign">마감된 캠페인</a></li>
+	                        <li class="last-item menu-my-fav-campaign-selected"><a href="/blgr/favcampaign">관심 캠페인</a></li>
 	                      </ul>
 	                </li>
                     <li><a href="/blog/${sessionScope.__LOGIN_USER__.usrId}/manage">블로그 관리</a></li>
                     <li><a href="/blgr/chat/rooms">메세지</a></li>
                   </ul>
                 </li>
-                
-                
               </c:if>
+              
               <c:if test="${sessionScope.__LOGIN_USER__ ne null 
                   and sessionScope.__LOGIN_USER__.autr == 1004}">
                 <li class="advertiser-menu">
@@ -110,10 +110,9 @@ pageEncoding="UTF-8"%>
                   </ul>
                 </li>
               </c:if>
-                <li class="others-menu">
               <c:if test="${sessionScope.__LOGIN_USER__ ne null 
                   and sessionScope.__LOGIN_USER__.autr != 1001}">
-                <li>
+                <li class="others-menu">
                   <span>OTHERS</span>
                   <ul class="menu-content">
                     <li><a href="">계정 관리</a></li>

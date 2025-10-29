@@ -6,6 +6,9 @@
     <jsp:param name='css' value="
         <link type='text/css' rel='stylesheet' href='/css/campaignmain.css' />
     " />
+    <jsp:param name="scripts" value="
+        <script type='text/javascript' src='/js/campaign/campaignmain.js'></script>
+    " />
 </jsp:include>
         <div class="main">
           <div class="campaign-detail-wrapper">
@@ -55,40 +58,34 @@
 	                  </li>
 					</ul>
                     <div>지도</div>
+                    <div>aaaaaaaaaaa</div>
+                    <div>aaaaaaaaaaa</div>
+                    <div>aaaaaaaaaaa</div>
+                    <div>aaaaaaaaaaa</div>
+                    <div>aaaaaaaaaaa</div>
+                    <div>aaaaaaaaaaa</div>
+                    <div>aaaaaaaaaaa</div>
+                    <div>aaaaaaaaaaa</div>
+                    <div>aaaaaaaaaaa</div>
+                    <div>aaaaaaaaaaa</div>
+                    <div>aaaaaaaaaaa</div>
+                    <div>aaaaaaaaaaa</div>
+                    <div>aaaaaaaaaaa</div>
+                    <div>aaaaaaaaaaa</div>
+                    <div>aaaaaaaaaaa</div>
+                    <div>aaaaaaaaaaa</div>
+                    <div>aaaaaaaaaaa</div>
 	            </div>
 	            <div class="cmpn-rightbar-area">
 	              <div class="right-bar">
 	              
-	              <!-- 여기 스티키바 자를부분 -->
-	              
-	              <div class="right-bar-top">
-					<div class="right-bor-top-wrapper">
-						<ul class="right-bar-detail-table">
-						  <li>
-						    <label for="">캠페인 신청기간</label>
-						    <div>${detail.rcrtStrtDt } ~ ${detail.pstEndDt }</div>
-						  </li>
-						  <li>
-						    <label for="">선정자 발표일</label>
-						    <div>몇일할껀지??</div>
-						  </li>
-						  <li>
-						    <label for="">캠페인 종료일</label>
-						    <div>${detail.cmpnEndDt }</div>
-						  </li>
-						  <li>
-						    <label for="">신청</label>
-						    <div>${detail.adptCnt } / ${detail.rcrtPrsnn }</div>
-						  </li>
-						</ul>
-					</div>
-				  </div>
-				  <div class="right-bar-bottom">2</div>
-				  <div class="right-bar-bottom">버튼</div>
-
-	              
-	              
-	              <!-- 여기 스티키바 자를부분 -->
+	              <!-- 오른쪽 창 -->
+					<jsp:include page="/WEB-INF/views/campaign/campaigndetailrightbar.jsp">
+					    <jsp:param name="scripts" value="
+					        <script type='text/javascript' src='/js/campaign/campaignmain.js'></script>
+					    " />					   
+	                </jsp:include>
+	              <!-- 오른쪽 창 -->
 	              
 	              </div>
 	            </div>

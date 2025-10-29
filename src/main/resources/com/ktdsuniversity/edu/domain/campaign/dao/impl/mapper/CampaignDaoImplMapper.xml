@@ -375,13 +375,13 @@ ORDER BY RCRT_END_DT ASC
                <collection property="area"
                            javaType="list"
                            ofType="java.lang.String">
+                           <result property="area" column="AREA"/>
                </collection>
     </resultMap>
     
     <select id="selectCampaignListCategoryAndSortBy"
             resultMap="RequestCampaignVOMap"
             parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO">
-            
 			SELECT CMPN.CMPN_ID 
 			     , CMPN.OFFR_CN 
 			     , CMPN.RCRT_PRSNN 
@@ -392,6 +392,14 @@ ORDER BY RCRT_END_DT ASC
 			     , CMPN.RCRT_END_DT
 			     , PARCD.CD_NM      AS PARENT_AREA  
 			     , ARCD.CD_NM       AS AREA
+                 , CASE WHEN EXISTS (
+                                     SELECT 1
+                                       FROM FAV_CMPN FC
+                                      WHERE FC.BLG_USR_ID = #{loginId} 
+                                        AND FC.CMPN_ID    = CMPN.CMPN_ID
+                                        AND FC.DLT_YN     = 'N'
+                       ) THEN 'Y' ELSE 'N'
+                    END                  AS FAVYN			     
 			  FROM CMPN CMPN 
 			  LEFT JOIN ( SELECT FAV.CMPN_ID  
 			                   , COUNT(FAV.CMPN_ID) AS LIKE_CNT
@@ -466,6 +474,176 @@ ORDER BY RCRT_END_DT ASC
 			  FROM CM_CD
 			 WHERE CD_ID = #{_parameter} 
 	</select>
+	
+	
+	<select id="selectMyCampaignByBlgId"
+	        parameterType="map"
+	        resultMap="RequestCampaignVOMap">
+			SELECT U.USR_ID                               
+			     , ADPT.CMPN_ID
+			     , CMPN.CMPN_TITLE 
+			     , CMPN.OFFR_CN 
+			     , CMPN.RCRT_PRSNN
+			     , CMPN.STTS_CD 
+			     , ARCD.CD_NM                              AS AREA
+			     , PARCD.CD_NM                             AS PARENT_AREA   
+			     , NVL(ADPT_CNT.CNT, 0)                    AS ADPT_CNT
+			     , CASE WHEN FC.CMPN_ID IS NULL THEN 'N'
+			            ELSE 'Y'
+			       END                                     AS FAV_YN
+			     , ADPT.PST_STTS_CD       
+			  FROM USR U
+			 INNER JOIN CMPN_PST_ADPT ADPT
+			    ON U.USR_ID = ADPT.BLG_USR_ID
+			   AND ADPT.DLT_YN = 'N'
+			 INNER JOIN CMPN CMPN
+			    ON CMPN.CMPN_ID = ADPT.CMPN_ID
+			   AND ADPT.DLT_YN = 'N'
+			  LEFT JOIN (SELECT CMPN_ID
+			                  , COUNT(CMPN_ID) AS CNT
+			               FROM CMPN_PST_ADPT
+			              WHERE ADPT_YN = 'Y'
+			                AND DLT_YN  = 'N'
+			              GROUP BY CMPN_ID
+			             ) ADPT_CNT
+			    ON ADPT_CNT.CMPN_ID = ADPT.CMPN_ID
+			  LEFT JOIN FAV_CMPN FC
+			    ON FC.BLG_USR_ID = U.USR_ID
+			   AND FC.CMPN_ID    = ADPT.CMPN_ID
+			   AND FC.DLT_YN     = 'N'
+			  LEFT JOIN CMPN_AR CMPNAR
+			    ON CMPN.CMPN_ID = CMPNAR.CMPN_ID 
+			  LEFT JOIN AR_CD ARCD
+			    ON CMPNAR.AR_CD = ARCD.CD_ID
+			  LEFT JOIN AR_CD PARCD
+			    ON PARCD.CD_ID = ARCD.PRNT_CD_ID   
+			 WHERE U.USR_ID    = #{blgId}
+			   AND ADPT.DLT_YN = 'N'
+			  <if test="statuses != null and statuses.size() > 0">
+			    AND CMPN.STTS_CD IN
+			    <foreach collection="statuses" item="statuses" open="(" separator="," close=")">
+			      #{statuses}
+			    </foreach>
+			  </if>
+	</select>
+	
+    <select id="selectFavCamapignExists"
+            parameterType="map"
+            resultType="string">
+			SELECT CASE 
+			         WHEN EXISTS (SELECT 1
+			                        FROM FAV_CMPN
+			                       WHERE BLG_USR_ID = #{blgId}
+			                         AND CMPN_ID = #{campaignId})
+			         THEN 1 ELSE 0 
+			       END AS CNT
+			FROM DUAL
+    </select>
+    
+    <insert id="insertFavCamapign"
+            parameterType="map">
+			INSERT INTO FAV_CMPN 
+			VALUES 
+			(#{blgId}
+			,#{campaignId}
+			,SYSDATE
+			,#{blgId}
+			,SYSDATE 
+			,#{blgId}
+			,'N')
+    </insert>
+    
+    <select id="selectFavDltYn"
+            parameterType="map"
+            resultType="string">
+			SELECT DLT_YN
+			  FROM FAV_CMPN
+			 WHERE BLG_USR_ID = #{blgId}
+			   AND CMPN_ID = #{campaignId}
+    </select>
+
+    <update id="updateFavCamapignOn"
+            parameterType="map">
+			UPDATE FAV_CMPN
+			   SET DLT_YN = 'N'
+			 WHERE BLG_USR_ID = #{blgId}
+			   AND CMPN_ID =#{campaignId}    
+    </update>
+
+    <update id="updateFavCamapignOff"
+            parameterType="map">
+			UPDATE FAV_CMPN
+			   SET DLT_YN = 'Y'
+			 WHERE BLG_USR_ID = #{blgId}
+			   AND CMPN_ID =#{campaignId}
+    </update>    
+	
+    <select id="selectMyFavCampaignByBlgId"
+            parameterType="map"
+            resultMap="RequestCampaignVOMap">
+            SELECT CMPN.CMPN_ID
+                 , CMPN.CMPN_TITLE 
+                 , CMPN.OFFR_CN 
+                 , CMPN.RCRT_PRSNN
+                 , CMPN.STTS_CD 
+                 , ARCD.CD_NM                              AS AREA
+                 , PARCD.CD_NM                             AS PARENT_AREA   
+                 , NVL(ADPT_CNT.CNT, 0)                    AS ADPT_CNT
+              FROM CMPN CMPN
+              LEFT JOIN CMPN_AR CMPNAR
+                ON CMPN.CMPN_ID = CMPNAR.CMPN_ID 
+              LEFT JOIN AR_CD ARCD
+                ON CMPNAR.AR_CD = ARCD.CD_ID
+              LEFT JOIN AR_CD PARCD
+                ON PARCD.CD_ID = ARCD.PRNT_CD_ID   
+              LEFT JOIN (SELECT CMPN_ID
+                              , COUNT(CMPN_ID) AS CNT
+                           FROM CMPN_PST_ADPT
+                          WHERE ADPT_YN = 'Y'
+                            AND DLT_YN  = 'N'
+                          GROUP BY CMPN_ID
+                         ) ADPT_CNT
+                ON ADPT_CNT.CMPN_ID = CMPN.CMPN_ID    
+             WHERE CMPN.CMPN_ID IN ( SELECT CMPN_ID
+                                       FROM FAV_CMPN FC
+                                      WHERE FC.BLG_USR_ID = #{blgId}
+                                        AND FC.DLT_YN ='N')
+               AND CMPN.STTS_CD IN 
+				    <foreach collection="statuses" item="statuses" open="(" separator="," close=")">
+				      #{statuses}
+				    </foreach>                   
+    </select>
+        
+    <insert id="applyCampaign"
+            parameterType="map">
+			INSERT INTO CMPN_PST_ADPT
+			( CMPN_PST_ADPT_ID
+			, BLG_USR_ID
+			, CMPN_ID
+			, PST_URL
+			, PST_STTS_CD
+			, PST_DDLN
+			, PST_SBMT_DT
+			, PST_TITLE
+			, CRT_DT
+			, CRTR
+			, UPDT_DT
+			, MTTR)
+			VALUES
+			( 'CMPN-PST-ADPT-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_PST_DA_PK.NEXTVAL, 6, 0)
+			, #{blgId}
+			, #{campaignId}
+			, NULL
+			, NULL
+			, NULL
+			, NULL
+			, NULL
+			, SYSDATE
+			, #{blgId}
+			, SYSDATE
+			, #{blgId} )    
+    </insert>
+	
 </mapper>
 
 

@@ -43,7 +43,7 @@ public class UserController {
      */
     @GetMapping("/main")
     public String viewMainPage() {
-    	return "main";
+    	return "campaign/campaignmain";
     }
     /**
      * 로그인 페이지 

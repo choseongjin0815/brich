@@ -9,8 +9,22 @@ public class RequestSearchCampaignVO {
 	public String category;
 	public String sortBy;
 	public String searchKeyword;
+	public String loginId;
 	
 	
+	public String getLoginId() {
+		return this.loginId;
+	}
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
+	}
+	public RequestSearchCampaignVO(String category, String sortBy, String searchKeyword, String loginId) {
+		super();
+		this.category = category;
+		this.sortBy = sortBy;
+		this.searchKeyword = searchKeyword;
+		this.loginId = loginId;
+	}
 	public String getCategory() {
 		return this.category;
 	}
@@ -34,7 +48,7 @@ public class RequestSearchCampaignVO {
 	@Override
 	public String toString() {
 		return "RequestSearchCampaignVO [category=" + category + ", sortBy=" + sortBy + ", searchKeyword="
-				+ searchKeyword + "]";
+				+ searchKeyword + ", loginId=" + loginId + "]";
 	}
 	
 	

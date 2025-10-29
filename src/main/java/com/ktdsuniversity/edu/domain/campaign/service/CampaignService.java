@@ -29,6 +29,16 @@ public interface CampaignService {
 
 	ResponseCampaignListVO readSubmittedMyCampaignByBlgId(String blgId);
 
+	boolean favCampaignDo(String blgId, String campaignId);
+
+	ResponseCampaignListVO readOnGoingMyCampaignByBlgId(String blgId);
+
+	ResponseCampaignListVO readClosedMyCampaignByBlgId(String blgId);
+
+	ResponseCampaignListVO readFavMyCampaignByBlgId(String blgId);
+
+	int applyCampaign(String campaignId, String blgId);
+
 	boolean updatePstSttsApproveByCmpnPstAdoptId(RequestApplicantVO requestApplicantVO);
 
 	boolean createDenyByCmpnPstAdoptId(RequestDenyVO requestDenyVO);

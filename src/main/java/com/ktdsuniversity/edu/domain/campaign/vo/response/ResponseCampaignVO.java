@@ -24,6 +24,32 @@ public class ResponseCampaignVO extends CampaignVO{
 	  * 부모지역 이름
 	  */
 	 public String parentArea;
+	 
+	 /**
+	  * 포스팅 상태 코드
+	  */
+	 public String pstSttsCd;
+	 
+	 /**
+	  * 좋아요 여부
+	  */
+	 public String favYn;
+
+	 public String getPstSttsCd() {
+		return this.pstSttsCd;
+	}
+
+	 public void setPstSttsCd(String pstSttsCd) {
+		 this.pstSttsCd = pstSttsCd;
+	 }
+
+	 public String getFavYn() {
+		 return this.favYn;
+	 }
+
+	 public void setFavYn(String favYn) {
+		 this.favYn = favYn;
+	 }
 
 	 public int getLikeCnt() {
 		 return this.likeCnt;
@@ -42,10 +68,18 @@ public class ResponseCampaignVO extends CampaignVO{
 	 }
 
 	 @Override
-	public String toString() {
-		return "ResponseCampaignVO [likeCnt=" + likeCnt + ", adptCnt=" + adptCnt + ", area=" + area + ", parentArea="
-				+ parentArea + "] " + super.toString();
-	}
+	 public String toString() {
+	     return "ResponseCampaignVO{" +
+	             "super=" + super.toString() +  
+	             ", likeCnt=" + likeCnt +
+	             ", adptCnt=" + adptCnt +
+	             ", area=" + area +
+	             ", parentArea='" + parentArea + '\'' +
+	             ", pstSttsCd='" + pstSttsCd + '\'' +
+	             ", favYn='" + favYn + '\'' +
+	             '}';
+	 }
+
 
 	 public List<String> getArea() {
 		 return this.area;

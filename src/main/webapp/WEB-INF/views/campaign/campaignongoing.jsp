@@ -13,15 +13,15 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
           <div class="campaign-detail-wrapper">
           
           <!-- 내 캠페인 프로필 -->
-			<jsp:include page="/WEB-INF/views/campaign/campaignmy.jsp">
-			   <jsp:param name="campaignMyName" value="신청한 캠페인"/>
-			</jsp:include>
+            <jsp:include page="/WEB-INF/views/campaign/campaignmy.jsp">
+               <jsp:param name="campaignMyName" value="진행중 캠페인"/>
+            </jsp:include>
           <!-- 내 캠페인 프로필-->
           
           
           
            <!-- 캠페인 리스트 -->
-			<jsp:include page="/WEB-INF/views/campaign/campaignlist.jsp"/>
+            <jsp:include page="/WEB-INF/views/campaign/campaignlist.jsp"/>
            <!-- 캠페인 리스트 -->
            
             </div>
