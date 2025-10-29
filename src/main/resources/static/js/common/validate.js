@@ -53,7 +53,7 @@ $().ready(function() {
             }
         });
     
-    $(".duplicate-id").on("click", function() {
+    $(".duplicate-id").parent().on("click", function() {
         var url = $(".logId").val();
         var btn = $(this);
         $.get("/duplicate-id/check?logId=" + url, function(response) {
