@@ -10,12 +10,12 @@ $().ready(function(){
 	  $(this).css("background-color", activeColor);
 	});
 
-	// 마우스 뗐을 때 원래 색 복귀
 	$("#verify-btn").on("mouseup mouseleave touchend", function() {
 	  $(this).css("background-color", defaultColor);
+	  $()
 	});
 	
-	const modal = $("#verifyModal");
+	const modal = $("#verify-modal");
 
 	  // 모달 열기
 	  $("#verify-btn").on("click", function() {
@@ -32,17 +32,41 @@ $().ready(function(){
 	    if ($(e.target).is(modal)) modal.fadeOut(200);
 	  });
 
+	  $("#generateCode").on("click", function() {
+	    $.ajax({
+	      url: "/api/verify-code",
+	      method: "POST",
+	      success: function(res) {
+	        $("#verificationCode").html(
+	          `<strong style='color:#6A52E8;'>${res.code}</strong>`
+	        );
+	        $("#verifyResult").text("이 코드를 블로그 소개글에 넣고 인증을 진행하세요.");
+			$("#generateCode").attr("disabled", true);
+			$("#generateCode").css("background-color","#aaa");
+	      }
+	    });
+	  });
+	  
+	  $("#run-verification").on("mousedown touchstart", function() {
+	    $(this).css("background-color", "#079634");
+	  });
+
+	  $("#run-verification").on("mouseup mouseleave touchend", function() {
+	    $(this).css("background-color", "#28a745");
+	    $()
+	  });
 	  // 인증 시작
-	  $("#runVerification").on("click", function() {
-	    $("#verifyResult").text("인증 진행 중...");
+	  $("#run-verification").on("click", function() {
+	    $("#verify-result").text("인증 진행 중...");
 
 	    // ✅ input의 value 가져오기
 	    var blogURL = $("#blog-url").val().trim();
-	    var usrID = "${sessionScope.__LOGIN_USER__.usrId}";
+		var usrID = $("#run-verification").data("user-id");
+
 
 	    // ✅ 비어 있는지 확인
 	    if (blogURL === "") {
-	      $("#verifyResult").html("<span style='color:red'>블로그 주소를 입력해주세요.</span>");
+	      $("#verify-result").html("<span style='color:red'>블로그 주소를 입력해주세요.</span>");
 	      return; // 더 이상 진행하지 않음
 	    }
 
@@ -56,16 +80,16 @@ $().ready(function(){
 	      }),
 	      success: function(res) {
 	        if (res.success) {
-	          $("#verifyResult").html("<span style='color:green'>인증에 성공하였습니다. 블로그 관리 화면으로 이동합니다.</span>");
+	          $("#verify-result").html("<span style='color:green'>인증에 성공하였습니다. 블로그 관리 화면으로 이동합니다.</span>");
 	          setTimeout(function() {
 	            window.location.href = "/blog/" + usrID + "/manage";
 	          }, 3000);
 	        } else {
-	          $("#verifyResult").html("<span style='color:red'>인증 실패 ❌</span>");
+	          $("#verify-result").html("<span style='color:red'>인증 실패 ❌</span>");
 	        }
 	      },
 	      error: function() {
-	        $("#verifyResult").html("<span style='color:red'>서버 오류 발생 ❌</span>");
+	        $("#verify-result").html("<span style='color:red'>서버 오류 발생 ❌</span>");
 	      }
 	    });
 	  });

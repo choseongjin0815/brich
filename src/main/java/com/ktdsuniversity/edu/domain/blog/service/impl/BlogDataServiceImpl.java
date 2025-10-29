@@ -1,12 +1,15 @@
 package com.ktdsuniversity.edu.domain.blog.service.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestModifyBlogAddrsVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
@@ -35,11 +38,21 @@ public class BlogDataServiceImpl implements BlogDataService{
 		return result;
 	}
 
+	@Transactional
 	@Override
-	public boolean runPythonVerification(String blogUrl, String usrId) {
-		PythonExecutor.runPython("", blogUrl);
+	public boolean runPythonVerification(RequestModifyBlogAddrsVO requestModifyBlogAddrsVO, String code) {
+		String pythonOutput = PythonExecutor.runPython("C:\\Users\\User\\Desktop\\project\\brich-project\\src\\main\\resources\\static\\crawler\\verification-crawler.py", requestModifyBlogAddrsVO.getBlgAddrs(), code);
+		int updateCount = 0;
+		if(pythonOutput.contains("Verification successful")) {
+			updateCount = userDao.updateBlgAddrsById(requestModifyBlogAddrsVO);
+			}
+		return updateCount > 0;
 		
-		return true;
+	}
+
+	@Override
+	public String generateVerificationCode() {
+		return UUID.randomUUID().toString().substring(0, 8).toUpperCase();
 	}
 
 

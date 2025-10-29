@@ -80,9 +80,7 @@
   cursor: pointer;
 }
 
-.btn:hover {
-  background-color: #4668A7;
-}
+
 
 .btn-green {
   background-color: #28a745;
@@ -97,3 +95,5 @@
   margin-top: 15px;
   font-weight: bold;
 }
+
+.
