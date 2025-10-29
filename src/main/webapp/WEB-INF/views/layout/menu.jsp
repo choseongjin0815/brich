@@ -29,7 +29,7 @@ pageEncoding="UTF-8"%>
         	</div>
         	<div class="top-menu-right flex-row">
 		        <div class="top-menu-search-area">
-		          <input class="search-input" type="text" name="searchKeyword" value="${search.searchKeyword}" placeholder="Search" />
+		          <input class="search-input" type="text" name="searchKeyword"  placeholder="Search" />
 		        </div>
 	            <div class="top-menu-profile-area flex-row">
 	            	<div class="menu-profile"></div>
@@ -66,10 +66,10 @@ pageEncoding="UTF-8"%>
                         <div class="caret-up display-none"></div>
                         </div> 
 	                      <ul class="my-sub-menu display-none">
-	                        <li class="menu-my-submitted-campaign-selected"><a href="/submittedmycampaign">신청한 캠페인</a></li>
-	                        <li><a href="">진행중 캠페인</a></li>
-	                        <li><a href="">마감된 캠페인</a></li>
-	                        <li class="last-item"><a href="">관심 캠페인</a></li>
+	                        <li class="menu-my-submitted-campaign-selected"><a href="/blgr/submittedmycampaign">신청한 캠페인</a></li>
+	                        <li class="menu-my-ongoing-campaign-selected"><a href="/blgr/campaignongoing">진행중 캠페인</a></li>
+	                        <li class="menu-my-closed-campaign-selected"><a href="/blgr/closedcampaign">마감된 캠페인</a></li>
+	                        <li class="last-item menu-my-fav-campaign-selected"><a href="/blgr/favcampaign">관심 캠페인</a></li>
 	                      </ul>
 	                </li>
                     <li><a href="/blog/${sessionScope.__LOGIN_USER__.usrId}/manage">블로그 관리</a></li>

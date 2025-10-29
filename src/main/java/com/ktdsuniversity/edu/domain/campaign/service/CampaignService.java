@@ -26,4 +26,10 @@ public interface CampaignService {
 
 	boolean favCampaignDo(String blgId, String campaignId);
 
+	ResponseCampaignListVO readOnGoingMyCampaignByBlgId(String blgId);
+
+	ResponseCampaignListVO readClosedMyCampaignByBlgId(String blgId);
+
+	ResponseCampaignListVO readFavMyCampaignByBlgId(String blgId);
+
 }

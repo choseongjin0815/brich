@@ -127,6 +127,11 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	public String selectFavDltYn(Map<String, String> param) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectFavDltYn" , param);
 	}
+
+	@Override
+	public List<ResponseCampaignVO> selectMyFavCampaignByBlgId(Map<String, Object> param) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectMyFavCampaignByBlgId" , param);
+	}
 	
 
 }

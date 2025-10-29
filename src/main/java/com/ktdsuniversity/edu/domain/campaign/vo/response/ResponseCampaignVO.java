@@ -68,10 +68,18 @@ public class ResponseCampaignVO extends CampaignVO{
 	 }
 
 	 @Override
-	public String toString() {
-		return "ResponseCampaignVO [likeCnt=" + likeCnt + ", adptCnt=" + adptCnt + ", area=" + area + ", parentArea="
-				+ parentArea + ", pstSttsCd=" + pstSttsCd + ", favYn=" + favYn + "]";
-	}
+	 public String toString() {
+	     return "ResponseCampaignVO{" +
+	             "super=" + super.toString() +  
+	             ", likeCnt=" + likeCnt +
+	             ", adptCnt=" + adptCnt +
+	             ", area=" + area +
+	             ", parentArea='" + parentArea + '\'' +
+	             ", pstSttsCd='" + pstSttsCd + '\'' +
+	             ", favYn='" + favYn + '\'' +
+	             '}';
+	 }
+
 
 	 public List<String> getArea() {
 		 return this.area;

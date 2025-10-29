@@ -1,7 +1,11 @@
 $(document).ready(function(){
-  var here = location.pathname.replace(/^\/+|\/+$/g, '').split('/')[0];
-  if(here === 'submittedmycampaign'){
-     $(".my-sub-menu").removeClass('display-none');
+  var here = location.pathname.replace(/^\/+|\/+$/g, '').split('/');
+  
+  if (here.includes('submittedmycampaign') 
+        || here.includes('campaignongoing')
+        || here.includes('closedcampaign')
+        || here.includes('favcampaign')) {
+    $(".my-sub-menu").removeClass('display-none');
   }
   
   $(".my-campaign").click(function() {
@@ -12,10 +16,19 @@ $(document).ready(function(){
   
   $('common-menu').removeClass('menu-selected');
   
-  if (here === 'campaignmain' || here === 'campaigndetail') {
+  if (here.includes('campaignmain') || here.includes('campaigndetail')) {
     $('.menu-campaignmain-selected').addClass('menu-selected')
   }
-  if (here === 'submittedmycampaign') {
+  if ( here.includes('submittedmycampaign')) {
       $('.menu-my-submitted-campaign-selected').addClass('menu-selected')
+  }
+  if ( here.includes('campaignongoing')) {
+      $('.menu-my-ongoing-campaign-selected').addClass('menu-selected')
+  }
+  if ( here.includes('closedcampaign')) {
+      $('.menu-my-closed-campaign-selected').addClass('menu-selected')
+  }
+  if ( here.includes('favcampaign')) {
+      $('.menu-my-fav-campaign-selected').addClass('menu-selected')
   }
 })

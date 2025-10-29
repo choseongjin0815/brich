@@ -54,5 +54,7 @@ public interface CampaignDao {
 
 	String selectFavDltYn(Map<String, String> param);
 
+	List<ResponseCampaignVO> selectMyFavCampaignByBlgId(Map<String, Object> param);
+
 
 }

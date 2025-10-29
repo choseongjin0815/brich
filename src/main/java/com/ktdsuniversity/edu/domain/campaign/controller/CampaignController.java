@@ -52,15 +52,56 @@ public class CampaignController {
     	return "campaign/campaignmain";
     }
     
-    @GetMapping("/submittedmycampaign")
+    @GetMapping("/blgr/submittedmycampaign")
     public String submittedmycampaign(Model model,@SessionAttribute(value = "__LOGIN_USER__") 
     						UserVO loginUser) {
     	String blgId = loginUser.getUsrId();
     	ResponseCampaignListVO CampaignListAndCategory = campaignService.readSubmittedMyCampaignByBlgId(blgId);
     	model.addAttribute("campaignList", CampaignListAndCategory.getResponseCampaignList());
+    	
+    	log.info( "캠페인 리스트 조회결과 : " + CampaignListAndCategory.getResponseCampaignList().toString());
     	return "campaign/submittedmycampaign";
     }
     
+    @GetMapping("/blgr/campaignongoing")
+    public String campaignongoing(Model model,@SessionAttribute(value = "__LOGIN_USER__") 
+    							UserVO loginUser) {
+    	String blgId = loginUser.getUsrId();
+    	ResponseCampaignListVO CampaignListAndCategory = campaignService.readOnGoingMyCampaignByBlgId(blgId);
+    	model.addAttribute("campaignList", CampaignListAndCategory.getResponseCampaignList());
+    	
+    	log.info( "캠페인 리스트 조회결과 : " + CampaignListAndCategory.getResponseCampaignList().toString());
+    	return "campaign/campaignongoing";
+    }
+    
+    @GetMapping("/blgr/closedcampaign")
+    public String closedcampaign(Model model,@SessionAttribute(value = "__LOGIN_USER__") 
+    							UserVO loginUser) {
+    	String blgId = loginUser.getUsrId();
+    	ResponseCampaignListVO CampaignListAndCategory = campaignService.readClosedMyCampaignByBlgId(blgId);
+    	model.addAttribute("campaignList", CampaignListAndCategory.getResponseCampaignList());
+    	
+    	log.info( "캠페인 리스트 조회결과 : " + CampaignListAndCategory.getResponseCampaignList().toString());
+    	return "campaign/closedcampaign";
+    }
+    
+    @GetMapping("/blgr/favcampaign")
+    public String favcampaign(Model model,@SessionAttribute(value = "__LOGIN_USER__") 
+    							UserVO loginUser) {
+    	String blgId = loginUser.getUsrId();
+    	ResponseCampaignListVO CampaignListAndCategory = campaignService.readFavMyCampaignByBlgId(blgId);
+    	model.addAttribute("campaignList", CampaignListAndCategory.getResponseCampaignList());
+    	
+    	log.info( "캠페인 리스트 조회결과 : " + CampaignListAndCategory.getResponseCampaignList().toString());
+    	return "campaign/favcampaign";
+    }
+    
+    /**
+     * 좋아요 
+     * @param loginUser
+     * @param campaignId
+     * @return
+     */
     @GetMapping("/blgr/love/{campaignId}")
     public String favCampaignDo(@SessionAttribute(value = "__LOGIN_USER__") UserVO loginUser, 
     						@PathVariable String campaignId) {
@@ -69,6 +110,7 @@ public class CampaignController {
     	return "redirect:/campaignmain";
     }
     
+
     
     @GetMapping("/adv/applicant/{cmpnId}")
     public String readApplicantList(Model model, @PathVariable String cmpnId,

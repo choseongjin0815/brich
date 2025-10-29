@@ -102,13 +102,55 @@ public class CampaignServiceImpl implements CampaignService {
 		Map<String, Object> param = new HashMap<>();
 		param.put("blgId", blgId);
 		param.put("statuses", code);
-
-		
 		
 		responseCampaignListVO.setResponseCampaignList(campaignDao.selectMyCampaignByBlgId(param));
 		
 		return responseCampaignListVO;
 	}
+	
+	@Override
+	public ResponseCampaignListVO readOnGoingMyCampaignByBlgId(String blgId) {
+		ResponseCampaignListVO responseCampaignListVO = new ResponseCampaignListVO();
+		
+		// ('2007')  -- 진행중 캠페인
+		List<String> code = List.of("2007");
+		Map<String, Object> param = new HashMap<>();
+		param.put("blgId", blgId);
+		param.put("statuses", code);
+		
+		responseCampaignListVO.setResponseCampaignList(campaignDao.selectMyCampaignByBlgId(param));
+		
+		return responseCampaignListVO;
+	}
+	
+	@Override
+	public ResponseCampaignListVO readClosedMyCampaignByBlgId(String blgId) {
+		ResponseCampaignListVO responseCampaignListVO = new ResponseCampaignListVO();		
+		// ('2009')  -- 종료 캠페인
+		List<String> code = List.of("2009");
+		Map<String, Object> param = new HashMap<>();
+		param.put("blgId", blgId);
+		param.put("statuses", code);
+		
+		responseCampaignListVO.setResponseCampaignList(campaignDao.selectMyCampaignByBlgId(param));
+		
+		return responseCampaignListVO;
+	}	
+	
+	@Override
+	public ResponseCampaignListVO readFavMyCampaignByBlgId(String blgId) {
+		
+		ResponseCampaignListVO responseCampaignListVO = new ResponseCampaignListVO();		
+		// ('2005')  -- 모집중
+		List<String> code = List.of("2005");
+		Map<String, Object> param = new HashMap<>();
+		param.put("blgId", blgId);
+		param.put("statuses", code);
+		
+		responseCampaignListVO.setResponseCampaignList(campaignDao.selectMyFavCampaignByBlgId(param));
+		
+		return responseCampaignListVO;
+	}	
 
 	public ResponseApplicantListVO readApplicantListById(RequestApplicantVO requestApplicantVO) {
 		int applicantCount = this.campaignDao.selectApplicantCountByCmpnId(requestApplicantVO);
@@ -182,6 +224,9 @@ public class CampaignServiceImpl implements CampaignService {
 		
 		return updateCount > 0 ;
 	}
+
+
+
 
 
 }

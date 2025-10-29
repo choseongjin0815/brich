@@ -5,6 +5,16 @@ $().ready(function() {
     var searchButton = $(".search-button");
     var campaignFav = $(".campaign-fav");
     var hereCategory = new URLSearchParams(window.location.search).get('category') || '';
+    var campaignMainBlock = $(".campaign-main-block");
+    var here = location.pathname.replace(/^\/+|\/+$/g, '').split('/');    
+    
+    if (here.includes('campaignmain')) {
+      $('.campaign-status').removeClass('display-none');
+    }
+    if (here.includes('closedcampaign')) {
+      $('.campaign-fav').addClass('display-none');
+    }
+    
     $('.category-seleted-box').each(function () {
       if($(this).data('category-menu') === hereCategory){
          $(".category-seleted-box-"+hereCategory).removeClass('visibility-hidden');
@@ -33,8 +43,13 @@ $().ready(function() {
 	    searchParam = "?" + searchParam 
 	    window.location.href = window.location.pathname + searchParam;
 	});
-    campaignFav.on("click", function() {
+    campaignFav.on("click", function(e) {
+        e.stopPropagation();
         var cmpnId = $(this).data("cmpn-id");
         window.location.href = "/blgr/love/"+ cmpnId ;
+    })
+    campaignMainBlock.on("click", function() {
+        var cmpnId = $(this).data("cmpn-id");
+        window.location.href = "/campaigndetail/"+ cmpnId ;
     })
 });
