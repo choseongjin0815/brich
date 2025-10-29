@@ -3,13 +3,12 @@ package com.ktdsuniversity.edu.domain.campaign.dao;
 
 import java.util.List;
 
-
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
-import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostAdoptVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestUpdatePstSttsVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
@@ -45,11 +44,13 @@ public interface CampaignDao {
 
 	List<ResponseCampaignVO> selectSubmittedMyCampaignByBlgId(String blgId);
 
-	int updatePstSttsApproveByCmpnPstAdoptId(RequestApplicantVO requestApplicantVO);
+	int updatePstSttsByCmpnPstAdoptId(RequestUpdatePstSttsVO requestUpdatePstSttsVO);
 
 	int selectAdoptPaginationCount(RequestApplicantVO requestApplicantVO);
 
 	String selectStateNameByStateCode(String sttsCd);
 
-	boolean insertDenyByCmpnPstAdoptId(RequestDenyVO requestDenyVO);
+	int insertDenyByCmpnPstAdoptId(RequestDenyVO requestDenyVO);
+
+	List<CommonCodeVO> selectDoAndCityList();
 }

@@ -123,7 +123,6 @@ $().ready(function() {
         postUrl.attr("href", url);
         postUrl.attr("target", "_blank");
         postUrl.data("cmpn-apply-id", postId);
-        console.log(postUrl.data());
 
         $(".post-url").append(postUrl);
     });
@@ -137,17 +136,46 @@ $().ready(function() {
     
     $("#add-file").on("change", function() {
         var files = this.files;
-        var $fileList = $("#fileList");
+        var $fileList = $("#file-list");
         $fileList.empty(); // 초기화
     
         $.each(files, function(index, file) {
-            $fileList.append("<div>" + file.name + "</div>");
+            $fileList.append("<span>" + file.name +"\t </span>");
         });
     });
     
-    $(".modal-submit").on("click", function() {
+    $(".deny-submit").on("click", function() {
+        var denyContainer = $(this).closest(".deny-container");
+        var reason = denyContainer.children("#reason").val();
+        var attachedFile = denyContainer.find("input[type=file]");
+        var files = attachedFile[0].files;
+        
+        var formData = new FormData();
+        formData.append("reason", reason);
+        
+        if (files.length > 0) {
+            for(i = 0; i < files.length; i++) {
+                formData.append("file", files[i]);
+            }
+        }
+        
+        url = window.location.href;
         id = $(".post-url").children("a").data("cmpn-apply-id");
-        $(".deny-form").attr("action", "/adv/deny/" + id);
-        $(".deny-form").submit();
+        $.ajax({
+            url: "/adv/deny/" + id,
+            method: "post",
+            enctype: "multipart/form-data",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log(response);
+                if(response) {
+                    $(".modal").css("display", "none");
+                    window.location.reload();
+                }
+            }
+        });
+        
     });
 });

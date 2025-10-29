@@ -1,22 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<!DOCTYPE html>
-	<html>
-	<head>
-		<meta charset="UTF-8">
-		<title>Insert title here</title>
-		<link type="text/css" rel="stylesheet" href="/css/brich.css" />
-		<script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
-		<script type="text/javascript" src="/js/campaign/applicantAdopt.js"></script>
-		<script type="text/javascript" src="/js/common/paginator.js"></script>
-	</head>
-	<body>
-	   <div class="campaign-wrapper">
-		    <jsp:include page="/WEB-INF/views/campaign/campaignTab.jsp">
-		       <jsp:param value="${applicantList.campaignInfo.cmpnTitle}" name="cmpnTitle" />
-		       <jsp:param value="${applicantList.campaignInfo.sttsCd}" name="sttsCd" />
-		    </jsp:include>
+<c:set var="scripts">
+       <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
+       <script type="text/javascript" src="/js/campaign/applicantAdopt.js"></script>
+       <script type="text/javascript" src="/js/common/paginator.js"></script>
+       <script type="text/javascript" src="/js/common/validate.js"></script>
+</c:set>
+	
+<jsp:include page="/WEB-INF/views/layout/menu.jsp">
+   <jsp:param name='css' value="
+       <link type='text/css' rel='stylesheet' href='/css/brich.css' />
+   " />
+   <jsp:param name="scripts" value="${scripts}" />
+</jsp:include>
+
+    <div class="campaign">
+	    <jsp:include page="/WEB-INF/views/campaign/campaignTab.jsp">
+	       <jsp:param value="${applicantList.campaignInfo.cmpnTitle}" name="cmpnTitle" />
+	       <jsp:param value="${applicantList.campaignInfo.sttsCd}" name="sttsCd" />
+	    </jsp:include>
+	    <div class="campaign-wrapper">
 		    <div class="campaign-title">
 	            <div>캠페인 신청자</div>
 	            <span class="enddate">~${applicantList.campaignInfo.rcrtEndDt}</span>
@@ -103,5 +107,6 @@
 	            <jsp:param value="${search.pageCount}" name="pageCount"/>
 	        </jsp:include>
         </div>
-	</body>
-</html>
+    </div>
+        
+<jsp:include page="/WEB-INF/views/layout/footer.jsp" />

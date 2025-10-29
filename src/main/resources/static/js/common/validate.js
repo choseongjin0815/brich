@@ -18,10 +18,10 @@ $().ready(function() {
     $(".require-input").on("keyup", function() {
         var value = $(this).val();
         if (value === "") {
-            $(".require-input").addClass("empty");
+            $(".require-input").addClass("require-empty");
         }
         else {
-            $(".require-input").removeClass("empty");
+            $(".require-input").removeClass("require-empty");
         }
         submitAutoActive();
     });
@@ -96,7 +96,7 @@ $().ready(function() {
 });
 
 function submitAutoActive() {
-    var emptyLength = $(".empty").length;
+    var emptyLength = $(".require-empty").length;
     if (emptyLength > 0) {
         $(".auto-active").attr("disabled", "disabled");
     }

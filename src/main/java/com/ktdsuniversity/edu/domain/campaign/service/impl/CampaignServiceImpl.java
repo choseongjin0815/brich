@@ -14,21 +14,44 @@ import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestUpdatePstSttsVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignwriteVO;
+import com.ktdsuniversity.edu.domain.file.dao.FileDao;
+import com.ktdsuniversity.edu.domain.file.dao.FileGroupDao;
+import com.ktdsuniversity.edu.domain.file.util.MultipartFileHandler;
+import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
+import com.ktdsuniversity.edu.domain.file.vo.FileVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
+import com.ktdsuniversity.edu.global.config.WebSocketConfig;
 
 @Service
 public class CampaignServiceImpl implements CampaignService {
+
+    private final WebSocketConfig webSocketConfig;
 	
 	private static final Logger log = LoggerFactory.getLogger(CampaignServiceImpl.class);
 
     @Autowired
     private CampaignDao campaignDao;
+    
+    @Autowired
+    private FileGroupDao fileGroupDao;
+    
+    @Autowired
+    private FileDao fileDao;
+    
+    @Autowired
+    private MultipartFileHandler multipartFileHandler;
+
+    CampaignServiceImpl(WebSocketConfig webSocketConfig) {
+        this.webSocketConfig = webSocketConfig;
+    }
     
     /**
      * 캠페인 메인
@@ -145,9 +168,54 @@ public class CampaignServiceImpl implements CampaignService {
 		return adoptList;
 	}
 
+	@Transactional
 	@Override
 	public boolean updatePstSttsApproveByCmpnPstAdoptId(RequestApplicantVO requestApplicantVO) {
-		int updateCount = this.campaignDao.updatePstSttsApproveByCmpnPstAdoptId(requestApplicantVO);
+		RequestUpdatePstSttsVO requestUpdatePstSttsVO = new RequestUpdatePstSttsVO();
+		requestUpdatePstSttsVO.setCmpnPstAdptId(requestApplicantVO.getCmpnPstAdptId());
+		requestUpdatePstSttsVO.setStts("6004");
+		requestUpdatePstSttsVO.setAdvId(requestApplicantVO.getUsrId());
+		int updateCount = this.campaignDao.updatePstSttsByCmpnPstAdoptId(requestUpdatePstSttsVO);
 		return updateCount == 1;
+	}
+	
+	@Transactional
+	@Override
+	public boolean createDenyByCmpnPstAdoptId(RequestDenyVO requestDenyVO) {
+		List<FileVO> uploadResult = this.multipartFileHandler.upload(requestDenyVO.getFile());
+		RequestUpdatePstSttsVO requestUpdatePstSttsVO = new RequestUpdatePstSttsVO();
+		requestUpdatePstSttsVO.setCmpnPstAdptId(requestDenyVO.getCmpnPstAdptId());
+		requestUpdatePstSttsVO.setStts("6003");
+		requestUpdatePstSttsVO.setAdvId(requestDenyVO.getAdvId());
+		
+		if (uploadResult != null && uploadResult.size() > 0) {
+			// 1. File Group Insert
+			FileGroupVO fileGroupVO = new FileGroupVO();
+			fileGroupVO.setFlCnt(uploadResult.size());
+			int insertGroupCount = this.fileGroupDao.insertFileGroup(fileGroupVO);
+			
+			// 2. File Insert
+			for(FileVO result: uploadResult) {
+				result.setFlGrpId(fileGroupVO.getFlGrpId());
+				int insertFileCount = this.fileDao.insertFile(result);
+			}
+			
+			requestDenyVO.setFileGroupId(fileGroupVO.getFlGrpId());
+		}
+		
+		int insertCount = this.campaignDao.insertDenyByCmpnPstAdoptId(requestDenyVO);
+		int updateCount = 0;
+		if (insertCount == 1) {
+			updateCount = this.campaignDao.updatePstSttsByCmpnPstAdoptId(requestUpdatePstSttsVO);
+		}
+		return insertCount == 1 && updateCount == 1;
+	}
+
+	@Override
+	public ResponseCampaignwriteVO createCampaign() {
+		ResponseCampaignwriteVO common = new ResponseCampaignwriteVO();
+		common.setDoAndCityList(this.campaignDao.selectDoAndCityList());
+		common.setCategoryList(this.campaignDao.selectCategoryList());
+		return common;
 	}
 }
