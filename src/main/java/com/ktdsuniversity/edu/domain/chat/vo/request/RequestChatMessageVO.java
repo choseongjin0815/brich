@@ -16,6 +16,10 @@ public class RequestChatMessageVO {
     
     private String attchGrpId;
     
+    private String nm;
+    
+    private String cmpny;
+    
     private String rdYn;
     
     private String crtDt;
@@ -129,11 +133,29 @@ public class RequestChatMessageVO {
 		this.files = files;
 	}
 
+	public String getNm() {
+		return this.nm;
+	}
+
+	public void setNm(String nm) {
+		this.nm = nm;
+	}
+
+	public String getCmpny() {
+		return this.cmpny;
+	}
+
+	public void setCmpny(String cmpny) {
+		this.cmpny = cmpny;
+	}
+
 	@Override
 	public String toString() {
 		return "RequestChatMessageVO [chtMsgId=" + chtMsgId + ", chtRmId=" + chtRmId + ", msgCn=" + msgCn + ", usrId="
-				+ usrId + ", attchGrpId=" + attchGrpId + ", rdYn=" + rdYn + ", crtDt=" + crtDt + ", crtr=" + crtr
-				+ ", updtDt=" + updtDt + ", mttr=" + mttr + ", dltYn=" + dltYn + ", files=" + files + "]";
+				+ usrId + ", attchGrpId=" + attchGrpId + ", nm=" + nm + ", cmpny=" + cmpny + ", rdYn=" + rdYn
+				+ ", crtDt=" + crtDt + ", crtr=" + crtr + ", updtDt=" + updtDt + ", mttr=" + mttr + ", dltYn=" + dltYn
+				+ ", files=" + files + "]";
 	}
+
    
 }

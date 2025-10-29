@@ -1,9 +1,12 @@
 package com.ktdsuniversity.edu.domain.chat.service.impl;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,18 +26,32 @@ import com.ktdsuniversity.edu.domain.chat.vo.request.RequestChatMessageVO;
 import com.ktdsuniversity.edu.domain.chat.vo.request.RequestChatRoomFindVO;
 import com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatCampaignListVO;
 import com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatRoomInfoVO;
+import com.ktdsuniversity.edu.domain.file.dao.FileDao;
+import com.ktdsuniversity.edu.domain.file.dao.FileGroupDao;
+import com.ktdsuniversity.edu.domain.file.util.MultipartFileHandler;
+import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
+import com.ktdsuniversity.edu.domain.file.vo.FileVO;
 import com.ktdsuniversity.edu.global.util.TimeFormatUtil;
 
 @Service
 public class ChatServiceImpl implements ChatService {
 
 	private static final Logger log = LoggerFactory.getLogger(ChatServiceImpl.class);
+	
+	@Autowired
+	private MultipartFileHandler multipartFileHandler;
 
 	@Autowired
 	private ChatMessageRepository chatMessageRepository;
 
 	@Autowired
 	private ChatDao chatDao;
+	
+	@Autowired
+	private FileGroupDao fileGroupDao;
+	
+	@Autowired
+	private FileDao fileDao;
 
 	@Override
 	public SearchChatVO readAllChatRoomList(SearchChatVO searchChatVO) {
@@ -219,14 +236,8 @@ public class ChatServiceImpl implements ChatService {
 	public List<ChatMessageVO> readChatMessageList(String chtRmId, String usrId) {
 		// MongoDB에서 메시지 목록 조회
 		List<ChatMessageVO> messages = chatMessageRepository.findByChtRmIdOrderByCrtDtAsc(chtRmId);
-
-		// 각 메시지에 사용자 이름 추가 (Oracle에서)
-		for (ChatMessageVO message : messages) {
-			// 사용자 이름 조회
-			String userName = chatDao.selectUserName(message.getUsrId());
-			message.setUsrNm(userName);
-		}
-
+		
+		
 		// 3. 읽음 처리
 		updateMessagesAsRead(chtRmId, usrId);
 
@@ -236,15 +247,38 @@ public class ChatServiceImpl implements ChatService {
 	@Transactional
 	@Override
 	public ChatMessageVO sendMessage(RequestChatMessageVO requestChatMessageVO) {
-		// 메시지 ID 생성
-		String msgId = generateMessageId();
+		
 		ChatMessageVO message = new ChatMessageVO();
-		message.setChtMsgId(msgId);
+		
+		List<FileVO> uploadResult = this.multipartFileHandler.upload(requestChatMessageVO.getFiles());
+		
+		if(uploadResult != null && uploadResult.size() > 0) {
+			//1.File Group Insert
+			FileGroupVO fileGroupVO = new FileGroupVO();
+			fileGroupVO.setFlCnt(uploadResult != null ? uploadResult.size(): 0);
+			int insertGroupCount = this.fileGroupDao.insertFileGroup(fileGroupVO);
+			
+			//2.File Insert	
+			for(FileVO result : uploadResult) {
+				result.setFlGrpId(fileGroupVO.getFlGrpId());
+				int insertFileCount = this.fileDao.insertFile(result);
+			}
+			//게시글에 첨부되어있는 파일 그룹의 아이디가 무엇인지 알수있다.
+			requestChatMessageVO.setAttchGrpId(fileGroupVO.getFlGrpId());
+			message.setAttchGrpId(requestChatMessageVO.getAttchGrpId());
+			
+		}
+		
+		// 메시지 ID 생성
+		message.setChtMsgId(UUID.randomUUID().toString());
 		message.setUsrId(requestChatMessageVO.getUsrId());
 		message.setCrtr(requestChatMessageVO.getUsrId());
 		message.setMttr(requestChatMessageVO.getUsrId());
-		message.setCrtDt("");
-		message.setUpdtDt("");
+		message.setUsrNm(requestChatMessageVO.getNm());
+		message.setCmpny(requestChatMessageVO.getCmpny());
+		String now = DateTimeFormatter.ISO_INSTANT.format(Instant.now());
+		message.setCrtDt(now);
+		message.setUpdtDt(now);
 		message.setRdYn("N");
 		message.setDltYn("N");
 
@@ -263,17 +297,15 @@ public class ChatServiceImpl implements ChatService {
 	public void updateMessagesAsRead(String chtRmId, String usrId) {
 		// MongoDB에서 안읽은 메시지 조회
 		List<ChatMessageVO> unreadMessages = chatMessageRepository.findUnreadMessages(chtRmId, usrId);
+		String now = DateTimeFormatter.ISO_INSTANT.format(Instant.now());
 
 		// 읽음 처리
 		for (ChatMessageVO msg : unreadMessages) {
 			msg.setRdYn("Y");
-			msg.setUpdtDt("");
+			msg.setUpdtDt(now);
 			chatMessageRepository.save(msg);
 		}
 	}
 
-	private String generateMessageId() {
-		return "CHT_MSG-" + "-";
-	}
 
 }

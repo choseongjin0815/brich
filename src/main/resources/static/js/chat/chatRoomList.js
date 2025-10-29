@@ -78,9 +78,14 @@ $().ready(function() {
             alert(response.body.message);
             window.location.reload(true);
         });
-
-
     })
+    
+    //실제 메시지를 나누는 채팅방 들어가기 
+    $(document).on("click", ".chatroom-content-item", function() {
+        var chtRmId = $(this).closest(".chatroom-content-item").data("chat-room");
+        var startUrl = auth === 1004 ? '/adv' : '/blgr';
+        window.location.href = startUrl + "/chat/room/" + chtRmId;
+    });
 });
 
 // 필터 버튼 스타일 업데이트
@@ -92,7 +97,7 @@ function updateFilterButtons($clickedButton) {
         $(".progress.readall").css({
             "border-bottom": "3px solid #000"
         })
-        return ; 
+        return;
     }
     $clickedButton.css({
         "border-bottom": "3px solid #000"
