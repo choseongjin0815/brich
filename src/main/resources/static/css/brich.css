@@ -211,6 +211,10 @@ body {
   margin: 0 auto;
   margin-top: 50px;
   text-align: center;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.01);
+  }
 }
 
 .term-content {

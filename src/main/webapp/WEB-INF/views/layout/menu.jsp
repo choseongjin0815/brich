@@ -13,8 +13,11 @@ pageEncoding="UTF-8"%>
     ${param.css }
     ${param.chatCss}
     ${param.scripts}
-    ${param.chatroomscripts}
+    ${param.chatroomListscripts}
     ${param.chatscripts}
+    ${param.chatroomscripts}
+    ${param.sockjs}
+    ${param.stompjs}
   </head>
   <body>
     <div class="wrapper">
@@ -72,7 +75,7 @@ pageEncoding="UTF-8"%>
 	                      </ul>
 	                </li>
                     <li><a href="/blog/${sessionScope.__LOGIN_USER__.usrId}/manage">블로그 관리</a></li>
-                    <li><a href="">메세지</a></li>
+                    <li><a href="/blgr/chat/rooms">메세지</a></li>
                   </ul>
                 </li>
                 
@@ -86,7 +89,7 @@ pageEncoding="UTF-8"%>
                     <li class="menu-campaignmain-selected"><a href="/campaignmain">캠페인</a></li>
                     <li><a href="">MY 캠페인</a></li> 
                     <li><a href="">캠페인 만들기</a></li>
-                    <li><a href="">메세지</a></li>
+                    <li><a href="/adv/chat/campaigns">메세지</a></li>
                   </ul>
                 </li>
               </c:if>

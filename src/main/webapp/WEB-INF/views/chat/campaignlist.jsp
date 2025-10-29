@@ -30,7 +30,7 @@
        <div class="campaign-content-item" data-campaign-id="#campaign#">
          <div class="campaign-item">
            <div class="campaign-title-c">#campaigntitle#</div>
-           <div class="campaign-status">#campaignstatus#</div>
+           <div class="campaign-status end">#campaignstatus#</div>
          </div>
          <!--추후 이동할 엔드포인트 삽입-->
          <a href="/#campaignid#" class="campaign-link">캠페인으로</a>

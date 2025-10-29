@@ -104,11 +104,19 @@ public class ChatMessageVO {
    @Field("DLT_YN")
    private String dltYn;
 
+   @Field("NM")
    private String usrNm;
-   private String cmpnId;
-   private String cmpnTitle;
-   private List<FileVO> fileList;
    
+   @Field("CMPN_ID")
+   private String cmpnId;
+
+   @Field("CMPN_TITLE")
+   private String cmpnTitle;
+   
+   @Field("CMPNY")
+   private String cmpny;
+   
+   private List<FileVO> fileList;
    public String getChtMsgId() {
 	return this.chtMsgId;
    }
@@ -193,14 +201,24 @@ public class ChatMessageVO {
    public void setCmpnTitle(String cmpnTitle) {
 	this.cmpnTitle = cmpnTitle;
    }
+   public String getCmpny() {
+	return this.cmpny;
+   }
+   public void setCmpny(String cmpny) {
+	this.cmpny = cmpny;
+   }
    public List<FileVO> getFileList() {
 	return this.fileList;
    }
    public void setFileList(List<FileVO> fileList) {
 	this.fileList = fileList;
    }
-
-   
-
-   
+   @Override
+   public String toString() {
+	return "ChatMessageVO [chtMsgId=" + chtMsgId + ", chtRmId=" + chtRmId + ", usrId=" + usrId + ", attchGrpId="
+			+ attchGrpId + ", rdYn=" + rdYn + ", msgCn=" + msgCn + ", crtDt=" + crtDt + ", crtr=" + crtr + ", updtDt="
+			+ updtDt + ", mttr=" + mttr + ", dltYn=" + dltYn + ", usrNm=" + usrNm + ", cmpnId=" + cmpnId
+			+ ", cmpnTitle=" + cmpnTitle + ", cmpny=" + cmpny + ", fileList=" + fileList + "]";
+   }
+      
 }
