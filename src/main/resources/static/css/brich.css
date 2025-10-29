@@ -221,9 +221,21 @@ body {
   color: #828282;
 }
 
+.campaign-wrapper {
+	display: flex;
+	flex-direction: column;
+	margin: 0 auto;
+	
+	& input[type="number"] {
+	   width: 100px;
+	}
+}
+
 .campaign-tab {
   display: flex;
   font-size: 1rem;
+  height: 30px;
+  margin: 20px;
 
   & > label {
     flex-basis: auto;
@@ -245,15 +257,41 @@ body {
   font-size: 2.25rem;
   color: #5a6acf;
   font-weight: bold;
+  margin: 0 30px;
 
   & > div {
     display: inline-block;
   }
 }
 
+.campaign-sub-title {
+	font-size: 1.5rem;
+	color: #5275C1;
+}
+
 .enddate {
   color: #aaa;
   font-size: 1rem;
+}
+
+.write-content {
+	padding: 0 50px 30px 50px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin: 10px 0;
+	
+	& > input[name="cmpnTitle"] {
+	   width: 1100px;
+	   height: 40px;
+	}
+	
+	& > .address {
+        & > input[type="text"] {
+         width: 540px;
+         height: 40px;
+        }
+    }
 }
 
 .id-search {
@@ -263,9 +301,11 @@ body {
 
   justify-content: center;
   align-items: center;
+  
 
   box-sizing: border-box;
   padding: 0 5px;
+  margin: 10px 10px 10px auto;
   border: 1px solid #6d5bd0;
   border-radius: 6px;
   background-color: #f4f2ff;
@@ -506,21 +546,6 @@ body {
     }
   }
 
-  & > .deny-container {
-    & > div {
-      margin: 10px 0;
-    }
-
-    & > textarea {
-      width: 1200px;
-      height: 150px;
-      padding: 10px;
-      box-sizing: border-box;
-      resize: none;
-      font-size: 1rem;
-    }
-  }
-
   & > .close-mark {
     position: absolute;
     top: 20px;
@@ -531,12 +556,127 @@ body {
   }
 }
 
-.add-file {
-  background-color: #e7e9ed;
-  width: 100px;
-  height: 30px;
-  border-radius: 10px;
+.deny-container {
+  & > div {
+    margin: 10px 0;
+  }
+
+  & > textarea {
+    width: 1200px;
+    height: 150px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
 }
+
+.modal-area {
+  width: 600px;
+  height: 700px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 10px 0;
+
+  display: grid;
+  grid-template-columns: 140px auto;
+  grid-template-rows: 70px auto 30px 50px;
+  gap: 10px;
+  /*justify-content: center;*/
+  position: relative;
+
+  background-color: #ffffff;
+  
+  & > div {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+  
+  & > .grid-item:first-child {
+    padding: 0 20px 10px 20px;
+    border-bottom: 1px solid #D3D3D3;
+    
+    grid-row: 1 / 2;
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+  }
+  
+  & > .grid-item:nth-child(2) {
+    grid-row: 2 / 3;
+    grid-column: 1 / 2;
+  }
+  
+  & > .grid-item:nth-child(3) {
+    grid-row: 2 / 3;
+    grid-column: 2 / 3;
+  }
+  
+  & > .grid-item:nth-child(4) {
+    grid-row: 3 / 4;
+    grid-column: 1 / -1;
+  }
+  
+  & > .grid-item:last-child {
+    grid-row: 4 / -1;
+    grid-column: 1 / -1;
+  }
+  
+  & > .do-city {
+    overflow: auto;
+    text-align: center;
+    
+    & > input[name="do-city"] {
+        display: none;
+        
+        &:checked + label {
+            background-color: #5275C1;
+            color: #fff;
+        }
+    }
+    
+    & > label {
+        display: inline-block;
+    
+	    &:hover {
+	        background-color: #eee;
+	    }
+    }
+  }
+  
+  & > .modal-button-list {
+    padding-right: 10px;
+  }
+}
+
+.text-input {
+    border-radius: 5px;
+    border: 1px solid #9F9C9C;
+    resize: none;
+    font-size: 1rem;
+}
+
+.write-input {
+	width: 1100px;
+	height: 100px;
+	box-sizing: border-box;
+	padding: 10px;
+}
+
+/*
+.add-file-flex {
+	& > .add-file {
+	  background-color: #e7e9ed;
+	  width: 100px;
+	  height: 30px;
+	  border-radius: 10px;
+	  font-size: 1rem;
+	  display: inline-block;
+	  text-align: center;
+	}
+	
+	& > #add-file {
+	   display: none;
+	}
+}*/
 
 .button_120_50 {
   width: 120px;
@@ -562,6 +702,12 @@ body {
     background-color: #1a62f8;
     color: #fff;
   }
+  
+  & > button[disabled="disabled"] {
+    background-color: #eee;
+    color: #ccc;
+    border: 0;
+}
 }
 
 .campaign-block {
@@ -584,6 +730,18 @@ body {
     height: 110px;
     border-radius: 10px;
   }
+}
+
+.font-green {
+	color: #23CD0D;
+}
+
+.font-brown {
+	color: #FBAF35;
+}
+
+.font-red {
+	color: #FB3535;
 }
 
 .deny-container {

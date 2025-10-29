@@ -14,6 +14,17 @@ $().ready(function() {
             });
         }
     });
+    
+    $(".require-input").on("keyup", function() {
+        var value = $(this).val();
+        if (value === "") {
+            $(".require-input").addClass("require-empty");
+        }
+        else {
+            $(".require-input").removeClass("require-empty");
+        }
+        submitAutoActive();
+    });
 
     $("#password-confirm").on("keyup", function() {
         $(this).next(".validate-password-confirm").remove();
@@ -83,3 +94,13 @@ $().ready(function() {
         });
     });
 });
+
+function submitAutoActive() {
+    var emptyLength = $(".require-empty").length;
+    if (emptyLength > 0) {
+        $(".auto-active").attr("disabled", "disabled");
+    }
+    else {
+        $(".auto-active").removeAttr("disabled");
+    }
+}

@@ -1,22 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title>Insert title here</title>
-		<link type="text/css" rel="stylesheet" href="/css/brich.css" />
-		<script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
-		<script type="text/javascript" src="/js/campaign/applicantAdopt.js"></script>
-		<script type="text/javascript" src="/js/common/paginator.js"></script>
-	</head>
-	<body>
+<c:set var="scripts">
+	<script type='text/javascript' src='/js/campaign/campaignmain.js'></script>
+	<script type="text/javascript" src="/js/campaign/applicantAdopt.js"></script>
+	<script type="text/javascript" src="/js/common/validate.js"></script>
+    <script type="text/javascript" src="/js/common/paginator.js"></script>
+</c:set>
+<jsp:include page="/WEB-INF/views/layout/menu.jsp">
+    <jsp:param name='css' value="
+        <link type='text/css' rel='stylesheet' href='/css/brich.css' />
+    " />
+    <jsp:param name="scripts" value="${scripts}" />
+</jsp:include>
+
+    <div>
+	    <jsp:include page="/WEB-INF/views/campaign/campaignTab.jsp">
+	       <jsp:param value="${adoptList.campaignInfo.cmpnTitle}" name="cmpnTitle"/>
+	       <jsp:param value="${adoptList.campaignInfo.sttsCd}" name="sttsCd"/>
+	    </jsp:include>
 	    <div class="campaign-wrapper">
-		    <jsp:include page="/WEB-INF/views/campaign/campaignTab.jsp">
-		       <jsp:param value="${adoptList.campaignInfo.cmpnTitle}" name="cmpnTitle"/>
-		       <jsp:param value="${adoptList.campaignInfo.sttsCd}" name="sttsCd"/>
-		    </jsp:include>
 		    <div class="campaign-title">
 	            <div>캠페인 신청자</div>
 	            <span class="enddate">~${adoptList.campaignInfo.cmpnEndDt}</span>
@@ -105,18 +108,20 @@
 				    </div>
 		            
 		            <div class="deny-container">
-                        <textarea name="reason" placeholder="반려 사유를 입력하세요."></textarea>
-                        <div>
-                            <button type="button" class="add-file">첨부파일 +</button>
+                        <textarea name="reason" id="reason" class="text-input require-input require-empty" placeholder="반려 사유를 입력하세요."></textarea>
+                        <div class="add-file-flex">
+                            <!-- <button type="button" class="add-file">첨부파일 +</button> -->
+                            <input id="add-file" type="file" name="file" multiple />
+                            <div id="file-list"></div>
                         </div>
                         <div class="modal-button-list">
                             <button type="button" class="modal-close">닫기</button>
-                            <button type="button" class="modal-submit">제출</button>
+                            <button type="button" class="modal-submit deny-submit auto-active">제출</button>
                         </div>
                     </div>
                     <button type="button" class="modal-close close-mark">X</button>
 	            </div>
 	        </div>
         </div>
-	</body>
-</html>
+    </div>
+<jsp:include page="/WEB-INF/views/layout/footer.jsp" />

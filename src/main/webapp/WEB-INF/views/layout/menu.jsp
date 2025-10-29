@@ -31,7 +31,7 @@ pageEncoding="UTF-8"%>
         	</div>
         	<div class="top-menu-right flex-row">
 		        <div class="top-menu-search-area">
-		          <input class="search-input" type="text" name="searchKeyword" value="${search.searchKeyword}" placeholder="Search" />
+		          <input class="search-input" type="text" name="searchKeyword" placeholder="Search" />
 		        </div>
 	            <div class="top-menu-profile-area flex-row">
 	            	<div class="menu-profile"></div>

@@ -1,4 +1,6 @@
 $().ready(function() {
+    submitAutoActive();
+    
     $("button[name='adopt'].disabled").on("click", function() {
         alert("선정 단계가 아닙니다.");
     });
@@ -120,6 +122,7 @@ $().ready(function() {
         postUrl.text(url);
         postUrl.attr("href", url);
         postUrl.attr("target", "_blank");
+        postUrl.data("cmpn-apply-id", postId);
 
         $(".post-url").append(postUrl);
     });
@@ -131,4 +134,48 @@ $().ready(function() {
         $(".button-list").empty();
     });
     
+    $("#add-file").on("change", function() {
+        var files = this.files;
+        var $fileList = $("#file-list");
+        $fileList.empty(); // 초기화
+    
+        $.each(files, function(index, file) {
+            $fileList.append("<span>" + file.name +"\t </span>");
+        });
+    });
+    
+    $(".deny-submit").on("click", function() {
+        var denyContainer = $(this).closest(".deny-container");
+        var reason = denyContainer.children("#reason").val();
+        var attachedFile = denyContainer.find("input[type=file]");
+        var files = attachedFile[0].files;
+        
+        var formData = new FormData();
+        formData.append("reason", reason);
+        
+        if (files.length > 0) {
+            for(i = 0; i < files.length; i++) {
+                formData.append("file", files[i]);
+            }
+        }
+        
+        url = window.location.href;
+        id = $(".post-url").children("a").data("cmpn-apply-id");
+        $.ajax({
+            url: "/adv/deny/" + id,
+            method: "post",
+            enctype: "multipart/form-data",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log(response);
+                if(response) {
+                    $(".modal").css("display", "none");
+                    window.location.reload();
+                }
+            }
+        });
+        
+    });
 });

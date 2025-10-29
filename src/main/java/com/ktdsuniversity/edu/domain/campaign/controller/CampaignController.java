@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.domain.campaign.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,17 +9,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignwriteVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
+import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 @Controller
 public class CampaignController {
@@ -128,4 +134,29 @@ public class CampaignController {
     		return false;
     	}
     }
+
+	@PostMapping("/adv/deny/{cmpnPstAdptId}")
+	@ResponseBody
+	public boolean doCreateDenyAction(@PathVariable String cmpnPstAdptId,
+									  RequestDenyVO requestDenyVO,
+									  @SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
+		requestDenyVO.setCmpnPstAdptId(cmpnPstAdptId);
+		requestDenyVO.setAdvId(loginUser.getUsrId());
+		System.out.println("controller: " + requestDenyVO);
+		boolean insert = this.campaignService.createDenyByCmpnPstAdoptId(requestDenyVO);
+		
+		if (insert) {
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+	}
+	
+	@GetMapping("/adv/campaignwrite")
+	public String doCreateCampaignAction(Model model) {
+		ResponseCampaignwriteVO common = this.campaignService.createCampaign();
+		model.addAttribute("common", common);
+		return "campaign/campaignWrite";
+	}
 }
