@@ -1,15 +1,23 @@
 package com.ktdsuniversity.edu.domain.chat.service.impl;
 
+
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -246,23 +254,40 @@ public class ChatServiceImpl implements ChatService {
 		int result = chatDao.updateChatRoomLeave(participant);
 		return result > 0;
 	}
-
+	
 	@Transactional
 	@Override
-	public List<ChatMessageVO> readChatMessageList(String chtRmId, String usrId) {
-		// MongoDB에서 메시지 목록 조회
-		List<ChatMessageVO> messages = chatMessageRepository.findByChtRmIdOrderByCrtDtAsc(chtRmId);
-
-		 for (ChatMessageVO message : messages) {
-		        if (message.getAttchGrpId() != null && !message.getAttchGrpId().isEmpty()) {
-		            List<FileVO> files = fileDao.selectFilesByGroupId(message.getAttchGrpId());
-		            message.setFileList(files);
-		        }
-		    }
-		// 3. 읽음 처리
-		updateMessagesAsRead(chtRmId, usrId);
-
-		return messages;
+	public Map<String, Object> readChatMessageListPaged(String chtRmId, String usrId, int page, int size) {
+	    // 페이징 설정 (최신순 내림차순)
+	    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "crtDt"));
+	    
+	    // 메시지 조회
+	    Slice<ChatMessageVO> messageSlice = chatMessageRepository
+	        .findByChtRmIdAndDltYnOrderByCrtDtDesc(chtRmId, "N", pageable);
+	    
+	    //Reverse되게 하기 위해서 List로
+	    List<ChatMessageVO> messages = new ArrayList<>(messageSlice.getContent());
+	    
+	    // 파일이 있다면 파일 정보 추가
+	    for (ChatMessageVO message : messages) {
+	        if (message.getAttchGrpId() != null && !message.getAttchGrpId().isEmpty()) {
+	            List<FileVO> files = fileDao.selectFilesByGroupId(message.getAttchGrpId());
+	            message.setFileList(files);
+	        }
+	    }
+	    
+	    Collections.reverse(messages);
+	    
+	    // 첫 페이지일 때만 읽음 처리
+	    if (page == 0) {
+	        updateMessagesAsRead(chtRmId, usrId);
+	    }
+	    
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("messages", messages);
+	    result.put("hasNext", messageSlice.hasNext());
+	    
+	    return result;
 	}
 
 	@Transactional

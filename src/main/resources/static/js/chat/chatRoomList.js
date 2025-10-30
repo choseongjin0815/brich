@@ -54,13 +54,17 @@ $().ready(function() {
     });
 
     // 신고, 나가기 버튼 영역 클릭시 숨김 방지
-    $(document).on("click", ".report-btn, .leave-chat-btn", function(event) {
+    $(document).on("click", ".report-btn, .leave-chat-btn, .leave-chat-btn-rm", function(event) {
         event.stopPropagation();
     });
 
     // 신고하기/나가기 메뉴 열기
     $(document).on("click", ".chat-leave-btn", function(event) {
+        var chtRmId = $(this).closest(".chatroom-content-item").data("chat-room");
+        console.log(chtRmId);
         event.stopPropagation(); // 문서 클릭 이벤트 막기
+        $(".modal-content-leave").data("cht-rm", chtRmId);
+        console.log(chtRmId);
         var parent = $(this).closest(".chatroom-content-item");
         parent.find(".report-btn, .leave-chat-btn").show();
     });
@@ -68,17 +72,44 @@ $().ready(function() {
     // 메뉴 외부 클릭시 메뉴 숨김
     $(document).on("click", function() {
         $(".report-btn, .leave-chat-btn").hide();
+        $(".modal").fadeOut(200);
     });
 
-    //채팅방 나가기
-    $(document).on("click", ".leave-chat-btn", function() {
-        var chtRmId = $(this).closest(".chatroom-content-item").data("chat-room");
+    //채팅방 나가기 로직 
+    //채팅방 나가기 버튼 누르면 모달 띄움
+    $(document).on("click", ".leave-chat-btn, .leave-chat-btn-rm", function() {
+        $(".modal").fadeIn(200);
+    });
+    //모달 닫기
+    $(document).on("click", ".cancel-btn", function() {
+        $(".modal").fadeOut(200);
+    });
+    //채팅방 나가기 
+    $(document).on("click", ".confirm-btn", function() {
+        var chtRmId = 
+            $(this).closest(".modal-content-leave").data("cht-rm") !== ""
+            ? $(this).closest(".modal-content-leave").data("cht-rm")
+            : $(".chat-main").data("chtrm-id");
+        console.log(chtRmId);
         var startUrl = auth === 1004 ? '/adv' : '/blgr';
         $.post(startUrl + "/chat/room/leave?chtRmId=" + chtRmId, function(response) {
-            alert(response.body.message);
-            window.location.reload(true);
+            if (response.error === null) {
+                alert(response.body.message);
+            }
+            //채팅방 목록에서 나간 경우
+            if($(".chat-main").data("chtrm-id") === undefined) {
+                window.location.reload(true);
+            }
+            //채팅방에서 방을 나간 경우
+            else {
+                window.location = document.referrer;
+                
+            }
         });
-    })
+    });
+
+
+
 
     //실제 메시지를 나누는 채팅방 들어가기 
     $(document).on("click", ".chatroom-content-item", function() {
@@ -105,13 +136,11 @@ function updateFilterButtons($clickedButton) {
 
 }
 
-// 채팅방 목록 로드 함수
 function loadChatRoomList(filter, pageNo) {
     var url = "";
     var params = "pageNo=" + pageNo;
 
     if (auth === 1004) {
-        // 광고주용
         params += "&cmpnId=" + cmpnId;
     }
 
@@ -124,84 +153,75 @@ function loadChatRoomList(filter, pageNo) {
     $.get(url + "?" + params, function(response) {
         var result = response.body;
         var items = result.chatRoomList;
-        console.log(response)
-        // 기존 목록 초기화
-        $(".content-list").children().remove();
+        
+        // HTML 문자열로 먼저 다 만들기
+        var htmlString = "";
 
-        console.log(response);
-
-       
-        // 채팅방 아이템 렌더링
         if (items && items.length > 0) {
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
                 var template = $("#chat-room-list").html();
 
-                //메시지의 길이가 50글자 이상이면 뒤에 ... 붙이고 나머지 제거
-                if (item.lastMsgCn.length >= 50) {
-                    item.lastMsgCn = item.lastMsgCn.substr(0, 35) + "...."
+                // 메시지 처리
+                var lastMsg = item.lastMsgCn || "";
+                if (lastMsg === null) {
+                    htmlString += "<div class='chatroom-content-item no-data' data-chat-room='" + item.chtRmId + "'>" + 
+                                  item.nm + " 님과 채팅을 시작해보세요!</div>";
+                    continue;
                 }
                 
-                //파일을 등록한 경우 메시지 내용이 없으므로 파일 메시지 입니다. 표시 
-                if (item.lastMsgCn === "") {
-                    item.lastMsgCn = "파일 메시지 입니다.";
+                if (lastMsg === "") {
+                    lastMsg = "파일 메시지 입니다.";
+                } else if (lastMsg.length >= 20) {
+                    lastMsg = lastMsg.substr(0, 20) + "...";
                 }
 
+                // template 채우기
                 template = template.replace("#campaigntitle#", item.cmpnTitle)
                     .replace("#campaignstatus#", item.cdNm)
-                    .replace("#lastmessage#", item.lastMsgCn || "")
+                    .replace("#lastmessage#", lastMsg)
                     .replace("#latesttime#", item.lastMsgCrtDt || "")
                     .replace("#unreadcount#", item.unreadCnt || 0)
                     .replace("#chatroomid#", item.chtRmId);
+                
                 if (auth === 1004) {
-                    // 광고주는 블로거 이름 표시
                     template = template.replace("#blogername#", item.nm || "");
                 }
 
-                var listItem = $(template);
+                // jQuery 객체로 변환해서 처리
+                var $listItem = $(template);
 
-                // 권한에 따라 불필요한 요소 제거
+                // 권한에 따라 제거
                 if (auth === 1004) {
-                    listItem.find(".campaign-status").remove();
-                    listItem.find(".campaign-title.camp").remove();
+                    $listItem.find(".campaign-status").remove();
+                    $listItem.find(".campaign-title.camp").remove();
                 } else {
-                    listItem.find(".campaign-title.bloger-name").remove();
-                }
-                //채팅 메시지가 없으면 채팅을 입력해주세요 메시지
-                console.log(item.lastMsgCn);
-                if (item.lastMsgCn === null) {
-                    listItem.children().remove();
-                    listItem.append("<div class='no-data'>" + item.nm + " 님과 채팅을 시작해보세요!</div>");
+                    $listItem.find(".campaign-title.bloger-name").remove();
                 }
 
-                //메시지의 길이가 20글자 이상이면 뒤에 ... 붙이고 나머지 제거
-                if (item.lastMsgCn.length >= 20) {
-                    item.lastMsgCn = item.lastMsgCn.substr(0, 20) + "..."
-                }
-                //안읽은 개수가 0개일때 화면에 표시하지 않도록 제거
+                // 안읽은 개수 0이면 제거
                 if (item.unreadCnt === 0) {
-                    listItem.find(".unread-count").remove();
+                    $listItem.find(".unread-count").remove();
                 }
 
-                //상태에 따른 스타일 적용 
+                // 상태 스타일
                 if (item.cdNm === '종료') {
-                    listItem.find(".campaign-status").addClass("end");
-                }
-                else if (item.cdNm === '진행중') {
-                    listItem.find(".campaign-status").addClass("ongoing");
-                }
-                else if (item.cdNm === '선정중') {
-                    listItem.find(".campaign-status").addClass("selecting");
+                    $listItem.find(".campaign-status").addClass("end");
+                } else if (item.cdNm === '진행중') {
+                    $listItem.find(".campaign-status").addClass("ongoing");
+                } else if (item.cdNm === '선정중') {
+                    $listItem.find(".campaign-status").addClass("selecting");
                 }
 
-                $(".content-list").append(listItem);
-
-
-
+                // HTML 문자열로 누적
+                htmlString += $listItem[0].outerHTML;
             }
         } else {
-            $(".content-list").append("<div class='no-data'>채팅방이 없습니다.</div>");
+            htmlString = "<div class='no-data'>채팅방이 없습니다.</div>";
         }
+
+        // 한 번에 교체! (reflow 1번만 발생)
+        $(".content-list").html(htmlString);
 
         // 페이지네이션 렌더링
         renderPagination(result);

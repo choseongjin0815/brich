@@ -6,6 +6,12 @@ var myCmpny = null;
 var auth = null;
 var startUrl = null;
 
+// 페이징 관련 변수
+var currentPage = 0;
+var pageSize = 20;
+var isLoading = false;
+var hasMoreMessages = true;
+
 $().ready(function() {
     // 사용자 정보 및 채팅방 정보 초기화
     auth = $(".content-box").data("auth");
@@ -20,7 +26,7 @@ $().ready(function() {
     console.log("권한:", auth);
     console.log("사업자명:", myCmpny);
 
-    // WebSocket 연결 및 채팅방 구독
+    // WebSocket 연결
     connect();
 
     // 신고하기/나가기 메뉴 열기
@@ -29,41 +35,13 @@ $().ready(function() {
         $(".report-btn-rm, .leave-chat-btn-rm").show();
     });
 
-    // 메뉴 외부 클릭시 메뉴 숨김
-    $(document).on("click", function() {
-        $(".report-btn-rm, .leave-chat-btn-rm").hide();
-    });
-
-    // 채팅방 나가기
-    $(".leave-chat-btn-rm").on("click", function(event) {
-        event.stopPropagation();
-        if (confirm("채팅방을 나가시겠습니까?")) {
-            $.post(startUrl + "/chat/room/leave", { chtRmId: chtRmId }, function(response) {
-                if (response.body.success) {
-                    alert(response.body.message);
-                    disconnect();
-                    window.location.href = startUrl + "/chat/rooms";
-                } else {
-                    alert(response.body.message);
-                }
-            }).fail(function() {
-                alert("채팅방 나가기에 실패했습니다.");
-            });
-        }
-    });
-
-    // 페이지 로딩 시 채팅 메시지 내역 출력
-    loadChatMessages();
-
-    // 메시지 전송 버튼 클릭 (중복 방지를 위해 off 후 on)
+    // 메시지 전송 버튼 클릭
     $(".chat-send-btn").off("click").on("click", function() {
         sendMessage();
     });
 
-    // Enter 키로 메시지 전송 (줄바꿈은 shift + enter로 해야함)
-    // 한글 입력 중복 방지를 위해 isComposing을 체크해야함 <== 문제상황 "안녕"같은 한글 입력하면 "안" "안녕" 두개 입력되는 현상이 있었음
+    // Enter 키로 메시지 전송
     $(".chat-text-input").off("keydown").on("keydown", function(e) {
-        // 한글 조합 중이면 무시 (안녕 -> 안녕, 녕 중복 입력 방지)
         if (e.isComposing || e.keyCode === 229) {
             return;
         }
@@ -84,7 +62,6 @@ $().ready(function() {
         var files = this.files;
         if (files && files.length > 0) {
             sendFileMessage(files);
-            // 선택 초기화
             $(this).val("");
         }
     });
@@ -93,13 +70,18 @@ $().ready(function() {
     $(window).on("beforeunload", function() {
         disconnect();
     });
+
+    // 스크롤 이벤트 초기화
+    initScrollEvent();
+
+    // 메시지 로드
+    loadChatMessages(0);
 });
 
 /**
  * WebSocket 연결
  */
 function connect() {
-    // 이미 연결되어 있으면 중복 연결 방지
     if (stompClient !== null && stompClient.connected) {
         console.log("이미 WebSocket이 연결되어 있습니다.");
         return;
@@ -109,7 +91,6 @@ function connect() {
     
     var socket = new SockJS('/ws-chat');
     stompClient = Stomp.over(socket);
-    
     
     stompClient.connect({}, function(frame) {
         console.log('WebSocket 연결 성공:', frame);
@@ -162,26 +143,163 @@ function disconnect() {
 }
 
 /**
- * 채팅 메시지 내역 로드
+ * 채팅 메시지 내역 로드 (페이징)
  */
-function loadChatMessages() {
-    $.get(startUrl + "/chat/room/" + chtRmId + "/messages", function(response) {
-        if (response.body.success) {
-            var messages = response.body.data;
+function loadChatMessages(page) {
+    if (isLoading || !hasMoreMessages) return;
+    
+    isLoading = true;
+    
+    $.get(startUrl + "/chat/room/" + chtRmId + "/messages", {
+        page: page,
+        size: pageSize
+    }, function(response) {
+        if (response.body.messages && response.body.messages.length > 0) {
+            var messages = response.body.messages;
+            hasMoreMessages = response.body.hasNext;
+            
             var chatArea = $(".message-container");
-            chatArea.empty(); // 기존 메시지 삭제
-
-            if (messages && messages.length > 0) {
+            
+            if (page === 0) {
+                // 첫 로딩: 기존 메시지 삭제
+                chatArea.empty();
+                
                 messages.forEach(function(message) {
-                    displayMessage(message, false); // 스크롤 안함
+                    var messageHtml = createMessageHtml(message);
+                    chatArea.append(messageHtml);
                 });
+                
+                // 스크롤을 최하단으로
+                scrollToBottom();
+            } else {
+                // 추가 로딩: 기존 메시지 위에 추가
+                var oldScrollHeight = chatArea[0].scrollHeight;
+                
+                // 메시지를 역순으로 prepend (오래된 것부터)
+                for (var i = messages.length - 1; i >= 0; i--) {
+                    var messageHtml = createMessageHtml(messages[i]);
+                    chatArea.prepend(messageHtml);
+                }
+                
+                // 스크롤 위치 유지
+                var newScrollHeight = chatArea[0].scrollHeight;
+                chatArea.scrollTop(newScrollHeight - oldScrollHeight);
             }
-            // 스크롤을 최하단으로 이동
-            scrollToBottom();
+            
+            currentPage = page;
         }
+        
+        isLoading = false;
     }).fail(function(error) {
         console.error("메시지 로드 실패:", error);
+        isLoading = false;
     });
+}
+
+/**
+ * 스크롤 이벤트 - 상단 도달 시 이전 메시지 로드
+ */
+function initScrollEvent() {
+    var container = $(".message-container");
+    
+    container.on("scroll", function() {
+        // 스크롤이 맨 위에서 50px 이내면 이전 메시지 로드함
+        if (container.scrollTop() < 50 && !isLoading && hasMoreMessages) {
+            console.log("이전 메시지 로드...");
+            loadChatMessages(currentPage + 1);
+        }
+    });
+}
+
+/**
+ * 화면에 메시지 생성
+ * sessionAttribute에 있는 나의 아이디 값이랑 메시지에 담긴 id를 비교함
+ */
+function createMessageHtml(message) {
+    var formattedTime = formatChatDate(message.crtDt);
+    
+    // 내 메시지
+    if (message.usrId === myId) {
+        var readCheckImg = message.rdYn === "Y" 
+            ? "<img class='read-check' src='/img/read_receipt.png' />" 
+            : "";
+        
+        var fileImagesHtml = generateFileHtml(message, myId);
+        
+        return "<div class='my-message'>" +
+                readCheckImg +
+                "<div class='message-time'>" + formattedTime + "</div>" +
+                "<div class='message-content-wrapper'>" +
+                    fileImagesHtml +
+                    (message.msgCn && message.msgCn.trim() 
+                        ? "<div class='my-message-text'>" + message.msgCn + "</div>" 
+                        : "") +
+                "</div>" +
+            "</div>";
+    } 
+    // 상대방 메시지
+    else {
+        var senderName = message.cmpny && message.cmpny.trim() 
+            ? message.cmpny 
+            : message.usrNm;
+        
+        var fileImagesHtml = generateFileHtml(message, message.usrId);
+        
+        return "<div class='other-message'>" +
+                "<div class='other-message-text-box'>" +
+                    "<div class='other-name'>" + senderName + "</div>" +
+                    "<div class='message-content-wrapper'>" +
+                        fileImagesHtml +
+                        (message.msgCn && message.msgCn.trim() 
+                            ? "<div class='other-message-text'>" + message.msgCn + "</div>" 
+                            : "") +
+                    "</div>" +
+                "</div>" +
+                "<div class='message-time'>" + formattedTime + "</div>" +
+            "</div>";
+    }
+}
+
+/**
+ * 파일 HTML 생성
+ */
+function generateFileHtml(message, usrId) {
+    var html = "";
+    
+    if (message.attchGrpId && message.fileList && message.fileList.length > 0) {
+        message.fileList.forEach(function(file) {
+            var ext = file.flNm ? file.flNm.substring(file.flNm.lastIndexOf('.') + 1).toLowerCase() : '';
+            var fileUrl = '/file/' + usrId + '/' + message.attchGrpId + '/' + file.flId;
+            
+            if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
+                html += "<a href='" + fileUrl + "' download='" + file.flNm + "'>" +
+                    "<img class='chat-img' src='" + fileUrl + "' />" +
+                    "</a>";
+            } else {
+                html += "<div class='chat-file'>" +
+                    "<a href='" + fileUrl + "' download='" + file.flNm + "'>" +
+                    file.flNm +
+                    "</a>" +
+                    "</div>";
+            }
+        });
+    }
+    
+    return html;
+}
+
+/**
+ * 메시지 화면에 표시 (WebSocket으로 받은 새로운 메시지)
+ */
+function displayMessage(message, shouldScroll) {
+    var chatArea = $(".message-container");
+    var messageHtml = createMessageHtml(message);
+    
+    chatArea.append(messageHtml);
+    
+    if (shouldScroll !== false) {
+        scrollToBottom();
+    }
 }
 
 /**
@@ -199,11 +317,10 @@ function sendMessage() {
 
     if (!stompClient || !stompClient.connected) {
         alert("채팅 서버와 연결되지 않았습니다. 잠시 후 다시 시도해주세요.");
-        connect(); // 재연결 시도
+        connect();
         return;
     }
 
-    // WebSocket으로 메시지 전송
     var chatMessage = {
         chtRmId: chtRmId,
         usrId: myId,
@@ -213,13 +330,9 @@ function sendMessage() {
     };
 
     console.log("메시지 전송 데이터:", chatMessage);
-    console.log("전송 시간:", new Date().toISOString());
-
     stompClient.send("/app/chat/send", {}, JSON.stringify(chatMessage));
-
     console.log("=== sendMessage 전송 완료 ===");
 
-    // 입력창 초기화
     $(".chat-text-input").val("");
     $(".chat-text-input").focus();
 }
@@ -234,31 +347,27 @@ function sendFileMessage(files) {
         return;
     }
 
-    // FormData 생성
     var formData = new FormData();
     
-    // 파일 추가
     for (var i = 0; i < files.length; i++) {
         formData.append("files", files[i]);
     }
     
-    // 메시지 정보 추가
     formData.append("chtRmId", chtRmId);
     formData.append("usrId", myId);
-    formData.append("msgCn", ""); // 파일만 전송
+    formData.append("msgCn", "");
     formData.append("nm", myName);
     formData.append("cmpny", myCmpny);
 
-    // REST API로 전송 (Controller의 @PostMapping("/message/send"))
+    //파일 메시지 같은 경우는 MessageMapping이 아닌 PostMapping(실제 파일 데이터 때문에)
     $.ajax({
         url: startUrl + "/chat/message/send",
         type: "POST",
         data: formData,
-        processData: false,  // FormData 사용 시 필수
-        contentType: false,  // FormData 사용 시 필수
+        processData: false,
+        contentType: false,
         success: function(response) {
             console.log("파일 전송 성공:", response);
-            // 서버에서 WebSocket으로 브로드캐스트하므로 별도 처리 불필요
         },
         error: function(error) {
             console.error("파일 전송 실패:", error);
@@ -268,148 +377,8 @@ function sendFileMessage(files) {
 }
 
 /**
- * 메시지 화면에 표시
- */
-function displayMessage(message, shouldScroll) {
-    console.log("=== displayMessage 호출 ===", message);
-    
-    var chatArea = $(".message-container");
-    var formattedTime = formatChatDate(message.crtDt);
-    
-    // 내 메시지인 경우
-    if (message.usrId === myId) {
-        // 읽음 표시 아이콘 (rdYn이 Y면 표시)
-        var readCheckImg = "";
-        if (message.rdYn === "Y") {
-            readCheckImg = "<img class='read-check' src='/img/read_receipt.png' />";
-        }
-        
-        // 첨부 파일 처리
-        var fileImagesHtml = "";
-        if (message.attchGrpId && message.fileList && message.fileList.length > 0) {
-            message.fileList.forEach(function(file) {
-                // 확장자 추출
-                var ext = '';
-                if (file.flNm && file.flNm.lastIndexOf('.') > -1) {
-                    ext = file.flNm.substring(file.flNm.lastIndexOf('.') + 1).toLowerCase();
-                }
-                
-                // 파일 다운로드 URL
-                var fileUrl = '/file/' + myId + '/' + message.attchGrpId + '/' + file.flId;
-                
-                // 이미지 파일이면 미리보기 표시 (클릭하면 다운로드)
-                if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(ext)) {
-                    fileImagesHtml += "<a href='" + fileUrl + "' download='" + escapeHtml(file.flNm) + "'>" +
-                        "<img class='chat-img' src='" + fileUrl + "' />" +
-                        "</a>";
-                } 
-                // 기타 파일은 파일명 + 다운로드 링크로 표시
-                else {
-                    fileImagesHtml += "<div class='chat-file'>" +
-                        "<a href='" + fileUrl + "' download='" + escapeHtml(file.flNm) + "'>" +
-                        escapeHtml(file.flNm) +
-                        "</a>" +
-                        "</div>";
-                }
-            });
-        }
-        
-        var myMessageHtml = 
-            "<div class='my-message'>" +
-                readCheckImg +
-                "<div class='message-time'>" + formattedTime + "</div>";
-        
-        // 파일과 텍스트를 묶는 컨테이너
-        myMessageHtml += "<div class='message-content-wrapper'>";
-        
-        // 파일이 있으면 표시
-        if (fileImagesHtml) {
-            myMessageHtml += fileImagesHtml;
-        }
-        
-        // 텍스트 메시지가 있으면 표시
-        if (message.msgCn && message.msgCn.trim()) {
-            myMessageHtml += "<div class='my-message-text'>" + escapeHtml(message.msgCn) + "</div>";
-        }
-        
-        myMessageHtml += "</div></div>";
-        
-        chatArea.append(myMessageHtml);
-    } 
-    // 상대방 메시지인 경우
-    else {
-        var senderName = "";
-        
-        // 내가 광고주가 아닐 때 (블로거) - 회사명 표시
-        if (message.cmpny && message.cmpny.trim()) {
-            senderName = message.cmpny;  // 보낸 사람이 사업자면 회사명
-        } else {
-            senderName = message.usrNm;  // 보낸 사람이 블로거면 이름
-        }
-        
-        // 첨부 파일 처리
-        var fileImagesHtml = "";
-        if (message.attchGrpId && message.fileList && message.fileList.length > 0) {
-            message.fileList.forEach(function(file) {
-                // 확장자 추출
-                var ext = '';
-                if (file.flNm && file.flNm.lastIndexOf('.') > -1) {
-                    ext = file.flNm.substring(file.flNm.lastIndexOf('.') + 1).toLowerCase();
-                }
-                
-                // 파일 다운로드 URL
-                var fileUrl = '/file/' + message.usrId + '/' + message.attchGrpId + '/' + file.flId;
-                
-                // 이미지 파일이면 미리보기 표시 (클릭하면 다운로드)
-                if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(ext)) {
-                    fileImagesHtml += "<a href='" + fileUrl + "' download='" + escapeHtml(file.flNm) + "'>" +
-                        "<img class='chat-img' src='" + fileUrl + "' />" +
-                        "</a>";
-                } 
-                // 기타 파일은 파일명 + 다운로드 링크로 표시
-                else {
-                    fileImagesHtml += "<div class='chat-file'>" +
-                        "<a href='" + fileUrl + "' download='" + escapeHtml(file.flNm) + "'>" +
-                         escapeHtml(file.flNm) +
-                        "</a>" +
-                        "</div>";
-                }
-            });
-        }
-        
-        var otherMessageHtml = 
-            "<div class='other-message'>" +
-                "<div class='other-message-text-box'>" +
-                    "<div class='other-name'>" + escapeHtml(senderName) + "</div>" +
-                    "<div class='message-content-wrapper'>";
-        
-        // 파일이 있으면 표시
-        if (fileImagesHtml) {
-            otherMessageHtml += fileImagesHtml;
-        }
-        
-        // 텍스트 메시지가 있으면 표시
-        if (message.msgCn && message.msgCn.trim()) {
-            otherMessageHtml += "<div class='other-message-text'>" + escapeHtml(message.msgCn) + "</div>";
-        }
-        
-        otherMessageHtml +=
-                    "</div>" +
-                "</div>" +
-                "<div class='message-time'>" + formattedTime + "</div>" +
-            "</div>";
-        
-        chatArea.append(otherMessageHtml);
-    }
-
-    // 스크롤 처리 (기본값 true)
-    if (shouldScroll !== false) {
-        scrollToBottom();
-    }
-}
-
-/**
  * 스크롤을 최하단으로 이동
+ * 가장 최근 메시지가 제일 아래에 있을 것이므로 아래로 이동한 화면으로 시작함
  */
 function scrollToBottom() {
     var container = $(".message-container");
@@ -434,13 +403,11 @@ function markMessagesAsRead() {
 }
 
 /**
- * 읽음 상태 업데이트 (UI 업데이트용)
+ * 읽음 상태 업데이트
  */
 function updateReadStatus() {
-    // 상대방이 메시지를 읽었을 때 내가 보낸 메시지에 읽음 표시 추가
     console.log("읽음 상태 업데이트");
     
-    // 아직 읽음 표시가 없는 내 메시지들에 읽음 아이콘 추가
     $(".my-message").each(function() {
         if ($(this).find(".read-check").length === 0) {
             $(this).prepend("<img class='read-check' src='/img/read_receipt.png' />");
@@ -469,7 +436,6 @@ function formatChatDate(isoString) {
 
     const two = n => String(n).padStart(2, "0");
 
-    // 오늘인지 체크
     if (y === nowY && m === nowM && d === nowD) {
         const ampm = hh < 12 ? "오전" : "오후";
         let hour12 = hh % 12;
@@ -477,29 +443,11 @@ function formatChatDate(isoString) {
         return `${ampm} ${hour12}:${two(mm)}`;
     }
 
-    // 올해
+    //메시지 날짜가 올해랑 같은 연도면 mm.dd로 표현함
     if (y === nowY) {
         return `${two(m)}.${two(d)}`;
     }
 
-    // 작년 이전
     return `${y}.${two(m)}.${two(d)}`;
 }
 
-/**
- * XSS 방지를 위한 HTML 이스케이프 <-- SQL인젝션 같은 느낌 생각하면 됨
- */
-function escapeHtml(text) {
-    if (!text) return "";
-    
-    var map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;',
-        '\n': '<br>'
-    };
-    
-    return text.replace(/[&<>"'\n]/g, function(m) { return map[m]; });
-}

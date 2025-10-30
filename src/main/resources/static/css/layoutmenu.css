@@ -75,7 +75,7 @@ ul {
           }
 
           & > .menu-profilename {
-            flex-grow: 1;
+            flex-grow: 0.5;
             padding: 9px 0 9px 12px;
           }
 
@@ -259,7 +259,14 @@ ul {
    }
 }
 
-
+.logout {
+	color: #333;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-right: 20px;
+	font-size: 14px;
+}
 
 
 

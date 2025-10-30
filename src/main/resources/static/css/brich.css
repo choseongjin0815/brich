@@ -83,7 +83,7 @@ body {
   }
 
   .regist-main {
-    margin-top: 190px;
+    margin-top: 140px;
 
     & > form {
       & > .regist-btn {
@@ -127,7 +127,7 @@ body {
         }
         display: flex;
         flex-direction: column;
-        margin: 10px 0;
+        margin: 8px 0;
         & > input {
           border: 1px solid #11111333;
           width: 550px;
@@ -172,9 +172,14 @@ body {
             width: 400px;
           }
         }
+        
+        & > .regist-side-btn.email-verify,
+            .regist-side-btn.email-send {
+		    margin-top: 30px 
+		}
 
         & > .regist-side-btn {
-          margin-top: 31px;
+          margin-top: 36px;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -189,6 +194,7 @@ body {
     }
   }
 }
+
 
 & .term-check-input {
   display: flex;

@@ -37,6 +37,7 @@ pageEncoding="UTF-8"%>
 	            <div class="top-menu-profile-area flex-row">
 	            	<div class="menu-profile"></div>
 	            	<div class="menu-profilename height-center">${sessionScope.__LOGIN_USER__.logId}</div>
+	            	<a class="logout" href="/logout">로그아웃</a>
 	            	<div class="menu-alert"></div>
 				</div>
         	</div>

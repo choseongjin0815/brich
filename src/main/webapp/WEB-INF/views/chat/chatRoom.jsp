@@ -5,10 +5,21 @@
 	<jsp:param name='chatCss'
 		value="
         <link type='text/css' rel='stylesheet' href='/css/chat/chat.css' />
+        <link type='text/css' rel='stylesheet' href='/css/blog/verification.css' />
+        
     " />
+    
 	<jsp:param name='chatroomscripts'
 		value="
         <script type='text/javascript' src='/js/chat/chatRoom.js'></script>
+    " />
+    <jsp:param name="chatroomListscripts"
+        value="
+        <script type='text/javascript' src='/js/chat/chatRoomList.js'></script>
+    " />
+    <jsp:param name="scripts"
+        value="
+        <script type='text/javascript' src='/js/blog/verification.js'></script>
     " />
 	<jsp:param name="sockjs"
 		value='<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>' />
@@ -39,6 +50,18 @@
 			<button class="chat-send-btn" type="button">전송</button>
 		</div>
 	</div>
+</div>
+<div class="modal">
+    <div class="modal-content-leave" data-cht-rm="">
+        <div class="leave-check">
+            <div class="m1">채팅방에서 나가시겠습니까?</div>
+            <div class="m2">채팅방을 되돌릴 수 없습니다.</div>
+            <div class="modal-btn-box">
+                <div class="cancel-btn">취소</div>
+                <div class="confirm-btn">나가기</div>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
 </div>

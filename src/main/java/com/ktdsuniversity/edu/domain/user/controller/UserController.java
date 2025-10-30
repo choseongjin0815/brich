@@ -178,7 +178,10 @@ public class UserController {
     		model.addAttribute("registData", requestUserRegistVO);
     		
     		//블로거 회원 가입 검증 실패
-    		if(requestUserRegistVO.getAutr().equals("1002")) {
+    		if(requestUserRegistVO.getAutr().equals("1003")) {
+    	    	List<CommonCodeVO> blogCategory = this.userService.readCategoryList();
+    	    	model.addAttribute("categoryList", blogCategory);
+
     			 model.addAttribute("role", "blogger");
     			 
     			 log.info("{}",model.getAttribute("registData"));

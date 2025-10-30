@@ -27,12 +27,22 @@
 			<div class="progress not">안읽음</div>
 		</div>
 		<div class="content-list"></div>
-		<div class="page-list">1 2 3 4 5</div>
+		<div class="page-list"></div>
 	</div>
 </div>
-<div class="modal"></div>
-
+<div class="modal">
+    <div class="modal-content-leave" data-cht-rm="">
+        <div class="leave-check">
+            <div class="m1">채팅방에서 나가시겠습니까?</div>
+            <div class="m2">채팅방을 되돌릴 수 없습니다.</div>
+            <div class="modal-btn-box">
+                <div class="cancel-btn">취소</div>
+                <div class="confirm-btn">나가기</div>
+            </div>
+        </div>
+    </div>
 </div>
+
 </div>
 </div>
 <template id="chat-room-list">

@@ -165,6 +165,9 @@
     color: #FF0000;  
     font-size: 14px;
 }
+.email-confirm {
+	height: 22px;
+}
 
 .email-not-check {
     text-align: center;
@@ -173,7 +176,7 @@
 
 .find-btn {
     padding: 5px 0;
-    width: 100%;
+    width: 80%;
     border-radius: 8px;
     color: #fff;
     font-size: 24px;
@@ -237,4 +240,19 @@
        transform: scale(1.01);
     }    
 
+}
+
+.require-mark {
+	display: inline-block;
+	padding-top: 5px;
+	color: red;
+	vertical-align: middle;
+}
+
+.optional-label {
+	margin-top: 10px;
+}
+
+.cmpny-name {
+	margin-top: 10px;
 }
