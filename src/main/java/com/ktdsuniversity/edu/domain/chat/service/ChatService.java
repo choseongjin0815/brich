@@ -34,4 +34,6 @@ public interface ChatService {
     public ChatMessageVO sendMessage(RequestChatMessageVO requestChatMessageVO);
     
     public void updateMessagesAsRead(String chtRmId, String usrId);
+
+	public CampaignVO readCampaignByChtRmId(String chtRmId);
 }

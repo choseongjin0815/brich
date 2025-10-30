@@ -342,6 +342,7 @@ ul{
 
 .my-message-text,
 .other-message-text {
+	word-break: break-all;
 	max-width: 350px;
 }
 
@@ -399,4 +400,73 @@ ul{
 	&:hover {
 	   transform: scale(1.07);
 	}
+}
+
+.file-insert {
+	margin-left: 50px;
+}
+
+
+.message-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+
+.chat-file {
+    margin-top: 10px;
+    padding: 4px 6px;
+    background-color: #F2F2F7;
+    border-radius: 5px;
+    max-width: 350px;
+    display: block;
+}
+
+.chat-file a {
+    text-decoration: none;
+    color: #007AFF;
+    font-size: 14px;
+    display: block;
+    word-break: break-all;
+}
+
+.chat-file a:hover {
+    text-decoration: underline;
+}
+
+
+.my-message .chat-file {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+
+.chat-img {
+    display: block;
+    max-width: 350px;
+    margin: 5px 0;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.chat-img:hover {
+    opacity: 0.9;
+}
+
+
+a:has(.chat-img) {
+    display: block;
+    line-height: 0;
+}
+
+.leave-room-modal {
+  display: none; /* 기본 비활성 */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
 }

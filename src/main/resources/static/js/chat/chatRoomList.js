@@ -79,7 +79,7 @@ $().ready(function() {
             window.location.reload(true);
         });
     })
-    
+
     //실제 메시지를 나누는 채팅방 들어가기 
     $(document).on("click", ".chatroom-content-item", function() {
         var chtRmId = $(this).closest(".chatroom-content-item").data("chat-room");
@@ -130,11 +130,22 @@ function loadChatRoomList(filter, pageNo) {
 
         console.log(response);
 
+       
         // 채팅방 아이템 렌더링
         if (items && items.length > 0) {
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
                 var template = $("#chat-room-list").html();
+
+                //메시지의 길이가 50글자 이상이면 뒤에 ... 붙이고 나머지 제거
+                if (item.lastMsgCn.length >= 50) {
+                    item.lastMsgCn = item.lastMsgCn.substr(0, 35) + "...."
+                }
+                
+                //파일을 등록한 경우 메시지 내용이 없으므로 파일 메시지 입니다. 표시 
+                if (item.lastMsgCn === "") {
+                    item.lastMsgCn = "파일 메시지 입니다.";
+                }
 
                 template = template.replace("#campaigntitle#", item.cmpnTitle)
                     .replace("#campaignstatus#", item.cdNm)
@@ -163,6 +174,10 @@ function loadChatRoomList(filter, pageNo) {
                     listItem.append("<div class='no-data'>" + item.nm + " 님과 채팅을 시작해보세요!</div>");
                 }
 
+                //메시지의 길이가 20글자 이상이면 뒤에 ... 붙이고 나머지 제거
+                if (item.lastMsgCn.length >= 20) {
+                    item.lastMsgCn = item.lastMsgCn.substr(0, 20) + "..."
+                }
                 //안읽은 개수가 0개일때 화면에 표시하지 않도록 제거
                 if (item.unreadCnt === 0) {
                     listItem.find(".unread-count").remove();

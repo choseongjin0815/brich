@@ -80,10 +80,11 @@ public class ChatController {
     		                 , Model model) {
     	String usrId = loginUser.getUsrId();
         String auth = loginUser.getAutr();
-        
+        CampaignVO campaignVO = this.chatService.readCampaignByChtRmId(chtRmId);
         model.addAttribute("chtRmId", chtRmId);
         model.addAttribute("usrId", usrId);
         model.addAttribute("auth", auth);
+        model.addAttribute("campaign", campaignVO);
         
         return "chat/chatRoom";
     }
@@ -261,6 +262,7 @@ public class ChatController {
     @ResponseBody
     public AjaxResponse sendMessage(RequestChatMessageVO requestChatMessageVO
     							  , @SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser) {
+    	log.info("위 호출");
     	String usrId = loginUser.getUsrId();
       	 
         AjaxResponse ajaxResponse = new AjaxResponse();

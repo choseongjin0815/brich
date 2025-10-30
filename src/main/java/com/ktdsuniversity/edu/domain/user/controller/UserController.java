@@ -73,6 +73,7 @@ public class UserController {
     		return "/user/login";
     	}
     	UserVO loginUser = this.userService.readUser(requestUserLoginVO);
+    	log.info("{}",loginUser);
     	
     	if(loginUser != null) {
     		httpSession.setAttribute("__LOGIN_USER__", loginUser);

@@ -88,5 +88,11 @@ public class ChatDaoImpl extends SqlSessionDaoSupport implements ChatDao {
     public String selectUserName(String usrId) {
         return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUserName", usrId);
     }
+
+
+	@Override
+	public CampaignVO selectCampaignByChtRmId(String chtRmId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignByChtRmId", chtRmId);
+	}
     
 }

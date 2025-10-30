@@ -277,9 +277,9 @@ public class CampaignServiceImpl implements CampaignService {
 			return 0;
 		}
 			
-		
+		return 0; // 코드 오류 나서 넣음 - 성진 
 	}
-}
+
 
 
 

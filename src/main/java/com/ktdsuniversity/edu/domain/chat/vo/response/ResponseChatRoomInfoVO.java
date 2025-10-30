@@ -22,6 +22,8 @@ public class ResponseChatRoomInfoVO {
 	private String logId;
 	
 	private int unreadCnt;
+	
+	private String crtDt;
 
 	public String getChtRmId() {
 		return this.chtRmId;
@@ -66,6 +68,7 @@ public class ResponseChatRoomInfoVO {
 	public String getLastMsgCn() {
 		return this.lastMsgCn;
 	}
+	
 
 	public void setLastMsgCn(String lastMsgCn) {
 		this.lastMsgCn = lastMsgCn;
@@ -112,11 +115,22 @@ public class ResponseChatRoomInfoVO {
 		this.logId = logId;
 	}
 
+	
+	public String getCrtDt() {
+		return this.crtDt;
+	}
+
+	public void setCrtDt(String crtDt) {
+		this.crtDt = crtDt;
+	}
+
 	@Override
 	public String toString() {
 		return "ResponseChatRoomInfoVO [chtRmId=" + chtRmId + ", cmpnId=" + cmpnId + ", cmpnTitle=" + cmpnTitle
 				+ ", sttsCd=" + sttsCd + ", cdNm=" + cdNm + ", lastMsgCn=" + lastMsgCn + ", lastMsgCrtDt="
 				+ lastMsgCrtDt + ", lastMsgUsrId=" + lastMsgUsrId + ", nm=" + nm + ", logId=" + logId + ", unreadCnt="
-				+ unreadCnt + "]";
+				+ unreadCnt + ", crtDt=" + crtDt + "]";
 	}
+
+	
 }

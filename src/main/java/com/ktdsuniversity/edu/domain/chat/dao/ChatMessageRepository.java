@@ -23,8 +23,7 @@ public interface ChatMessageRepository extends MongoRepository<ChatMessageVO, St
 	 /**
      * 채팅방의 최신 메시지 조회 (내림차순)
      */
-    @Query("{ 'CHT_RM_ID': ?0, 'DLT_YN': 'N' }")
-    public List<ChatMessageVO> findByChtRmIdOrderByCrtDtDesc(String chtRmId, Sort sort);
+	public ChatMessageVO findTop1ByChtRmIdAndDltYnOrderByCrtDtDesc(String chtRmId, String dltYn);
     
     /**
     * 안읽은 메시지 개수 조회

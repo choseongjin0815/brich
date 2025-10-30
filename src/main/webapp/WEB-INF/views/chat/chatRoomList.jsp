@@ -5,11 +5,17 @@
 	<jsp:param name='chatCss'
 		value="
         <link type='text/css' rel='stylesheet' href='/css/chat/chat.css' />
+        <link type='text/css' rel='stylesheet' href='/css/blog/verification.css' />
     " />
 	<jsp:param name="chatroomListscripts"
 		value="
         <script type='text/javascript' src='/js/chat/chatRoomList.js'></script>
     " />
+	<jsp:param name="scripts"
+		value="
+        <script type='text/javascript' src='/js/blog/verification.js'></script>
+    " />
+
 </jsp:include>
 <div class="chat-main" data-cmpn="${cmpnId}">
 	<div class="header-title">메시지</div>
@@ -23,6 +29,9 @@
 		<div class="content-list"></div>
 		<div class="page-list">1 2 3 4 5</div>
 	</div>
+</div>
+<div class="modal"></div>
+
 </div>
 </div>
 </div>

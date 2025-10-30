@@ -27,6 +27,7 @@
              , AVRG_VSTR_CNT
              , BLG_NGHBR_CNT
              , SCRP_CNT
+             , CMPNY
              , CRT_DT
              , CRTR
              , UPDT_DT
