@@ -93,6 +93,13 @@ $().ready(function() {
             }
         });
     });
+    
+    $(".modal-close").on("click", function() {
+        $(".modal").css("display", "none");
+        $(".deny-container").css("display", "none");
+        $(".post-url").children("a").remove();
+        $(".button-list").empty();
+    });
 });
 
 function submitAutoActive() {

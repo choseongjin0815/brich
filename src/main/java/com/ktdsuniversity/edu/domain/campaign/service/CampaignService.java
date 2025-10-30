@@ -44,4 +44,6 @@ public interface CampaignService {
 	boolean createDenyByCmpnPstAdoptId(RequestDenyVO requestDenyVO);
 
 	ResponseCampaignwriteVO createCampaign();
+
+	List<CommonCodeVO> readDistrictByCdId(String cdId);
 }

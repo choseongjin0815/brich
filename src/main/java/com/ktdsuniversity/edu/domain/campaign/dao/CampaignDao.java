@@ -68,4 +68,8 @@ public interface CampaignDao {
 	int insertDenyByCmpnPstAdoptId(RequestDenyVO requestDenyVO);
 
 	List<CommonCodeVO> selectDoAndCityList();
+
+	List<CommonCodeVO> selectDistrictByCdId(String cdId);
+
+	String selectPersonPrice();
 }

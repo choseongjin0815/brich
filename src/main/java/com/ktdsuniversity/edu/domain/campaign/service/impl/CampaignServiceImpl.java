@@ -274,18 +274,11 @@ public class CampaignServiceImpl implements CampaignService {
 					// 신청
 					// 신청취소
 		} else {
-			return 0;
 		}
 			
+		return 0;
 		
 	}
-}
-
-
-
-
-
-
 
 	@Transactional
 	@Override
@@ -335,6 +328,13 @@ public class CampaignServiceImpl implements CampaignService {
 		ResponseCampaignwriteVO common = new ResponseCampaignwriteVO();
 		common.setDoAndCityList(this.campaignDao.selectDoAndCityList());
 		common.setCategoryList(this.campaignDao.selectCategoryList());
+		common.setPersonPrice(this.campaignDao.selectPersonPrice());
 		return common;
+	}
+
+	@Override
+	public List<CommonCodeVO> readDistrictByCdId(String cdId) {
+		List<CommonCodeVO> districtList = this.campaignDao.selectDistrictByCdId(cdId);
+		return districtList;
 	}
 }

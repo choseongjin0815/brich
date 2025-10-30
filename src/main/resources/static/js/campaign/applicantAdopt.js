@@ -127,13 +127,6 @@ $().ready(function() {
         $(".post-url").append(postUrl);
     });
     
-    $(".modal-close").on("click", function() {
-        $(".modal").css("display", "none");
-        $(".deny-container").css("display", "none");
-        $(".post-url").children("a").remove();
-        $(".button-list").empty();
-    });
-    
     $("#add-file").on("change", function() {
         var files = this.files;
         var $fileList = $("#file-list");

@@ -166,4 +166,14 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	public List<CommonCodeVO> selectDoAndCityList() {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectDoAndCityList");
 	}
+
+	@Override
+	public List<CommonCodeVO> selectDistrictByCdId(String cdId) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectDistrictByCdId", cdId);
+	}
+
+	@Override
+	public String selectPersonPrice() {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectPersonPrice");
+	}
 }

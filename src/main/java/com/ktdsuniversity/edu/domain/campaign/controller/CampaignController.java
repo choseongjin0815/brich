@@ -1,5 +1,6 @@
 package com.ktdsuniversity.edu.domain.campaign.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
@@ -223,10 +225,26 @@ public class CampaignController {
     	}
 	}
 	
-	@GetMapping("/adv/campaignwrite")
+	@GetMapping("/adv/campaign/write")
 	public String doCreateCampaignAction(Model model) {
 		ResponseCampaignwriteVO common = this.campaignService.createCampaign();
 		model.addAttribute("common", common);
-		return "campaign/campaignWrite";
+		return "campaign/write";
+	}
+	
+	@GetMapping("/adv/campaign/write/{cdId}")
+	@ResponseBody
+	public AjaxResponse doReadDistrictAction(@PathVariable String cdId) {
+		AjaxResponse response = new AjaxResponse();
+		
+		List<CommonCodeVO> districtList = this.campaignService.readDistrictByCdId(cdId);
+		response.setBody(districtList);
+		return response;
+	}
+	
+	@PostMapping("/adv/campaign/write")
+	public String doCreateCampaignAction(RequestCreateCmpnVO requestCreateCmpnVO) {
+		System.out.println(requestCreateCmpnVO);
+		return "";
 	}
 }

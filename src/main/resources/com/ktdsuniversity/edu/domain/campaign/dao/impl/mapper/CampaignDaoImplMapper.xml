@@ -220,6 +220,23 @@
 		   AND PST_STTS_CD = '6002'
     </update>
     
+    <select id="selectDistrictByCdId"
+            parameterType="string"
+            resultType="com.ktdsuniversity.edu.global.common.CommonCodeVO">
+        SELECT CD_ID
+		     , CD_NM
+		  FROM AR_CD
+		 WHERE PRNT_CD_ID = #{_parameter}
+		   AND DLT_YN = 'N'
+    </select>
+    
+    <select id="selectPersonPrice"
+            resultType="string">
+        SELECT VALUE1
+          FROM CM_CD
+         WHERE CD_ID = '5000'
+    </select>
+    
     <insert id="insertDenyByCmpnPstAdoptId"
             parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO">
         <selectKey keyProperty="cmpnPstAdptId" resultType="string" order="BEFORE">
@@ -321,6 +338,7 @@
              , CD_NM
           FROM AR_CD
          WHERE PRNT_CD_ID IS NULL
+           AND DLT_YN = 'N'
     </select>
     
     <select id="selectCategoryList"
