@@ -189,6 +189,11 @@ public class UserServiceImpl implements UserService {
 		return this.campaignDao.selectCategoryList();
 	}
 
+	@Override
+	public UserVO readUserByLogId(String id) {
+		return this.userDao.selectUserByLogId(id);
+	}
+
 
 
 

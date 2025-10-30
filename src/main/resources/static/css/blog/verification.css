@@ -96,4 +96,13 @@
   font-weight: bold;
 }
 
-.
+.copy-btn {
+  margin-left: 8px;
+  background-color: #6A52E8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}

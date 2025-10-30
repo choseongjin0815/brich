@@ -59,7 +59,8 @@ public class BlogDataController {
 	@GetMapping("/blog/{usrId}/verification")
 	public String viewBlogVerificationPage(@PathVariable String usrId, HttpSession session, Model model) {
 		UserVO loginUser = (UserVO) session.getAttribute("__LOGIN_USER__");
-	    if (loginUser == null || !loginUser.getUsrId().equals(usrId) || loginUser.getBlgAddrs() != null) {
+	    if (loginUser == null || !loginUser.getUsrId().equals(usrId)) {
+	    	
 	        return "redirect:/access-denied";
 	    }
 	    

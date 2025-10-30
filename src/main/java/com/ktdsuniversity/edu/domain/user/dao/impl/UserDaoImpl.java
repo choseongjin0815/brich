@@ -79,5 +79,10 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
 		return super.getSqlSession().update(this.NAME_SPACE + "updateBlgAddrsById" , requestModifyBlogAddrsVO);
 	}
 
+	@Override
+	public UserVO selectUserByLogId(String id) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUserByLogId", id);
+	}
+
 
 }

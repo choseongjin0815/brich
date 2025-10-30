@@ -275,10 +275,10 @@ public class CampaignServiceImpl implements CampaignService {
 					// 신청취소
 		} else {
 			return 0;
-		}
-			
 		
+			
 	}
+		return 0;
 }
 
 

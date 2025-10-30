@@ -24,5 +24,7 @@ public interface UserService {
 
 	public List<CommonCodeVO> readCategoryList();
 
+	public UserVO readUserByLogId(String id);
+
 
 }

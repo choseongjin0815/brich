@@ -32,13 +32,46 @@ $().ready(function(){
 	    if ($(e.target).is(modal)) modal.fadeOut(200);
 	  });
 
+	  $(document).on("click", "#copy-btn", async function () {
+	    const code = $("#code-text").text().trim();
+	    const $btn = $(this);
+
+	    // 최신 API 시도
+	    try {
+	      if (navigator.clipboard && window.isSecureContext) {
+	        await navigator.clipboard.writeText(code);
+	      } else {
+	        // 폴백: 임시 textarea 활용
+	        const ta = document.createElement("textarea");
+	        ta.value = code;
+	        ta.style.position = "fixed";
+	        ta.style.top = "-1000px";
+	        document.body.appendChild(ta);
+	        ta.focus();
+	        ta.select();
+	        const ok = document.execCommand("copy");
+	        document.body.removeChild(ta);
+	        if (!ok) throw new Error("execCommand copy failed");
+	      }
+	      // UX 피드백
+	      const original = $btn.text();
+	      $btn.text("복사됨!").prop("disabled", true);
+	      setTimeout(() => {
+	        $btn.text(original).prop("disabled", false);
+	      }, 1200);
+	    } catch (e) {
+	      console.error(e);
+	      alert("복사에 실패했어요. 직접 드래그해서 복사해 주세요.");
+	    }
+	  });
 	  $("#generateCode").on("click", function() {
 	    $.ajax({
 	      url: "/api/verify-code",
 	      method: "POST",
 	      success: function(res) {
 	        $("#verificationCode").html(
-	          `<strong style='color:#6A52E8;'>${res.code}</strong>`
+	          `<strong id="code-text" style='color:#6A52E8;'>${res.code}</strong>
+			  <button class="copy-btn" id="copy-btn" type="button" style="margin-left:8px;">복사</button>`
 	        );
 	        $("#verifyResult").text("이 코드를 블로그 소개글에 넣고 인증을 진행하세요.");
 			$("#generateCode").attr("disabled", true);

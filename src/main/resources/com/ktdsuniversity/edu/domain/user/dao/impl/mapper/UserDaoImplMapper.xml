@@ -150,4 +150,38 @@
           SET BLG_ADDRS=#{blgAddrs}, UPDT_DT=SYSDATE, MTTR='SYSTEM'
         WHERE USR_ID=#{id}
 	</update>
+	
+	    <select parameterType="string"
+            resultType="com.ktdsuniversity.edu.domain.user.vo.UserVO"
+            id="selectUserByLogId">
+        SELECT USR_ID
+             , LOG_ID
+             , EML
+             , PSWRD
+             , NM
+             , SALT
+             , LGN_PL_CNT
+             , BLCK_YN
+             , RCNT_LGN_BLCK_DT
+             , RCNT_LGN_FL_DT
+             , RCNT_LGN_SCS_DT
+             , AUTR
+             , SBSCRPTN_EXPRS_DT
+             , PNLT_CNT
+             , RCNT_BLG_CRTFCTN_DT
+             , BLG_ADDRS
+             , CRTFD_ADMIN
+             , TTL_VSTR_CNT
+             , AVRG_VSTR_CNT
+             , BLG_NGHBR_CNT
+             , SCRP_CNT
+             , CRT_DT
+             , CRTR
+             , UPDT_DT
+             , MTTR
+             , DLT_YN
+         FROM USR
+        WHERE LOG_ID = #{logId}
+          AND AUTR IN('1001', '1002', '1003', '1004')
+    </select>
 </mapper>

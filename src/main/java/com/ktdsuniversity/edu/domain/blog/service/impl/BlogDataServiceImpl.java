@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ktdsuniversity.edu.domain.blog.dao.PostDataDao;
 import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
+import com.ktdsuniversity.edu.domain.blog.vo.PostDataInsertVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestModifyBlogAddrsVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
@@ -21,10 +23,15 @@ import com.ktdsuniversity.edu.global.util.PythonExecutor;
 @Service
 public class BlogDataServiceImpl implements BlogDataService{
 
+	private final String NAME_SPACE = "C:\\Users\\User\\Desktop\\project\\brich-project\\src\\main\\resources\\static\\crawler\\";
+	
 	@Autowired
 	private CampaignDao campaignDao;
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private PostDataDao postDataDao;
 	
 	@Override
 	public ResponseExpireSoonListVO readExpireSoonCampaignList(RequestExpireSoonCampaignVO requestExpireSoonCampaignVO) {
@@ -41,7 +48,7 @@ public class BlogDataServiceImpl implements BlogDataService{
 	@Transactional
 	@Override
 	public boolean runPythonVerification(RequestModifyBlogAddrsVO requestModifyBlogAddrsVO, String code) {
-		String pythonOutput = PythonExecutor.runPython("C:\\Users\\User\\Desktop\\project\\brich-project\\src\\main\\resources\\static\\crawler\\verification-crawler.py", requestModifyBlogAddrsVO.getBlgAddrs(), code);
+		String pythonOutput = PythonExecutor.runPython(NAME_SPACE + "verification-crawler.py", requestModifyBlogAddrsVO.getBlgAddrs(), code);
 		int updateCount = 0;
 		if(pythonOutput.contains("Verification successful")) {
 			updateCount = userDao.updateBlgAddrsById(requestModifyBlogAddrsVO);
@@ -53,6 +60,21 @@ public class BlogDataServiceImpl implements BlogDataService{
 	@Override
 	public String generateVerificationCode() {
 		return UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+	}
+
+	@Override
+	public boolean runPythonInitialPostData(String blgAddrs) {
+		String pythonOutput = PythonExecutor.runPython(NAME_SPACE + "post-data-signup-crawler.py", blgAddrs);
+		
+		return false;
+	}
+
+	@Transactional
+	@Override
+	public boolean insertPostData(PostDataInsertVO post) {
+		int insertCount = postDataDao.insertPostData(post); 
+		
+		return insertCount > 0;
 	}
 
 
