@@ -17,7 +17,7 @@ import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 public interface CampaignDao {
 
-	ResponseCampaignVO selectCampaignDetailById(String campaignId);
+	ResponseCampaignVO selectCampaignDetailById(Map<String, String> param);
 
 	List<CommonCodeVO> selectCategoryList();
 
@@ -68,4 +68,12 @@ public interface CampaignDao {
 	int insertDenyByCmpnPstAdoptId(RequestDenyVO requestDenyVO);
 
 	List<CommonCodeVO> selectDoAndCityList();
+
+	String selecthasAdoptYn(Map<String, String> param);
+
+	String selectAdoptDltYn(Map<String, String> param);
+
+	int updateCancelApplyCampaign(Map<String, String> param);
+
+	int updateApplyCampaign(Map<String, String> param);
 }
