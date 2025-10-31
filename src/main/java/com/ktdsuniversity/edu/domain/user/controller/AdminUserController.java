@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ktdsuniversity.edu.domain.report.vo.AdminPenaltyRequestVO;
 import com.ktdsuniversity.edu.domain.user.service.AdminUserService;
 import com.ktdsuniversity.edu.domain.user.vo.AdminUserBaseInfoVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminUserListVO;
@@ -151,5 +152,19 @@ public class AdminUserController {
 		
 		return ajaxResponse;
 	}
+	
+	@ResponseBody
+	@PostMapping("/admin/user_penalty_process/{usrId}")
+	public AjaxResponse doAdminUserPenaltyProcessAction(@PathVariable String usrId, 
+														@RequestBody AdminPenaltyRequestVO adminPanaltyRequestVO) {
+		
+		boolean isSuccess = this.adminUserService.updateUserPenaltyInfo(adminPanaltyRequestVO);
+		
+		AjaxResponse ajaxResponse = new AjaxResponse();
+		ajaxResponse.setBody(isSuccess);
+		
+		return ajaxResponse;
+	}
+	
 	
 }

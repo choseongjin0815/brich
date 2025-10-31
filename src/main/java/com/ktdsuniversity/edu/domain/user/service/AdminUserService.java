@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ktdsuniversity.edu.domain.report.vo.AdminPenaltyRequestVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminUserBaseInfoVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminUserListVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminUserModifyInfoVO;
@@ -24,5 +25,7 @@ public interface AdminUserService {
 	boolean updateUserInfo(AdminUserModifyInfoVO adminUserModifyInfoVO, List<MultipartFile> newFiles);
 
 	boolean updateBlogAddress(AdminUserModifyInfoVO adminUserModifyInfoVO);
+
+	boolean updateUserPenaltyInfo(AdminPenaltyRequestVO adminPanaltyRequestVO);
 
 }

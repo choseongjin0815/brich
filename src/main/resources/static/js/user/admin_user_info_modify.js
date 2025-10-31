@@ -40,7 +40,7 @@ $().ready(function() {
     // 기존 블로그 주소 값 저장해 놓기
     var currentBlogAddr = inputBlogAddr.val();
         
-    /* 블로그 수동 인증 (모달 제외, 아직 미완성 251026) */
+    /* 블로그 수동 인증 (모달 제외) */
     $(activeBtn).on("click", function() {
         
         // 1. readonly 풀기
@@ -154,7 +154,7 @@ $().ready(function() {
             // 삭제될 파일의 data를 통해 flId 값 가져오기
             var deleteFileId = $(this).data("file-id");
             
-            // 두 번 뜨는데 일단 넣음
+            // 두 번 뜨는데 일단 넣음 (해결하긴 함)
             if(!confirm("기존 파일을 삭제하시겠습니까?")) {
                 return false;
             }

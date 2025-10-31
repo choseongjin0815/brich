@@ -75,7 +75,7 @@
 	                                    <c:forEach items="${inqrInfo.inqrFileList}" var="inqrFileList">
 	                                        <c:if test="${not empty inqrFileList.flId}">
 	                                            <a href="/file/${inqrInfo.inqrVO.inqrUsrId}/${inqrInfo.inqrVO.inqrFlGrpId}/${inqrFileList.flId}">
-	                                                &#128196;[${inqrFileList.flNm}]
+	                                                &#128196;${inqrFileList.flNm} 
 	                                            </a>
 	                                        </c:if>
 	                                    </c:forEach>

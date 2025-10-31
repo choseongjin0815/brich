@@ -7,6 +7,7 @@
 		<meta charset="UTF-8">
 		<title>회원 관리 - 상세 정보</title>
         <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
+        <script type="text/javascript" src="/js/user/admin_user_penalty_process.js"></script>
         <c:if test="${classType eq 'AdminAdvertiserDetailVO' && userInfo.autr eq '1007'}">
             <script type="text/javascript" src="/js/user/admin_advertiser_regist_process.js"></script>
         </c:if>
@@ -25,7 +26,9 @@
 		      <input type="hidden" id="login_usrId" value="${sessionScope.__LOGIN_USER__.usrId}"/>
 		      <input type="hidden" id="usrId" value="${userInfo.usrId}"/>
 		      <input type="hidden" id="autr" value="${userInfo.autr}"/>
-		      <input type="hidden" id="rcntBlgCrtfctnDt" value="${userInfo.rcntBlgCrtfctnDt}"/>
+		      <c:if test="${classType eq 'AdminBloggerDetailVO'}">
+		          <input type="hidden" id="rcntBlgCrtfctnDt" value="${userInfo.rcntBlgCrtfctnDt}"/>
+		      </c:if>
 		   <table>
 		      <c:choose>
 		        <c:when test="${not empty userInfo}">
@@ -97,12 +100,12 @@
 		                        (classType eq 'AdminAdvertiserDetailVO' && userInfo.autr eq '1004')}">
 		                        
 		              <label for="warning">경고</label>
-                      <input type="radio" id="warning" name="penalty-option" class="option_item"/>
+                      <input type="radio" name="penalty-option" class="option_item" value="warning"/>
                       
                       <label for="ban">정지</label>
-                      <input type="radio" id="ban" name="penalty-option" class="option_item"/>
+                      <input type="radio" name="penalty-option" class="option_item" value="ban"/>
                       
-                      <button class="panalty-btn">처리</button>
+                      <button class="penalty-btn">처리</button>
                       
                       <a href="/admin/user_modify/${usrId}">
                           <button class="modify-btn">수정</button>

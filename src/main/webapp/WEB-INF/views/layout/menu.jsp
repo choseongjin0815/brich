@@ -106,9 +106,9 @@ pageEncoding="UTF-8"%>
                   
                     <li><a href="/admin/user_list">회원 관리</a></li>
                     <li><a href="/admin/inqr_list">문의 관리</a></li>
-                    <li><a href="">신고 관리</a></li>
+                    <li><a href="/admin/report_list">신고 관리</a></li>
                     <li><a href="">캠페인 관리</a></li>
-                    <li><a href="">카테고리 관리</a></li>
+                    <li><a href="/admin/category_manage">카테고리 관리</a></li>
                     <li><a href="">도움말 관리</a></li>
                   </ul>
                 </li>
