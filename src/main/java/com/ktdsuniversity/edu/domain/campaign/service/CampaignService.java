@@ -5,6 +5,7 @@ package com.ktdsuniversity.edu.domain.campaign.service;
 import java.util.List;
 
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
@@ -19,6 +20,8 @@ public interface CampaignService {
 
 	ResponseCampaignVO readCampaignDetail(String campaignId);
 
+	ResponseCampaignVO readCampaignDetail(String campaignId, String usrId);
+	
 	ResponseCampaignListVO readCampaignListAndCategory(RequestSearchCampaignVO requestSearchCampaignVO);
 
 	ResponseApplicantListVO readApplicantListById(RequestApplicantVO requestApplicantVO);
@@ -29,7 +32,7 @@ public interface CampaignService {
 
 	ResponseCampaignListVO readSubmittedMyCampaignByBlgId(String blgId);
 
-	boolean favCampaignDo(String blgId, String campaignId);
+	int favCampaignDo(String blgId, String campaignId);
 
 	ResponseCampaignListVO readOnGoingMyCampaignByBlgId(String blgId);
 
@@ -44,4 +47,8 @@ public interface CampaignService {
 	boolean createDenyByCmpnPstAdoptId(RequestDenyVO requestDenyVO);
 
 	ResponseCampaignwriteVO createCampaign();
+
+	List<CommonCodeVO> readDistrictByCdId(String cdId);
+
+	boolean createNewCampaign(RequestCreateCmpnVO requestCreateCmpnVO);
 }

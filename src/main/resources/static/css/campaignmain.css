@@ -71,22 +71,6 @@
             width:320px;
             background-color : #DDE1FF;
             border-radius : 15px;
-            & > .love-Y {
-                width:35px;
-                height:35px;
-                background-image : url("/img/heartOn.png");
-                background-repeat: no-repeat;
-                background-size: cover;
-                z-index :99;
-            }
-            & > .love-N {
-                width:40px;
-                height:40px;
-                background-image : url("/img/heartOff.png");
-                background-repeat: no-repeat;
-                background-size: cover;
-                z-index :99;            
-            }
         }
         
         & > .campaign-one-offrcn {
@@ -258,8 +242,117 @@
     font-weight : bold;
     padding-right:8px;   
    }
+   .apply-blg{
+    margin : 0 30px 20px 30px;
+    border-radius : 10px;
+    color : white;
+    background-color : #5A67BA;
+    height : 60px;
+    font-size : 24px;
+    font-weight : bold;
+   }
+   .apply-cancel-blg{
+    margin : 0 30px 20px 30px;
+    border-radius : 10px;
+    color : white;
+    background-color : #FF676A;
+    height : 60px;
+    font-size : 24px;
+    font-weight : bold;
+   }
+   .required-login{
+    margin : 0 30px 20px 30px;
+    border-radius : 10px;
+    color : white;
+    background-color : #787B80;
+    height : 60px;
+    font-size : 24px;
+    font-weight : bold;   
+   }
+   .love-on {
+     width:35px;
+     height:35px;
+     background-image : url("/img/heartOn.png");
+     background-repeat: no-repeat;
+     background-size: cover;
+     z-index :99;
+            }
+   .love-off {
+    width:40px;
+    height:40px;
+    background-image : url("/img/heartOff.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index :99;            
+            }
+    .status--  {
+    margin : 0 30px 20px 30px;
+    border-radius : 10px;
+    color : white;
+    height : 60px;
+    font-size : 24px;
+    font-weight : bold;       
+    }
+    .status--approved { 
+    background-color : #00A906;   
+    }
+    .status--rejected { 
+    background-color : #FF676A;    
+    }
+    .status--review   { 
+    background-color : #B1B700;    
+    }
+    .status--draft    {
+    background-color : #5A67BA;
+    }    
+    .status--end{
+    background-color : gray;
+    }
+    .pst-stts-cd-6001{
+    color : #5A67BA;
+    font-weight: bold;
+    }
+    .pst-stts-cd-6002{
+    color : #B1B700;
+    font-weight : bold;
+    }
+    .pst-stts-cd-6003{
+    color : #B1B700;
+    font-weight: bold;
+    }
+    .pst-stts-cd-6004{
+    color : #00A906;
+    font-weight : bold;
+    }
 }
 
 .side-padding {
   padding: 0 100px 0 75px;
+}
+
+.submit-modal-area{
+  position: fixed;      
+  inset: 0;             
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);   
+  align-items: center;   
+  justify-content: center; 
+  z-index: 1000;         
+}
+
+.submit-modal{
+  align-items: center;   
+  justify-content: center; 	
+  background: #fff;
+  border-radius: 10px;
+  min-width: 320px;
+  width: 60vw;
+  height: 60vh;
+  padding: 24px;
+  overflow: auto; 
+  position: absolute;
+  top : 20%;
+  left: 20%;
+         
 }

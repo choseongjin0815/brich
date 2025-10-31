@@ -1,5 +1,6 @@
 package com.ktdsuniversity.edu.domain.file.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import com.ktdsuniversity.edu.domain.file.vo.FileVO;
@@ -14,5 +15,7 @@ public interface FileDao {
 	public FileVO selectFileVO(RequestDownloadVO requestDownloadVO);
 
 	public int updateFilesAsDelete(Map<String, Object> deleteParamMap);
+
+	public List<FileVO> selectFilesByGroupId(String attchGrpId);
 
 }

@@ -77,4 +77,16 @@
         </if>
     </update>
     
+    <select id="selectFilesByGroupId" parameterType="string" resultType="com.ktdsuniversity.edu.domain.file.vo.FileVO">
+	    SELECT FL_ID as flId,
+	           FL_GRP_ID as flGrpId,
+	           FL_NM as flNm,
+	           FL_SZ as flSz,
+	           FL_PTH as flPth,
+	           FL_TYP as flTyp
+	    FROM FL
+	    WHERE FL_GRP_ID = #{flGrpId}
+	    AND DLT_YN = 'N'
+</select>
+    
 </mapper>

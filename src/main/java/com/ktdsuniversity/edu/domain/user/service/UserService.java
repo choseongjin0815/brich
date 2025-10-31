@@ -8,6 +8,7 @@ import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserFindIdVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserLoginVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserResetPasswordVO;
+import com.ktdsuniversity.edu.domain.user.vo.response.ResponseUserInfoVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 public interface UserService {
@@ -25,6 +26,7 @@ public interface UserService {
 	public List<CommonCodeVO> readCategoryList();
 
 	public UserVO readUserByLogId(String id);
+	public ResponseUserInfoVO readUserByUserId(String usrId);
 
 
 }

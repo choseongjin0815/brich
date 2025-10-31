@@ -5,7 +5,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>회원 관리 - 리스트</title>
+		<title>회원 관리 - 목록</title>
 		<script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
 		<script type="text/javascript" src="/js/user/admin_user_list.js"></script>
 		<link type="text/css" rel="stylesheet" href="/css/admin/admin_list.css"/>

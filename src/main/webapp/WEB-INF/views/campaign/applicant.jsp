@@ -15,12 +15,12 @@
    <jsp:param name="scripts" value="${scripts}" />
 </jsp:include>
 
-    <div class="campaign">
+    <div class="campaign-wrapper">
 	    <jsp:include page="/WEB-INF/views/campaign/campaignTab.jsp">
 	       <jsp:param value="${applicantList.campaignInfo.cmpnTitle}" name="cmpnTitle" />
 	       <jsp:param value="${applicantList.campaignInfo.sttsCd}" name="sttsCd" />
 	    </jsp:include>
-	    <div class="campaign-wrapper">
+	    <div class="campaign-list-wrapper">
 		    <div class="campaign-title">
 	            <div>캠페인 신청자</div>
 	            <span class="enddate">~${applicantList.campaignInfo.rcrtEndDt}</span>
@@ -51,7 +51,7 @@
 	            </div>
 	            <div>채택
 	                <span class="adopt-count">${applicantList.adoptCount}</span> / <span class="total-adopt-count">${applicantList.campaignInfo.rcrtPrsnn}</span>
-	                <img class="sort desc" data-sort-type="PNLT_CNT" src="/img/arrow-bottom.png" />
+	                <img class="sort desc" data-sort-type="ADPT_YN" src="/img/arrow-bottom.png" />
 	            </div>
 	        </div>
 	           

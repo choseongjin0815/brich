@@ -47,8 +47,9 @@
                AND I.ANSR_USR_ID IS NOT NULL
               THEN 1
               ELSE 0
-          END ASC,
-          I.CRT_DT DESC
+          END ASC
+            , I.CRT_DT DESC
+            , I.UPDT_DT DESC
     </select>
     
     <resultMap type="com.ktdsuniversity.edu.domain.inqr.vo.AdminInqrDetailVO" id="AdminInqrDetailVOMap" autoMapping="true">
@@ -137,6 +138,7 @@
                 , F_ANSR.CRT_DT ASC
     </select>
     
+    <!-- 문의 관리 - 답변 등록 -->
     <update id="updateInqrToAnswer" parameterType="com.ktdsuniversity.edu.domain.inqr.vo.AdminAnsrRegistVO">
         UPDATE INQR 
            SET ANSR_CN = #{ansrCn}

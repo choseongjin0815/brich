@@ -5,7 +5,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>문의 관리 - 문의 목록</title>
+		<title>문의 관리 - 목록</title>
 		<script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
         <link type="text/css" rel="stylesheet" href="/css/admin/admin_list.css"/>
 	</head>
@@ -41,8 +41,8 @@
 			       
 		            <tbody>
 		                <c:choose>
-		                    <c:when test="${not empty inqr_list}">
-		                        <c:forEach items="${inqr_list}" var="inqrInfo">
+		                    <c:when test="${not empty inqrList}">
+		                        <c:forEach items="${inqrList}" var="inqrInfo">
 		                            <tr>
 		                                <td>${inqrInfo.logId}</td>
 		                                <td>

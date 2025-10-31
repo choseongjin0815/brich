@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ktdsuniversity.edu.domain.user.vo.BlogCategoryVO;
+import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 public interface BlogCategoryDao {
 
@@ -18,5 +19,7 @@ public interface BlogCategoryDao {
 	int updateCategoryAsReactive(Map<String, Object> reactiveParamMap);
 
 	int insertNewBlogCategory(Map<String, Object> insertParamMap);
+
+	public List<CommonCodeVO> selectUserCategoryByUserId(String usrId);
 
 }

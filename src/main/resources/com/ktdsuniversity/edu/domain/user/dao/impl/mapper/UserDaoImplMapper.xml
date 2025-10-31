@@ -27,6 +27,7 @@
              , AVRG_VSTR_CNT
              , BLG_NGHBR_CNT
              , SCRP_CNT
+             , CMPNY
              , CRT_DT
              , CRTR
              , UPDT_DT
@@ -184,4 +185,15 @@
         WHERE LOG_ID = #{logId}
           AND AUTR IN('1001', '1002', '1003', '1004')
     </select>
+	<select id="selectUserByUserId"
+	        parameterType="string"
+	        resultType="com.ktdsuniversity.edu.domain.user.vo.UserVO">
+	    SELECT USR_ID
+	         , EML
+	         , NM
+	         , CMPNY
+	         , LOG_ID
+	      FROM USR
+	     WHERE USR_ID = #{usrId}
+	</select>
 </mapper>

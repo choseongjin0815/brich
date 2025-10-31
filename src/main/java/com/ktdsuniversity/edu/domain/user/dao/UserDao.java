@@ -32,6 +32,7 @@ public interface UserDao {
 	public int updateBlgAddrsById(RequestModifyBlogAddrsVO requestModifyBlogAddrsVO);
 
 	public UserVO selectUserByLogId(String id);
+	public UserVO selectUserByUserId(String usrId);
 
 
 

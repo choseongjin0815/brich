@@ -14,6 +14,8 @@ import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCampaignAreaVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestUpdatePstSttsVO;
@@ -62,12 +64,17 @@ public class CampaignServiceImpl implements CampaignService {
      */
 	@Override
 	public ResponseCampaignVO readCampaignDetail(String campaignId) {
+		
+		Map<String, String> param = new HashMap<>();
+		param.put("campaignId",campaignId);		
 		// 상세조회
-		ResponseCampaignVO detail = campaignDao.selectCampaignDetailById(campaignId);
+		ResponseCampaignVO detail = campaignDao.selectCampaignDetailById(param);
 		
 		// 공통코드 이름 출력
-		String changeSttsCd = campaignDao.selectCampaignChangeSttsCd(detail.getSttsCd());
-		detail.setSttsCd(changeSttsCd);
+		String changeSttsCdNm = campaignDao.selectCampaignChangeSttsCd(detail.getSttsCd());
+		String changePstSttsCdNm = campaignDao.selectCampaignChangeSttsCd(detail.getPstSttsCd());
+		detail.setSttsCdNm(changeSttsCdNm);
+		detail.setPstSttsCdNm(changePstSttsCdNm);
 		
     	// 부모지역명 자르기 // 서울특별시 -> 서울
     	if(detail.getParentArea() != null) {
@@ -76,6 +83,31 @@ public class CampaignServiceImpl implements CampaignService {
 		
 		return detail;
 	}
+	
+	@Override
+	public ResponseCampaignVO readCampaignDetail(String campaignId, String usrId) {
+		
+		Map<String, String> param = new HashMap<>();
+		param.put("blgId", usrId);
+		param.put("campaignId",campaignId);
+		
+		// 상세조회
+		ResponseCampaignVO detail = campaignDao.selectCampaignDetailById(param);
+		
+		// 공통코드 이름 출력
+		String changeSttsCdNm = campaignDao.selectCampaignChangeSttsCd(detail.getSttsCd());
+		String changePstSttsCdNm = campaignDao.selectCampaignChangeSttsCd(detail.getPstSttsCd());
+		detail.setSttsCdNm(changeSttsCdNm);
+		detail.setPstSttsCdNm(changePstSttsCdNm);
+		
+    	// 부모지역명 자르기 // 서울특별시 -> 서울
+    	if(detail.getParentArea() != null) {
+    		detail.setParentArea(detail.getParentArea().substring(0, 2));
+    	}
+		
+		return detail;
+	}
+	
 	/**
 	 * 캠페인 메인 
 	 * 캠페인 목록 조회
@@ -224,7 +256,7 @@ public class CampaignServiceImpl implements CampaignService {
 	 * 사랑해요
 	 */
 	@Override
-	public boolean favCampaignDo(String blgId, String campaignId) {
+	public int favCampaignDo(String blgId, String campaignId) {
 		int updateCount = 0 ;
 		Map<String, String> param = new HashMap<>();
 		param.put("blgId",blgId);
@@ -249,7 +281,7 @@ public class CampaignServiceImpl implements CampaignService {
 		
 		
 		
-		return updateCount > 0 ;
+		return updateCount ;
 	}
 	
 	/**
@@ -261,25 +293,28 @@ public class CampaignServiceImpl implements CampaignService {
 		Map<String, String> param = new HashMap<>();
 		param.put("blgId",blgId);
 		param.put("campaignId",campaignId);
-		
+		int count = 0;
 		//캠페인 모집중 여부 확인	
-		ResponseCampaignVO detail = campaignDao.selectCampaignDetailById(campaignId);
+		ResponseCampaignVO detail = campaignDao.selectCampaignDetailById(param);
 		if(detail.getSttsCd().equals("2005")) {
 			// 캠페인 신청 이력 여부 확인
-				// 없다면 캠페인 생성 (insert)
-			
-				int count = this.campaignDao.insertApplyCampaign(param);
-			
-				// 있다면 신청상태(삭제여부 확인)
-					// 신청
-					// 신청취소
+			    String hasAdoptYn = campaignDao.selecthasAdoptYn(param);
+			    if(hasAdoptYn.equals("N")) {
+			    	// 없다면 캠페인 생성 (insert)
+			    	count = this.campaignDao.insertApplyCampaign(param);			    	
+			    } else {
+			    	String AdoptDltYn = campaignDao.selectAdoptDltYn(param);
+			    	if(AdoptDltYn.equals("N")) {   // 신청 취소
+			    		count = this.campaignDao.updateCancelApplyCampaign(param);
+			    	}else {						  // 신청
+			    		count = this.campaignDao.updateApplyCampaign(param);			    		
+			    	}
+			    }
 		} else {
-			return 0;
-		
-			
+		}
+		return count;
 	}
-		return 0;
-}
+
 
 
 
@@ -307,6 +342,11 @@ public class CampaignServiceImpl implements CampaignService {
 		requestUpdatePstSttsVO.setStts("6003");
 		requestUpdatePstSttsVO.setAdvId(requestDenyVO.getAdvId());
 		
+		RequestDenyVO requestDdlnVO = new RequestDenyVO();
+		requestDdlnVO.setCmpnPstAdptId(requestDenyVO.getCmpnPstAdptId());
+		requestDdlnVO.setPstDdln(requestDenyVO.getPstDdln());
+		requestDdlnVO.setAdvId(requestDenyVO.getAdvId());
+		
 		if (uploadResult != null && uploadResult.size() > 0) {
 			// 1. File Group Insert
 			FileGroupVO fileGroupVO = new FileGroupVO();
@@ -324,10 +364,19 @@ public class CampaignServiceImpl implements CampaignService {
 		
 		int insertCount = this.campaignDao.insertDenyByCmpnPstAdoptId(requestDenyVO);
 		int updateCount = 0;
+		int updateDateCount = 0;
+		int updateCmpnDateCount = 0;
+		
 		if (insertCount == 1) {
 			updateCount = this.campaignDao.updatePstSttsByCmpnPstAdoptId(requestUpdatePstSttsVO);
+			updateDateCount = this.campaignDao.updateDdlnByCmpnPstAdoptId(requestDdlnVO);
 		}
-		return insertCount == 1 && updateCount == 1;
+		
+		if (updateDateCount == 1) {
+			updateCmpnDateCount = this.campaignDao.udpateCmpnDateByCmpnId(requestDenyVO);
+		}
+		
+		return insertCount == 1 && updateCount == 1 && updateDateCount == 1 && updateCmpnDateCount == 1;
 	}
 
 	@Override
@@ -335,6 +384,50 @@ public class CampaignServiceImpl implements CampaignService {
 		ResponseCampaignwriteVO common = new ResponseCampaignwriteVO();
 		common.setDoAndCityList(this.campaignDao.selectDoAndCityList());
 		common.setCategoryList(this.campaignDao.selectCategoryList());
+		common.setPersonPrice(this.campaignDao.selectPersonPrice());
 		return common;
+	}
+
+	@Override
+	public List<CommonCodeVO> readDistrictByCdId(String cdId) {
+		List<CommonCodeVO> districtList = this.campaignDao.selectDistrictByCdId(cdId);
+		return districtList;
+	}
+
+	@Override
+	@Transactional
+	public boolean createNewCampaign(RequestCreateCmpnVO requestCreateCmpnVO) {
+		String addr = requestCreateCmpnVO.getRoadAddress() + " " + requestCreateCmpnVO.getDetailAddress();
+		requestCreateCmpnVO.setAddrs(addr);
+		
+		FileVO uploadResult = this.multipartFileHandler.upload(requestCreateCmpnVO.getFile());
+		
+		if (uploadResult != null) {
+			// 1. File Group Insert
+			FileGroupVO fileGroupVO = new FileGroupVO();
+			fileGroupVO.setFlCnt(1);
+			int insertGroupCount = this.fileGroupDao.insertFileGroup(fileGroupVO);
+			
+			// 2. File Insert
+			uploadResult.setFlGrpId(fileGroupVO.getFlGrpId());
+			int insertFileCount = this.fileDao.insertFile(uploadResult);
+			
+			requestCreateCmpnVO.setAttchGrpId(fileGroupVO.getFlGrpId());
+		}
+		
+		int insertCmpnCount = this.campaignDao.insertNewCampaign(requestCreateCmpnVO);
+		
+		if (requestCreateCmpnVO.getArea() != null && insertCmpnCount == 1) {
+			RequestCampaignAreaVO requestCampaignAreaVO = new RequestCampaignAreaVO();
+			requestCampaignAreaVO.setCmpnId(requestCreateCmpnVO.getCmpnId());
+			requestCampaignAreaVO.setUsrId(requestCreateCmpnVO.getUsrId());
+			
+			for(String arCd : requestCreateCmpnVO.getArea()) {
+				requestCampaignAreaVO.setArCd(arCd);
+				int insertAreaCount = this.campaignDao.insertCampaignCategory(requestCampaignAreaVO);
+			}
+		}
+		
+		return insertCmpnCount == 1;
 	}
 }

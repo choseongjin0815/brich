@@ -17,14 +17,18 @@ import com.ktdsuniversity.edu.domain.file.util.MultipartFileHandler;
 import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
 import com.ktdsuniversity.edu.domain.file.vo.FileVO;
 import com.ktdsuniversity.edu.domain.user.dao.BlogCategoryDao;
+import com.ktdsuniversity.edu.domain.user.dao.UserAreaDao;
 import com.ktdsuniversity.edu.domain.user.dao.UserDao;
 import com.ktdsuniversity.edu.domain.user.service.UserService;
 import com.ktdsuniversity.edu.domain.user.vo.BlogCategoryVO;
+import com.ktdsuniversity.edu.domain.user.vo.UserAreaVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserFindIdVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserLoginVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserResetPasswordVO;
+import com.ktdsuniversity.edu.domain.user.vo.response.ResponseUserInfoVO;
+import com.ktdsuniversity.edu.global.common.AreaCode;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 import com.ktdsuniversity.edu.global.util.SHAEncrypter;
 
@@ -33,7 +37,11 @@ import com.ktdsuniversity.edu.global.util.SHAEncrypter;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserDao userDao;   
+    private UserDao userDao;  
+    
+    @Autowired
+    private UserAreaDao userAreaDao; 
+    
     @Autowired
 	private MultipartFileHandler multipartFileHandler;
 	@Autowired
@@ -192,6 +200,20 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserVO readUserByLogId(String id) {
 		return this.userDao.selectUserByLogId(id);
+}
+  @Override
+	public ResponseUserInfoVO readUserByUserId(String usrId) {
+		
+		ResponseUserInfoVO userInfo = new ResponseUserInfoVO();
+		UserVO userVO = this.userDao.selectUserByUserId(usrId);
+		List<AreaCode> areaList = this.userAreaDao.selectUserAreaByUserId(usrId);
+		List<CommonCodeVO> categoryList = this.blogCategoryDao.selectUserCategoryByUserId(usrId);
+		
+		userInfo.setUserVO(userVO);
+		userInfo.setAreaList(areaList);
+		userInfo.setCategoryList(categoryList);
+		
+		return userInfo;
 	}
 
 

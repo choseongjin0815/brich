@@ -8,6 +8,7 @@ $().ready(function() {
     var campaignMainBlock = $(".campaign-main-block");
     var here = location.pathname.replace(/^\/+|\/+$/g, '').split('/');    
     var applyBlg = $(".apply-blg");
+    var applyCancelBlg = $(".apply-cancel-blg");
     
     if (here.includes('campaignmain')) {
       $('.campaign-status').removeClass('display-none');
@@ -44,11 +45,6 @@ $().ready(function() {
 	    searchParam = "?" + searchParam 
 	    window.location.href = window.location.pathname + searchParam;
 	});
-    campaignFav.on("click", function(e) {
-        e.stopPropagation();
-        var cmpnId = $(this).data("cmpn-id");
-        window.location.href = "/blgr/love/"+ cmpnId ;
-    })
     campaignMainBlock.on("click", function() {
         var cmpnId = $(this).data("cmpn-id");
         window.location.href = "/campaigndetail/"+ cmpnId ;
@@ -57,8 +53,29 @@ $().ready(function() {
         var campaignId = $(".apply-blg").data("campaign-id");
         $.post("/blgr/apply/" + campaignId ,function() {
             alert("신청완료!");
-            $(".apply-blg").addClass('display-none')
-            $(".apply-cancel-blg").removeClass('display-none')
+            $(".apply-blg").toggleClass('display-none');
+            $(".apply-cancel-blg").toggleClass('display-none');
         })
     })
+    applyCancelBlg.on("click", function(){
+        var campaignId = $(".apply-cancel-blg").data("campaign-id");
+        $.post("/blgr/apply/" + campaignId ,function() {
+            alert("취소완료!");
+            $(".apply-cancel-blg").toggleClass('display-none');
+            $(".apply-blg").toggleClass('display-none');
+        })
+    })
+    campaignFav.on("click", function(e) {
+        e.stopPropagation();
+        var cmpnId = $(this).data("cmpn-id");
+        $.ajax({
+                url: `/blgr/love/` + cmpnId,
+                type: "POST",
+                context: this, // 콜백 안 this = 클릭한 요소
+                success: function () {
+                  $(this).find(".love-on, .love-off").toggleClass("display-none");
+                }
+              });
+    })
+    
 });
