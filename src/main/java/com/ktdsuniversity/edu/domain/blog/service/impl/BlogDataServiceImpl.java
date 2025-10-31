@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ktdsuniversity.edu.domain.blog.dao.PostDataDao;
 import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
+import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
 import com.ktdsuniversity.edu.domain.blog.vo.PostDataInsertVO;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogIndexListVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestModifyBlogAddrsVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
@@ -75,6 +77,11 @@ public class BlogDataServiceImpl implements BlogDataService{
 		int insertCount = postDataDao.insertPostData(post); 
 		
 		return insertCount > 0;
+	}
+
+	@Override
+	public List<BlogIndexVO> readBlogIndexList(RequestBlogIndexListVO requestBlogIndexListVO) {
+		return null;
 	}
 
 
