@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:set var="scripts">
-	<script type='text/javascript' src='/js/campaign/campaignmain.js'></script>
 	<script type="text/javascript" src="/js/campaign/applicantAdopt.js"></script>
 	<script type="text/javascript" src="/js/common/validate.js"></script>
     <script type="text/javascript" src="/js/common/paginator.js"></script>
@@ -14,12 +13,12 @@
     <jsp:param name="scripts" value="${scripts}" />
 </jsp:include>
 
-    <div>
+    <div class="campaign-wrapper">
 	    <jsp:include page="/WEB-INF/views/campaign/campaignTab.jsp">
 	       <jsp:param value="${adoptList.campaignInfo.cmpnTitle}" name="cmpnTitle"/>
 	       <jsp:param value="${adoptList.campaignInfo.sttsCd}" name="sttsCd"/>
 	    </jsp:include>
-	    <div class="campaign-wrapper">
+	    <div class="campaign-list-wrapper">
 		    <div class="campaign-title">
 	            <div>캠페인 신청자</div>
 	            <span class="enddate">~${adoptList.campaignInfo.cmpnEndDt}</span>
@@ -93,6 +92,7 @@
 	        <div class="modal">
 	             <div class="modal-post">
 		            <jsp:include page="/WEB-INF/views/campaign/campaignBlock.jsp">
+		              <jsp:param value="${adoptList.campaignInfo.cmpnId}" name="cmpnId" />
 		              <jsp:param value="${adoptList.campaignInfo.cmpnTitle}" name="cmpnTitle" />
 		              <jsp:param value="${adoptList.cmpnCdNm}" name="cmpnCdNm" />
 		              <jsp:param value="${adoptList.campaignInfo.cnfmDt}" name="cnfmDt" />
@@ -113,6 +113,10 @@
                             <!-- <button type="button" class="add-file">첨부파일 +</button> -->
                             <input id="add-file" type="file" name="file" multiple />
                             <div id="file-list"></div>
+                        </div>
+                        <div class="pst-ddln">
+                            <span>포스팅 제출일</span>
+                            <input type="date" name="pstDdln" />
                         </div>
                         <div class="modal-button-list">
                             <button type="button" class="modal-close">닫기</button>

@@ -5,6 +5,7 @@ package com.ktdsuniversity.edu.domain.campaign.service;
 import java.util.List;
 
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
@@ -47,4 +48,7 @@ public interface CampaignService {
 
 	ResponseCampaignwriteVO createCampaign();
 
+	List<CommonCodeVO> readDistrictByCdId(String cdId);
+
+	boolean createNewCampaign(RequestCreateCmpnVO requestCreateCmpnVO);
 }

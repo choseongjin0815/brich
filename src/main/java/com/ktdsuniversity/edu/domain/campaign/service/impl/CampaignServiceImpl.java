@@ -14,6 +14,8 @@ import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCampaignAreaVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestUpdatePstSttsVO;
@@ -309,7 +311,6 @@ public class CampaignServiceImpl implements CampaignService {
 			    	}
 			    }
 		} else {
-			return 0;
 		}
 		return count;
 	}
@@ -341,6 +342,11 @@ public class CampaignServiceImpl implements CampaignService {
 		requestUpdatePstSttsVO.setStts("6003");
 		requestUpdatePstSttsVO.setAdvId(requestDenyVO.getAdvId());
 		
+		RequestDenyVO requestDdlnVO = new RequestDenyVO();
+		requestDdlnVO.setCmpnPstAdptId(requestDenyVO.getCmpnPstAdptId());
+		requestDdlnVO.setPstDdln(requestDenyVO.getPstDdln());
+		requestDdlnVO.setAdvId(requestDenyVO.getAdvId());
+		
 		if (uploadResult != null && uploadResult.size() > 0) {
 			// 1. File Group Insert
 			FileGroupVO fileGroupVO = new FileGroupVO();
@@ -358,10 +364,19 @@ public class CampaignServiceImpl implements CampaignService {
 		
 		int insertCount = this.campaignDao.insertDenyByCmpnPstAdoptId(requestDenyVO);
 		int updateCount = 0;
+		int updateDateCount = 0;
+		int updateCmpnDateCount = 0;
+		
 		if (insertCount == 1) {
 			updateCount = this.campaignDao.updatePstSttsByCmpnPstAdoptId(requestUpdatePstSttsVO);
+			updateDateCount = this.campaignDao.updateDdlnByCmpnPstAdoptId(requestDdlnVO);
 		}
-		return insertCount == 1 && updateCount == 1;
+		
+		if (updateDateCount == 1) {
+			updateCmpnDateCount = this.campaignDao.udpateCmpnDateByCmpnId(requestDenyVO);
+		}
+		
+		return insertCount == 1 && updateCount == 1 && updateDateCount == 1 && updateCmpnDateCount == 1;
 	}
 
 	@Override
@@ -369,8 +384,50 @@ public class CampaignServiceImpl implements CampaignService {
 		ResponseCampaignwriteVO common = new ResponseCampaignwriteVO();
 		common.setDoAndCityList(this.campaignDao.selectDoAndCityList());
 		common.setCategoryList(this.campaignDao.selectCategoryList());
+		common.setPersonPrice(this.campaignDao.selectPersonPrice());
 		return common;
 	}
 
+	@Override
+	public List<CommonCodeVO> readDistrictByCdId(String cdId) {
+		List<CommonCodeVO> districtList = this.campaignDao.selectDistrictByCdId(cdId);
+		return districtList;
+	}
 
+	@Override
+	@Transactional
+	public boolean createNewCampaign(RequestCreateCmpnVO requestCreateCmpnVO) {
+		String addr = requestCreateCmpnVO.getRoadAddress() + " " + requestCreateCmpnVO.getDetailAddress();
+		requestCreateCmpnVO.setAddrs(addr);
+		
+		FileVO uploadResult = this.multipartFileHandler.upload(requestCreateCmpnVO.getFile());
+		
+		if (uploadResult != null) {
+			// 1. File Group Insert
+			FileGroupVO fileGroupVO = new FileGroupVO();
+			fileGroupVO.setFlCnt(1);
+			int insertGroupCount = this.fileGroupDao.insertFileGroup(fileGroupVO);
+			
+			// 2. File Insert
+			uploadResult.setFlGrpId(fileGroupVO.getFlGrpId());
+			int insertFileCount = this.fileDao.insertFile(uploadResult);
+			
+			requestCreateCmpnVO.setAttchGrpId(fileGroupVO.getFlGrpId());
+		}
+		
+		int insertCmpnCount = this.campaignDao.insertNewCampaign(requestCreateCmpnVO);
+		
+		if (requestCreateCmpnVO.getArea() != null && insertCmpnCount == 1) {
+			RequestCampaignAreaVO requestCampaignAreaVO = new RequestCampaignAreaVO();
+			requestCampaignAreaVO.setCmpnId(requestCreateCmpnVO.getCmpnId());
+			requestCampaignAreaVO.setUsrId(requestCreateCmpnVO.getUsrId());
+			
+			for(String arCd : requestCreateCmpnVO.getArea()) {
+				requestCampaignAreaVO.setArCd(arCd);
+				int insertAreaCount = this.campaignDao.insertCampaignCategory(requestCampaignAreaVO);
+			}
+		}
+		
+		return insertCmpnCount == 1;
+	}
 }

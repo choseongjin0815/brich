@@ -56,7 +56,8 @@
     <select id="selectCampaignInfoByCmpnId"
             parameterType="string"
             resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
-        SELECT C.STTS_CD
+        SELECT C.CMPN_ID
+             , C.STTS_CD
 		     , C.RCRT_PRSNN
 		     , C.CMPN_TITLE
 		     , TO_CHAR(C.CNFM_DT + 3, 'YYYY-MM-DD') AS CNFM_DT
@@ -220,6 +221,23 @@
 		   AND PST_STTS_CD = '6002'
     </update>
     
+    <select id="selectDistrictByCdId"
+            parameterType="string"
+            resultType="com.ktdsuniversity.edu.global.common.CommonCodeVO">
+        SELECT CD_ID
+		     , CD_NM
+		  FROM AR_CD
+		 WHERE PRNT_CD_ID = #{_parameter}
+		   AND DLT_YN = 'N'
+    </select>
+    
+    <select id="selectPersonPrice"
+            resultType="string">
+        SELECT VALUE1
+          FROM CM_CD
+         WHERE CD_ID = '5000'
+    </select>
+    
     <insert id="insertDenyByCmpnPstAdoptId"
             parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO">
         <selectKey keyProperty="cmpnPstAdptId" resultType="string" order="BEFORE">
@@ -250,6 +268,133 @@
 			 , 'N'
 			 , #{fileGroupId}
 			 , NULL)
+    </insert>
+    
+    <update id="updateDdlnByCmpnPstAdoptId"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO">
+        UPDATE CMPN_PST_ADPT
+		   SET PST_DDLN = TO_DATE(#{pstDdln} || '23:59:59', 'YYYY-MM-DD HH24:MI:SS')
+		     , UPDT_DT = SYSDATE
+		     , MTTR = #{advId}
+		 WHERE CMPN_PST_ADPT_ID  = #{cmpnPstAdptId}
+		   AND DLT_YN = 'N'
+    </update>
+    
+    <update id="udpateCmpnDateByCmpnId"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO">
+        UPDATE CMPN
+		   SET PST_END_DT = (SELECT MAX(PST_DDLN)
+		                       FROM CMPN_PST_ADPT
+		                      WHERE CMPN_ID = #{cmpnId}
+		                        AND DLT_YN = 'N')
+		     , CMPN_END_DT = (SELECT MAX(PST_DDLN)
+		                       FROM CMPN_PST_ADPT
+		                      WHERE CMPN_ID = #{cmpnId}
+		                        AND DLT_YN = 'N')
+		     , UPDT_DT = SYSDATE
+		     , MTTR = #{advId}
+		 WHERE CMPN_ID = #{cmpnId}
+		   AND DLT_YN = 'N'
+    </update>
+    
+    <insert id="insertNewCampaign"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO">
+        <selectKey keyProperty="cmpnId" resultType="string" order="BEFORE">
+            SELECT 'CMPN-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_CMPN_PK.NEXTVAL, 6, '0')
+              FROM DUAL
+        </selectKey>
+    INSERT INTO CMPN
+         ( CMPN_ID
+         , USR_ID
+         , CTG_CD
+         , STTS_CD
+         , PRSNN_PRC
+         , DRTN_PRC
+         , PRSNN_DSCNT
+         , DRTN_DSCNT
+         , CMPN_PRNT_ID
+         , RCRT_STRT_DT
+         , RCRT_PRSNN
+         , PRGRSS_DRTN
+         , RCRT_END_DT
+         , PST_END_DT
+         , CMPN_END_DT
+         , RTRN_RSN
+         , ADDRS
+         , ATTCH_GRP_ID
+         , CMPN_TITLE
+         , CMPN_CN
+         , OFFR_CN
+         , OFFR_PRC
+         , PST_MSSN
+         , HSTG
+         , NTFCN
+         , "VIEW"
+         , CNFM_DT
+         , CRT_DT
+         , CRTR
+         , UPDT_DT
+         , MTTR
+         , DLT_YN)
+        VALUES
+        ( #{cmpnId}
+        , #{usrId}
+        , #{ctgCd}
+        , '2001'
+        , NULL
+        , NULL
+        , NULL
+        , NULL
+        , NULL
+        , NULL
+        , #{rcrtPrsnn}
+        , NULL
+        , NULL
+        , NULL
+        , NULL
+        , NULL
+        , #{addrs}
+        , #{attchGrpId}
+        , #{cmpnTitle}
+        , #{cmpnCn}
+        , #{offrCn}
+        , #{offrPrc}
+        , #{pstMssn}
+        , #{ntfcn}
+        , #{hstg}
+        , 0
+        , NULL
+        , SYSDATE
+        , #{usrId}
+        , SYSDATE
+        , #{usrId}
+        , 'N')
+    </insert>
+    
+    <insert id="insertCampaignCategory"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCampaignAreaVO">
+        <selectKey keyProperty="cmpnArId" resultType="string" order="BEFORE">
+            SELECT 'CMPN_AR-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_CMPN_AR_PK.NEXTVAL, 6, '0')
+              FROM DUAL
+        </selectKey>
+        INSERT INTO CMPN_AR
+             ( CMPN_AR_ID
+             , CMPN_ID
+             , AR_CD
+             , CRT_DT
+             , CRTR
+             , UPDT_DT
+             , MTTR
+             , DLT_YN)
+        VALUES
+             ( #{cmpnArId}
+             , #{cmpnId}
+             , #{arCd}
+             , SYSDATE
+             , #{usrId}
+             , SYSDATE
+             , #{usrId}
+             , 'N')
     </insert>
     
     <select id="selectCampaignDetailById"
@@ -339,6 +484,7 @@
              , CD_NM
           FROM AR_CD
          WHERE PRNT_CD_ID IS NULL
+           AND DLT_YN = 'N'
     </select>
     
     <select id="selectCategoryList"
