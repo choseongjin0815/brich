@@ -19,6 +19,8 @@ public interface CampaignService {
 
 	ResponseCampaignVO readCampaignDetail(String campaignId);
 
+	ResponseCampaignVO readCampaignDetail(String campaignId, String usrId);
+	
 	ResponseCampaignListVO readCampaignListAndCategory(RequestSearchCampaignVO requestSearchCampaignVO);
 
 	ResponseApplicantListVO readApplicantListById(RequestApplicantVO requestApplicantVO);
@@ -29,7 +31,7 @@ public interface CampaignService {
 
 	ResponseCampaignListVO readSubmittedMyCampaignByBlgId(String blgId);
 
-	boolean favCampaignDo(String blgId, String campaignId);
+	int favCampaignDo(String blgId, String campaignId);
 
 	ResponseCampaignListVO readOnGoingMyCampaignByBlgId(String blgId);
 
@@ -44,4 +46,5 @@ public interface CampaignService {
 	boolean createDenyByCmpnPstAdoptId(RequestDenyVO requestDenyVO);
 
 	ResponseCampaignwriteVO createCampaign();
+
 }
