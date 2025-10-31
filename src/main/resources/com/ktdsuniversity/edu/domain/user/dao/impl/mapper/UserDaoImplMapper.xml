@@ -27,6 +27,7 @@
              , AVRG_VSTR_CNT
              , BLG_NGHBR_CNT
              , SCRP_CNT
+             , CMPNY
              , CRT_DT
              , CRTR
              , UPDT_DT
@@ -150,4 +151,16 @@
           SET BLG_ADDRS=#{blgAddrs}, UPDT_DT=SYSDATE, MTTR='SYSTEM'
         WHERE USR_ID=#{id}
 	</update>
+	
+	<select id="selectUserByUserId"
+	        parameterType="string"
+	        resultType="com.ktdsuniversity.edu.domain.user.vo.UserVO">
+	    SELECT USR_ID
+	         , EML
+	         , NM
+	         , CMPNY
+	         , LOG_ID
+	      FROM USR
+	     WHERE USR_ID = #{usrId}
+	</select>
 </mapper>

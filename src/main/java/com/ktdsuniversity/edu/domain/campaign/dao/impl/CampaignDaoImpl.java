@@ -12,6 +12,8 @@ import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCampaignAreaVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestUpdatePstSttsVO;
@@ -33,8 +35,8 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
     }
 
 	@Override
-	public ResponseCampaignVO selectCampaignDetailById(String campaignId) {
-		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignDetailById", campaignId);
+	public ResponseCampaignVO selectCampaignDetailById(Map<String, String> param) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignDetailById", param);
 	}
 
 	@Override
@@ -154,7 +156,7 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	@Override
 	public int insertApplyCampaign(Map<String, String> param) {
 		
-		return super.getSqlSession().insert(this.NAME_SPACE + "applyCampaign", param);
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertApplyCampaign", param);
 	}
 
 	@Override
@@ -165,5 +167,54 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	@Override
 	public List<CommonCodeVO> selectDoAndCityList() {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectDoAndCityList");
+	}
+
+	@Override
+	public List<CommonCodeVO> selectDistrictByCdId(String cdId) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectDistrictByCdId", cdId);
+	}
+
+	@Override
+	public String selectPersonPrice() {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectPersonPrice");
+	}
+
+	@Override
+	public int insertNewCampaign(RequestCreateCmpnVO requestCreateCmpnVO) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertNewCampaign", requestCreateCmpnVO);
+	}
+
+	@Override
+	public int insertCampaignCategory(RequestCampaignAreaVO requestCampaignAreaVO) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertCampaignCategory", requestCampaignAreaVO);
+	}
+
+	@Override
+	public int updateDdlnByCmpnPstAdoptId(RequestDenyVO requestDenyVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateDdlnByCmpnPstAdoptId", requestDenyVO);
+	}
+
+	@Override
+	public int udpateCmpnDateByCmpnId(RequestDenyVO requestDenyVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "udpateCmpnDateByCmpnId", requestDenyVO);
+	
+	@Override
+	public String selecthasAdoptYn(Map<String, String> param) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selecthasAdoptYn" ,param);
+	}
+
+	@Override
+	public String selectAdoptDltYn(Map<String, String> param) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectAdoptDltYn" ,param);
+	}
+
+	@Override
+	public int updateCancelApplyCampaign(Map<String, String> param) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateCancelApplyCampaign" ,param);
+	}
+
+	@Override
+	public int updateApplyCampaign(Map<String, String> param) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateApplyCampaign" , param);
 	}
 }

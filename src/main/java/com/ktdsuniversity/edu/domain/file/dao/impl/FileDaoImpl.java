@@ -1,5 +1,6 @@
 package com.ktdsuniversity.edu.domain.file.dao.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -40,6 +41,11 @@ public class FileDaoImpl extends SqlSessionDaoSupport implements FileDao {
 	@Override
 	public int updateFilesAsDelete(Map<String, Object> deleteParamMap) {
 		return super.getSqlSession().update(this.NAME_SPACE + "updateFilesAsDelete", deleteParamMap);
+	}
+
+	@Override
+	public List<FileVO> selectFilesByGroupId(String attchGrpId) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectFilesByGroupId", attchGrpId);
 	}
 
 }

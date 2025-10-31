@@ -7,6 +7,8 @@ import java.util.Map;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCampaignAreaVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestUpdatePstSttsVO;
@@ -17,7 +19,7 @@ import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 public interface CampaignDao {
 
-	ResponseCampaignVO selectCampaignDetailById(String campaignId);
+	ResponseCampaignVO selectCampaignDetailById(Map<String, String> param);
 
 	List<CommonCodeVO> selectCategoryList();
 
@@ -68,4 +70,23 @@ public interface CampaignDao {
 	int insertDenyByCmpnPstAdoptId(RequestDenyVO requestDenyVO);
 
 	List<CommonCodeVO> selectDoAndCityList();
+
+	List<CommonCodeVO> selectDistrictByCdId(String cdId);
+
+	String selectPersonPrice();
+
+	int insertNewCampaign(RequestCreateCmpnVO requestCreateCmpnVO);
+
+	int insertCampaignCategory(RequestCampaignAreaVO requestCampaignAreaVO);
+
+	int updateDdlnByCmpnPstAdoptId(RequestDenyVO requestDenyVO);
+
+	int udpateCmpnDateByCmpnId(RequestDenyVO requestDenyVO);
+	String selecthasAdoptYn(Map<String, String> param);
+
+	String selectAdoptDltYn(Map<String, String> param);
+
+	int updateCancelApplyCampaign(Map<String, String> param);
+
+	int updateApplyCampaign(Map<String, String> param);
 }

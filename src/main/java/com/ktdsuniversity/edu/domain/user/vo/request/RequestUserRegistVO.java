@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public class RequestUserRegistVO{
 	
@@ -34,6 +35,7 @@ public class RequestUserRegistVO{
 	
 	private String autr;
 	
+	@NotBlank(message="필수 입력입니다.")
 	private String cmpny;
 	
 	private String salt;
@@ -41,7 +43,7 @@ public class RequestUserRegistVO{
 	private String flGrpId;
 	
 	private List<String> cdIdList;
-	
+
 	private List<MultipartFile> file;
 
 	public String getUsrId() {

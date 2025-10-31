@@ -7,8 +7,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class RequestDenyVO {
 
 	private String cmpnPstAdptId;
+	private String cmpnId;
 	private String advId;
 	private String reason;
+	private String pstDdln;
 	private String fileGroupId;
 	private List<MultipartFile> file;
 	
@@ -17,6 +19,12 @@ public class RequestDenyVO {
 	}
 	public void setCmpnPstAdptId(String cmpnPstAdptId) {
 		this.cmpnPstAdptId = cmpnPstAdptId;
+	}
+	public String getCmpnId() {
+		return this.cmpnId;
+	}
+	public void setCmpnId(String cmpnId) {
+		this.cmpnId = cmpnId;
 	}
 	public String getAdvId() {
 		return this.advId;
@@ -29,6 +37,12 @@ public class RequestDenyVO {
 	}
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+	public String getPstDdln() {
+		return this.pstDdln;
+	}
+	public void setPstDdln(String pstDdln) {
+		this.pstDdln = pstDdln;
 	}
 	public String getFileGroupId() {
 		return this.fileGroupId;
@@ -45,7 +59,7 @@ public class RequestDenyVO {
 	
 	@Override
 	public String toString() {
-		return "RequestDenyVO [cmpnPstAdptId=" + cmpnPstAdptId + ", advId=" + advId + ", reason=" + reason
-				+ ", fileGroupId=" + fileGroupId + ", file=" + file + "]";
+		return "RequestDenyVO [cmpnPstAdptId=" + cmpnPstAdptId + ", cmpnId=" + cmpnId + ", advId=" + advId + ", reason="
+				+ reason + ", pstDdln=" + pstDdln + ", fileGroupId=" + fileGroupId + ", file=" + file + "]";
 	}
 }
