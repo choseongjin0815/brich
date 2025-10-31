@@ -35,8 +35,8 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
     }
 
 	@Override
-	public ResponseCampaignVO selectCampaignDetailById(String campaignId) {
-		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignDetailById", campaignId);
+	public ResponseCampaignVO selectCampaignDetailById(Map<String, String> param) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignDetailById", param);
 	}
 
 	@Override
@@ -156,7 +156,7 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	@Override
 	public int insertApplyCampaign(Map<String, String> param) {
 		
-		return super.getSqlSession().insert(this.NAME_SPACE + "applyCampaign", param);
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertApplyCampaign", param);
 	}
 
 	@Override
@@ -197,5 +197,24 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	@Override
 	public int udpateCmpnDateByCmpnId(RequestDenyVO requestDenyVO) {
 		return super.getSqlSession().update(this.NAME_SPACE + "udpateCmpnDateByCmpnId", requestDenyVO);
+	
+	@Override
+	public String selecthasAdoptYn(Map<String, String> param) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selecthasAdoptYn" ,param);
+	}
+
+	@Override
+	public String selectAdoptDltYn(Map<String, String> param) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectAdoptDltYn" ,param);
+	}
+
+	@Override
+	public int updateCancelApplyCampaign(Map<String, String> param) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateCancelApplyCampaign" ,param);
+	}
+
+	@Override
+	public int updateApplyCampaign(Map<String, String> param) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateApplyCampaign" , param);
 	}
 }

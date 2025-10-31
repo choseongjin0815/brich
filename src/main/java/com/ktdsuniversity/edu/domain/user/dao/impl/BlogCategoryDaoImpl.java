@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.domain.user.dao.BlogCategoryDao;
 import com.ktdsuniversity.edu.domain.user.vo.BlogCategoryVO;
+import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 @Repository
 public class BlogCategoryDaoImpl extends SqlSessionDaoSupport implements BlogCategoryDao {
@@ -51,6 +52,11 @@ public class BlogCategoryDaoImpl extends SqlSessionDaoSupport implements BlogCat
 	@Override
 	public int insertNewBlogCategory(Map<String, Object> insertParamMap) {
 		return super.getSqlSession().insert(this.NAME_SPACE + "insertNewBlogCategory", insertParamMap);
+	}
+
+	@Override
+	public List<CommonCodeVO> selectUserCategoryByUserId(String usrId) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectUserCategoryByUserId", usrId);
 	}
 
 }

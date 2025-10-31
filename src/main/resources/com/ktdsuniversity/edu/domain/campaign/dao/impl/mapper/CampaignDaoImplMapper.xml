@@ -398,7 +398,7 @@
     </insert>
     
     <select id="selectCampaignDetailById"
-            parameterType="string"
+            parameterType="map"
             resultMap="RequestCampaignVOMap">
 			SELECT  CMPN.CMPN_ID
                   , CMPN.USR_ID
@@ -436,18 +436,28 @@
                   , NVL(ADPT_TABLE.ADPT_CNT, 0)               AS ADPT_CNT
                   , ARCD.CD_NM                                 AS AREA
                   , PARCD.CD_NM                                AS PARENT_AREA   
+                  , ADPT.PST_STTS_CD
+                  , CASE WHEN EXISTS (SELECT 1
+                                        FROM CMPN_PST_ADPT 
+                                       WHERE CMPN_ID = #{campaignId} 
+                                     <if test="blgId != null and blgId != ''">
+                                         AND BLG_USR_ID = #{blgId}
+                                     </if>
+                                         AND DLT_YN = 'N') 
+                    THEN 'Y' ELSE 'N'
+                    END                  AS ADPT_YN                   
               FROM CMPN CMPN 
               LEFT JOIN ( SELECT FAV.CMPN_ID  
                                , COUNT(FAV.CMPN_ID) AS LIKE_CNT
                             FROM FAV_CMPN FAV
-                           WHERE FAV.CMPN_ID = #{_parameter}
+                           WHERE FAV.CMPN_ID = #{campaignId}
                              AND FAV.DLT_YN = 'N'
                            GROUP BY  FAV.CMPN_ID) LIKE_TABLE
                      ON CMPN.CMPN_ID = LIKE_TABLE.CMPN_ID 
               LEFT JOIN ( SELECT ADPT.CMPN_ID 
                                , COUNT(ADPT.CMPN_ID) AS ADPT_CNT
                             FROM CMPN_PST_ADPT ADPT 
-                           WHERE ADPT.CMPN_ID = #{_parameter}
+                           WHERE ADPT.CMPN_ID = #{campaignId}
                              AND ADPT.DLT_YN = 'N'
                            GROUP BY ADPT.CMPN_ID) ADPT_TABLE
                      ON CMPN.CMPN_ID = ADPT_TABLE.CMPN_ID 
@@ -457,7 +467,15 @@
                ON CMPNAR.AR_CD = ARCD.CD_ID
              LEFT JOIN AR_CD PARCD
                ON PARCD.CD_ID = ARCD.PRNT_CD_ID 
-            WHERE CMPN.CMPN_ID = #{_parameter}
+             LEFT JOIN (SELECT PST_STTS_CD
+                             , CMPN_ID 
+                          FROM CMPN_PST_ADPT
+                         WHERE CMPN_ID = #{campaignId}
+                           <if test="blgId != null and blgId != ''">
+                           AND BLG_USR_ID = #{blgId}
+                           </if>             ) ADPT
+               ON CMPN.CMPN_ID = ADPT.CMPN_ID                
+            WHERE CMPN.CMPN_ID = #{campaignId}
     </select>
     
     <select id="selectDoAndCityList"
@@ -735,6 +753,7 @@ ORDER BY RCRT_END_DT ASC
                  , ARCD.CD_NM                              AS AREA
                  , PARCD.CD_NM                             AS PARENT_AREA   
                  , NVL(ADPT_CNT.CNT, 0)                    AS ADPT_CNT
+                 , (SELECT 'Y' FROM DUAL)                  AS FAV_YN
               FROM CMPN CMPN
               LEFT JOIN CMPN_AR CMPNAR
                 ON CMPN.CMPN_ID = CMPNAR.CMPN_ID 
@@ -760,7 +779,7 @@ ORDER BY RCRT_END_DT ASC
 				    </foreach>                   
     </select>
         
-    <insert id="applyCampaign"
+    <insert id="insertApplyCampaign"
             parameterType="map">
 			INSERT INTO CMPN_PST_ADPT
 			( CMPN_PST_ADPT_ID
@@ -789,6 +808,46 @@ ORDER BY RCRT_END_DT ASC
 			, SYSDATE
 			, #{blgId} )    
     </insert>
+	
+	<select id="selecthasAdoptYn"
+	        parameterType="map"
+	        resultType="string">
+			SELECT CASE 
+			         WHEN EXISTS (  SELECT 1
+			                          FROM CMPN_PST_ADPT 
+			                         WHERE BLG_USR_ID = #{blgId}
+			                           AND CMPN_ID = #{campaignId})
+			         THEN 'Y' ELSE 'N' 
+			       END AS CNT
+			FROM DUAL
+	</select>
+	<select id="selectAdoptDltYn"
+	        parameterType="map"
+	        resultType="string">
+			SELECT CASE 
+			         WHEN EXISTS (  SELECT 1
+			                          FROM CMPN_PST_ADPT 
+			                         WHERE BLG_USR_ID = #{blgId}
+			                           AND CMPN_ID = #{campaignId}
+			                           AND DLT_YN = 'N')
+			         THEN 'N' ELSE 'Y'
+			       END AS CNT
+			FROM DUAL
+	</select>
+	<update id="updateCancelApplyCampaign"
+	        parameterType="map">
+			UPDATE CMPN_PST_ADPT
+			   SET DLT_YN = 'Y'
+			 WHERE BLG_USR_ID = #{blgId}
+			   AND CMPN_ID = #{campaignId}
+	</update>
+	<update id="updateApplyCampaign"
+	        parameterType="map">
+			UPDATE CMPN_PST_ADPT
+			   SET DLT_YN = 'N'
+			 WHERE BLG_USR_ID = #{blgId}
+			   AND CMPN_ID = #{campaignId}
+	</update>
 	
 </mapper>
 

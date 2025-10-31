@@ -11,7 +11,7 @@
          SELECT 'FG-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_FL_GRP_PK.NEXTVAL, 6, '0')
            FROM DUAL
       </selectKey> 
-      
+         
       INSERT INTO FL_GRP
       (FL_GRP_ID
       , FL_CNT
