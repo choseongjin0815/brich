@@ -12,12 +12,14 @@ pageEncoding="UTF-8"%>
     
     ${param.css }
     ${param.chatCss}
+    ${param.accountCss}
     ${param.scripts}
     ${param.chatroomListscripts}
     ${param.chatscripts}
     ${param.chatroomscripts}
     ${param.sockjs}
     ${param.stompjs}
+    ${param.accountJs}
   </head>
   <body>
     <div class="wrapper">
@@ -116,7 +118,14 @@ pageEncoding="UTF-8"%>
                 <li class="others-menu">
                   <span>OTHERS</span>
                   <ul class="menu-content">
-                    <li><a href="">계정 관리</a></li>
+                    <c:choose>
+                        <c:when test="${sessionScope.__LOGIN_USER__.autr eq 1004}">
+                            <li><a href="/adv/account/info">계정 관리</a></li>
+                        </c:when>
+                        <c:otherwise> 
+                            <li><a href="/blgr/account/info">계정 관리</a></li>
+                        </c:otherwise>   
+                    </c:choose>
                     <li><a href="">Help</a></li>
                     <li><a href="">신고</a></li>
                   </ul>

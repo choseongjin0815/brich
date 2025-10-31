@@ -17,8 +17,8 @@
     " />
 
 </jsp:include>
+<div class="header-title">메시지</div>
 <div class="chat-main" data-cmpn="${cmpnId}">
-	<div class="header-title">메시지</div>
 	<div class="content-box"
 		data-auth="${sessionScope.__LOGIN_USER__.autr}">
 		<div class="content-title">채팅방 목록</div>

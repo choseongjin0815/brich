@@ -1,6 +1,5 @@
 package com.ktdsuniversity.edu.domain.chat.service.impl;
 
-
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,9 +44,6 @@ public class ChatServiceImpl implements ChatService {
 
 	@Autowired
 	private MultipartFileHandler multipartFileHandler;
-	
-	@Autowired
-	private MongoTemplate mongoTemplate;
 
 	@Autowired
 	private ChatMessageRepository chatMessageRepository;
@@ -76,13 +71,10 @@ public class ChatServiceImpl implements ChatService {
 			totalCount = chatDao.selectUserChatRoomsCount(searchChatVO);
 			chatRooms = chatDao.selectUserChatRooms(searchChatVO);
 			log.info("{}", System.currentTimeMillis());
-			log.info("블로거로 리스트!");
 		} else {
 			// 광고주용
-			log.info("{}", System.currentTimeMillis());
 			totalCount = chatDao.selectCampaignChatRoomsCount(searchChatVO);
 			chatRooms = chatDao.selectCampaignChatRooms(searchChatVO);
-			log.info("{}", System.currentTimeMillis());
 		}
 
 		// 2. 페이지 정보 설정
@@ -92,10 +84,8 @@ public class ChatServiceImpl implements ChatService {
 		for (ResponseChatRoomInfoVO chatRoom : chatRooms) {
 			// 최신 메시지 조회
 			//Sort sort = Sort.by(Sort.Direction.DESC, "CRT_DT");
-			log.info("채팅메시지 조회{}", System.currentTimeMillis());
 			//여기서 메시지를 하나만 조회하면 되는거아닌가???????????????
 			ChatMessageVO messages = chatMessageRepository.findTop1ByChtRmIdAndDltYnOrderByCrtDtDesc(chatRoom.getChtRmId(), "N");
-			log.info("채팅메시지 조회{}", System.currentTimeMillis());
 			if (messages != null) {
 				ChatMessageVO lastMessage = messages;
 				chatRoom.setLastMsgCn(lastMessage.getMsgCn());
@@ -105,18 +95,13 @@ public class ChatServiceImpl implements ChatService {
 			}
 
 			// 안읽은 메시지 수 조회
-			log.info("안읽은 메시지 개수{}", System.currentTimeMillis());
 			long unreadCount = chatMessageRepository.countUnreadMessages(chatRoom.getChtRmId(),
 					searchChatVO.getUsrId());
-			log.info("안읽은 메시지 개수{}", System.currentTimeMillis());
 			chatRoom.setUnreadCnt((int) unreadCount);
 		}
-		log.info("시간{}", System.currentTimeMillis());
 		//최근 메시지 온 순서대로 정렬
 		chatRooms.sort(Comparator.comparing(ResponseChatRoomInfoVO::getCrtDt).reversed());
 		
-		log.info("chatRooms: {}", chatRooms);
-
 		// 4. 결과 목록을 SearchChatVO에 설정
 		searchChatVO.setChatRoomList(chatRooms);
 
@@ -163,7 +148,6 @@ public class ChatServiceImpl implements ChatService {
 				chatRoom.setLastMsgUsrId(lastMessage.getUsrId());
 				chatRoom.setLastMsgCrtDt(TimeFormatUtil.format(lastMessage.getCrtDt()));
 				chatRoom.setCrtDt(lastMessage.getCrtDt());
-
 			}
 
 			// 안읽은 메시지 수 조회
@@ -178,7 +162,6 @@ public class ChatServiceImpl implements ChatService {
 		}
 		
 		unreadRooms.sort(Comparator.comparing(ResponseChatRoomInfoVO::getCrtDt).reversed());
-
 
 		// 3. 필터링된 결과에서 페이징 적용
 		int startIndex = searchChatVO.getPageNo() * searchChatVO.getListSize();
@@ -312,9 +295,7 @@ public class ChatServiceImpl implements ChatService {
 			// 게시글에 첨부되어있는 파일 그룹의 아이디가 무엇인지 알수있다.
 			requestChatMessageVO.setAttchGrpId(fileGroupVO.getFlGrpId());
 			message.setAttchGrpId(requestChatMessageVO.getAttchGrpId());
-
 			message.setFileList(uploadResult);
-
 		}
 
 		// 메시지 ID 생성
@@ -343,7 +324,6 @@ public class ChatServiceImpl implements ChatService {
 		if (uploadResult != null && uploadResult.size() > 0) {
 			savedMessage.setFileList(uploadResult);
 		}
-
 		return savedMessage;
 	}
 

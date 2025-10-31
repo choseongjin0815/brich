@@ -26,8 +26,8 @@
 	<jsp:param name="stompjs"
 		value='<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>' />
 </jsp:include>
+<div class="header-title">메시지</div>
 <div class="chat-main" data-chtrm-id="${chtRmId}">
-	<div class="header-title">메시지</div>
 	<div class="content-box"
 		data-auth="${sessionScope.__LOGIN_USER__.autr}"
 		data-usr-id="${sessionScope.__LOGIN_USER__.usrId}"
