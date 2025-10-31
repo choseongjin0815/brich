@@ -1,6 +1,5 @@
 package com.ktdsuniversity.edu.domain.campaign.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -140,7 +139,7 @@ public class CampaignController {
     
 
     
-    @GetMapping("/adv/applicant/{cmpnId}")
+    @GetMapping("/adv/campaign/applicant/{cmpnId}")
     public String readApplicantList(Model model, @PathVariable String cmpnId,
     								RequestApplicantVO requestApplicantVO) {
     	// TODO 캠페인 주인과 세션이 다를 때 접근 막을 것
@@ -177,7 +176,7 @@ public class CampaignController {
     	}
     }
     
-    @GetMapping("/adv/adopt/{cmpnId}")
+    @GetMapping("/adv/campaign/adopt/{cmpnId}")
     public String readAdoptList(Model model, @PathVariable String cmpnId,
     		RequestApplicantVO requestApplicantVO) {
     	requestApplicantVO.setListSize(10);
@@ -207,14 +206,11 @@ public class CampaignController {
     	}
     }
 
-	@PostMapping("/adv/deny/{cmpnPstAdptId}")
+	@PostMapping("/adv/deny/{cmpnPstAdptId}/{cmpnId}")
 	@ResponseBody
-	public boolean doCreateDenyAction(@PathVariable String cmpnPstAdptId,
-									  RequestDenyVO requestDenyVO,
+	public boolean doCreateDenyAction(RequestDenyVO requestDenyVO,
 									  @SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
-		requestDenyVO.setCmpnPstAdptId(cmpnPstAdptId);
 		requestDenyVO.setAdvId(loginUser.getUsrId());
-		System.out.println("controller: " + requestDenyVO);
 		boolean insert = this.campaignService.createDenyByCmpnPstAdoptId(requestDenyVO);
 		
 		if (insert) {
@@ -243,8 +239,21 @@ public class CampaignController {
 	}
 	
 	@PostMapping("/adv/campaign/write")
-	public String doCreateCampaignAction(RequestCreateCmpnVO requestCreateCmpnVO) {
-		System.out.println(requestCreateCmpnVO);
-		return "";
+	public String doCreateNewCampaignAction(RequestCreateCmpnVO requestCreateCmpnVO,
+											@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
+		requestCreateCmpnVO.setUsrId(loginUser.getUsrId());
+		boolean insert = this.campaignService.createNewCampaign(requestCreateCmpnVO);
+		if (insert) {
+			return "redirect:/adv/campaign/list";
+		}
+		
+		else {
+			return "";
+		}
+	}
+	
+	@GetMapping("/adv/campaign/list")
+	public String readCampaignListByUsrId() {
+		return "campaign/list";
 	}
 }

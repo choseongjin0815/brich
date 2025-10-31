@@ -18,10 +18,10 @@ $().ready(function() {
     $(".require-input").on("keyup", function() {
         var value = $(this).val();
         if (value === "") {
-            $(".require-input").addClass("require-empty");
+            $(this).addClass("require-empty");
         }
         else {
-            $(".require-input").removeClass("require-empty");
+            $(this).removeClass("require-empty");
         }
         submitAutoActive();
     });

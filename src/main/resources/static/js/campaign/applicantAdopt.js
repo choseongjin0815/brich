@@ -7,7 +7,6 @@ $().ready(function() {
     
     $("button[name='adopt']").on("click", function() {
         var cmpnPstAdptId = $(this).closest(".applicant").children(".user").children(".logId").data("cmpn-apply-id");
-        console.log(cmpnPstAdptId);
         var adpt = $(this).attr("class");
         that = $(this);
         
@@ -142,6 +141,7 @@ $().ready(function() {
         var reason = denyContainer.children("#reason").val();
         var attachedFile = denyContainer.find("input[type=file]");
         var files = attachedFile[0].files;
+        var deadline = denyContainer.children(".pst-ddln").find("input[type=date]").val();
         
         var formData = new FormData();
         formData.append("reason", reason);
@@ -151,18 +151,19 @@ $().ready(function() {
                 formData.append("file", files[i]);
             }
         }
+        formData.append("pstDdln", deadline);
         
         url = window.location.href;
         id = $(".post-url").children("a").data("cmpn-apply-id");
+        cmpnId = $(".campaign-block").data("cmpn-id");
         $.ajax({
-            url: "/adv/deny/" + id,
+            url: "/adv/deny/" + id + "/" + cmpnId,
             method: "post",
             enctype: "multipart/form-data",
             data: formData,
             processData: false,
             contentType: false,
             success: function(response) {
-                console.log(response);
                 if(response) {
                     $(".modal").css("display", "none");
                     window.location.reload();

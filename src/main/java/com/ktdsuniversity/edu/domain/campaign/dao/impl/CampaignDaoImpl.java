@@ -12,6 +12,8 @@ import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCampaignAreaVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestUpdatePstSttsVO;
@@ -175,5 +177,25 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	@Override
 	public String selectPersonPrice() {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectPersonPrice");
+	}
+
+	@Override
+	public int insertNewCampaign(RequestCreateCmpnVO requestCreateCmpnVO) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertNewCampaign", requestCreateCmpnVO);
+	}
+
+	@Override
+	public int insertCampaignCategory(RequestCampaignAreaVO requestCampaignAreaVO) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertCampaignCategory", requestCampaignAreaVO);
+	}
+
+	@Override
+	public int updateDdlnByCmpnPstAdoptId(RequestDenyVO requestDenyVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateDdlnByCmpnPstAdoptId", requestDenyVO);
+	}
+
+	@Override
+	public int udpateCmpnDateByCmpnId(RequestDenyVO requestDenyVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "udpateCmpnDateByCmpnId", requestDenyVO);
 	}
 }

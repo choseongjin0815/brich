@@ -8,29 +8,22 @@ import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 
 public class RequestCreateCmpnVO extends CampaignVO {
 
-	private String loadAddress;
+	private String roadAddress;
 	private String detailAddress;
-	private List<String> category;
 	private List<String> area;
 	private MultipartFile file;
 	
-	public String getLoadAddress() {
-		return this.loadAddress;
+	public String getRoadAddress() {
+		return this.roadAddress;
 	}
-	public void setLoadAddress(String loadAddress) {
-		this.loadAddress = loadAddress;
+	public void setRoadAddress(String roadAddress) {
+		this.roadAddress = roadAddress;
 	}
 	public String getDetailAddress() {
 		return this.detailAddress;
 	}
 	public void setDetailAddress(String detailAddress) {
 		this.detailAddress = detailAddress;
-	}
-	public List<String> getCategory() {
-		return this.category;
-	}
-	public void setCategory(List<String> category) {
-		this.category = category;
 	}
 	public List<String> getArea() {
 		return this.area;
@@ -47,7 +40,6 @@ public class RequestCreateCmpnVO extends CampaignVO {
 	
 	@Override
 	public String toString() {
-		return "RequestCreateCmpnVO [loadAddress=" + loadAddress + ", detailAddress=" + detailAddress + ", category="
-				+ category + ", area=" + area + ", file=" + file + super.toString() + "]";
+		return "RequestCreateCmpnVO [roadAddress=" + roadAddress + ", detailAddress=" + detailAddress + ", area=" + area + ", file=" + file + super.toString() + "]";
 	}
 }

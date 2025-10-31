@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-<div class="campaign-block">
+<div class="campaign-block" data-cmpn-id="${param.cmpnId}">
     <img src="/img/image13.png" />
     <div class="flex-grow-1">
         <div>${param.cmpnTitle}</div>
