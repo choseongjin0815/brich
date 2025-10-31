@@ -104,4 +104,15 @@
                                           AND DLT_YN = 'N')
     </insert>
     
+    <select id="selectUserCategoryByUserId"
+            parameterType="string"
+            resultType="com.ktdsuniversity.edu.global.common.CommonCodeVO">
+        SELECT CC.CD_ID
+             , CC.CD_NM
+          FROM BLG_CTG BC
+         INNER JOIN CM_CD CC
+            ON BC.CD_ID = CC.CD_ID
+        WHERE BC.USR_ID = #{usrId} 
+    </select>
+    
 </mapper>

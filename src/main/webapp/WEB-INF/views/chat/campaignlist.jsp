@@ -10,8 +10,8 @@
         <script type='text/javascript' src='/js/chat/chat.js'></script>
     " />
 </jsp:include>
+<div class="header-title">메시지</div>
         <div class="chat-main"> 
-          <div class="header-title">메시지</div>
           <div class="content-box">
             <div class="content-title">캠페인 목록</div>
             <div class="progress-check">

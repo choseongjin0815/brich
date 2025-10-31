@@ -7,7 +7,7 @@ public class RequestUserResetPasswordVO {
 	private String salt;
 	
 	private String pswrd;
-
+	
 	public String getLogId() {
 		return this.logId;
 	}

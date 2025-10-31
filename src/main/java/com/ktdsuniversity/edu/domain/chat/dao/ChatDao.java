@@ -38,4 +38,7 @@ public interface ChatDao {
     
     // 사용자 이름 조회
     public String selectUserName(String usrId);
+
+    //채팅방에 해당하는 캠페인 정보 조회
+	public CampaignVO selectCampaignByChtRmId(String chtRmId);
 }

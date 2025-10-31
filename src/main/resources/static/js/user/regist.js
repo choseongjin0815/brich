@@ -23,18 +23,17 @@ $().ready(function() {
         }
     });
     $("#fileInput").on("change", function() {
-            var files = this.files;
-            var $fileList = $("#fileList");
-            $fileList.empty(); // 초기화
+        var files = this.files;
+        var $fileList = $("#fileList");
+        $fileList.empty(); // 초기화
 
-            $.each(files, function(index, file) {
-                $fileList.append("<div>" + file.name + "</div>");
-            });
+        $.each(files, function(index, file) {
+            $fileList.append("<div>" + file.name + "</div>");
         });
+    });
     $(".regist-btn").on("click", function() {
-        if($("#email-confirm").val() === "OK") {
-            $(".user-regist-form").submit();
-        }
+        $(".user-regist-form").submit();
+
     });
 
     $(".next-btn").on("click", function() {
@@ -80,7 +79,7 @@ $().ready(function() {
         else {
             timerHtml.text("적절하지 않은 이메일입니다.")
         }
-        $.post("/email/send?email=" + email, function() {});
+        $.post("/email/send?email=" + email, function() { });
     });
 
     $(".email-verify").on("click", function() {
@@ -101,25 +100,25 @@ $().ready(function() {
             }
         });
     });
-    
+
     $(".find-btn").on("click", function() {
         var name = $("#name").val();
         window.location.href = "/find/id/" + ((name !== "") ? name : "non");
     });
-    
+
     $(".reset-password-btn").on("click", function() {
         window.location.href = "/reset/password"
     });
-    
+
     $(".go-login-btn").on("click", function() {
         window.location.href = "/login";
     });
-    
+
     $(".do-reset-btn").on("click", function() {
-        if($("#email-confirm").val() === "OK" 
-        && $("#password").val() === $("#password-confirm").val()) {
+        if ($("#email-confirm").val() === "OK"
+            && $("#password").val() === $("#password-confirm").val()) {
             alert($("#password").val(), $("#password-confirm").val())
-              $(".user-regist-form").submit();
+            $(".user-regist-form").submit();
         }
     });
 });
