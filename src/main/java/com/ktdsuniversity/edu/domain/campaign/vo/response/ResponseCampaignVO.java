@@ -6,6 +6,14 @@ import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 
 public class ResponseCampaignVO extends CampaignVO{
 	
+	 public String getPstSttsCdNm() {
+		return this.pstSttsCdNm;
+	}
+
+	public void setPstSttsCdNm(String pstSttsCdNm) {
+		this.pstSttsCdNm = pstSttsCdNm;
+	}
+
 	 /**
 	  * 좋아요 수
 	  */
@@ -31,9 +39,41 @@ public class ResponseCampaignVO extends CampaignVO{
 	 public String pstSttsCd;
 	 
 	 /**
+	  * 포스팅 상태 코드 이름
+	  */
+	 public String pstSttsCdNm;
+	 
+	 /**
 	  * 좋아요 여부
 	  */
 	 public String favYn;
+	 
+	 /**
+	  * 신청 여부
+	  */
+	 public String adptYn;
+	 
+	 /**
+	  * 공통코드 이름
+	  */
+	 public String SttsCdNm;
+	 
+	 	 
+	 public String getSttsCdNm() {
+		return this.SttsCdNm;
+	}
+
+	 public void setSttsCdNm(String sttsCdNm) {
+		 SttsCdNm = sttsCdNm;
+	 }
+
+	 public String getAdptYn() {
+		return this.adptYn;
+	}
+
+	 public void setAdptYn(String adptYn) {
+		 this.adptYn = adptYn;
+	 }
 
 	 public String getPstSttsCd() {
 		return this.pstSttsCd;
@@ -68,17 +108,11 @@ public class ResponseCampaignVO extends CampaignVO{
 	 }
 
 	 @Override
-	 public String toString() {
-	     return "ResponseCampaignVO{" +
-	             "super=" + super.toString() +  
-	             ", likeCnt=" + likeCnt +
-	             ", adptCnt=" + adptCnt +
-	             ", area=" + area +
-	             ", parentArea='" + parentArea + '\'' +
-	             ", pstSttsCd='" + pstSttsCd + '\'' +
-	             ", favYn='" + favYn + '\'' +
-	             '}';
-	 }
+	public String toString() {
+		return "ResponseCampaignVO [likeCnt=" + likeCnt + ", adptCnt=" + adptCnt + ", area=" + area + ", parentArea="
+				+ parentArea + ", pstSttsCd=" + pstSttsCd + ", pstSttsCdNm=" + pstSttsCdNm + ", favYn=" + favYn
+				+ ", adptYn=" + adptYn + ", SttsCdNm=" + SttsCdNm + "]";
+	}
 
 
 	 public List<String> getArea() {

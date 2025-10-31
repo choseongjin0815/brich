@@ -18,14 +18,18 @@
 						<c:if test="${not empty detail.parentArea}">[ ${detail.parentArea} ]</c:if> 
 						 ${detail.cmpnTitle }
 					</div>
-					<div class="cmpn-title-love">
-						하트
-					</div>
+				    <c:if test="${not empty sessionScope.__LOGIN_USER__ }" > 
+						<div class="cmpn-title-love">
+							하트
+    					</div>
+					</c:if>
 				</div>
 	            <div class="cmpn-title-offrCn">${detail.offrCn}</div>
 	            <div class ="cmpn-title-person flex-space-between">
 	              <div>신청 ${detail.adptCnt } / ${detail.rcrtPrsnn }</div>
-	              <div>${detail.sttsCd}</div>
+	              <c:if test="${not empty detail.pstSttsCd}">
+		              <div class ="pst-stts-cd-${detail.pstSttsCd}">${detail.pstSttsCdNm}</div>
+	              </c:if>
 	            </div>
 	          </div>
 	          <div class="cmpn-bottom-area">
@@ -91,6 +95,12 @@
 	            </div>
 	          </div>
           </div>
+        </div>
+        <div class = "submit-modal-area display-none">
+            <div class="submit-modal">
+            dd
+            
+            </div>
         </div>
         
 <jsp:include page="/WEB-INF/views/layout/footer.jsp"/>

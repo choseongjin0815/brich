@@ -37,7 +37,17 @@ public class CampaignController {
     @GetMapping("/campaigndetail/{campaignId}")
     public String campaignDetailPage(@PathVariable String campaignId, Model model,
     							 @SessionAttribute(value = "__LOGIN_USER__", required = false) UserVO loginUser ) {
-    	ResponseCampaignVO detail = campaignService.readCampaignDetail(campaignId);
+    	ResponseCampaignVO detail = new ResponseCampaignVO(); 
+    	if(loginUser != null) {
+    		if(loginUser.getAutr().equals("1002") || loginUser.getAutr().equals("1003") ) {
+        		detail = campaignService.readCampaignDetail(campaignId, loginUser.getUsrId());    	
+        	}else {    		
+        		detail = campaignService.readCampaignDetail(campaignId);
+        	}
+    	}else {    		
+    		detail = campaignService.readCampaignDetail(campaignId);
+    	}
+
     	
     	log.info( "캠페인 상세조회 결과 : " + detail.toString());
     	model.addAttribute("detail", detail);
@@ -47,7 +57,9 @@ public class CampaignController {
     @GetMapping("/campaignmain")
     public String campaignMainPage(RequestSearchCampaignVO requestSearchCampaignVO, Model model,
     						   @SessionAttribute(value = "__LOGIN_USER__", required = false) UserVO loginUser){
-    	requestSearchCampaignVO.setLoginId(loginUser.getUsrId());
+    	if(loginUser != null) {
+    		requestSearchCampaignVO.setLoginId(loginUser.getUsrId());
+    	}
     	log.info( "입력 파라미터 값 : " + requestSearchCampaignVO.toString());
     	ResponseCampaignListVO CampaignListAndCategory = campaignService.readCampaignListAndCategory(requestSearchCampaignVO);
     	
@@ -109,16 +121,20 @@ public class CampaignController {
      * @param campaignId
      * @return
      */
-    @GetMapping("/blgr/love/{campaignId}")
-    public String favCampaignDo(@SessionAttribute(value = "__LOGIN_USER__") UserVO loginUser, 
+    @ResponseBody
+    @PostMapping("/blgr/love/{campaignId}")
+    public AjaxResponse favCampaignDo(@SessionAttribute(value = "__LOGIN_USER__") UserVO loginUser, 
     						@PathVariable String campaignId) {
     	String blgId = loginUser.getUsrId();
-    	boolean update = campaignService.favCampaignDo(blgId, campaignId);
-    	return "redirect:/campaignmain";
+    	int count = campaignService.favCampaignDo(blgId, campaignId);
+    	
+    	AjaxResponse ajaxResponse = new AjaxResponse();
+    	ajaxResponse.setBody(count);
+    	return ajaxResponse;
     }
     
     /**
-     * 캠페인 신청하기
+     * 캠페인 신청, 취소 하기
      * @param loginUser
      * @param campaignId
      * @return

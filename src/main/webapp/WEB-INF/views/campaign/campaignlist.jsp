@@ -6,18 +6,16 @@ pageEncoding="UTF-8"%>
     <c:forEach items="${campaignList}" var="campaignList">
       <div class="campaign-main-block" data-cmpn-id="${campaignList.cmpnId}">
         <div class="campaign-thumbnail">
-          <div
-            class="campaign-fav love-${campaignList.favYn}"
-            data-usr-id="${sessionScope.__LOGIN_USER__.usrId}"
-            data-cmpn-id="${campaignList.cmpnId}"
-          >
-            <c:if test="${campaignList.favYn eq 'Y'}">
-              <div class="love-on"></div>
-            </c:if>
-            <c:if test="${campaignList.favYn eq 'N'}">
-              <div class="love-off"></div>
-            </c:if>
-          </div>
+           <c:if test="${not empty sessionScope.__LOGIN_USER__ }" > 
+	          <c:set var="love" value="${campaignList.favYn eq 'Y'}" />
+	          <div
+	            class="campaign-fav love-${campaignList.favYn}"
+	            data-usr-id="${sessionScope.__LOGIN_USER__.usrId}"
+	            data-cmpn-id="${campaignList.cmpnId}"> 
+	              <div class="love-on ${love ? '' : 'display-none'}"></div>
+	              <div class="love-off ${love ? 'display-none' : ''}"></div>
+	          </div>
+           </c:if>
         </div>
 
         <div class="campaign-one-title padding-10px">
