@@ -39,12 +39,12 @@ public class AdminInqrServiceImpl implements AdminInqrService {
 
 	@Override
 	public List<AdminInqrListVO> readAdminInqrList() {
-		return adminInqrDao.selectAdminInqrList();
+		return this.adminInqrDao.selectAdminInqrList();
 	}
 
 	@Override
 	public AdminInqrDetailVO readAdminInqrDetailByInqrId(String inqrId) {
-		return adminInqrDao.selectAdminInqrDetailByInqrId(inqrId);
+		return this.adminInqrDao.selectAdminInqrDetailByInqrId(inqrId);
 	}
 
 	@Transactional
@@ -60,7 +60,7 @@ public class AdminInqrServiceImpl implements AdminInqrService {
 			
 			for(FileVO fileVO : insertedFiles) {
 				fileVO.setFlGrpId(fileGroupVo.getFlGrpId());
-				int insertCount = fileDao.insertFile(fileVO);
+				int insertCount = this.fileDao.insertFile(fileVO);
 			}
 			
 			ansrInfo.setAnsrFlGrpId(fileGroupVo.getFlGrpId());

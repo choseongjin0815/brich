@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.domain.report.vo.AdminPenaltyRequestVO;
 import com.ktdsuniversity.edu.domain.user.dao.AdminUserDao;
 import com.ktdsuniversity.edu.domain.user.vo.AdminAdvertiserDetailVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerAreaInfoVO;
@@ -134,6 +135,21 @@ public class AdminUserDaoImpl extends SqlSessionDaoSupport implements AdminUserD
 	@Override
 	public int insertHistoryToBlogAddress(UserUpdateHistoryVO updateHistory) {
 		return super.getSqlSession().insert(this.NAME_SPACE + "insertHistoryToBlogAddress", updateHistory);
+	}
+
+	@Override
+	public int selectPenaltyCountById(String rptedUsrId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectPenaltyCountById", rptedUsrId);
+	}
+
+	@Override
+	public int updateUserPenaltyCount(AdminPenaltyRequestVO requestVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateUserPenaltyCount", requestVO);
+	}
+
+	@Override
+	public int insertNewHistoryByPenaltyCount(UserUpdateHistoryVO history) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertNewHistoryByPenaltyCount", history);
 	}
 
 }

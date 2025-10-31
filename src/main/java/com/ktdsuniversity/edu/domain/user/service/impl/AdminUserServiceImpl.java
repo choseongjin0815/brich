@@ -19,6 +19,8 @@ import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.file.dao.FileDao;
 import com.ktdsuniversity.edu.domain.file.util.MultipartFileHandler;
 import com.ktdsuniversity.edu.domain.file.vo.FileVO;
+import com.ktdsuniversity.edu.domain.report.dao.PenaltyHistoryDao;
+import com.ktdsuniversity.edu.domain.report.vo.AdminPenaltyRequestVO;
 import com.ktdsuniversity.edu.domain.user.dao.AdminUserDao;
 import com.ktdsuniversity.edu.domain.user.dao.BlogCategoryDao;
 import com.ktdsuniversity.edu.domain.user.service.AdminUserService;
@@ -49,6 +51,9 @@ public class AdminUserServiceImpl implements AdminUserService {
 	private FileDao fileDao;
 	
 	@Autowired
+	private PenaltyHistoryDao penaltyHistoryDao;
+	
+	@Autowired
 	private MultipartFileHandler multipartFileHandler;
 	
 	@Override
@@ -75,12 +80,12 @@ public class AdminUserServiceImpl implements AdminUserService {
 		String userAutr = this.adminUserDao.selectAdminUserAutrById(usrId);
 		
 		if(userAutr.equals("1002") || userAutr.equals("1003")) {
-			AdminBloggerDetailVO info = adminUserDao.selectAdminBloggerDetailById(usrId);
+			AdminBloggerDetailVO info = this.adminUserDao.selectAdminBloggerDetailById(usrId);
 			
-			List<CampaignVO> progressList = adminUserDao.selectBloggerCmpnProgressList(usrId);
-		    List<CampaignVO> completedList = adminUserDao.selectBloggerCmpnCompletedList(usrId);
-		    List<AdminBloggerAreaInfoVO> usrAr = adminUserDao.selectBloggerAreaList(usrId);
-		    List<AdminBloggerCategoryInfoVO> usrBlgCtg = adminUserDao.selectBloggerCategoryList(usrId);
+			List<CampaignVO> progressList = this.adminUserDao.selectBloggerCmpnProgressList(usrId);
+		    List<CampaignVO> completedList = this.adminUserDao.selectBloggerCmpnCompletedList(usrId);
+		    List<AdminBloggerAreaInfoVO> usrAr = this.adminUserDao.selectBloggerAreaList(usrId);
+		    List<AdminBloggerCategoryInfoVO> usrBlgCtg = this.adminUserDao.selectBloggerCategoryList(usrId);
 		    
 		    info.setCmpnProgressList(progressList);
 		    info.setCmpnCompletedList(completedList);
@@ -109,10 +114,10 @@ public class AdminUserServiceImpl implements AdminUserService {
 			return info;
 		}
 		else if(userAutr.equals("1004") || userAutr.equals("1007")) {
-			AdminAdvertiserDetailVO info = adminUserDao.selectAdminAdvertiserDetailById(usrId);
+			AdminAdvertiserDetailVO info = this.adminUserDao.selectAdminAdvertiserDetailById(usrId);
 			
-			List<CampaignVO> progressList = adminUserDao.selectAdvertiserCmpnProgressList(usrId);
-		    List<CampaignVO> completedList = adminUserDao.selectAdvertiserCmpnCompletedList(usrId);
+			List<CampaignVO> progressList = this.adminUserDao.selectAdvertiserCmpnProgressList(usrId);
+		    List<CampaignVO> completedList = this.adminUserDao.selectAdvertiserCmpnCompletedList(usrId);
 		    
 		    info.setCmpnProgressList(progressList);
 		    info.setCmpnCompletedList(completedList);
@@ -157,10 +162,10 @@ public class AdminUserServiceImpl implements AdminUserService {
 		String usrId = adminUserModifyInfoVO.getUsrId();
 		
 		// 수정 전 회원 정보 백업
-		UserVO beforeInfo = adminUserDao.selectUserInfoById(usrId);
+		UserVO beforeInfo = this.adminUserDao.selectUserInfoById(usrId);
 
 		// 회원 정보 UPDATE (기본 정보만)
-		int updateCount = adminUserDao.updateUserInfo(adminUserModifyInfoVO);
+		int updateCount = this.adminUserDao.updateUserInfo(adminUserModifyInfoVO);
 		daoValidate(updateCount, "updateUserInfo");
 		
 		// 업데이트된 회원 정보를 UserVO로 변환 (기존 정보와 비교할 준비)
@@ -177,7 +182,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 		else if(modifyUserAutr.equals("1004")) {
 			
 			// 상호명
-			updateCount = adminUserDao.updateAdvertiserInfo(adminUserModifyInfoVO);
+			updateCount = this.adminUserDao.updateAdvertiserInfo(adminUserModifyInfoVO);
 			daoValidate(updateCount, "updateAdvertiserInfo");
 			
 			// 사업자 등록증 파일 INSERT or UPDATE 구분 처리
@@ -191,7 +196,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 	    if(!historyList.isEmpty()) {
 	    	
 	    	// 회원 정보 수정 이력 테이블에 INSERT
-	    	updateCount = adminUserDao.insertUpdateHistory(historyList);
+	    	updateCount = this.adminUserDao.insertUpdateHistory(historyList);
 	    	daoValidate(updateCount, "insertUpdateHistory");
 	    }
 	    
@@ -240,7 +245,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 		Set<String> newCategorySet = new HashSet<>(usrBlgCtg);
 		
 		// 현재 블로거의 블로그 카테고리 가져오기 (UPDATE 전)
-		List<BlogCategoryVO> existBlogCategoryList = blogCategoryDao.selectUserBlogCategoryById(usrId);
+		List<BlogCategoryVO> existBlogCategoryList = this.blogCategoryDao.selectUserBlogCategoryById(usrId);
 		
 		// UPDATE될 블로거의 카테고리 ID Set (cdId)
 		Set<String> existIdSet = new HashSet<>();
@@ -276,7 +281,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 			deleteParamMap.put("adminId", adminId);
 			
 			// 해당 ROW -> DLT_YN = 'Y' (UPDATE)
-			updateAndInsertCount = blogCategoryDao.updateBlogCategoryAsDelete(deleteParamMap);
+			updateAndInsertCount = this.blogCategoryDao.updateBlogCategoryAsDelete(deleteParamMap);
 		}
 		
 		// 추가될 카테고리 혹은 재활성화 카테고리 찾기
@@ -301,7 +306,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 			searchParamMap.put("usrId", usrId);
 			
 			// 추가/재활성화 대상 중 비활성화(DLT_YN = 'Y') 상태인 카테고리 조회
-			List<String> deletedList = blogCategoryDao.selectDeletedCategoryById(searchParamMap);
+			List<String> deletedList = this.blogCategoryDao.selectDeletedCategoryById(searchParamMap);
 			
 			// 재활성화(DLT_YN = 'N' UPDATE 예정) 대상으로 간주
 			List<String> reactiveCategoryList = new ArrayList<>(deletedList);
@@ -318,7 +323,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 				reactiveParamMap.put("usrId", usrId);
 				reactiveParamMap.put("adminId", adminId);
 				
-				updateAndInsertCount = blogCategoryDao.updateCategoryAsReactive(reactiveParamMap);
+				updateAndInsertCount = this.blogCategoryDao.updateCategoryAsReactive(reactiveParamMap);
 				daoValidate(updateAndInsertCount, "updateCategoryAsReactive");
 			}
 			
@@ -331,7 +336,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 					insertParamMap.put("usrId", usrId);
 					insertParamMap.put("adminId", adminId);
 					
-					updateAndInsertCount = blogCategoryDao.insertNewBlogCategory(insertParamMap);
+					updateAndInsertCount = this.blogCategoryDao.insertNewBlogCategory(insertParamMap);
 				}
 			}
 		}
@@ -359,7 +364,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 			deleteParamMap.put("deleteFiles", deleteFiles);
 			deleteParamMap.put("adminId", adminId);
 			
-			updateAndInsertCount = fileDao.updateFilesAsDelete(deleteParamMap);
+			updateAndInsertCount = this.fileDao.updateFilesAsDelete(deleteParamMap);
 			// daoValidate(updateAndInsertCount, "updateFilesAsDelete");
 		}
 		
@@ -375,7 +380,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 			// 업로드 된 파일의 flGrpId를 지정
 			for(FileVO fileVO : insertResult) {
 				fileVO.setFlGrpId(flGrpId);
-				updateAndInsertCount = fileDao.insertFile(fileVO);
+				updateAndInsertCount = this.fileDao.insertFile(fileVO);
 				daoValidate(updateAndInsertCount, "insertFile");
 			}
 		}
@@ -419,7 +424,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 				historyList.add(createHistory(usrId, "CMPNY", beforeInfo.getCmpny(), afterInfo.getCmpny(), adminId, updtRsn));
 			}
 			
-			// flGrpId 비교 (이거 굳이 안 해도 될 것 같아서 그냥 안 넣을 게요...)
+			// flGrpId 비교 (이거 굳이 안 해도 될 것 같아서 그냥 안 넣을게요...)
 		}
 		
 		return historyList;
@@ -460,13 +465,18 @@ public class AdminUserServiceImpl implements AdminUserService {
 		}
 	}
 
+	/**
+	 * 블로그 주소 수동 인증 (UPDATE)
+	 * @param adminUserModifyInfoVO
+	 * @return
+	 */
 	@Transactional
 	@Override
 	public boolean updateBlogAddress(AdminUserModifyInfoVO adminUserModifyInfoVO) {
 		
 		if(adminUserModifyInfoVO.getIsBlogAddressChange()) {
 			
-			int updateCount = adminUserDao.updateBlogAddress(adminUserModifyInfoVO);
+			int updateCount = this.adminUserDao.updateBlogAddress(adminUserModifyInfoVO);
 			
 			UserUpdateHistoryVO updateHistory = new UserUpdateHistoryVO();
 			
@@ -476,17 +486,64 @@ public class AdminUserServiceImpl implements AdminUserService {
 			updateHistory.setAftUpdtCn(adminUserModifyInfoVO.getBlgAddrs());
 			updateHistory.setUpdtAdmin(adminUserModifyInfoVO.getAdminId());
 			updateHistory.setUpdtRsn("[블로그 수동 인증]");
-			updateCount = adminUserDao.insertHistoryToBlogAddress(updateHistory);
+			updateCount = this.adminUserDao.insertHistoryToBlogAddress(updateHistory);
 			
 			updateHistory.setUpdtItem("RCNT_BLG_CRTFCTN_DT");
 			updateHistory.setBefUpdtCn(adminUserModifyInfoVO.getBefBlgCrtfctnDt());
-			updateCount = adminUserDao.insertHistoryToBlogAddress(updateHistory);
+			updateCount = this.adminUserDao.insertHistoryToBlogAddress(updateHistory);
 			
 			return updateCount > 0;
 		}
 		else {
 			throw new IllegalArgumentException("error");
 		}
+	}
+
+	/**
+	 * 회원 경고/정지 처리
+	 * @param adminPanaltyRequestVO
+	 * @return
+	 */
+	@Transactional
+	@Override
+	public boolean updateUserPenaltyInfo(AdminPenaltyRequestVO adminPanaltyRequestVO) {
+		
+		int updateAndInsertCount = 0;
+		
+		String penalty = adminPanaltyRequestVO.getPenaltyOption();
+		
+		if(penalty.equals("warning")) {
+			updateAndInsertCount = this.penaltyHistoryDao.insertPenaltyHistoryInWarning(adminPanaltyRequestVO);
+			daoValidate(updateAndInsertCount, "insertPenaltyHistoryInWarning");
+		}
+		else if(penalty.equals("ban")) {
+			updateAndInsertCount = this.penaltyHistoryDao.insertPenaltyHistoryInBan(adminPanaltyRequestVO);
+			daoValidate(updateAndInsertCount, "insertPenaltyHistoryInBan");
+		}
+		
+		int pnltCnt = this.adminUserDao.selectPenaltyCountById(adminPanaltyRequestVO.getUsrId());
+		
+		updateAndInsertCount = this.adminUserDao.updateUserPenaltyCount(adminPanaltyRequestVO);
+		daoValidate(updateAndInsertCount, "updateUserPenaltyCount");
+		
+		UserUpdateHistoryVO history = new UserUpdateHistoryVO();
+	    history.setUsrId(adminPanaltyRequestVO.getUsrId());
+	    history.setUpdtItem("PNLT_CNT");
+	    history.setBefUpdtCn(pnltCnt + "");
+	    history.setAftUpdtCn( (pnltCnt + 1) + "");
+	    history.setUpdtAdmin(adminPanaltyRequestVO.getAdminId());
+	    history.setUpdtRsn("징계 처리(" + adminPanaltyRequestVO.getPenaltyKeyword() + ")");
+		
+		if( (pnltCnt + 1) >= 3 ) {
+			history.setUpdtRsn("징계 누적 횟수 3 이상 (최근 징계: " + adminPanaltyRequestVO.getPenaltyKeyword() + ")");
+			
+			// 징계 기록도 함께 갱신한다.
+			updateAndInsertCount = this.penaltyHistoryDao.updateHistoryBanToPenaltyCount(adminPanaltyRequestVO);
+			daoValidate(updateAndInsertCount, "updateHistoryBanToPenaltyCount");
+		}
+		
+		return this.adminUserDao.insertNewHistoryByPenaltyCount(history) > 0;
+		
 	}
 
 }

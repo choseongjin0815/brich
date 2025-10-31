@@ -35,9 +35,9 @@ public class AdminInqrController {
 	@GetMapping("/admin/inqr_list")
 	public String viewAdminInqrListPage(Model model) {
 		
-		List<AdminInqrListVO> result = this.adminInqrService.readAdminInqrList();
+		List<AdminInqrListVO> inqrList = this.adminInqrService.readAdminInqrList();
 		
-		model.addAttribute("inqr_list", result);
+		model.addAttribute("inqrList", inqrList);
 		
 		return "/inqr/admin_inqr_list";
 	}
@@ -58,11 +58,16 @@ public class AdminInqrController {
 		return "/inqr/admin_inqr_detail";
 	}
 	
-	
+	/**
+	 * 문의 관리 - 답변 등록 처리 (UPDATE, 파일 첨부할 경우 +INSERT)
+	 * @param inqrId
+	 * @param ansrInfo
+	 * @return
+	 */
 	@ResponseBody
 	@PostMapping("/admin/ansr_regist_process/{inqrId}")
 	public AjaxResponse doAdminAnsrRegistProcessAction(@PathVariable String inqrId, 
-													  @ModelAttribute AdminAnsrRegistVO ansrInfo) {
+													   @ModelAttribute AdminAnsrRegistVO ansrInfo) {
 		
 		boolean isSuccess = this.adminInqrService.updateInqrToAnswer(ansrInfo, ansrInfo.getFiles());
 		

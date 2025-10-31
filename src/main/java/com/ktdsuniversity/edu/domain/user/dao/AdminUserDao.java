@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.domain.report.vo.AdminPenaltyRequestVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminAdvertiserDetailVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerAreaInfoVO;
 import com.ktdsuniversity.edu.domain.user.vo.AdminBloggerCategoryInfoVO;
@@ -57,5 +58,11 @@ public interface AdminUserDao {
 	int updateBlogAddress(AdminUserModifyInfoVO adminUserModifyInfoVO);
 
 	int insertHistoryToBlogAddress(UserUpdateHistoryVO updateHistory);
+
+	int selectPenaltyCountById(String rptedUsrId);
+
+	int updateUserPenaltyCount(AdminPenaltyRequestVO requestVO);
+
+	int insertNewHistoryByPenaltyCount(UserUpdateHistoryVO history);
 
 }
