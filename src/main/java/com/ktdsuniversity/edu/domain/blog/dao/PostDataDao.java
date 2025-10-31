@@ -4,6 +4,6 @@ import com.ktdsuniversity.edu.domain.blog.vo.PostDataVO;
 
 public interface PostDataDao {
 
-	void insertPostData(PostDataVO post);
+	int insertPostData(PostDataVO post);
 
 }

@@ -1,22 +1,26 @@
 package com.ktdsuniversity.edu.domain.blog.controller;
 
-import java.io.IOException;
+
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+
 
 import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
+import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogIndexListVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
-import com.ktdsuniversity.edu.global.util.PythonExecutor;
 
-import jakarta.servlet.http.HttpServletRequest;
+
+
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -25,7 +29,7 @@ public class BlogDataController {
 	@Autowired BlogDataService blogDataService;
 	
 	@GetMapping("/blog/{usrId}/dashboard")
-	public String viewBlogDashBoard(@PathVariable String usrId, HttpSession session, Model model, RequestExpireSoonCampaignVO requestExpireSoonCampaignVO){
+	public String viewBlogDashBoard(@PathVariable String usrId, HttpSession session, Model model, RequestExpireSoonCampaignVO requestExpireSoonCampaignVO, RequestBlogIndexListVO requestBlogIndexListVO){
 	    
 		UserVO loginUser = (UserVO) session.getAttribute("__LOGIN_USER__");
 	    if (loginUser == null || !loginUser.getUsrId().equals(usrId)) {
@@ -36,9 +40,12 @@ public class BlogDataController {
 		requestExpireSoonCampaignVO.setPageCount(1);
 		ResponseExpireSoonListVO result = 
 				this.blogDataService.readExpireSoonCampaignList(requestExpireSoonCampaignVO);
+		List<BlogIndexVO>indexResult = 
+				this.blogDataService.readBlogIndexList(requestBlogIndexListVO);
 		model.addAttribute("list", result);
 		model.addAttribute("user", loginUser);
 		model.addAttribute("paginator", requestExpireSoonCampaignVO);
+		model.addAttribute("index", indexResult);
 		return "blog/dashboard";
 	}
 	
@@ -60,6 +67,7 @@ public class BlogDataController {
 	public String viewBlogVerificationPage(@PathVariable String usrId, HttpSession session, Model model) {
 		UserVO loginUser = (UserVO) session.getAttribute("__LOGIN_USER__");
 	    if (loginUser == null || !loginUser.getUsrId().equals(usrId) || loginUser.getBlgAddrs() != null) {
+	    	
 	        return "redirect:/access-denied";
 	    }
 	    

@@ -23,8 +23,8 @@ public class PostDataDaoImpl extends SqlSessionDaoSupport implements PostDataDao
 
     @Transactional
 	@Override
-	public void insertPostData(PostDataVO post) {
-		super.getSqlSession().insert(this.NAME_SPACE + "insertPostData", post);
+	public int insertPostData(PostDataVO post) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertPostData", post);
 	}
 
 

@@ -133,7 +133,7 @@ numeric_string = "".join(numeric_chars)
 links = set()  # ✅ set으로 중복 방지
 total_pages = math.ceil(int(numeric_string) / 5)
 
-for page_num in range(1, 5):
+for page_num in range(1, 20):
     # ✅ 현재 페이지 HTML 새로 파싱
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     
@@ -205,8 +205,9 @@ for idx, post_url in enumerate(links):
     # 날짜
     post_elem = soup.select_one('span.se_publishDate.pcol2')
     post_date = post_elem.text.strip() if post_elem else 'N/A'
-
+    
     now = datetime.now()
+    # ====== 날짜 파싱 ======
     if re.search(r'(시간|분|일)\s*전', post_date):
         post_datetime = now
     else:
@@ -214,7 +215,7 @@ for idx, post_url in enumerate(links):
             post_datetime = datetime.strptime(post_date, "%Y. %m. %d. %H:%M")
             if now - post_datetime < timedelta(days=7):
                 print(f"최근 7일 이내 포스트 → 제외: {post_date}")
-                continue  # 리스트에 추가하지 않고 다음 포스트로 넘어감
+                continue
         except ValueError:
             try:
                 post_datetime = datetime.strptime(post_date, "%Y. %m. %d.")
@@ -222,35 +223,23 @@ for idx, post_url in enumerate(links):
                 print(f"날짜 파싱 실패: {post_date}")
                 continue
 
-    # post_date_str = post_datetime.strftime("%Y-%m-%d")
-
-    # 댓글
+    # ====== 댓글 ======
     comment_elem = soup.select_one('em._commentCount')
     comment_count = comment_elem.text.strip() if comment_elem else 'N/A'
 
     results.append({
         'index': idx,
         'url': post_url,
-        'date': post_date,
+        'date': post_datetime,
         'likes': like_count,
         'comments': comment_count
     })
 
-    print(f"{post_url} | 날짜: {post_date} | 공감: {like_count} | 댓글: {comment_count} | 인덱스: {idx+1}")
+    print(f"{post_url} | 날짜: {post_datetime} | 공감: {like_count} | 댓글: {comment_count} | 인덱스: {idx+1}")
 
-# ====== 날짜 정렬 (문자열 → datetime 변환 후 최신순 정렬) ======
-def parse_date_safe(s: str) -> datetime:
-    s = s.replace(".", "-").replace(" ", "").strip()
-    try:
-        return datetime.strptime(s, "%Y-%m-%d")
-    except ValueError:
-        # "YYYY-MM-DDHH:MM" 같이 붙은 경우
-        try:
-            return datetime.strptime(s[:10], "%Y-%m-%d")
-        except Exception:
-            return datetime.min
 
-results.sort(key=lambda x: parse_date_safe(x["date"]), reverse=True)
+# ====== 날짜 기준 정렬 ======
+results.sort(key=lambda x: x["date"], reverse=True)
 url = "http://localhost:8080/api/results"
 
 def safe_int(value):
@@ -265,7 +254,7 @@ data = {
             "pstUrl": r["url"],
             "pstCmnt": safe_int(r["comments"]),
             "pstLk": safe_int(r["likes"]),
-            "pstdDt": r["date"]
+            "pstdDt": r["date"].strftime("%Y-%m-%d%H:%M")
         }
         for r in results
     ]

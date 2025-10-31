@@ -198,6 +198,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public UserVO readUserByLogId(String id) {
+		return this.userDao.selectUserByLogId(id);
+}
+  @Override
 	public ResponseUserInfoVO readUserByUserId(String usrId) {
 		
 		ResponseUserInfoVO userInfo = new ResponseUserInfoVO();
