@@ -36,4 +36,20 @@
     
     </insert>
     
+    <select id="selectBlogIndex"
+    		parameterType="string">
+    SELECT USR_ID
+    	 , TO_CHAR(STAT_DT, 'YYYY-MM-DD') AS STAT_DT
+    	 , INDX_VAL
+    	 , INDX_VAL_AVG_5D
+    	 , CRT_DT
+    	 , CRTR
+    	 , UPDT_DT
+    	 , MTTR
+	  FROM TEAM_A.BLG_INDX
+	 WHERE USR_ID = #{_parameter}
+	   AND STAT_DT > SYSDATE - 36 
+	 ORDER BY STAT_DT
+    </select>
+    
 </mapper>

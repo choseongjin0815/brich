@@ -22,7 +22,7 @@ public interface BlogDataService {
 
 	boolean insertPostData(PostDataInsertVO post);
 
-	List<BlogIndexVO> readBlogIndexList(RequestBlogIndexListVO requestBlogIndexListVO);
+	List<BlogIndexVO> readBlogIndexList(String usrId);
 
 
 }

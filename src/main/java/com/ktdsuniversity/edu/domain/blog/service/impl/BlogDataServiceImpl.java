@@ -80,8 +80,10 @@ public class BlogDataServiceImpl implements BlogDataService{
 	}
 
 	@Override
-	public List<BlogIndexVO> readBlogIndexList(RequestBlogIndexListVO requestBlogIndexListVO) {
-		return null;
+	public List<BlogIndexVO> readBlogIndexList(String usrId) {
+		List<BlogIndexVO> list = postDataDao.selectBlogIndex(usrId);
+		
+		return list;
 	}
 
 

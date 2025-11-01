@@ -41,7 +41,7 @@ public class BlogDataController {
 		ResponseExpireSoonListVO result = 
 				this.blogDataService.readExpireSoonCampaignList(requestExpireSoonCampaignVO);
 		List<BlogIndexVO>indexResult = 
-				this.blogDataService.readBlogIndexList(requestBlogIndexListVO);
+				this.blogDataService.readBlogIndexList(usrId);
 		model.addAttribute("list", result);
 		model.addAttribute("user", loginUser);
 		model.addAttribute("paginator", requestExpireSoonCampaignVO);
