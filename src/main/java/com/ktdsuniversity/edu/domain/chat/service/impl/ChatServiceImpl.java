@@ -83,13 +83,14 @@ public class ChatServiceImpl implements ChatService {
 		// 3. MongoDB에서 각 채팅방의 최신 메시지 및 안읽은 수 조회
 		for (ResponseChatRoomInfoVO chatRoom : chatRooms) {
 			// 최신 메시지 조회
-			//Sort sort = Sort.by(Sort.Direction.DESC, "CRT_DT");
-			//여기서 메시지를 하나만 조회하면 되는거아닌가???????????????
+
 			ChatMessageVO messages = chatMessageRepository.findTop1ByChtRmIdAndDltYnOrderByCrtDtDesc(chatRoom.getChtRmId(), "N");
+			log.info("messages: {}", messages);
 			if (messages != null) {
 				ChatMessageVO lastMessage = messages;
 				chatRoom.setLastMsgCn(lastMessage.getMsgCn());
 				chatRoom.setLastMsgUsrId(lastMessage.getUsrId());
+				log.info("lastMessageCrtDt : {}", lastMessage.getCrtDt());
 				chatRoom.setLastMsgCrtDt(TimeFormatUtil.format(lastMessage.getCrtDt()));
 				chatRoom.setCrtDt(lastMessage.getCrtDt());
 			}
@@ -98,9 +99,13 @@ public class ChatServiceImpl implements ChatService {
 			long unreadCount = chatMessageRepository.countUnreadMessages(chatRoom.getChtRmId(),
 					searchChatVO.getUsrId());
 			chatRoom.setUnreadCnt((int) unreadCount);
+			log.info("chatroomCrtDt {}", chatRoom.getCrtDt());
 		}
 		//최근 메시지 온 순서대로 정렬
-		chatRooms.sort(Comparator.comparing(ResponseChatRoomInfoVO::getCrtDt).reversed());
+		//채팅방이 생성되었을때 메시지가 하나도 없기 때문에 에러나던 문제 수정함
+		 chatRooms.sort(Comparator.comparing(
+			        ResponseChatRoomInfoVO::getCrtDt, 
+			        Comparator.nullsFirst(Comparator.naturalOrder())).reversed());
 		
 		// 4. 결과 목록을 SearchChatVO에 설정
 		searchChatVO.setChatRoomList(chatRooms);
@@ -160,8 +165,8 @@ public class ChatServiceImpl implements ChatService {
 				unreadRooms.add(chatRoom);
 			}
 		}
+			unreadRooms.sort(Comparator.comparing(ResponseChatRoomInfoVO::getCrtDt).reversed());
 		
-		unreadRooms.sort(Comparator.comparing(ResponseChatRoomInfoVO::getCrtDt).reversed());
 
 		// 3. 필터링된 결과에서 페이징 적용
 		int startIndex = searchChatVO.getPageNo() * searchChatVO.getListSize();

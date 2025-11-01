@@ -4,11 +4,13 @@ import java.util.List;
 
 import com.ktdsuniversity.edu.domain.user.vo.BlogCategoryVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
+import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserAccountPasswordVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserFindIdVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserLoginVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserResetPasswordVO;
 import com.ktdsuniversity.edu.domain.user.vo.response.ResponseUserInfoVO;
+import com.ktdsuniversity.edu.domain.user.vo.response.ResponseUserSubscriptionInfoVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 public interface UserService {
@@ -27,6 +29,10 @@ public interface UserService {
 
 	public UserVO readUserByLogId(String id);
 	public ResponseUserInfoVO readUserByUserId(String usrId);
+
+	public ResponseUserSubscriptionInfoVO readSubscriptionInfoByUserId(String usrId);
+
+	public boolean updatePswrdByUsrId(RequestUserAccountPasswordVO requestUserAccountPasswordVO);
 
 
 }

@@ -45,8 +45,9 @@ $().ready(function() {
                 , newPswrd : newPswrd
                 , newPswrdConfirm : newPswrdConfirm}
             , function(response){
+             console.log(response);
             if(!response.error) {
-                alert(response.body.message);
+                alert(response.body.result);
                 window.location.reload();
             }
         });

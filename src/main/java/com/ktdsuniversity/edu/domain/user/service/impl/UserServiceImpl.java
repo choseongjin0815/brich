@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,17 +18,20 @@ import com.ktdsuniversity.edu.domain.file.util.MultipartFileHandler;
 import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
 import com.ktdsuniversity.edu.domain.file.vo.FileVO;
 import com.ktdsuniversity.edu.domain.user.dao.BlogCategoryDao;
+import com.ktdsuniversity.edu.domain.user.dao.SubscriptionPaymentDao;
 import com.ktdsuniversity.edu.domain.user.dao.UserAreaDao;
 import com.ktdsuniversity.edu.domain.user.dao.UserDao;
 import com.ktdsuniversity.edu.domain.user.service.UserService;
 import com.ktdsuniversity.edu.domain.user.vo.BlogCategoryVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserAreaVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
+import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserAccountPasswordVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserFindIdVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserLoginVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserResetPasswordVO;
 import com.ktdsuniversity.edu.domain.user.vo.response.ResponseUserInfoVO;
+import com.ktdsuniversity.edu.domain.user.vo.response.ResponseUserSubscriptionInfoVO;
 import com.ktdsuniversity.edu.global.common.AreaCode;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 import com.ktdsuniversity.edu.global.util.SHAEncrypter;
@@ -41,6 +45,9 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     private UserAreaDao userAreaDao; 
+    
+    @Autowired
+    private SubscriptionPaymentDao subscriptionPaymentDao;
     
     @Autowired
 	private MultipartFileHandler multipartFileHandler;
@@ -200,8 +207,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserVO readUserByLogId(String id) {
 		return this.userDao.selectUserByLogId(id);
-}
-  @Override
+	}
+   @Override
 	public ResponseUserInfoVO readUserByUserId(String usrId) {
 		
 		ResponseUserInfoVO userInfo = new ResponseUserInfoVO();
@@ -215,6 +222,48 @@ public class UserServiceImpl implements UserService {
 		
 		return userInfo;
 	}
+
+  @Override
+  public ResponseUserSubscriptionInfoVO readSubscriptionInfoByUserId(String usrId) {
+	return this.subscriptionPaymentDao.selectSubscriptionInfoByUserId(usrId);
+  }
+
+  /*
+   * 계정 관리 - 비밀번호 재설정용
+   */
+  @Override
+  public boolean updatePswrdByUsrId(RequestUserAccountPasswordVO requestUserAccountPasswordVO) {
+	  //우선 입력한 현재 비밀번호와 나의 비밀번호가 일치하는지 확인 해야함
+	  
+	  //salt는 난수이기 때문에 DB에서 값을 가져와 줘야함
+	  String salt = this.userDao.selectSaltByUsrId(requestUserAccountPasswordVO.getUsrId());
+	  String currentPassword = requestUserAccountPasswordVO.getCurrentPswrd();
+	  String encryptedPassword = SHAEncrypter.getEncrypt(currentPassword, salt);
+	  Map<String, String> currentUserPswrd = Map.of("usrId", requestUserAccountPasswordVO.getUsrId()
+			  									  , "currentPassword", encryptedPassword);
+	  
+	  log.info("enc {}", currentUserPswrd);
+	  String originalPassword = this.userDao.selectUserPswrdByPswrd(currentUserPswrd);
+	  
+	  if(!encryptedPassword.equals(originalPassword) || originalPassword == null) {
+		  log.info("일치하는지 확인");
+		  return false;
+	  }
+	  
+	  //재설정할 비밀번호를 암호화한다. 
+	  salt = SHAEncrypter.generateSalt();
+	  String password = requestUserAccountPasswordVO.getNewPswrd(); 
+	  	
+	  encryptedPassword = SHAEncrypter.getEncrypt(password, salt);
+	  	
+	  //암호화한 재설정 비밀번호를 다시 newPswrd에 set해준다.
+	  requestUserAccountPasswordVO.setNewPswrd(encryptedPassword);
+	  requestUserAccountPasswordVO.setSalt(salt);
+	  
+	  int updateResult = this.userDao.updatePswrdByUsrId(requestUserAccountPasswordVO);
+  	
+	  return updateResult > 0;
+  }
 
 
 
