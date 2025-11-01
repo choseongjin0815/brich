@@ -96,13 +96,50 @@
 	          </div>
           </div>
         </div>
-        <div class = "submit-modal-area display-none">
-            <div class="submit-modal">
-            dd
-            
-            </div>
-        </div>
-        
+        <form class="submit-modal-form display-none">
+	    	<div class = "submit-modal-area" data-cmpn-id= "${detail.cmpnId}">
+	            <div class="submit-modal">
+	            	<div class="submit-modal-title height-center">포스팅 입력</div>
+	            	<div class="submit-modal-field middle-center">
+	            		<label class="submit-modal-label" for="post-title">포스팅 제목</label>
+	            		<input class="submit-modal-input" id="post-title" type="text" name="postTitle">
+	            	</div> 
+				    <div class="submit-modal-field middle-center">
+				    	<label class="submit-modal-label" for="post-url">포스팅 주소</label>
+				    	<input class="submit-modal-input" id="post-url" type="url" placeholder="https://" name="postUrl">
+				    </div>
+					<div class="submit-modal-actions flex-row">
+					   <div class="submit-modal-btn submit-modal-btn-close middle-center">닫기</div>
+					   <div class="submit-modal-btn submit-modal-btn-ok middle-center" >제출</div>
+					</div>
+	            </div>
+	    	</div>
+	    </form>
+	    
+       <form class="re-submit-modal-form display-none">
+	    	<div class = "submit-modal-area" data-cmpn-id= "${detail.cmpnId}">
+	            <div class="submit-modal">
+	            	<div class="submit-modal-title height-center">포스팅 재 제출</div>
+	            	<div class="submit-modal-field middle-center re-submit-area">
+	            		<label class="submit-modal-label " for="re-post-cn">수정된 내용</label>
+	            		<textarea class="submit-modal-input re-submit-cn" id="re-post-cn" type="text" name="rePostCn"></textarea>
+	            	</div> 
+	            	<div class="submit-modal-field middle-center">
+	            		<label class="submit-modal-label" for="re-post-title">포스팅 제목</label>
+	            		<input class="submit-modal-input" id="re-post-title" type="text" name="rePostTitle">
+	            	</div> 
+				    <div class="submit-modal-field middle-center">
+				    	<label class="submit-modal-label" for="re-post-url">포스팅 주소</label>
+				    	<input class="submit-modal-input" id="re-post-url" type="url" placeholder="https://" name="rePostUrl">
+				    </div>
+					<div class="submit-modal-actions flex-row">
+					   <div class="re-submit-modal-btn submit-modal-btn-close middle-center">닫기</div>
+					   <div class="submit-modal-btn re-submit-modal-btn-ok middle-center" >제출</div>
+					</div>
+	            </div>
+	    	</div>
+	    </form>	    
+	    
 <jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
   
 

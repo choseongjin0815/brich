@@ -210,7 +210,7 @@
     font-weight: bold;
   }
   .red-24px{
-    color: red;
+    color: #FF676A;
   }
    .campaign-now-status-2005, .campaign-now-status-2006{
     color : #AEB400;
@@ -228,7 +228,7 @@
     padding-right:8px;
    }  
    .campaign-pst-status-6003{
-    color : red;
+    color : #FF676A;
     font-weight : bold;
     padding-right:8px;
    }  
@@ -317,12 +317,19 @@
     font-weight : bold;
     }
     .pst-stts-cd-6003{
-    color : #B1B700;
+    color : #FF676A;
     font-weight: bold;
     }
     .pst-stts-cd-6004{
     color : #00A906;
     font-weight : bold;
+    }
+    .return-reason-box{
+    margin : 10px 30px 20px 30px;
+    	& > .return-reason-title{
+    		font-size : 24px;
+    		font-weight : bold;
+    	}
     }
 }
 
@@ -339,20 +346,87 @@
   align-items: center;   
   justify-content: center; 
   z-index: 1000;         
+  & > .submit-modal{
+	  align-items: center;   
+	  justify-content: center; 	
+	  background: #fff;
+	  border-radius: 10px;
+	  min-width: 220px;
+	  width: 50vw;
+	  height: 60vh;
+	  padding:  0 24px 24px 24px;
+	  overflow: auto; 
+	  position: absolute;
+	  top : 20%;
+	  left: 25%;
+	  & > .submit-modal-title{
+		  height: 70px;
+		  border-bottom : 1px solid #D9D9D9;
+		  font-size : 24px;
+		  font-weight : bold;
+		  padding-left : 15px;
+		  margin-bottom : 30px;
+		  }
+	  & > .submit-modal-field{
+	  	height: 70px;
+	  	gap : 50px;
+	  	& > .submit-modal-label{
+	  		font-size : 24px;
+	  	}
+	  	& > .submit-modal-input{
+	  		width : 500px;
+	  		height :40px;
+	  		border-radius : 10px;
+	  		border: 1px solid gray;
+	  		font-size : 20px;
+	  	}
+	  	& > .submit-modal-input::placeholder{
+	  		font-size : 20px;
+	  	}
+	  	& > .re-submit-cn{
+	  		height: 130px;
+	  	}
+	  }
+	  & > .re-submit-area{
+	  	height: 150px;
+	  }
+	  & > .submit-modal-actions{
+	  		position : absolute;
+	  		bottom : 15px;
+	  		right : 15px;	  	
+	  		gap : 20px;
+	  		& > .submit-modal-btn{
+	  			width : 100px;
+	  			height : 35px;
+	  			border-radius : 4px;
+	  		}
+	  		& > .submit-modal-btn-ok {
+	  			background-color : #1A62F8;
+	  			color : white;
+	  		}
+	  		& >.submit-modal-btn-close{
+	  			color : #333;
+	  		}	  		
+	  	}
+	}
+     
+ .re-submit-modal-btn-ok {
+	  	background-color : #1A62F8;
+	  	color : white;
+	  	}
 }
 
-.submit-modal{
-  align-items: center;   
-  justify-content: center; 	
-  background: #fff;
-  border-radius: 10px;
-  min-width: 320px;
-  width: 60vw;
-  height: 60vh;
-  padding: 24px;
-  overflow: auto; 
-  position: absolute;
-  top : 20%;
-  left: 20%;
-         
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

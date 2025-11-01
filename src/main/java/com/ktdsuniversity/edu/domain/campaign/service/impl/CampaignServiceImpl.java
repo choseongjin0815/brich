@@ -17,6 +17,7 @@ import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCampaignAreaVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestPostSubmitVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestUpdatePstSttsVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
@@ -314,8 +315,38 @@ public class CampaignServiceImpl implements CampaignService {
 		}
 		return count;
 	}
-
-
+	
+	@Override
+	public int postSubmit(RequestPostSubmitVO requestPostSubmitVO) {
+		
+		int postSubmitCount = campaignDao.updatePostSubmit(requestPostSubmitVO);
+		
+		return postSubmitCount;
+	}
+	
+	@Transactional
+	@Override
+	public int rePostSubmit(RequestPostSubmitVO requestPostSubmitVO) {
+		
+		int count = 0;
+		// 재재출 변경내용 업데이트
+		int postSubmitCount = campaignDao.updateRePostSubmit(requestPostSubmitVO);
+		
+		// 재재출 변경 제목 url 업데이트
+		
+		int postSubmitCnCount = campaignDao.updatePostSubmit(requestPostSubmitVO);
+		
+		// 포스트 상태 변경    반려 -> 검토중    6003 -> 6002
+		int postSttsCount = campaignDao.updateRePostSubmitStts(requestPostSubmitVO);
+		
+		
+		if (postSubmitCount == 1 && postSttsCount ==1 && postSubmitCnCount  ==1) {
+			count = 1;
+		}
+		
+		return count;
+	}
+	
 
 
 
@@ -430,4 +461,17 @@ public class CampaignServiceImpl implements CampaignService {
 		
 		return insertCmpnCount == 1;
 	}
+
+	@Override
+	public String postReturnReason(String campaignId, String usrId) {
+		
+		Map<String, String> param = new HashMap<>();
+		param.put("blgId", usrId);
+		param.put("cmpnId",campaignId);
+		
+		String returnReason = this.campaignDao.selectReturnReason(param);
+		return returnReason;
+	}
+
+	
 }

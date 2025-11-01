@@ -9,7 +9,9 @@ $().ready(function() {
     var here = location.pathname.replace(/^\/+|\/+$/g, '').split('/');    
     var applyBlg = $(".apply-blg");
     var applyCancelBlg = $(".apply-cancel-blg");
-    
+    var submitModalBtnOk = $(".submit-modal-btn-ok");
+    var reSubmitModalBtnOk = $(".re-submit-modal-btn-ok");
+	
     if (here.includes('campaignmain')) {
       $('.campaign-status').removeClass('display-none');
     }
@@ -77,5 +79,48 @@ $().ready(function() {
                 }
               });
     })
+	
+	submitModalBtnOk.on("click", function() {
+		var campaignId = $(".submit-modal-area").data("cmpn-id");
+		
+		var postData = {
+		     postTitle: $("#post-title").val(),
+		     postUrl: $("#post-url").val()
+		 };
+		$.post("/blgr/pstsubmit/" + campaignId , postData, function() {
+		    alert("제출완료!");
+			$(".submit-modal-form").addClass("display-none");
+			
+		})
+	})
+	
+	reSubmitModalBtnOk.on("click", function() {
+		var campaignId = $(".submit-modal-area").data("cmpn-id");
+		
+		var postData = {
+		     postTitle: $("#re-post-title").val(),
+		     postUrl: $("#re-post-url").val(),
+			 postSubmitChgCn: $(".re-submit-cn").val()
+		 };
+		$.post("/blgr/repstsubmit/" + campaignId , postData, function() {
+		    alert("수정제출완료!");
+			$(".re-submit-modal-form").addClass("display-none");
+			location.reload();
+		})
+	})
     
+	$(".status--draft").on("click",function() {
+		$(".submit-modal-form").removeClass("display-none");
+	})
+	
+	$(".status--rejected").on("click",function(){
+		$(".re-submit-modal-form").removeClass("display-none");
+	})
+	
+	$(".submit-modal-btn-close").on("click",function() {
+		$(".submit-modal-form").addClass("display-none");
+		$(".re-submit-modal-form").addClass("display-none");
+	})
+	
+	
 });

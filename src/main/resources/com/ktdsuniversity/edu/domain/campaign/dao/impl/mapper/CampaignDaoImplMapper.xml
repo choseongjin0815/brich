@@ -730,6 +730,8 @@ ORDER BY RCRT_END_DT ASC
             parameterType="map">
 			UPDATE FAV_CMPN
 			   SET DLT_YN = 'N'
+		     	 , UPDT_DT = SYSDATE
+		     	 , MTTR = #{blgId}			   
 			 WHERE BLG_USR_ID = #{blgId}
 			   AND CMPN_ID =#{campaignId}    
     </update>
@@ -738,6 +740,8 @@ ORDER BY RCRT_END_DT ASC
             parameterType="map">
 			UPDATE FAV_CMPN
 			   SET DLT_YN = 'Y'
+		     	 , UPDT_DT = SYSDATE
+		     	 , MTTR = #{blgId}			   
 			 WHERE BLG_USR_ID = #{blgId}
 			   AND CMPN_ID =#{campaignId}
     </update>    
@@ -838,6 +842,8 @@ ORDER BY RCRT_END_DT ASC
 	        parameterType="map">
 			UPDATE CMPN_PST_ADPT
 			   SET DLT_YN = 'Y'
+		     	 , UPDT_DT = SYSDATE
+		     	 , MTTR = #{blgId}			   
 			 WHERE BLG_USR_ID = #{blgId}
 			   AND CMPN_ID = #{campaignId}
 	</update>
@@ -845,9 +851,72 @@ ORDER BY RCRT_END_DT ASC
 	        parameterType="map">
 			UPDATE CMPN_PST_ADPT
 			   SET DLT_YN = 'N'
+		     	 , UPDT_DT = SYSDATE
+		     	 , MTTR = #{blgId}				   
 			 WHERE BLG_USR_ID = #{blgId}
 			   AND CMPN_ID = #{campaignId}
 	</update>
+	
+	
+	
+	<update id="updatePostSubmit"
+			parameterType = "com.ktdsuniversity.edu.domain.campaign.vo.request.RequestPostSubmitVO">
+			UPDATE CMPN_PST_ADPT
+			   SET PST_URL= #{postUrl}
+			     , PST_STTS_CD='6002'
+			     , PST_SBMT_DT= SYSDATE
+			     , PST_TITLE= #{postTitle}
+			     , UPDT_DT= SYSDATE
+			     , MTTR= #{blgId}
+			WHERE BLG_USR_ID = #{blgId}
+			  AND CMPN_ID =#{cmpnId}
+	</update>
+	
+	<update id="updateRePostSubmit"
+			parameterType = "com.ktdsuniversity.edu.domain.campaign.vo.request.RequestPostSubmitVO">
+			UPDATE POST_RTRN_HIST
+			   SET POST_SUBMIT_CHG_CN = #{postSubmitChgCn}
+			 WHERE POST_RTRN_HIST_ID  =  (  SELECT POST_RTRN_HIST_ID
+											  FROM (SELECT LEVEL, POST_RTRN_HIST_ID
+											     	  FROM POST_RTRN_HIST
+											       CONNECT BY PRIOR POST_RTRN_HIST_ID = POST_ID 
+											      	 START WITH POST_RTRN_HIST_ID = ( SELECT POST_RTRN_HIST_ID 
+											         								    FROM POST_RTRN_HIST
+																			           WHERE POST_ID = (SELECT CMPN_PST_ADPT_ID
+																							              FROM CMPN_PST_ADPT
+																							             WHERE BLG_USR_ID = #{blgId}
+																							               AND CMPN_ID = #{cmpnId})   )
+											 ORDER BY LEVEL DESC   )
+											WHERE ROWNUM = 1 )
+	</update>
+	<update id="updateRePostSubmitStts"
+			parameterType = "com.ktdsuniversity.edu.domain.campaign.vo.request.RequestPostSubmitVO">
+			 UPDATE CMPN_PST_ADPT
+				SET PST_STTS_CD='6002'
+				  , UPDT_DT= SYSDATE
+				  , MTTR=#{blgId}
+				WHERE BLG_USR_ID = #{blgId}
+				  AND CMPN_ID =#{cmpnId}
+	</update>
+	
+	<select id="selectReturnReason"
+			parameterType="string"
+			resultType="string">
+			SELECT POST_RETN_RSN
+			  FROM (SELECT LEVEL, POST_RTRN_HIST_ID ,POST_RETN_RSN
+			     	  FROM POST_RTRN_HIST
+			       CONNECT BY PRIOR POST_RTRN_HIST_ID = POST_ID 
+			      	 START WITH POST_RTRN_HIST_ID = ( SELECT POST_RTRN_HIST_ID 
+			         								    FROM POST_RTRN_HIST
+											           WHERE POST_ID = (SELECT CMPN_PST_ADPT_ID
+															              FROM CMPN_PST_ADPT
+															             WHERE BLG_USR_ID = #{blgId}
+															               AND CMPN_ID = #{cmpnId})   )
+			 ORDER BY LEVEL DESC   )
+			WHERE ROWNUM = 1			
+	</select>
+	
+	
 	
 </mapper>
 
