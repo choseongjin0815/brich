@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ktdsuniversity.edu.domain.blog.controller.SearchBlogController;
+import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignwriteVO;
 import com.ktdsuniversity.edu.domain.user.service.UserService;
 import com.ktdsuniversity.edu.domain.user.vo.BlogCategoryVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
@@ -34,6 +36,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private CampaignService campaignService;
     
 	private static final Logger log = LoggerFactory.getLogger(SearchBlogController.class);
 
@@ -149,10 +154,10 @@ public class UserController {
      */
     @GetMapping("/regist/{role}")
     public String viewRegistPage(@PathVariable String role, Model model) {
-    	List<CommonCodeVO> blogCategory = this.userService.readCategoryList();
-    	log.info("{}" ,blogCategory);
+    	//List<CommonCodeVO> blogCategory = this.userService.readCategoryList();
+    	ResponseCampaignwriteVO common = this.campaignService.createCampaign();
     	if(role.equals("blogger") || role.equals("advertiser")) {
-    		model.addAttribute("categoryList", blogCategory);
+    		model.addAttribute("common", common);
     		model.addAttribute("role", role);
     	} else {
     		return null;
@@ -172,6 +177,12 @@ public class UserController {
     	
 	   	log.info("requestUserRegistVO: {}", requestUserRegistVO);
 
+	   	// 광고주인 경우 cmpny 필수 체크 추가
+	    if(requestUserRegistVO.getAutr().equals("1007")) {
+	        if(requestUserRegistVO.getCmpny() == null || requestUserRegistVO.getCmpny().isBlank()) {
+	            bindingResult.rejectValue("cmpny", "required", "필수 입력입니다.");
+	        }
+	    }
     	//서버단 Validation
     	if(bindingResult.hasErrors()) {
     	   	log.info("requestUserRegistVO: {}", requestUserRegistVO);
@@ -179,12 +190,12 @@ public class UserController {
     		
     		//블로거 회원 가입 검증 실패
     		if(requestUserRegistVO.getAutr().equals("1003")) {
-    	    	List<CommonCodeVO> blogCategory = this.userService.readCategoryList();
-    	    	model.addAttribute("categoryList", blogCategory);
+    			ResponseCampaignwriteVO common = this.campaignService.createCampaign();
+    	        model.addAttribute("common", common); 
 
-    			 model.addAttribute("role", "blogger");
-    			 
-    			 log.info("{}",model.getAttribute("registData"));
+    			model.addAttribute("role", "blogger");
+    			
+    			log.info("{}",model.getAttribute("registData"));
     			return "/user/regist";	
     		}
     		//광고주 회원 가입 검증 실패
@@ -197,8 +208,8 @@ public class UserController {
     	if(!requestUserRegistVO.getPswrd().equals(requestUserRegistVO.getPswrdConfirm())) {
     		//블로거 비밀번호 확인 실패
     		if(requestUserRegistVO.getAutr().equals("1002")) {
-    			 model.addAttribute("role", "blogger");
-    			 model.addAttribute("passwordError", "비밀번호가 일치하지 않습니다.");
+    			model.addAttribute("role", "blogger");
+    			model.addAttribute("passwordError", "비밀번호가 일치하지 않습니다.");
     			return "/user/regist";	
     		}
     		//광고주 비밀번호 확인 실패
@@ -278,5 +289,14 @@ public class UserController {
     public String doPasswordResetAction(RequestUserResetPasswordVO resetPasswordInfo) {
     	boolean updateResult = this.userService.updatePswrdByLogIdAndPswrd(resetPasswordInfo);   	
     	return "redirect:/login";
+    }
+    
+    @GetMapping("/regist/area/{id}")
+    @ResponseBody
+    public AjaxResponse getArea(@PathVariable String id) {
+    	AjaxResponse response = new AjaxResponse();
+		List<CommonCodeVO> districtList = this.campaignService.readDistrictByCdId(id);
+		response.setBody(districtList);
+		return response;
     }
 }

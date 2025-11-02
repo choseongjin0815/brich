@@ -35,7 +35,6 @@ public class RequestUserRegistVO{
 	
 	private String autr;
 	
-	@NotBlank(message="필수 입력입니다.")
 	private String cmpny;
 	
 	private String salt;
@@ -43,6 +42,8 @@ public class RequestUserRegistVO{
 	private String flGrpId;
 	
 	private List<String> cdIdList;
+	
+	private List <String> areaList;
 
 	private List<MultipartFile> file;
 
@@ -150,12 +151,21 @@ public class RequestUserRegistVO{
 		this.cdIdList = cdIdList;
 	}
 
+	public List<String> getAreaList() {
+		return this.areaList;
+	}
+
+	public void setAreaList(List<String> areaList) {
+		this.areaList = areaList;
+	}
+
 	@Override
 	public String toString() {
 		return "RequestUserRegistVO [usrId=" + usrId + ", logId=" + logId + ", nm=" + nm + ", eml=" + eml + ", pswrd="
 				+ pswrd + ", pswrdConfirm=" + pswrdConfirm + ", emailConfirm=" + emailConfirm + ", autr=" + autr
-				+ ", cmpny=" + cmpny + ", salt=" + salt + ", flGrpId=" + flGrpId + ", cdIdList=" + cdIdList + ", file="
-				+ file + ", toString()=" + super.toString() + "]";
+				+ ", cmpny=" + cmpny + ", salt=" + salt + ", flGrpId=" + flGrpId + ", cdIdList=" + cdIdList
+				+ ", areaList=" + areaList + ", file=" + file + "]";
 	}
+
 
 }

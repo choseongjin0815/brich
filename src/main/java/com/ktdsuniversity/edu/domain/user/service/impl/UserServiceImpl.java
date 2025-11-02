@@ -164,11 +164,17 @@ public class UserServiceImpl implements UserService {
 		if(insertResult == 1 && requestUserRegistVO.getCdIdList() != null) {
 			String createdUserId = this.userDao.selectUserIdByLogId(requestUserRegistVO.getLogId());
 			BlogCategoryVO blogCategoryVO = new BlogCategoryVO();
+			UserAreaVO userAreaVO = new UserAreaVO();
 			blogCategoryVO.setUsrId(createdUserId);
+			userAreaVO.setUsrId(createdUserId);
     		for(String cdId : requestUserRegistVO.getCdIdList()) {
     			blogCategoryVO.setCdId(cdId);
     			int insertCategoryResult = this.blogCategoryDao.insertBlogCategory(blogCategoryVO);
     		}
+    	    for(String areaId : requestUserRegistVO.getAreaList()) {
+    	    	userAreaVO.setArId(areaId);
+    	    	int insertAreaResult = this.userAreaDao.insertArea(userAreaVO);
+    	    }
     	}
 		
 		return insertResult > 0;
