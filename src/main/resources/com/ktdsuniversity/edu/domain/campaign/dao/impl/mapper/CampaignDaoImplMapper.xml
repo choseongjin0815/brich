@@ -371,6 +371,25 @@
         , 'N')
     </insert>
     
+    <select id="selectCampaignListByUsrId"
+            parameterType="string"
+            resultType="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO">
+        SELECT C.CMPN_ID
+             , C.STTS_CD 
+             , CC.CD_NM AS STTS_CD_NM
+             , TO_CHAR(C.RCRT_STRT_DT, 'YYYY-MM-DD') AS RCRT_STRT_DT
+             , TO_CHAR(C.RCRT_END_DT, 'YYYY-MM-DD') AS RCRT_END_DT
+             , TO_CHAR(C.PST_END_DT, 'YYYY-MM-DD') AS PST_END_DT
+             , TO_CHAR(C.CMPN_END_DT, 'YYYY-MM-DD') AS CMPN_END_DT
+             , C.ATTCH_GRP_ID
+             , C.CMPN_TITLE
+          FROM CMPN C
+         INNER JOIN CM_CD CC
+            ON C.STTS_CD = CC.CD_ID
+         WHERE C.USR_ID = #{_parameter}
+           AND C.DLT_YN = 'N'
+    </select>
+    
     <insert id="insertCampaignCategory"
             parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCampaignAreaVO">
         <selectKey keyProperty="cmpnArId" resultType="string" order="BEFORE">

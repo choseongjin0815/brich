@@ -217,4 +217,9 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	public int updateApplyCampaign(Map<String, String> param) {
 		return super.getSqlSession().update(this.NAME_SPACE + "updateApplyCampaign" , param);
 	}
+
+	@Override
+	public List<ResponseCampaignVO> selectCampaignListByUsrId(String usrId) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectCampaignListByUsrId", usrId);
+	}
 }

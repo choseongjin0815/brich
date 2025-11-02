@@ -430,4 +430,13 @@ public class CampaignServiceImpl implements CampaignService {
 		
 		return insertCmpnCount == 1;
 	}
+
+	@Override
+	public ResponseCampaignListVO readCampaignListByUsrId(String usrId) {
+		List<ResponseCampaignVO> campaignList = this.campaignDao.selectCampaignListByUsrId(usrId);
+		
+		ResponseCampaignListVO campaign = new ResponseCampaignListVO();
+		campaign.setResponseCampaignList(campaignList);
+		return campaign;
+	}
 }

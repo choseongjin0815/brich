@@ -111,7 +111,7 @@ public class ResponseCampaignVO extends CampaignVO{
 	public String toString() {
 		return "ResponseCampaignVO [likeCnt=" + likeCnt + ", adptCnt=" + adptCnt + ", area=" + area + ", parentArea="
 				+ parentArea + ", pstSttsCd=" + pstSttsCd + ", pstSttsCdNm=" + pstSttsCdNm + ", favYn=" + favYn
-				+ ", adptYn=" + adptYn + ", SttsCdNm=" + SttsCdNm + "]";
+				+ ", adptYn=" + adptYn + ", SttsCdNm=" + SttsCdNm + super.toString() + "]";
 	}
 
 

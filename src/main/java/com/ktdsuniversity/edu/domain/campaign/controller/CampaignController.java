@@ -269,7 +269,10 @@ public class CampaignController {
 	}
 	
 	@GetMapping("/adv/campaign/list")
-	public String readCampaignListByUsrId() {
+	public String readCampaignListByUsrId(@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser
+										  , Model model) {
+		ResponseCampaignListVO campaignList = this.campaignService.readCampaignListByUsrId(loginUser.getUsrId());
+		model.addAttribute("campaignList", campaignList);
 		return "campaign/list";
 	}
 }

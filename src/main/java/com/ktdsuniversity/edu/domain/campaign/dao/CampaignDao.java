@@ -89,4 +89,6 @@ public interface CampaignDao {
 	int updateCancelApplyCampaign(Map<String, String> param);
 
 	int updateApplyCampaign(Map<String, String> param);
+
+	List<ResponseCampaignVO> selectCampaignListByUsrId(String usrId);
 }

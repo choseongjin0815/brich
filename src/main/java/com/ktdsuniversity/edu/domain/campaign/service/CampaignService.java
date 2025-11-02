@@ -51,4 +51,6 @@ public interface CampaignService {
 	List<CommonCodeVO> readDistrictByCdId(String cdId);
 
 	boolean createNewCampaign(RequestCreateCmpnVO requestCreateCmpnVO);
+
+	ResponseCampaignListVO readCampaignListByUsrId(String usrId);
 }
