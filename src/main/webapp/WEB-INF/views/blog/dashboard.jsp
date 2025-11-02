@@ -7,9 +7,10 @@
        	<link type='text/css' rel='stylesheet' href='/css/campaignmain.css' />
     	<link type='text/css' rel='stylesheet' href='/css/blog/dashboard.css' />
        	<link typr='text/css' rel='stylesheet' href='/css/paginator-simple.css'/>
+		
    	" />
    	<jsp:param name="scripts" value="
-       	
+       	<script type='text/javascript' src='/js/blog/dashboard.js'></script>
 	" />    
 </jsp:include>
 		<div class="dashboard-container">
@@ -45,7 +46,9 @@
 				</div>
 				<div>추천 캠페인</div>
 				<div>핵심 황금 키워드</div>
-				<div>내 블로그 지수
+				<div>내 블로그 지수 <button class="blog-index-detail-btn">자세히 보기</button>
+					<div id="blog-index-detail-modal" class="modal">
+					</div>
 					<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 					<div style="width: 100%; max-width: 800px; margin: 0 auto;">
@@ -77,7 +80,7 @@
 					                    data: avg5d,
 					                    borderColor: '#7B61FF',
 					                    backgroundColor: 'rgba(123, 97, 255, 0.1)',
-					                    tension: 0.3,
+					                    tension: 0.5,
 					                    fill: true,
 					                    pointRadius: 3,
 					                    pointHoverRadius: 5
