@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ktdsuniversity.edu.domain.blog.controller.SearchBlogController;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignwriteVO;
 import com.ktdsuniversity.edu.domain.file.dao.FileDao;
 import com.ktdsuniversity.edu.domain.file.dao.FileGroupDao;
 import com.ktdsuniversity.edu.domain.file.util.MultipartFileHandler;
@@ -27,6 +28,7 @@ import com.ktdsuniversity.edu.domain.user.vo.UserAreaVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserAccountPasswordVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserFindIdVO;
+import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserInfoModifyVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserLoginVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserResetPasswordVO;
@@ -212,10 +214,14 @@ public class UserServiceImpl implements UserService {
 	public ResponseUserInfoVO readUserByUserId(String usrId) {
 		
 		ResponseUserInfoVO userInfo = new ResponseUserInfoVO();
+		ResponseCampaignwriteVO common = new ResponseCampaignwriteVO();
+		common.setDoAndCityList(this.campaignDao.selectDoAndCityList());
+		common.setCategoryList(this.campaignDao.selectCategoryList());
 		UserVO userVO = this.userDao.selectUserByUserId(usrId);
 		List<AreaCode> areaList = this.userAreaDao.selectUserAreaByUserId(usrId);
 		List<CommonCodeVO> categoryList = this.blogCategoryDao.selectUserCategoryByUserId(usrId);
 		
+		userInfo.setResponseCampaignwriteVO(common);
 		userInfo.setUserVO(userVO);
 		userInfo.setAreaList(areaList);
 		userInfo.setCategoryList(categoryList);
@@ -265,6 +271,52 @@ public class UserServiceImpl implements UserService {
 	  return updateResult > 0;
   }
 
+	 @Override
+	 @Transactional
+	 public boolean updateUserInfoByUsrId(RequestUserInfoModifyVO requestUserInfoModifyVO) {
+		 List<String> cdIdList = requestUserInfoModifyVO.getCdIdList();
+		 List<String> areaList = requestUserInfoModifyVO.getArea();
+		 String usrId = requestUserInfoModifyVO.getUsrId();
+		//카테고리가 있다면 기존 카테고리 N
+		if(cdIdList != null) {
+			int deleteCategoryReulst = this.blogCategoryDao.updateDltYnByUsrId(usrId);
+			
+			//카테고리 삽입
+			
+			for(String cdId : cdIdList) {
+				log.info("카테고리 삽입");
+				BlogCategoryVO category = new BlogCategoryVO();
+				category.setCdId(cdId);
+				category.setUsrId(usrId);
+				int categoryInsert = this.blogCategoryDao.mergeBlogCategory(category);
+				if(categoryInsert != 1) {
+					return false;
+				}
+			}
+			
+		}
+		//지역이 있다면 기존 카테고리 N
+		if(areaList != null) {
+			int deleteAreaResult = this.userAreaDao.updateDltYnByUsrId(usrId);
+			
+			log.info("지역 삽입 ");
+			//지역 삽입
+			for(String areaId : areaList) {
+				UserAreaVO area = new UserAreaVO();
+				area.setArId(areaId);
+				area.setUsrId(usrId);
+				int areaInsert = this.userAreaDao.insertArea(area);
+				if(areaInsert != 1) {
+					return false;
+				}
+			}
+			
+		}
+		return true;
+	 }
+	
+	 
+	
 
 
 

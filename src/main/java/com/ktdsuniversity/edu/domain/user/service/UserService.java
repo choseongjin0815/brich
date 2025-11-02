@@ -6,6 +6,7 @@ import com.ktdsuniversity.edu.domain.user.vo.BlogCategoryVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserAccountPasswordVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserFindIdVO;
+import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserInfoModifyVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserLoginVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserResetPasswordVO;
@@ -33,6 +34,8 @@ public interface UserService {
 	public ResponseUserSubscriptionInfoVO readSubscriptionInfoByUserId(String usrId);
 
 	public boolean updatePswrdByUsrId(RequestUserAccountPasswordVO requestUserAccountPasswordVO);
+
+	public boolean updateUserInfoByUsrId(RequestUserInfoModifyVO requestUserInfoModifyVO);
 
 
 }

@@ -1,5 +1,6 @@
 package com.ktdsuniversity.edu.domain.user.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -8,18 +9,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignwriteVO;
 import com.ktdsuniversity.edu.domain.chat.controller.ChatController;
 import com.ktdsuniversity.edu.domain.user.service.UserService;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserAccountPasswordVO;
+import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserInfoModifyVO;
 import com.ktdsuniversity.edu.domain.user.vo.response.ResponseUserInfoVO;
 import com.ktdsuniversity.edu.domain.user.vo.response.ResponseUserSubscriptionInfoVO;
 import com.ktdsuniversity.edu.global.common.AjaxResponse;
+import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 /**
  * 블로거와 광고주의 계정 관리 페이지
@@ -31,6 +37,8 @@ public class UserAccountController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired CampaignService campaignService;
+	
 	private static final Logger log = LoggerFactory.getLogger(UserAccountController.class);
 
 	
@@ -41,14 +49,50 @@ public class UserAccountController {
 	public String viewAccountInfoPage(@SessionAttribute(name = "__LOGIN_USER__") UserVO loginUser
 									, Model model) {
 		String usrId = loginUser.getUsrId();
-		
 		ResponseUserInfoVO userInfo = this.userService.readUserByUserId(usrId);
-
+		//ResponseCampaignwriteVO common = this.campaignService.createCampaign();
+		ResponseCampaignwriteVO common = userInfo.getResponseCampaignwriteVO();
+		
+		model.addAttribute("common", common);
 		model.addAttribute("userInfo", userInfo);
 		
 		log.info("{}", userInfo.getAreaList());
+		log.info("list : {}", common.getDoAndCityList());
 		
 		return "/user/account/info";
+	}
+	
+	/*
+	 * 계정 정보 수정 
+	 */
+	@PostMapping("/info/update")
+	@ResponseBody 
+	public AjaxResponse doUpdateUserInfo(@SessionAttribute(name = "__LOGIN_USER__") UserVO loginUser
+									   , RequestUserInfoModifyVO requestUserInfoModifyVO) {
+		String usrId = loginUser.getUsrId();
+		log.info("area: {}", requestUserInfoModifyVO.getArea());
+		log.info("caterogy {}", requestUserInfoModifyVO.getCdIdList());
+		requestUserInfoModifyVO.setUsrId(usrId);
+		boolean updateResult = this.userService.updateUserInfoByUsrId(requestUserInfoModifyVO);
+		AjaxResponse ajaxResponse = new AjaxResponse();
+		
+		if(updateResult == false) {
+			ajaxResponse.setBody("수정에 실패했습니다.");
+			return ajaxResponse;
+		}
+		ajaxResponse.setBody("수정에 성공했습니다.");
+		
+		return ajaxResponse;
+	}
+	
+	@GetMapping("/info/{cdId}")
+	@ResponseBody
+	public AjaxResponse doReadDistrictAction(@PathVariable String cdId) {
+		AjaxResponse response = new AjaxResponse();
+		
+		List<CommonCodeVO> districtList = this.campaignService.readDistrictByCdId(cdId);
+		response.setBody(districtList);
+		return response;
 	}
 	/**
 	 * 비밀번호 재설정 페이지

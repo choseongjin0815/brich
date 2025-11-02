@@ -11,6 +11,38 @@
           FROM USR_AR U
          INNER JOIN AR_CD A
             ON U.AR_ID = A.CD_ID
-         WHERE U.USR_ID = #{usrId}        
+         WHERE U.USR_ID = #{usrId}    
+           AND U.DLT_YN = 'N'    
     </select>
+    
+    <update id="updateDltYnByUsrId"
+            parameterType="string">
+        UPDATE USR_AR
+           SET DLT_YN = 'Y'
+         WHERE USR_ID = #{usrId}    
+    </update>
+    
+    <insert id="insertArea"
+            parameterType="com.ktdsuniversity.edu.domain.user.vo.UserAreaVO">
+        <selectKey keyProperty="usrArId" order="BEFORE" resultType="string">
+         SELECT 'USR_AR-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_USR_AR_PK.NEXTVAL, 6, 0)
+           FROM DUAL
+      </selectKey>
+        INSERT INTO USR_AR
+		( USR_AR_ID
+		, USR_ID
+		, AR_ID
+		, CRT_DT
+		, CRTR
+		, UPDT_DT
+		, MTTR)
+		VALUES
+		( #{usrArId}
+		, #{usrId}
+		, #{arId}
+		, SYSDATE
+		, #{usrId}
+		, SYSDATE
+		, #{usrId})
+     </insert>
 </mapper>
