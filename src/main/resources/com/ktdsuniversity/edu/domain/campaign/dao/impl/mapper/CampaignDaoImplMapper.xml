@@ -546,6 +546,7 @@ ORDER BY RCRT_END_DT ASC
     <select id="selectCampaignListCategoryAndSortBy"
             resultMap="RequestCampaignVOMap"
             parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO">
+            <include refid="Common.paginationHeader" />
 			SELECT CMPN.CMPN_ID 
 			     , CMPN.OFFR_CN 
 			     , CMPN.RCRT_PRSNN 
@@ -612,7 +613,8 @@ ORDER BY RCRT_END_DT ASC
 			  ORDER BY
 		        CASE WHEN #{sortBy} = 'latest'   THEN CMPN.RCRT_STRT_DT END  DESC ,
 		        CASE WHEN #{sortBy} = 'deadline' THEN CMPN.RCRT_END_DT  END  ASC  ,
-		        CASE WHEN #{sortBy} = 'popular'  THEN LIKE_CNT 		    END  DESC			   
+		        CASE WHEN #{sortBy} = 'popular'  THEN LIKE_CNT 		    END  DESC
+		      <include refid="Common.paginationFooter" />
     </select>
     
 

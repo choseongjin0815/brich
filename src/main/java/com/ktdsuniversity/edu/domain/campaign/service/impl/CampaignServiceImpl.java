@@ -131,6 +131,7 @@ public class CampaignServiceImpl implements CampaignService {
 			requestSearchCampaignVO.setCategory(searchCatagory);
 			log.info("조회할 카테고리 번호 : " + searchCatagory);
 		}
+		requestSearchCampaignVO.setListSize(16);
 		if(requestSearchCampaignVO.getSortBy() == null) {
 			// 초기 정렬 세팅
 			requestSearchCampaignVO.setSortBy("latest");

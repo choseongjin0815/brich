@@ -73,7 +73,8 @@ public class CampaignController {
     	
     	log.info( "캠페인 리스트 조회결과 : " + CampaignListAndCategory.getResponseCampaignList().toString());
     	return "campaign/campaignmain";
-    }
+    }  
+    
     
     @GetMapping("/blgr/submittedmycampaign")
     public String submittedmycampaign(Model model,@SessionAttribute(value = "__LOGIN_USER__") 

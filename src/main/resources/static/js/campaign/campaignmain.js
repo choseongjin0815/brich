@@ -47,10 +47,6 @@ $().ready(function() {
 	    searchParam = "?" + searchParam 
 	    window.location.href = window.location.pathname + searchParam;
 	});
-    campaignMainBlock.on("click", function() {
-        var cmpnId = $(this).data("cmpn-id");
-        window.location.href = "/campaigndetail/"+ cmpnId ;
-    })
     applyBlg.on("click", function(){
         var campaignId = $(".apply-blg").data("campaign-id");
         $.post("/blgr/apply/" + campaignId ,function() {
@@ -67,18 +63,29 @@ $().ready(function() {
             $(".apply-blg").toggleClass('display-none');
         })
     })
-    campaignFav.on("click", function(e) {
-        e.stopPropagation();
-        var cmpnId = $(this).data("cmpn-id");
-        $.ajax({
-                url: `/blgr/love/` + cmpnId,
-                type: "POST",
-                context: this, // 콜백 안 this = 클릭한 요소
-                success: function () {
-                  $(this).find(".love-on, .love-off").toggleClass("display-none");
-                }
-              });
-    })
+
+	$(document).on("click", ".campaign-main-block", function () {
+	    const cmpnId = $(this).data("cmpn-id");
+	    window.location.href = "/campaigndetail/" + cmpnId;
+	});
+
+	$(document).on("click", ".campaign-fav", function (e) {
+	    e.stopPropagation(); 
+	    const cmpnId = $(this).data("cmpn-id");
+	    const $this = $(this);
+
+	    $.ajax({
+	        url: `/blgr/love/` + cmpnId,
+	        type: "POST",
+	        success: function () {
+	            $this.find(".love-on, .love-off").toggleClass("display-none");
+	        }
+	    });
+	});
+	
+	
+	
+	
 	
 	submitModalBtnOk.on("click", function() {
 		var campaignId = $(".submit-modal-area").data("cmpn-id");
@@ -121,6 +128,34 @@ $().ready(function() {
 		$(".submit-modal-form").addClass("display-none");
 		$(".re-submit-modal-form").addClass("display-none");
 	})
+	
+	
+	//--------------------------------
+	let pageNo = 0;
+	let isLoading = false;
+	let hasMore = true;
+
+	$(window).on("scroll", function () {
+	  if (!isLoading && hasMore && $(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+	    isLoading = true;
+	    pageNo++;
+
+	    const params = $(".search-section").serialize() + "&pageNo=" + pageNo + "&listSize=16";
+
+	    $.get("/campaignmain", params, function (html) {
+	      const newContent = $(html).find(".campaign-main-list-area").html();
+
+	      if ($.trim(newContent) === "") {
+	        hasMore = false;
+	      } else {
+	        $(".campaign-main-list-area").append(newContent);
+	      }
+
+	      isLoading = false;
+	    });
+	  }
+	});
+	
 	
 	
 });

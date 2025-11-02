@@ -1,9 +1,11 @@
 package com.ktdsuniversity.edu.domain.campaign.vo.request;
 
+import com.ktdsuniversity.edu.global.common.AbstractSearchVO;
+
 /**
  * 캠페인 메인 정렬 기준을 입력받는 VO
  */
-public class RequestSearchCampaignVO {
+public class RequestSearchCampaignVO extends AbstractSearchVO{
 	
 	
 	public String category;
