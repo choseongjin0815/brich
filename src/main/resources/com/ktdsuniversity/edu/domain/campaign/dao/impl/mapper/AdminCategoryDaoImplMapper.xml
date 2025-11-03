@@ -41,4 +41,74 @@
          ORDER SIBLINGS BY SRT
     </select>
     
+    <!-- 카테고리 분할 - 해당 카테고리의 하위 카테고리 출력 -->
+    <select id="selectChildrenCategoryList" resultType="com.ktdsuniversity.edu.domain.campaign.vo.AdminCampaignCategoryVO" parameterType="string">
+        SELECT CD_ID
+             , CD_NM
+          FROM CM_CD
+         WHERE PRNT_CD_ID = #{_parameter}
+           AND DLT_YN = 'N'
+    </select>
+    
+    <!-- 카테고리 병합 - 해당 카테고리 제외, 상위 카테고리 출력 -->
+    <select id="selectParentCategoryList" resultType="com.ktdsuniversity.edu.domain.campaign.vo.AdminCampaignCategoryVO" parameterType="string">
+        SELECT CD_ID
+             , CD_NM
+          FROM CM_CD
+         WHERE CD_ID != #{_parameter}
+           AND PRNT_CD_ID = '3000'
+           AND DLT_YN = 'N'
+    </select>
+    
+    <!-- 현재 캠페인 카테고리 중 가장 마지막 cdId 값을 가져옴 -->
+    <select id="selectLastCampaignCdId" resultType="string">
+        SELECT MAX(CD_ID) AS LAST_CD_ID
+          FROM CM_CD
+         WHERE CD_ID BETWEEN '3001' AND '3999'
+    </select>
+    
+    <!-- 현재 캠페인 카테고리 중 999를 제외한 가장 큰 srt 값을 가져옴 -->
+    <select id="selectLastSrtNumber" resultType="_int">
+        SELECT MAX(SRT) AS LAST_SRT
+          FROM CM_CD
+         WHERE CD_ID BETWEEN '3001' AND '3999'
+           AND SRT != 999
+    </select>
+    
+    <!-- 카테고리 추가 (INSERT) -->
+    <insert id="insertNewCampaignCategory" parameterType="com.ktdsuniversity.edu.domain.campaign.vo.AdminCampaignCategoryVO">
+        INSERT INTO CM_CD (CD_ID
+                         , CD_NM
+                         , PRNT_CD_ID
+                         , USE_YN
+                         , SRT
+                         , KEY1
+                         , VALUE1
+                         , KEY2
+                         , VALUE2
+                         , KEY3
+                         , VALUE3
+                         , CRT_DT
+                         , CRTR
+                         , UPDT_DT
+                         , MTTR
+                         , DLT_YN)
+                   VALUES (#{cdId}
+                         , #{cdNm}
+                         , '3000'
+                         , 'Y'
+                         , #{srt}
+                         , NULL
+                         , NULL
+                         , NULL
+                         , NULL
+                         , NULL
+                         , NULL
+                         , SYSDATE
+                         , #{adminId} 
+                         , SYSDATE
+                         , #{adminId}
+                         , 'N')
+    </insert>
+    
 </mapper>

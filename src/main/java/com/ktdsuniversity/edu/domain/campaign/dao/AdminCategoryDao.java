@@ -8,4 +8,14 @@ public interface AdminCategoryDao {
 
 	List<AdminCampaignCategoryVO> selectCampaignCategoryList();
 
+	List<AdminCampaignCategoryVO> selectChildrenCategoryList(String parentCdId);
+
+	List<AdminCampaignCategoryVO> selectParentCategoryList(String excludeCdId);
+
+	String selectLastCampaignCdId();
+
+	int selectLastSrtNumber();
+
+	int insertNewCampaignCategory(AdminCampaignCategoryVO adminCampaignCategoryVO);
+
 }

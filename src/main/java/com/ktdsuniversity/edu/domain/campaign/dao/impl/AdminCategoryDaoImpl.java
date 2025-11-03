@@ -26,4 +26,29 @@ public class AdminCategoryDaoImpl extends SqlSessionDaoSupport implements AdminC
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectCampaignCategoryList");
 	}
 
+	@Override
+	public List<AdminCampaignCategoryVO> selectChildrenCategoryList(String parentCdId) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectChildrenCategoryList", parentCdId);
+	}
+
+	@Override
+	public List<AdminCampaignCategoryVO> selectParentCategoryList(String excludeCdId) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectParentCategoryList", excludeCdId);
+	}
+
+	@Override
+	public String selectLastCampaignCdId() {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectLastCampaignCdId");
+	}
+
+	@Override
+	public int selectLastSrtNumber() {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectLastSrtNumber");
+	}
+
+	@Override
+	public int insertNewCampaignCategory(AdminCampaignCategoryVO adminCampaignCategoryVO) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertNewCampaignCategory", adminCampaignCategoryVO);
+	}
+
 }
