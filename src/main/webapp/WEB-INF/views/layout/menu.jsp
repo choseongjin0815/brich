@@ -100,8 +100,8 @@ pageEncoding="UTF-8"%>
                   <span>MENU</span>
                   <ul class="menu-content">
                     <li class="menu-campaignmain-selected"><a href="/campaignmain">캠페인</a></li>
-                    <li><a href="">MY 캠페인</a></li> 
-                    <li><a href="">캠페인 만들기</a></li>
+                    <li><a href="/adv/campaign/list">MY 캠페인</a></li> 
+                    <li><a href="/adv/campaign/write">캠페인 만들기</a></li>
                     <li><a href="/adv/chat/campaigns">메세지</a></li>
                   </ul>
                 </li>

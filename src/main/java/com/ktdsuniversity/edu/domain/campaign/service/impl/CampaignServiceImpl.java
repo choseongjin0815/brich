@@ -464,6 +464,31 @@ public class CampaignServiceImpl implements CampaignService {
 	}
 
 	@Override
+	public ResponseCampaignListVO readCampaignListByUsrId(RequestSearchCampaignVO requestSearchCampaignVO) {
+		int campaignCount = this.campaignDao.selectCampaignListCountByusrId(requestSearchCampaignVO);
+		requestSearchCampaignVO.setPageCount(campaignCount);
+		
+		List<ResponseCampaignVO> campaignList = this.campaignDao.selectCampaignListByUsrId(requestSearchCampaignVO);
+		
+		ResponseCampaignListVO campaign = new ResponseCampaignListVO();
+		campaign.setResponseCampaignList(campaignList);
+		return campaign;
+	}
+
+	@Override
+	public ResponseCampaignListVO readDenyHistoryByCmpnId(RequestSearchCampaignVO requestSearchCampaignVO) {
+		
+		List<ResponseCampaignVO> denyList = this.campaignDao.selectDenyListByCmpnId(requestSearchCampaignVO);
+		
+		ResponseCampaignListVO deny = new ResponseCampaignListVO();
+		deny.setResponseCampaignList(denyList);
+		
+		deny.setCampaignInfo(this.campaignDao.selectCampaignInfoByCmpnId(requestSearchCampaignVO.getCmpnId()));
+		
+		return deny;
+  }
+  
+  @Override
 	public String postReturnReason(String campaignId, String usrId) {
 		
 		Map<String, String> param = new HashMap<>();

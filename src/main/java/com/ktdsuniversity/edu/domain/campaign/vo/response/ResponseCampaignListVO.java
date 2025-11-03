@@ -18,7 +18,9 @@ public class ResponseCampaignListVO {
 	 */
 	private List<CommonCodeVO> CategoryList;
 	
+	private boolean isDeny;
 	
+	private CampaignVO campaignInfo;
 	
 
 	public List<CommonCodeVO> getCategoryList() {
@@ -37,9 +39,25 @@ public class ResponseCampaignListVO {
 		ResponseCampaignList = responseCampaignList;
 	}
 
+	public boolean getIsDeny() {
+		return this.isDeny;
+	}
+
+	public void setIsDeny(boolean isDeny) {
+		this.isDeny = isDeny;
+	}
+
+	public CampaignVO getCampaignInfo() {
+		return this.campaignInfo;
+	}
+
+	public void setCampaignInfo(CampaignVO campaignInfo) {
+		this.campaignInfo = campaignInfo;
+	}
+
 	@Override
 	public String toString() {
 		return "ResponseCampaignListVO [ResponseCampaignList=" + ResponseCampaignList + ", CategoryList=" + CategoryList
-				+ "]";
+				+ ", isDeny=" + isDeny + "]";
 	}
 }

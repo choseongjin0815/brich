@@ -163,7 +163,7 @@
           width: 330px;
           border-radius: 10px;
           position: sticky;
-          top: 270px;
+          top: 100px;
           right: 60px;
 
           & > .right-bar-top {

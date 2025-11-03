@@ -81,6 +81,14 @@ public class ResponseCampaignVO extends CampaignVO{
 	 public void setSttsCdNm(String sttsCdNm) {
 		 SttsCdNm = sttsCdNm;
 	 }
+	 
+	 public String getPstSttsCdNm() {
+			return this.pstSttsCdNm;
+		}
+
+	public void setPstSttsCdNm(String pstSttsCdNm) {
+		this.pstSttsCdNm = pstSttsCdNm;
+	}
 
 	 public String getAdptYn() {
 		return this.adptYn;
@@ -126,7 +134,7 @@ public class ResponseCampaignVO extends CampaignVO{
 	public String toString() {
 		return "ResponseCampaignVO [likeCnt=" + likeCnt + ", adptCnt=" + adptCnt + ", area=" + area + ", parentArea="
 				+ parentArea + ", pstSttsCd=" + pstSttsCd + ", pstSttsCdNm=" + pstSttsCdNm + ", favYn=" + favYn
-				+ ", adptYn=" + adptYn + ", SttsCdNm=" + SttsCdNm + "]";
+				+ ", adptYn=" + adptYn + ", SttsCdNm=" + SttsCdNm + super.toString() + "]";
 	}
 
 
@@ -145,7 +153,6 @@ public class ResponseCampaignVO extends CampaignVO{
 	 public void setParentArea(String parentArea) {
 		 this.parentArea = parentArea;
 	 }
-	 
 	 
 
 }

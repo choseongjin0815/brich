@@ -53,6 +53,9 @@ public interface CampaignService {
 
 	boolean createNewCampaign(RequestCreateCmpnVO requestCreateCmpnVO);
 
+	ResponseCampaignListVO readCampaignListByUsrId(RequestSearchCampaignVO requestSearchCampaignVO);
+
+	ResponseCampaignListVO readDenyHistoryByCmpnId(RequestSearchCampaignVO requestSearchCampaignVO);
 	int postSubmit(RequestPostSubmitVO requestPostSubmitVO);
 
 	int rePostSubmit(RequestPostSubmitVO requestPostSubmitVO);

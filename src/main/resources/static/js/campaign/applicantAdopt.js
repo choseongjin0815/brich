@@ -68,22 +68,6 @@ $().ready(function() {
         window.location.href = url;
     });
     
-    $(".id-search").children("img").on("click", function() {
-         id = $(this).closest(".id-search").children("input[type=text]").val();
-         url = "";
-         if (window.location.search === "") {
-            url = window.location.pathname + "?searchId=" + id;
-         }
-         else {
-             url = new URL(window.location.href);
-             searchParam = url.searchParams;
-             searchParam.set("searchId", id);
-             searchParam.set("pageNo", 0);
-             url = url.toString();
-         }
-         window.location.href = url;
-    })
-    
     $(".view-post").on("click", function() {
         postState = $(this).closest("div.applicant").children("button[name=postState]").text();
         postId = $(this).closest(".applicant").children(".user").children(".logId").data("cmpn-apply-id");

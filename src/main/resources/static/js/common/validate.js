@@ -100,6 +100,62 @@ $().ready(function() {
         $(".post-url").children("a").remove();
         $(".button-list").empty();
     });
+    
+    $(".id-search").children("img").on("click", function() {
+             keyword = $(this).closest(".id-search").children("input[type=text]").val();
+             url = "";
+             if (window.location.search === "") {
+                url = window.location.pathname + "?searchKeyword=" + keyword;
+             }
+             else {
+                 url = new URL(window.location.href);
+                 searchParam = url.searchParams;
+                 searchParam.set("searchKeyword", keyword);
+                 searchParam.set("pageNo", 0);
+                 url = url.toString();
+             }
+             window.location.href = url;
+        });
+        
+    $(".campaign-block").on("click", function() {
+        cmpnId = $(this).data("cmpn-id");
+        window.location.href = "/campaigndetail/" + cmpnId;
+    });
+    
+    // campaignTab js
+    url = window.location.href;
+    if (url.includes("detail")) {
+        $("#campaign-name").attr("checked", "true");
+    }
+    else if (url.includes("applicant")) {
+        $("#campaign-applicant").attr("checked", "true");
+    }
+    else if (url.includes("adopt")) {
+        $("#campaign-adopt").attr("checked", "true");
+    }
+    else if (url.includes("deny-history")) {
+        $("#campaign-return-hist").attr("checked", "true");
+    }
+    
+    $(".campaign-tab").children("input").on("click", function() {
+        cmd = $(this).attr("id");
+        cmpnId = $("#campaign-name").data("cmpn-id");
+        url = "";
+        if (cmd === "campaign-name") {
+            url = "/campaigndetail/" + cmpnId;
+        }
+        else if (cmd === "campaign-adopt") {
+            url = "/adv/campaign/adopt/" + cmpnId;
+        }
+        else if (cmd === "campaign-applicant") {
+            url = "/adv/campaign/applicant/" + cmpnId;
+        }
+        else if (cmd === "campaign-return-hist") {
+            url = "/adv/campaign/deny-history/" + cmpnId;
+        }
+        
+        window.location.href = url;
+    });
 });
 
 function submitAutoActive() {
