@@ -193,6 +193,7 @@
 	         , NM
 	         , CMPNY
 	         , LOG_ID
+	         , AUTR
 	      FROM USR
 	     WHERE USR_ID = #{usrId}
 	</select>

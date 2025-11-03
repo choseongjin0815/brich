@@ -27,6 +27,7 @@ import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserResetPasswordVO;
 import com.ktdsuniversity.edu.global.common.AjaxResponse;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
+import com.ktdsuniversity.edu.global.exceptions.BrichException;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -40,7 +41,7 @@ public class UserController {
     @Autowired
     private CampaignService campaignService;
     
-	private static final Logger log = LoggerFactory.getLogger(SearchBlogController.class);
+	private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     /**
      * 임시 메인 페이지
@@ -74,8 +75,7 @@ public class UserController {
     		                      , @RequestParam String nextUrl) {
     	
     	if(bindingResult.hasErrors()) {
-    		model.addAttribute("inputData", requestUserLoginVO);
-    		return "/user/login";
+    		throw new BrichException("아이디와 비밀번호를 모두 입력해주세요.", "/WEB-INF/views/user/login.jsp");
     	}
     	UserVO loginUser = this.userService.readUser(requestUserLoginVO);
     	log.info("{}",loginUser);

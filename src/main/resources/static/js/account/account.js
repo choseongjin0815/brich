@@ -84,6 +84,7 @@ $().ready(function() {
     $(".modal-close").on("click", function() {
         $(".modal").css("display", "none");
     });
+  
     
     // 모달 선택 버튼 
     $(".modal-submit").on("click", function() {

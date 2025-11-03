@@ -3,5 +3,47 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ktdsuniversity.edu.domain.report.dao.impl.ReportDaoImpl">
+    <select id="selectReportCategoryList"
+            resultType="com.ktdsuniversity.edu.global.common.CommonCodeVO">
+        SELECT CD_ID
+		     , CD_NM
+		  FROM CM_CD
+		 WHERE PRNT_CD_ID = '8000'
+		   AND USE_YN = 'Y'
+		   AND DLT_YN = 'N'
+    </select>
     
+    <insert id="insertReport"
+            parameterType="com.ktdsuniversity.edu.domain.report.vo.request.RequestReportCreateVO">
+        <selectKey keyProperty="rptId" order="BEFORE" resultType="string">
+         SELECT 'RPT-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_RPT_PK.NEXTVAL, 6, 0)
+           FROM DUAL
+      </selectKey>
+        
+        INSERT INTO RPT 
+		( RPT_ID
+		, RPTR_USR_ID
+		, RPTED_USR_ID
+		, RPT_TITLE
+		, RPT_RSN
+		, RPT_CN
+		, RPT_FL_GRP_ID 
+		, CRT_DT 
+		, CRTR 
+		, UPDT_DT 
+		, MTTR )
+		VALUES
+		( #{rptId}
+		, #{rptrUsrId}
+		, #{rptedUsrId}
+		, #{rptTitle}
+		, #{rptRsn}
+		, #{rptCn}
+		, #{rptFlGrpId}
+		, SYSDATE
+		, #{rptedUsrId}
+		, SYSDATE
+		, #{rptedUsrId})
+        
+    </insert>
 </mapper>

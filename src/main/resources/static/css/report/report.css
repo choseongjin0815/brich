@@ -1,0 +1,160 @@
+.content-box {
+	padding: 40px;
+}
+.report-title {
+	font-size: 20px;
+	font-weight: 700;
+	display: block;
+}
+.report-input {
+	margin: 0 20px;
+	margin-bottom: 20px;
+}
+.report-input-tag {
+	border-radius: 5px;
+    border: 1px solid #11111333;
+    margin-top: 10px;
+    padding: 8px;
+	outline: none;
+}
+.text {
+	width: 100%;
+}
+
+
+select {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+
+  color: #444;
+  background-color: #fff;
+
+  padding: 0.3rem;
+  margin: 0;
+  margin-top: 10px;
+
+  border: 1px solid #aaa;
+  border-radius: 0.5em;
+  box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.04);
+}
+.btn-flex {
+	display: flex;
+	justify-content: space-around;
+}
+.btn-back,
+.btn-report {
+	font-size: 1.5rem;
+	border-radius: 5px;
+	padding: 10px 20px;
+	color: #fff;
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: 700;
+	
+	&:hover {
+	   transform: scale(1.05)
+	}
+}
+.btn-back {
+	background-color: #7B61FF;
+}
+.btn-report {
+    background-color: #FF676A;
+}
+
+textarea {
+	font-size: 18px;
+	padding: 10px;
+	height: 180px;
+	overflow: auto;
+	resize: none;
+	outline: none;
+}
+
+.require-mark {
+    display: inline-block;
+    padding-top: 5px;
+    color: red;
+    vertical-align: middle;
+}
+.ttl {
+	width: 80%;
+}
+
+/* 파일 업로드 래퍼 */
+.file-upload-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 파일 미리보기 컨테이너 - 가로 스크롤 */
+.file-preview-container {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    flex: 1;
+    align-items: center;
+}
+
+/* 스크롤바 스타일링 */
+.file-preview-container::-webkit-scrollbar {
+    height: 6px;
+}
+
+.file-preview-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.file-preview-container::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* 개별 파일 아이템 */
+.file-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+/* 파일명 텍스트 */
+.file-name {
+    color: #0066cc;
+    font-size: 14px;
+    cursor: default;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 삭제 버튼 */
+.file-remove-btn {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    flex-shrink: 0;
+    transition: background-color 0.2s;
+}
+
+.file-remove-btn:hover {
+    background-color: #cc0000;
+}
+
+/* 파일이 없을 때 메시지 */
+.no-files-message {
+    color: #999;
+    font-size: 13px;
+}

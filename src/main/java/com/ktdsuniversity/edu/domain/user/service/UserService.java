@@ -37,5 +37,4 @@ public interface UserService {
 
 	public boolean updateUserInfoByUsrId(RequestUserInfoModifyVO requestUserInfoModifyVO);
 
-
 }

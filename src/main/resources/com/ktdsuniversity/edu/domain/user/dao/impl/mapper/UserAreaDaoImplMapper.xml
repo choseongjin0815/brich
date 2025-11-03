@@ -7,13 +7,18 @@
             parameterType="string"
             resultType="com.ktdsuniversity.edu.global.common.AreaCode"> 
         SELECT A.CD_ID
-             , A.CD_NM
-          FROM USR_AR U
-         INNER JOIN AR_CD A
-            ON U.AR_ID = A.CD_ID
-         WHERE U.USR_ID = #{usrId}    
-           AND U.DLT_YN = 'N'    
-    </select>
+		     , CASE 
+		         WHEN P.CD_NM IS NOT NULL THEN P.CD_NM || ' ' || A.CD_NM
+		         ELSE A.CD_NM
+		       END AS CD_NM
+		  FROM USR_AR U
+		 INNER JOIN AR_CD A
+		    ON U.AR_ID = A.CD_ID
+		  LEFT JOIN AR_CD P
+		    ON A.PRNT_CD_ID = P.CD_ID
+		 WHERE U.USR_ID = #{usrId}
+		   AND U.DLT_YN = 'N'  
+	</select>
     
     <update id="updateDltYnByUsrId"
             parameterType="string">

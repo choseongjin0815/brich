@@ -9,6 +9,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 import com.ktdsuniversity.edu.domain.blog.controller.SearchBlogController;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
@@ -36,7 +37,10 @@ import com.ktdsuniversity.edu.domain.user.vo.response.ResponseUserInfoVO;
 import com.ktdsuniversity.edu.domain.user.vo.response.ResponseUserSubscriptionInfoVO;
 import com.ktdsuniversity.edu.global.common.AreaCode;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
+import com.ktdsuniversity.edu.global.exceptions.AjaxException;
+import com.ktdsuniversity.edu.global.exceptions.BrichException;
 import com.ktdsuniversity.edu.global.util.SHAEncrypter;
+import com.ktdsuniversity.edu.global.util.SessionUtil;
 
 
 @Service
@@ -66,12 +70,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
 	public UserVO readUser(RequestUserLoginVO requestUserLoginVO) {
+    	if(requestUserLoginVO.getLogId().equals("")
+    	|| requestUserLoginVO.getPswrd().equals("")) {
+    		throw new BrichException("아이디와 비밀번호를 모두 입력해주세요.", "/WEB-INF/views/user/login.jsp");
+    	}
 		//1. LOG_ID, autr(1001,1002,1003,1004) 이용해 유저 정보 조회
     	UserVO userVO = this.userDao.selectUserByLogIdAndAutr(requestUserLoginVO);
     	log.info("loginUser:{}", userVO);
 		//2. 조회된 유저가 없을 경우
     	if(userVO == null) {
-    		throw new IllegalArgumentException("아이디 또는 비밀번호가 잘못되었습니다.");
+    		throw new BrichException("아이디 또는 비밀번호가 잘못되었습니다.", "/WEB-INF/views/user/login.jsp");
     	}
     	
     	//블럭 케이스 
@@ -81,7 +89,7 @@ public class UserServiceImpl implements UserService {
     	if(userVO.getBlckYn().equals("Y")) {
     		int count = this.userDao.selectUnblockUserByLogId(requestUserLoginVO.getLogId());
     		if(count == 0) {
-        		throw new IllegalArgumentException("아이디 또는 비밀번호가 잘못되었습니다.");
+        		throw new BrichException("아이디 또는 비밀번호가 잘못되었습니다.", "/WEB-INF/views/user/login.jsp");
     		}
     	}
     	
@@ -99,14 +107,13 @@ public class UserServiceImpl implements UserService {
     		//4.동시에 마지막 블럭 날짜를 현재로 변경한다.
     		updateCount = this.userDao.updateBlockByLogid(requestUserLoginVO.getLogId());
     		
-    		throw new IllegalArgumentException("아이디 또는 비밀번호가 잘못 되었습니다.");
+    		throw new BrichException("아이디 또는 비밀번호가 잘못되었습니다.", "/WEB-INF/views/user/login.jsp");
     		
     	}
     	//로그인 성공 케이스 
     	//1) 로그인 실패 횟수를 0으로 초기화한다. 
     	//2) 블럭 여부를 "N"으로 변경한다. 
     	//3) 마지막 로그인 성공 날짜를 현재로 변경한다.
-    	log.info("3");
     	int updateCount = this.userDao.updateLoginSuccessByLogId(requestUserLoginVO.getLogId());
     	
 		return userVO;
@@ -320,9 +327,7 @@ public class UserServiceImpl implements UserService {
 		}
 		return true;
 	 }
-	
-	 
-	
+
 
 
 
