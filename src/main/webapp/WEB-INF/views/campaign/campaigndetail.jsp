@@ -7,6 +7,7 @@
        <script type="text/javascript" src="/js/campaign/applicantAdopt.js"></script>
        <script type="text/javascript" src="/js/common/paginator.js"></script>
        <script type="text/javascript" src="/js/common/validate.js"></script>
+       <script type="text/javascript" src="/js/campaign/campaignmain.js"></script>
 </c:set>
 
 <c:set var="css">
@@ -54,7 +55,16 @@
 					<ul class="campaign-detail-table">
 					  <li>
                         <label for="">이미지</label>
-					    
+						<c:if test="${not empty detail.fileVoList}">
+						  <div class="cmpn-images">
+						    <c:forEach var="f" items="${detail.fileVoList}" varStatus="st">
+						      <div class="cmpn-image">
+						        <div class="path">${f.flPth}</div>
+						        <imgsrc="${pageContext.request.contextPath}${f.flPth}"/>
+						      </div>
+						    </c:forEach>
+						  </div>
+						</c:if>
 					  </li>
 					  <li>
 	                    <label for="">설명</label>

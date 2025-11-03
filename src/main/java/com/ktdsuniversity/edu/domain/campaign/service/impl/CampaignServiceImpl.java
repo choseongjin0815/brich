@@ -150,6 +150,10 @@ public class CampaignServiceImpl implements CampaignService {
 		return responseCampaignListVO;
 	}
 	
+	/**
+	 * 신청한 캠페인
+	 */
+	
 	@Override
 	public ResponseCampaignListVO readSubmittedMyCampaignByBlgId(String blgId) {
 		ResponseCampaignListVO responseCampaignListVO = new ResponseCampaignListVO();
@@ -165,6 +169,10 @@ public class CampaignServiceImpl implements CampaignService {
 		return responseCampaignListVO;
 	}
 	
+	/**
+	 * 
+	 * 진행중 캠페인
+	 */
 	@Override
 	public ResponseCampaignListVO readOnGoingMyCampaignByBlgId(String blgId) {
 		ResponseCampaignListVO responseCampaignListVO = new ResponseCampaignListVO();
@@ -180,6 +188,10 @@ public class CampaignServiceImpl implements CampaignService {
 		return responseCampaignListVO;
 	}
 	
+	/**
+	 * 
+	 * 마감된 캠페인
+	 */
 	@Override
 	public ResponseCampaignListVO readClosedMyCampaignByBlgId(String blgId) {
 		ResponseCampaignListVO responseCampaignListVO = new ResponseCampaignListVO();		
@@ -194,6 +206,9 @@ public class CampaignServiceImpl implements CampaignService {
 		return responseCampaignListVO;
 	}	
 	
+	/**
+	 * 좋아요캠페인
+	 */
 	@Override
 	public ResponseCampaignListVO readFavMyCampaignByBlgId(String blgId) {
 		

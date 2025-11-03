@@ -7,13 +7,6 @@ import com.ktdsuniversity.edu.domain.file.vo.FileVO;
 
 public class ResponseCampaignVO extends CampaignVO{
 	
-	 private String getPstSttsCdNm() {
-		return this.pstSttsCdNm;
-	}
-
-	public void setPstSttsCdNm(String pstSttsCdNm) {
-		this.pstSttsCdNm = pstSttsCdNm;
-	}
 	 /**
 	  * 파일 갯수
 	  */
@@ -29,6 +22,7 @@ public class ResponseCampaignVO extends CampaignVO{
 	 */
 	private List<FileVO> fileVoList;
 	
+
 	 /**
 	  * 좋아요 수
 	  */
@@ -74,7 +68,30 @@ public class ResponseCampaignVO extends CampaignVO{
 	 private String SttsCdNm;
 	 
 	 	 
-	 private String getSttsCdNm() {
+	 public String getFlCnt() {
+		 return this.flCnt;
+	 }
+	 
+	 public void setFlCnt(String flCnt) {
+		 this.flCnt = flCnt;
+	 }
+	 
+	 public String getFlGrpId() {
+		 return this.flGrpId;
+	 }
+	 
+	 public void setFlGrpId(String flGrpId) {
+		 this.flGrpId = flGrpId;
+	 }
+	 
+	 public List<FileVO> getFileVoList() {
+		 return this.fileVoList;
+	 }
+	 
+	 public void setFileVoList(List<FileVO> fileVoList) {
+		 this.fileVoList = fileVoList;
+	 }
+	 public String getSttsCdNm() {
 		return this.SttsCdNm;
 	}
 
@@ -132,9 +149,10 @@ public class ResponseCampaignVO extends CampaignVO{
 
 	 @Override
 	public String toString() {
-		return "ResponseCampaignVO [likeCnt=" + likeCnt + ", adptCnt=" + adptCnt + ", area=" + area + ", parentArea="
-				+ parentArea + ", pstSttsCd=" + pstSttsCd + ", pstSttsCdNm=" + pstSttsCdNm + ", favYn=" + favYn
-				+ ", adptYn=" + adptYn + ", SttsCdNm=" + SttsCdNm + super.toString() + "]";
+		return "ResponseCampaignVO [flCnt=" + flCnt + ", flGrpId=" + flGrpId + ", fileVoList=" + fileVoList
+				+ ", likeCnt=" + likeCnt + ", adptCnt=" + adptCnt + ", area=" + area + ", parentArea=" + parentArea
+				+ ", pstSttsCd=" + pstSttsCd + ", pstSttsCdNm=" + pstSttsCdNm + ", favYn=" + favYn + ", adptYn="
+				+ adptYn + ", SttsCdNm=" + SttsCdNm + "]";
 	}
 
 
