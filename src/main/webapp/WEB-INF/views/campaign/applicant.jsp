@@ -17,6 +17,7 @@
 
     <div class="campaign-wrapper">
 	    <jsp:include page="/WEB-INF/views/campaign/campaignTab.jsp">
+	       <jsp:param value="${applicantList.campaignInfo.cmpnId}" name="cmpnId" />
 	       <jsp:param value="${applicantList.campaignInfo.cmpnTitle}" name="cmpnTitle" />
 	       <jsp:param value="${applicantList.campaignInfo.sttsCd}" name="sttsCd" />
 	    </jsp:include>

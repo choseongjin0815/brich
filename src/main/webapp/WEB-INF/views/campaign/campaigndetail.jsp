@@ -2,15 +2,31 @@
 	pageEncoding="UTF-8"%> 
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
+<c:set var="scripts">
+       <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
+       <script type="text/javascript" src="/js/campaign/applicantAdopt.js"></script>
+       <script type="text/javascript" src="/js/common/paginator.js"></script>
+       <script type="text/javascript" src="/js/common/validate.js"></script>
+</c:set>
+
+<c:set var="css">
+       <link type='text/css' rel='stylesheet' href='/css/campaignmain.css' />
+       <link type='text/css' rel='stylesheet' href='/css/brich.css' />
+</c:set>
+
 <jsp:include page="/WEB-INF/views/layout/menu.jsp">
-    <jsp:param name='css' value="
-        <link type='text/css' rel='stylesheet' href='/css/campaignmain.css' />
-    " />
-    <jsp:param name="scripts" value="
-        <script type='text/javascript' src='/js/campaign/campaignmain.js'></script>
-    " />
+    <jsp:param name='css' value="${css}" />
+        
+    <jsp:param name="scripts" value="${scripts}" />
 </jsp:include>
         <div class="main">
+          <c:if test="${userInfo.usrId eq detail.usrId}">
+            <jsp:include page="/WEB-INF/views/campaign/campaignTab.jsp">
+                <jsp:param value="${detail.cmpnId}" name="cmpnId"></jsp:param>
+                <jsp:param value="${detail.cmpnTitle}" name="cmpnTitle"></jsp:param>
+                <jsp:param value="${detail.sttsCd}" name="sttsCd"></jsp:param>
+            </jsp:include>
+          </c:if>
           <div class="campaign-detail-wrapper">
 	          <div class="cmpn-top-area">
 	            <div class="cmpn-title flex-space-between">

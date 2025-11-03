@@ -11,7 +11,7 @@ public class RequestApplicantVO extends AbstractSearchVO {
 	private String adptYn;
 	private String usrId;
 	
-	private String searchId;
+	private String searchKeyword;
 	
 	public String getCmpnPstAdptId() {
 		return this.cmpnPstAdptId;
@@ -49,17 +49,17 @@ public class RequestApplicantVO extends AbstractSearchVO {
 	public void setAdptYn(String adptYn) {
 		this.adptYn = adptYn;
 	}
-	
-	public String getSearchId() {
-		return this.searchId;
+	public String getSearchKeyword() {
+		return this.searchKeyword;
 	}
-	public void setSearchId(String searchId) {
-		this.searchId = searchId;
+	public void setSearchKeyword(String searchKeyword) {
+		this.searchKeyword = searchKeyword;
 	}
 	
 	@Override
 	public String toString() {
 		return "RequestApplicantVO [cmpnPstAdptId=" + cmpnPstAdptId + ", cmpnId=" + cmpnId + ", order=" + order
-				+ ", sortCol=" + sortCol + ", adptYn=" + adptYn + ", usrId=" + usrId + ", searchId=" + searchId + "]";
+				+ ", sortCol=" + sortCol + ", adptYn=" + adptYn + ", usrId=" + usrId + ", searchKeyword="
+				+ searchKeyword + "]";
 	}
 }

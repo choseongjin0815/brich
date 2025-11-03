@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class RequestDenyVO {
 
+	private String postRtrnHistId;
 	private String cmpnPstAdptId;
 	private String cmpnId;
 	private String advId;
@@ -14,6 +15,13 @@ public class RequestDenyVO {
 	private String fileGroupId;
 	private List<MultipartFile> file;
 	
+	
+	public String getPostRtrnHistId() {
+		return this.postRtrnHistId;
+	}
+	public void setPostRtrnHistId(String postRtrnHistId) {
+		this.postRtrnHistId = postRtrnHistId;
+	}
 	public String getCmpnPstAdptId() {
 		return this.cmpnPstAdptId;
 	}

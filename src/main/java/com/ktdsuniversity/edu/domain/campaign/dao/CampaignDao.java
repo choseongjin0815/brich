@@ -90,5 +90,9 @@ public interface CampaignDao {
 
 	int updateApplyCampaign(Map<String, String> param);
 
-	List<ResponseCampaignVO> selectCampaignListByUsrId(String usrId);
+	List<ResponseCampaignVO> selectCampaignListByUsrId(RequestSearchCampaignVO requestSearchCampaignVO);
+
+	int selectCampaignListCountByusrId(RequestSearchCampaignVO requestSearchCampaignVO);
+
+	List<ResponseCampaignVO> selectDenyListByCmpnId(RequestSearchCampaignVO requestSearchCampaignVO);
 }

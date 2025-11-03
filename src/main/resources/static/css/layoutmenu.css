@@ -93,6 +93,7 @@ ul {
     flex-direction: row;
 
     & > .side-menu {
+      min-width: 290px;
       position: sticky;
       top: 73px;
       flex-basis: 290px;

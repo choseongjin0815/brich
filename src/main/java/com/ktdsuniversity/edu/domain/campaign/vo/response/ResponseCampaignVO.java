@@ -5,14 +5,6 @@ import java.util.List;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 
 public class ResponseCampaignVO extends CampaignVO{
-	
-	 public String getPstSttsCdNm() {
-		return this.pstSttsCdNm;
-	}
-
-	public void setPstSttsCdNm(String pstSttsCdNm) {
-		this.pstSttsCdNm = pstSttsCdNm;
-	}
 
 	 /**
 	  * 좋아요 수
@@ -57,7 +49,6 @@ public class ResponseCampaignVO extends CampaignVO{
 	  * 공통코드 이름
 	  */
 	 public String SttsCdNm;
-	 
 	 	 
 	 public String getSttsCdNm() {
 		return this.SttsCdNm;
@@ -66,6 +57,14 @@ public class ResponseCampaignVO extends CampaignVO{
 	 public void setSttsCdNm(String sttsCdNm) {
 		 SttsCdNm = sttsCdNm;
 	 }
+	 
+	 public String getPstSttsCdNm() {
+			return this.pstSttsCdNm;
+		}
+
+	public void setPstSttsCdNm(String pstSttsCdNm) {
+		this.pstSttsCdNm = pstSttsCdNm;
+	}
 
 	 public String getAdptYn() {
 		return this.adptYn;
@@ -130,7 +129,6 @@ public class ResponseCampaignVO extends CampaignVO{
 	 public void setParentArea(String parentArea) {
 		 this.parentArea = parentArea;
 	 }
-	 
 	 
 
 }

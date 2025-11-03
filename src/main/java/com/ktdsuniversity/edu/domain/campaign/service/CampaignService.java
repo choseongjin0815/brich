@@ -52,5 +52,7 @@ public interface CampaignService {
 
 	boolean createNewCampaign(RequestCreateCmpnVO requestCreateCmpnVO);
 
-	ResponseCampaignListVO readCampaignListByUsrId(String usrId);
+	ResponseCampaignListVO readCampaignListByUsrId(RequestSearchCampaignVO requestSearchCampaignVO);
+
+	ResponseCampaignListVO readDenyHistoryByCmpnId(RequestSearchCampaignVO requestSearchCampaignVO);
 }

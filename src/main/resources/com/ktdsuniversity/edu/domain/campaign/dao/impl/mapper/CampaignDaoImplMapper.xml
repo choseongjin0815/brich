@@ -44,8 +44,8 @@
 		    ON U.USR_ID = CPA.BLG_USR_ID
 		 WHERE CPA.CMPN_ID = #{cmpnId}
 		   AND CPA.DLT_YN = 'N'
-	   <if test="searchId != null and searchId != ''">
-	       AND U.LOG_ID LIKE '%' || #{searchId} || '%'
+	   <if test="searchKeyword != null and searchKeyword != ''">
+	       AND U.LOG_ID LIKE '%' || #{searchKeyword} || '%'
 	   </if>
        <if test='sortCol != null and sortCol != ""'>
 		  ORDER BY NVL(${sortCol}, 0) ${order}  
@@ -113,8 +113,8 @@
                         AND AUTR != '1005') U
             ON U.USR_ID = CPA.BLG_USR_ID
          WHERE CPA.CMPN_ID = #{cmpnId}
-       <if test="searchId != null and searchId != ''">
-           AND U.LOG_ID LIKE '%' || #{searchId} || '%'
+       <if test="searchKeyword != null and searchKeyword != ''">
+           AND U.LOG_ID LIKE '%' || #{searchKeyword} || '%'
        </if>
            AND CPA.DLT_YN = 'N'
        <if test='sortCol != null and sortCol != ""'>
@@ -175,8 +175,8 @@
 		 WHERE CPA.CMPN_ID = #{cmpnId}
 		   AND CPA.ADPT_YN = 'Y'
 		   AND CPA.DLT_YN = 'N'
-		<if test="searchId != null and searchId != ''">
-           AND U.LOG_ID LIKE '%' || #{searchId} || '%'
+		<if test="searchKeyword != null and searchKeyword != ''">
+           AND U.LOG_ID LIKE '%' || #{searchKeyword} || '%'
        </if>
        <if test='sortCol != null and sortCol != ""'>
           ORDER BY NVL(${sortCol}, 0) ${order}  
@@ -199,8 +199,8 @@
          WHERE CPA.CMPN_ID = #{cmpnId}
            AND CPA.ADPT_YN = 'Y'
            AND CPA.DLT_YN = 'N'
-        <if test="searchId != null and searchId != ''">
-           AND U.LOG_ID LIKE '%' || #{searchId} || '%'
+        <if test="searchKeyword != null and searchKeyword != ''">
+           AND U.LOG_ID LIKE '%' || #{searchKeyword} || '%'
        </if>
        <if test='sortCol != null and sortCol != ""'>
           ORDER BY NVL(${sortCol}, 0) ${order}  
@@ -240,7 +240,7 @@
     
     <insert id="insertDenyByCmpnPstAdoptId"
             parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO">
-        <selectKey keyProperty="cmpnPstAdptId" resultType="string" order="BEFORE">
+        <selectKey keyProperty="postRtrnHistId" resultType="string" order="BEFORE">
         SELECT 'PST_RTRN_HIST-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_POST_RTRN_HIST_PK.NEXTVAL, 6, '0')
           FROM DUAL
         </selectKey>
@@ -257,7 +257,7 @@
 			 , RETN_FL_GRP_ID
 			 , SUBMIT_FL_GRP_ID)
 			 VALUES
-			  (#{cmpnPstAdptId}
+			  (#{postRtrnHistId}
 			 , #{cmpnPstAdptId}
 			 , #{reason}
 			 , NULL
@@ -372,8 +372,9 @@
     </insert>
     
     <select id="selectCampaignListByUsrId"
-            parameterType="string"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO"
             resultType="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO">
+        <include refid="Common.paginationHeader" />
         SELECT C.CMPN_ID
              , C.STTS_CD 
              , CC.CD_NM AS STTS_CD_NM
@@ -386,8 +387,48 @@
           FROM CMPN C
          INNER JOIN CM_CD CC
             ON C.STTS_CD = CC.CD_ID
-         WHERE C.USR_ID = #{_parameter}
+         WHERE C.USR_ID = #{loginId}
            AND C.DLT_YN = 'N'
+        <if test="searchKeyword != null and searchKeyword != ''">
+           AND C.CMPN_TITLE LIKE '%' || #{searchKeyword} || '%'
+       </if>
+       <if test="sortBy != null and sortBy != ''">
+           AND C.STTS_CD = #{sortBy}
+       </if>
+        <include refid="Common.paginationFooter" />
+    </select>
+    
+    <select id="selectCampaignListCountByusrId"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO"
+            resultType="_int">
+        SELECT COUNT(CMPN_ID)
+          FROM CMPN
+         WHERE USR_ID = #{loginId}
+           AND DLT_YN = 'N'
+        <if test="searchKeyword != null and searchKeyword != ''">
+           AND CMPN_TITLE LIKE '%' || #{searchKeyword} || '%'
+       </if>
+       <if test="sortBy != null and sortBy != ''">
+           AND STTS_CD = #{sortBy}
+       </if>
+    </select>
+    
+    <select id="selectDenyListByCmpnId"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO"
+            resultType="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO">
+        SELECT LEVEL AS LVL
+		     , C.CMPN_ID
+             , C.STTS_CD 
+             , CC.CD_NM AS STTS_CD_NM
+             , C.ATTCH_GRP_ID
+             , C.CMPN_TITLE
+          FROM CMPN C
+         INNER JOIN CM_CD CC
+            ON C.STTS_CD = CC.CD_ID
+		 WHERE C.DLT_YN = 'N'
+		 START WITH C.CMPN_PRNT_ID = #{cmpnId}
+	   CONNECT BY PRIOR C.CMPN_ID = C.CMPN_PRNT_ID
+		 ORDER BY LVL DESC
     </select>
     
     <insert id="insertCampaignCategory"

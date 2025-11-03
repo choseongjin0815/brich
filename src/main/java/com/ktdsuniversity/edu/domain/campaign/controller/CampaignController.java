@@ -52,6 +52,7 @@ public class CampaignController {
     	
     	log.info( "캠페인 상세조회 결과 : " + detail.toString());
     	model.addAttribute("detail", detail);
+    	model.addAttribute("userInfo", loginUser);
     	return "campaign/campaigndetail";
     }
     
@@ -270,9 +271,28 @@ public class CampaignController {
 	
 	@GetMapping("/adv/campaign/list")
 	public String readCampaignListByUsrId(@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser
-										  , Model model) {
-		ResponseCampaignListVO campaignList = this.campaignService.readCampaignListByUsrId(loginUser.getUsrId());
+										  , Model model
+										  , RequestSearchCampaignVO requestSearchCampaignVO) {
+		requestSearchCampaignVO.setListSize(8);
+		requestSearchCampaignVO.setPageCountInGroup(5);
+		requestSearchCampaignVO.setLoginId(loginUser.getUsrId());
+		
+		ResponseCampaignListVO campaignList = this.campaignService.readCampaignListByUsrId(requestSearchCampaignVO);
 		model.addAttribute("campaignList", campaignList);
+		model.addAttribute("search", requestSearchCampaignVO);
+		return "campaign/list";
+	}
+	
+	@GetMapping("/adv/campaign/deny-history/{cmpnId}")
+	public String readDenyHistory(Model model
+								  , RequestSearchCampaignVO requestSearchCampaignVO) {
+		
+		ResponseCampaignListVO denyList = this.campaignService.readDenyHistoryByCmpnId(requestSearchCampaignVO);
+		denyList.setIsDeny(true);
+		log.info("---denyList:" + denyList.toString());
+		model.addAttribute("campaignList", denyList);
+		model.addAttribute("search", requestSearchCampaignVO);
+		
 		return "campaign/list";
 	}
 }
