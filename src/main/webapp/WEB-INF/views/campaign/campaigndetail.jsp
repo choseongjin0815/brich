@@ -37,8 +37,11 @@
 	          </div>
 	          <div class="cmpn-bottom-area">
 	            <div class="cmpn-content-area">
-		            <div>이미지</div>
 					<ul class="campaign-detail-table">
+					  <li>
+                        <label for="">이미지</label>
+					    
+					  </li>
 					  <li>
 	                    <label for="">설명</label>
 	                    <div>${detail.cmpnCn }</div>				  

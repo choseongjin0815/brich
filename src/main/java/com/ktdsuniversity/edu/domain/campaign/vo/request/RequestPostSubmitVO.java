@@ -2,15 +2,15 @@ package com.ktdsuniversity.edu.domain.campaign.vo.request;
 
 public class RequestPostSubmitVO {
 	
-	public String postTitle;
+	private String postTitle;
 	
-	public String postUrl;
+	private String postUrl;
 	
-	public String cmpnId;
+	private String cmpnId;
 	
-	public String blgId;
+	private String blgId;
 	
-	public String postSubmitChgCn;
+	private String postSubmitChgCn;
 	
 	public String getPostSubmitChgCn() {
 		return postSubmitChgCn;
