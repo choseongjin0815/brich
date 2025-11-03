@@ -7,13 +7,6 @@ import com.ktdsuniversity.edu.domain.file.vo.FileVO;
 
 public class ResponseCampaignVO extends CampaignVO{
 	
-	 private String getPstSttsCdNm() {
-		return this.pstSttsCdNm;
-	}
-
-	public void setPstSttsCdNm(String pstSttsCdNm) {
-		this.pstSttsCdNm = pstSttsCdNm;
-	}
 	 /**
 	  * 파일 갯수
 	  */
@@ -74,7 +67,7 @@ public class ResponseCampaignVO extends CampaignVO{
 	 private String SttsCdNm;
 	 
 	 	 
-	 private String getSttsCdNm() {
+	 public String getSttsCdNm() {
 		return this.SttsCdNm;
 	}
 

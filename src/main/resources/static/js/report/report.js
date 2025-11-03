@@ -4,6 +4,13 @@ $().ready(function() {
         window.history.back();
     });
 
+
+       // 신고 내용 보기 버튼 클릭
+    $(".detail").on("click", function() {
+        var reportId = $(this).data("report-id");
+        window.location.href = "/report/view/" + reportId;
+    });
+    
     // 신고하기
     $(".btn-report").on("click", function(){
         // 필수 입력 검증

@@ -158,3 +158,124 @@ textarea {
     color: #999;
     font-size: 13px;
 }
+
+.list-head,
+.list-item {
+
+	border: 1px solid #D9D5EC;
+	
+	display: flex;
+	background-color: #F4F2FF;
+	padding: 15px 20px;
+	margin: 0px 75px;
+	min-width: 885px;
+}
+
+.list-item.white {
+	background-color: #fff;
+}
+
+.f1,
+.f2,
+.f3,
+.f4,
+.f5 {
+	color: #6E6893;
+	min-width: 100px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.f5.detail {
+	border-radius: 5px;
+	color: #fff;
+	background-color: #7B61FF;
+	padding: 4px 0;
+	
+	&:hover {
+	   transform: scale(1.05);
+	}
+}
+
+.f1 {
+	flex-basis: 25%;
+}
+.f2 {
+	flex-basis: 45%;
+}
+.f3,
+.f4,
+.f5 {
+	flex-basis: 10%;
+}
+
+.report-list-wrapper {
+	width: 100%;
+}
+
+.complete {
+	padding: 5px 10px;
+	border-radius: 15px;
+	color: #007F00;
+	background-color: #CDFFCD;
+}
+.not-complete {
+	padding: 5px 10px;
+    border-radius: 15px;
+    color: #D30000;
+    background-color: #FFE0E0;
+}
+
+/* 기존 CSS 아래에 추가 */
+
+/* 페이지네이터 래퍼 - 중앙 정렬 */
+.paginator-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+    width: 100%;
+}
+
+/* 페이지네이터 기본 스타일 */
+.paginator {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 5px;
+}
+
+.paginator li {
+    display: inline-block;
+}
+
+.paginator li a {
+    display: block;
+    padding: 8px 12px;
+    border: 1px solid #D9D5EC;
+    border-radius: 5px;
+    color: #6E6893;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.paginator li a:hover {
+    background-color: #F4F2FF;
+    transform: scale(1.05);
+}
+
+
+.paginator li.active a {
+    background-color: #7B61FF;
+    color: #fff;
+    border-color: #7B61FF;
+}
+
+
+.paginator li:first-child a,
+.paginator li:last-child a {
+    font-weight: 600;
+}

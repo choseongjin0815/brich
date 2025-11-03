@@ -46,4 +46,46 @@
 		, #{rptedUsrId})
         
     </insert>
+    
+    <select id="selectReportListByUsrId"
+            parameterType="string"
+            resultType="com.ktdsuniversity.edu.domain.report.vo.response.ResponseMyReportInfoVO">
+        SELECT U.NM
+		     , U.CMPNY
+		     , R.PRCN_YN 
+		     , R.CRT_DT 
+		     , R.RPT_TITLE 
+		     , R.RPT_ID 
+		  FROM RPT R
+		 INNER JOIN USR U
+		    ON R.RPTR_USR_ID = U.USR_ID 
+		 WHERE U.USR_ID = #{usrId}
+    </select>
+    
+      <select id="selectMyReportCount" 
+            parameterType="com.ktdsuniversity.edu.domain.report.vo.ReportSearchVO" 
+            resultType="_int">
+        SELECT COUNT(1)
+          FROM RPT
+         WHERE RPTR_USR_ID = #{rptrUsrId}
+    </select>
+    
+    <!-- 추가: 신고자의 신고 목록 조회 (페이징) -->
+    <select id="selectMyReportListWithPaging" 
+            parameterType="com.ktdsuniversity.edu.domain.report.vo.ReportSearchVO" 
+            resultType="com.ktdsuniversity.edu.domain.report.vo.response.ResponseMyReportInfoVO">
+        <include refid="Common.paginationHeader" />
+        SELECT R.RPT_ID
+             , R.RPT_TITLE
+             , R.CRT_DT
+             , R.PRCN_YN
+             , U.NM
+             , U.CMPNY
+          FROM RPT R
+         INNER JOIN USR U
+            ON R.RPTED_USR_ID = U.USR_ID
+         WHERE R.RPTR_USR_ID = #{rptrUsrId}
+         ORDER BY R.CRT_DT DESC
+        <include refid="Common.paginationFooter" />
+    </select>
 </mapper>

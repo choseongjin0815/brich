@@ -16,11 +16,14 @@ import com.ktdsuniversity.edu.domain.file.vo.FileVO;
 import com.ktdsuniversity.edu.domain.report.controller.ReportController;
 import com.ktdsuniversity.edu.domain.report.dao.ReportDao;
 import com.ktdsuniversity.edu.domain.report.service.ReportService;
+import com.ktdsuniversity.edu.domain.report.vo.ReportSearchVO;
 import com.ktdsuniversity.edu.domain.report.vo.request.RequestReportCreateVO;
+import com.ktdsuniversity.edu.domain.report.vo.response.ResponseMyReportInfoVO;
 import com.ktdsuniversity.edu.domain.report.vo.response.ResponseReportVO;
 import com.ktdsuniversity.edu.domain.user.dao.UserDao;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
+import com.ktdsuniversity.edu.global.util.SessionUtil;
 
 @Service
 public class ReportServiceImpl implements ReportService {
@@ -89,6 +92,25 @@ public class ReportServiceImpl implements ReportService {
     	int insertResult = this.reportDao.insertReport(requestReportCreateVO);
 
 		return insertResult > 0;
+	}
+
+	@Override
+	public List<ResponseMyReportInfoVO> selectListByUsrId(String usrId) {
+		return this.reportDao.selectReportListByUsrId(usrId);
+	}
+	
+	@Override
+	public List<ResponseMyReportInfoVO> readMyReportListWithPaging(ReportSearchVO reportSearchVO) {
+	    // 1. 총 신고 건수 조회
+	    int reportCount = this.reportDao.selectMyReportCount(reportSearchVO);
+	    
+	    // 2. 페이지 정보 설정
+	    reportSearchVO.setPageCount(reportCount);
+	    
+	    // 3. 신고 목록 조회
+	    List<ResponseMyReportInfoVO> reportList = this.reportDao.selectMyReportListWithPaging(reportSearchVO);
+	    
+	    return reportList;
 	}
 
 }
