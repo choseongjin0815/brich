@@ -2,7 +2,9 @@ package com.ktdsuniversity.edu.domain.blog.controller;
 
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,10 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
 import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
+import com.ktdsuniversity.edu.domain.blog.vo.PostDataVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogIndexListVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
@@ -41,7 +45,7 @@ public class BlogDataController {
 		ResponseExpireSoonListVO result = 
 				this.blogDataService.readExpireSoonCampaignList(requestExpireSoonCampaignVO);
 		List<BlogIndexVO>indexResult = 
-				this.blogDataService.readBlogIndexList(requestBlogIndexListVO);
+				this.blogDataService.readBlogIndexList(usrId);
 		model.addAttribute("list", result);
 		model.addAttribute("user", loginUser);
 		model.addAttribute("paginator", requestExpireSoonCampaignVO);
@@ -75,5 +79,19 @@ public class BlogDataController {
 		return "/blog/verification";
 	}
 	
+	@GetMapping("/api/blog/{usrId}/details")
+	@ResponseBody
+	public Map<String, Object> getBlogDetails(
+	        @PathVariable String usrId,
+	        @RequestParam("date") String date) {
+
+	    Map<String, Object> result = new HashMap<>();
+	    List<PostDataVO> posts = blogDataService.readPostStatsByDate(usrId, date);
+	    List<BlogIndexVO> blogIndex = blogDataService.readDailyIndex(usrId, date);
+
+	    result.put("posts", posts);
+	    result.put("indexSummary", blogIndex);
+	    return result;
+	}
 
 }

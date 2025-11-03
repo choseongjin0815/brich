@@ -7,9 +7,10 @@
        	<link type='text/css' rel='stylesheet' href='/css/campaignmain.css' />
     	<link type='text/css' rel='stylesheet' href='/css/blog/dashboard.css' />
        	<link typr='text/css' rel='stylesheet' href='/css/paginator-simple.css'/>
+		
    	" />
    	<jsp:param name="scripts" value="
-       	
+       	<script type='text/javascript' src='/js/blog/dashboard.js'></script>
 	" />    
 </jsp:include>
 		<div class="dashboard-container">
@@ -38,14 +39,85 @@
 						</tbody>
 					</table>
 					<jsp:include page="/WEB-INF/views/layout/paginator-simple.jsp">
-					  <jsp:param name="havePrevPageGroup" value="${search.havePrevPageGroup}" />
-					  <jsp:param name="pageNo" value="${search.pageNo}" />
-					  <jsp:param name="haveNextPageGroup" value="${search.haveNextPageGroup}" />
+					  <jsp:param name="havePrevPageGroup" value="${paginator.havePrevPageGroup}" />
+					  <jsp:param name="pageNo" value="${paginator.pageNo}" />
+					  <jsp:param name="haveNextPageGroup" value="${paginator.haveNextPageGroup}" />
 					</jsp:include>
 				</div>
 				<div>추천 캠페인</div>
 				<div>핵심 황금 키워드</div>
-				<div>내 블로그 지수</div>
+				<div> <div class="flex-grow">내 블로그 지수</div> <button id="blog-index-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="blog-index-detail-btn">자세히 보기</button>
+					<div id="blog-index-modal" class="modal">
+						<div class="modal-content">
+						<span class="close">&times;</span>
+					<h3>내 블로그 지수</h3>
+	
+					
+						<button class="btn right-align" id="download-excel">엑셀 다운로드</button>
+						
+						</div>
+					</div>
+					<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+					<div style="width: 100%; max-width: 800px; margin: 0 auto;">
+					    <canvas id="blogIndexChart"></canvas>
+					</div>
+
+					<script>
+					    const labels = [
+					        <c:forEach items="${index}" var="row" varStatus="st">
+					            "${row.statDt}"<c:if test="${!st.last}">,</c:if>
+					        </c:forEach>
+					    ];
+
+					    const avg5d = [
+					        <c:forEach items="${index}" var="row" varStatus="st">
+					            ${row.indxValAvg5d}<c:if test="${!st.last}">,</c:if>
+					        </c:forEach>
+					    ];
+
+					    const ctx = document.getElementById('blogIndexChart').getContext('2d');
+					    const chart = new Chart(ctx, {
+					        type: 'line',
+					        data: {
+					            labels: labels,
+					            datasets: [
+
+					                {
+					                    label: '5일 평균 지수',
+					                    data: avg5d,
+					                    borderColor: '#7B61FF',
+					                    backgroundColor: 'rgba(123, 97, 255, 0.1)',
+					                    tension: 0.5,
+					                    fill: true,
+					                    pointRadius: 3,
+					                    pointHoverRadius: 5
+					                }
+					            ]
+					        },
+					        options: {
+					            responsive: true,
+					            plugins: {
+					                legend: { position: 'top' },
+					                title: {
+					                    display: true,
+					                    text: '최근 블로그 지수 변화'
+					                }
+					            },
+					            scales: {
+					                x: {
+					                    title: { display: true, text: '날짜' }
+					                },
+					                y: {
+					                    beginAtZero: true,
+					                    title: { display: true, text: '지수' }
+					                }
+					            }
+					        }
+					    });
+					</script>
+
+				</div>
 				<div>신청한 캠페인</div>
 				<div>나의 블로그 방문자 수</div>
 			
