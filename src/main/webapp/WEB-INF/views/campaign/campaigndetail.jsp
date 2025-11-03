@@ -2,14 +2,17 @@
 	pageEncoding="UTF-8"%> 
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
+<c:set var="scripts">
+        <script type='text/javascript' src='/js/campaign/campaignmain.js'></script>
+</c:set>
+
 <jsp:include page="/WEB-INF/views/layout/menu.jsp">
     <jsp:param name='css' value="
         <link type='text/css' rel='stylesheet' href='/css/campaignmain.css' />
     " />
-    <jsp:param name="scripts" value="
-        <script type='text/javascript' src='/js/campaign/campaignmain.js'></script>
-    " />
+    <jsp:param name="scripts" value="${scripts}" />
 </jsp:include>
+
         <div class="main">
           <div class="campaign-detail-wrapper">
 	          <div class="cmpn-top-area">
@@ -60,25 +63,16 @@
 	                    <label for="">위치</label>
 	                    <div>${detail.addrs }</div>
 	                  </li>
+	                  <li>
+	                    <label>지도</label>
+	                    <div id="map" style="width:500px;height:400px;" data-location="${detail.addrs }"></div>
+	                    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=75d2ae10ae5482a8868edf8364c88dad&libraries=services"></script>
+	                    <script type="text/javascript" src="/js/common/map.js"></script>
+	                  </li>
 					</ul>
-                    <div>지도</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
+ 
+                    
+                    
 	            </div>
 	            <div class="cmpn-rightbar-area">
 	              <div class="right-bar">

@@ -10,6 +10,7 @@ pageEncoding="UTF-8"%>
     <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="/js/common/layoutmenu.js"></script>
     
+    
     ${param.css }
     ${param.chatCss}
     ${param.accountCss}

@@ -89,7 +89,7 @@
   }
 
   & > .campaign-detail-wrapper {
-    padding: 45px 65px 0 65px;
+    padding: 45px 65px 50px 65px;
 
     & > .cmpn-top-area {
       font-size: 24px;
