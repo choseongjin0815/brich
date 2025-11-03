@@ -3,6 +3,16 @@ $().ready(function(){
 	// 모달 열기
 	$(".blog-index-detail-btn").on("click", function() {
 	  modal.fadeIn(200);
+	  var usrID = $("#blog-index-detail").data("user-id");
+	  
+	  $.ajax({
+		url: "/api/blog/index/" + usrID + "/detail",
+		method: "GET",
+		data: { date: date },
+		success: function(res){
+			
+		}
+	  })
 	});
 
 	// 닫기 버튼

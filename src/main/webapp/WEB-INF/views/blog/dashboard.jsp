@@ -39,15 +39,23 @@
 						</tbody>
 					</table>
 					<jsp:include page="/WEB-INF/views/layout/paginator-simple.jsp">
-					  <jsp:param name="havePrevPageGroup" value="${search.havePrevPageGroup}" />
-					  <jsp:param name="pageNo" value="${search.pageNo}" />
-					  <jsp:param name="haveNextPageGroup" value="${search.haveNextPageGroup}" />
+					  <jsp:param name="havePrevPageGroup" value="${paginator.havePrevPageGroup}" />
+					  <jsp:param name="pageNo" value="${paginator.pageNo}" />
+					  <jsp:param name="haveNextPageGroup" value="${paginator.haveNextPageGroup}" />
 					</jsp:include>
 				</div>
 				<div>추천 캠페인</div>
 				<div>핵심 황금 키워드</div>
-				<div>내 블로그 지수 <button class="blog-index-detail-btn">자세히 보기</button>
-					<div id="blog-index-detail-modal" class="modal">
+				<div> <div class="flex-grow">내 블로그 지수</div> <button id="blog-index-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="blog-index-detail-btn">자세히 보기</button>
+					<div id="blog-index-modal" class="modal">
+						<div class="modal-content">
+						<span class="close">&times;</span>
+					<h3>내 블로그 지수</h3>
+	
+					
+						<button class="btn right-align" id="download-excel">엑셀 다운로드</button>
+						
+						</div>
 					</div>
 					<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 

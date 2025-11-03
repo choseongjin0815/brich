@@ -11,7 +11,7 @@ import com.ktdsuniversity.edu.domain.blog.dao.PostDataDao;
 import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
 import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
 import com.ktdsuniversity.edu.domain.blog.vo.PostDataInsertVO;
-import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogIndexListVO;
+import com.ktdsuniversity.edu.domain.blog.vo.PostDataVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestModifyBlogAddrsVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
@@ -85,6 +85,18 @@ public class BlogDataServiceImpl implements BlogDataService{
 		
 		return list;
 	}
+
+	@Override
+	public List<PostDataVO> readPostStatsByDate(String usrId, String date) {
+		return null;
+	}
+
+	@Override
+	public List<BlogIndexVO> readDailyIndex(String usrId, String date) {
+		
+		return null;
+	}
+
 
 
 	

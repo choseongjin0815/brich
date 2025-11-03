@@ -64,18 +64,18 @@ $().ready(function(){
 	      alert("복사에 실패했어요. 직접 드래그해서 복사해 주세요.");
 	    }
 	  });
-	  $("#generateCode").on("click", function() {
+	  $("#generate-code").on("click", function() {
 	    $.ajax({
 	      url: "/api/verify-code",
 	      method: "POST",
 	      success: function(res) {
-	        $("#verificationCode").html(
+	        $("#verification-code").html(
 	          `<strong id="code-text" style='color:#6A52E8;'>${res.code}</strong>
 			  <button class="copy-btn" id="copy-btn" type="button" style="margin-left:8px;">복사</button>`
 	        );
-	        $("#verifyResult").text("이 코드를 블로그 소개글에 넣고 인증을 진행하세요.");
-			$("#generateCode").attr("disabled", true);
-			$("#generateCode").css("background-color","#aaa");
+	        $("#verify-result").text("이 코드를 블로그 소개글에 넣고 인증을 진행하세요.");
+			$("#generate-code").attr("disabled", true);
+			$("#generate-code").css("background-color","#aaa");
 	      }
 	    });
 	  });

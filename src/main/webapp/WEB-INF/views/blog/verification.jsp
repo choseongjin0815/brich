@@ -29,8 +29,8 @@
 					<h3>블로그 인증</h3>
 	
 						<p>인증 코드를 생성하고 블로그 소개글에 추가하세요.</p>
-						<button class="btn" id="generateCode">인증 코드 생성</button>
-						<div id="verificationCode" style="margin:10px 0;font-size:1.3em;"></div>
+						<button class="btn" id="generate-code">인증 코드 생성</button>
+						<div id="verification-code" style="margin:10px 0;font-size:1.3em;"></div>
 					<span>블로그 주소: <input id="blog-url" type="text"></span>
 					<p>아래 버튼을 눌러 블로그 인증을 진행하세요.</p>
 					<button id="run-verification" class="btn-green"

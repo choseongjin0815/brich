@@ -48,7 +48,7 @@
     	 , MTTR
 	  FROM TEAM_A.BLG_INDX
 	 WHERE USR_ID = #{_parameter}
-	   AND STAT_DT > SYSDATE - 36 
+	   AND STAT_DT > SYSDATE - 20 
 	 ORDER BY STAT_DT
     </select>
     
