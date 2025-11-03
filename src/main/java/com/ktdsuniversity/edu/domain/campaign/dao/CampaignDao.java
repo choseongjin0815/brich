@@ -10,6 +10,7 @@ import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCampaignAreaVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestPostSubmitVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestUpdatePstSttsVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO;
@@ -89,4 +90,14 @@ public interface CampaignDao {
 	int updateCancelApplyCampaign(Map<String, String> param);
 
 	int updateApplyCampaign(Map<String, String> param);
+
+	int updatePostSubmit(RequestPostSubmitVO requestPostSubmitVO);
+
+	int updatePostSubmitStts(RequestPostSubmitVO requestPostSubmitVO);
+
+	int updateRePostSubmit(RequestPostSubmitVO requestPostSubmitVO);
+
+	int updateRePostSubmitStts(RequestPostSubmitVO requestPostSubmitVO);
+
+	String selectReturnReason(Map<String, String> param);
 }

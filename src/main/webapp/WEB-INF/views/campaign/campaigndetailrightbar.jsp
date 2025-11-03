@@ -64,6 +64,12 @@
                             
                             <!-- 반려됨 -->                      
                             <c:if test="${detail.pstSttsCd == 6003}" >
+                            	<c:if test="${not empty returnReason}">
+								  <div class="return-reason-box">
+								  	<div class="return-reason-title">반려사유</div>
+								  	<div> ${returnReason} </div> 
+								  </div>
+								</c:if>
 		                        <div class="right-bar-bottom middle-center status--rejected status--" data-campaign-id="${detail.cmpnId}">
 		                          다시 제출하기
 		                        </div>

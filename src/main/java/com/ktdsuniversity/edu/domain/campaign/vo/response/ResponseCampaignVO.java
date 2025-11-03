@@ -3,63 +3,78 @@ package com.ktdsuniversity.edu.domain.campaign.vo.response;
 import java.util.List;
 
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.domain.file.vo.FileVO;
 
 public class ResponseCampaignVO extends CampaignVO{
 	
-	 public String getPstSttsCdNm() {
+	 private String getPstSttsCdNm() {
 		return this.pstSttsCdNm;
 	}
 
 	public void setPstSttsCdNm(String pstSttsCdNm) {
 		this.pstSttsCdNm = pstSttsCdNm;
 	}
-
+	 /**
+	  * 파일 갯수
+	  */
+	private String flCnt;
+	
+	/**
+	 *  파일 그룹 아이디
+	 */
+	private String flGrpId;
+	
+	/**
+	 * 파일 리스트
+	 */
+	private List<FileVO> fileVoList;
+	
 	 /**
 	  * 좋아요 수
 	  */
-	 public int likeCnt;
+	 private int likeCnt;
 	 /**
 	  * 현재 신청자 수 
 	  */
-	 public int adptCnt;
+	 private int adptCnt;
 	 
 	 /**
 	  * 지역 이름
 	  */
-	 public List<String> area;
+	 private List<String> area;
 	 
 	 /**
 	  * 부모지역 이름
 	  */
-	 public String parentArea;
+	 private String parentArea;
 	 
 	 /**
 	  * 포스팅 상태 코드
 	  */
-	 public String pstSttsCd;
+	 private String pstSttsCd;
 	 
 	 /**
 	  * 포스팅 상태 코드 이름
 	  */
-	 public String pstSttsCdNm;
+	 private String pstSttsCdNm;
 	 
 	 /**
 	  * 좋아요 여부
 	  */
-	 public String favYn;
+	 private String favYn;
 	 
 	 /**
 	  * 신청 여부
 	  */
-	 public String adptYn;
+	 private String adptYn;
 	 
 	 /**
 	  * 공통코드 이름
 	  */
-	 public String SttsCdNm;
+	 private String SttsCdNm;
 	 
 	 	 
-	 public String getSttsCdNm() {
+	 private String getSttsCdNm() {
 		return this.SttsCdNm;
 	}
 

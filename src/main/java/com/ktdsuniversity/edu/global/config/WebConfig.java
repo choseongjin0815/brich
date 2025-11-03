@@ -1,8 +1,10 @@
 package com.ktdsuniversity.edu.global.config;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.CacheControl;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -48,6 +50,10 @@ public class WebConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
 		registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css/");
 		registry.addResourceHandler("/img/**").addResourceLocations("classpath:/static/img/");
+		registry.addResourceHandler("/checkout.html").addResourceLocations("classpath:/static/templates/");		
+		registry.addResourceHandler("/fail.html").addResourceLocations("classpath:/static/templates/");		
+		registry.addResourceHandler("/success.html").addResourceLocations("classpath:/static/templates/");		
+	
 	}
 
 	@Override

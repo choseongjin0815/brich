@@ -15,6 +15,7 @@ import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCampaignAreaVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestPostSubmitVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestUpdatePstSttsVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO;
@@ -216,5 +217,30 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	@Override
 	public int updateApplyCampaign(Map<String, String> param) {
 		return super.getSqlSession().update(this.NAME_SPACE + "updateApplyCampaign" , param);
+	}
+
+	@Override
+	public int updatePostSubmit(RequestPostSubmitVO requestPostSubmitVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updatePostSubmit" ,requestPostSubmitVO );
+	}
+	
+	@Override
+	public int updateRePostSubmit(RequestPostSubmitVO requestPostSubmitVO) {
+		return  super.getSqlSession().update(this.NAME_SPACE + "updateRePostSubmit" ,requestPostSubmitVO );
+	}
+	
+	@Override
+	public int updateRePostSubmitStts(RequestPostSubmitVO requestPostSubmitVO) {
+		return  super.getSqlSession().update(this.NAME_SPACE + "updateRePostSubmitStts" ,requestPostSubmitVO );
+	}
+
+	@Override
+	public int updatePostSubmitStts(RequestPostSubmitVO requestPostSubmitVO) {
+		return 0;
+	}
+
+	@Override
+	public String selectReturnReason(Map<String, String> param) {
+		return  super.getSqlSession().selectOne(this.NAME_SPACE + "selectReturnReason" ,param );
 	}
 }

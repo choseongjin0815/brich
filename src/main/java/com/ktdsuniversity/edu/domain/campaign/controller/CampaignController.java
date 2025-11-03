@@ -17,6 +17,7 @@ import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestPostSubmitVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListVO;
@@ -42,13 +43,15 @@ public class CampaignController {
     	if(loginUser != null) {
     		if(loginUser.getAutr().equals("1002") || loginUser.getAutr().equals("1003") ) {
         		detail = campaignService.readCampaignDetail(campaignId, loginUser.getUsrId());    	
+        		String returnReason =  campaignService.postReturnReason(campaignId, loginUser.getUsrId());
+        		model.addAttribute("returnReason", returnReason);
         	}else {    		
         		detail = campaignService.readCampaignDetail(campaignId);
         	}
     	}else {    		
     		detail = campaignService.readCampaignDetail(campaignId);
     	}
-
+    	
     	
     	log.info( "캠페인 상세조회 결과 : " + detail.toString());
     	model.addAttribute("detail", detail);
@@ -70,7 +73,8 @@ public class CampaignController {
     	
     	log.info( "캠페인 리스트 조회결과 : " + CampaignListAndCategory.getResponseCampaignList().toString());
     	return "campaign/campaignmain";
-    }
+    }  
+    
     
     @GetMapping("/blgr/submittedmycampaign")
     public String submittedmycampaign(Model model,@SessionAttribute(value = "__LOGIN_USER__") 
@@ -153,7 +157,52 @@ public class CampaignController {
     	return ajaxResponse;
     }
     
-
+    /**
+     * 포스팅 작성
+     * @param requestPostSubmitVO
+     * @param loginUser
+     * @param campaignId
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/blgr/pstsubmit/{campaignId}")
+    public AjaxResponse postSubmit(RequestPostSubmitVO requestPostSubmitVO ,@SessionAttribute(value = "__LOGIN_USER__") UserVO loginUser, 
+    						@PathVariable String campaignId) {
+    	requestPostSubmitVO.setBlgId(loginUser.getUsrId());
+    	requestPostSubmitVO.setCmpnId(campaignId);
+    	int count = this.campaignService.postSubmit(requestPostSubmitVO);
+    	log.info( "포스팅 input 정보 : " + requestPostSubmitVO.toString());
+    
+    	
+    	AjaxResponse ajaxResponse = new AjaxResponse();
+    	ajaxResponse.setBody(count);
+    	
+    	return ajaxResponse;
+    }
+    
+    /**
+     * 포스팅 재 제출
+     * @param requestPostSubmitVO
+     * @param loginUser
+     * @param campaignId
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/blgr/repstsubmit/{campaignId}")
+    public AjaxResponse rePostSubmit(RequestPostSubmitVO requestPostSubmitVO ,@SessionAttribute(value = "__LOGIN_USER__") UserVO loginUser, 
+    		@PathVariable String campaignId) {
+    	requestPostSubmitVO.setBlgId(loginUser.getUsrId());
+    	requestPostSubmitVO.setCmpnId(campaignId);
+    	int count = this.campaignService.rePostSubmit(requestPostSubmitVO);
+    	log.info( "포스팅 input 정보 : " + requestPostSubmitVO.toString());
+    	
+    	
+    	AjaxResponse ajaxResponse = new AjaxResponse();
+    	ajaxResponse.setBody(count);
+    	
+    	return ajaxResponse;
+    }
+    
     
     @GetMapping("/adv/campaign/applicant/{cmpnId}")
     public String readApplicantList(Model model, @PathVariable String cmpnId,
