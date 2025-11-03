@@ -278,8 +278,8 @@
      z-index :99;
             }
    .love-off {
-    width:40px;
-    height:40px;
+    width:35px;
+    height:35px;
     background-image : url("/img/heartOff.png");
     background-repeat: no-repeat;
     background-size: cover;
