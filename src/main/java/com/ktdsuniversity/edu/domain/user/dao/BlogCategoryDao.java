@@ -22,4 +22,10 @@ public interface BlogCategoryDao {
 
 	public List<CommonCodeVO> selectUserCategoryByUserId(String usrId);
 
+	public int updateDltYnByUsrId(String usrId);
+
+	public int mergeBlogCategory(BlogCategoryVO category);
+
+	
+
 }

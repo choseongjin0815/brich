@@ -28,5 +28,15 @@ public class UserAreaDaoImpl extends SqlSessionDaoSupport implements UserAreaDao
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectUserAreaByUserId", usrId);
 	}
 
+	@Override
+	public int updateDltYnByUsrId(String usrId) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateDltYnByUsrId", usrId);
+	}
+
+	@Override
+	public int insertArea(UserAreaVO area) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertArea", area);
+	}
+
 
 }

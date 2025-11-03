@@ -237,7 +237,7 @@ public class ChatController {
 	@GetMapping("/room/{chtRmId}/messages")
 	@ResponseBody
 	public AjaxResponse getChatMessages(@PathVariable String chtRmId, @RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "20") int size,
+			@RequestParam(defaultValue = "10") int size,
 			@SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser) {
 
 		String usrId = loginUser.getUsrId();

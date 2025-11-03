@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.domain.user.dao.impl;
 
+import java.util.Map;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestModifyBlogAddrsVO;
 import com.ktdsuniversity.edu.domain.user.dao.UserDao;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
+import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserAccountPasswordVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserFindIdVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserLoginVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO;
@@ -87,6 +90,21 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
 	@Override
 	public UserVO selectUserByUserId(String usrId) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUserByUserId", usrId);
+	}
+
+	@Override
+	public String selectUserPswrdByPswrd(Map<String, String> currentUserPswrd) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUserPswrdByPswrd", currentUserPswrd);
+	}
+
+	@Override
+	public int updatePswrdByUsrId(RequestUserAccountPasswordVO requestUserAccountPasswordVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "requestUserAccountPasswordVO", requestUserAccountPasswordVO);
+	}
+
+	@Override
+	public String selectSaltByUsrId(String usrId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectSaltByUsrId", usrId);
 	}
 
 

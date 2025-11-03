@@ -11,6 +11,8 @@
 <link type="text/css" rel="stylesheet" href="/css/regist.css">
 <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
 <script type="text/javascript" src="/js/user/regist.js"></script>
+<link type="text/css" rel="stylesheet" href="/css/account/account.css">
+<script type="text/javascript" src="/js/common/areamodal.js"></script>
 <script type="text/javascript" src="/js/common/validate.js"></script>
 </head>
 <body>
@@ -130,14 +132,20 @@
                     <div class="input-flex">
                         <label class="optional-label">카테고리</label>
                         <div>
-                            <c:forEach items="${categoryList}" var="category">
+                            <c:forEach items="${common.categoryList}" var="category">
                                 <input name="cdIdList" type="checkbox" value="${category.cdId}"/>${category.cdNm}
                             </c:forEach>
                         </div>
                     </div>
                     <div class="input-flex">
-                        <label class="optional-label">지역</label>
-                    </div>
+					    <label class="optional-label">지역</label>
+					    <div class="area-flex">
+					        <div class="selected-area-list"></div>
+					        <div class="add-area-btn">지역 추가</div>
+					    </div>
+					    <!-- hidden input 영역 -->
+					    <div class="hidden-area-list"></div>
+					</div>
                     <input type="hidden" name="autr" value="1003"/>
                     
                     <button type="button" class="regist-btn">회원가입</button>
@@ -145,5 +153,7 @@
             </c:if>
         </div>
     </div>
+    <c:set var="doCityList" value="${common.doAndCityList}" scope="request" />
+    <jsp:include page="/WEB-INF/views/layout/areamodal.jsp" />
 </body>
 </html>

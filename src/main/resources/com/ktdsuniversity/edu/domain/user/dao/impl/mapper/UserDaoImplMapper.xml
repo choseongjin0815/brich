@@ -193,7 +193,32 @@
 	         , NM
 	         , CMPNY
 	         , LOG_ID
+	         , AUTR
 	      FROM USR
 	     WHERE USR_ID = #{usrId}
 	</select>
+	
+	<select id="selectUserPswrdByPswrd"
+	        parameterType="map"
+	        resultType="string">
+	    SELECT PSWRD
+		  FROM USR 
+		 WHERE USR_ID = #{usrId}
+		   AND PSWRD = #{currentPassword}
+	</select>
+	
+	<update id="requestUserAccountPasswordVO"
+	        parameterType="com.ktdsuniversity.edu.domain.user.vo.request.RequestUserAccountPasswordVO">
+	    UPDATE USR 
+	       SET PSWRD = #{newPswrd}
+             , SALT = #{salt} 
+         WHERE USR_ID = #{usrId}      
+	</update>
+	
+	<select id="selectSaltByUsrId"
+	        parameterType="string">
+	    SELECT SALT
+	      FROM USR
+	     WHERE USR_ID = #{usrId}
+	 </select>
 </mapper>

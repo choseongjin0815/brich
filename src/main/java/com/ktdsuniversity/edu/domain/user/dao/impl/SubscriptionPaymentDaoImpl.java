@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.domain.user.dao.SubscriptionPaymentDao;
+import com.ktdsuniversity.edu.domain.user.vo.response.ResponseUserSubscriptionInfoVO;
 
 @Repository
 public class SubscriptionPaymentDaoImpl extends SqlSessionDaoSupport implements SubscriptionPaymentDao {
@@ -17,6 +18,11 @@ public class SubscriptionPaymentDaoImpl extends SqlSessionDaoSupport implements 
     public void setSqlSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {
         super.setSqlSessionTemplate(sqlSessionTemplate);
     }
+
+	@Override
+	public ResponseUserSubscriptionInfoVO selectSubscriptionInfoByUserId(String usrId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectSubscriptionInfoByUserId", usrId);
+	}
 
 
 }

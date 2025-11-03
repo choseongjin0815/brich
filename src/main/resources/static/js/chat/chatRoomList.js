@@ -161,13 +161,12 @@ function loadChatRoomList(filter, pageNo) {
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
                 var template = $("#chat-room-list").html();
-
+               
                 // 메시지 처리
+                var lastMsgCrtDt = item.lastMsgCrtDt || ""
                 var lastMsg = item.lastMsgCn || "";
-                if (lastMsg === null) {
-                    htmlString += "<div class='chatroom-content-item no-data' data-chat-room='" + item.chtRmId + "'>" + 
-                                  item.nm + " 님과 채팅을 시작해보세요!</div>";
-                    continue;
+                if (lastMsg === "" && lastMsgCrtDt === "") {
+                    lastMsg = item.nm + " 님과 채팅을 시작해보세요!";
                 }
                 
                 if (lastMsg === "") {
