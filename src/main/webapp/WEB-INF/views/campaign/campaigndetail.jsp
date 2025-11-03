@@ -19,6 +19,7 @@
         
     <jsp:param name="scripts" value="${scripts}" />
 </jsp:include>
+
         <div class="main">
           <c:if test="${userInfo.usrId eq detail.usrId}">
             <jsp:include page="/WEB-INF/views/campaign/campaignTab.jsp">
@@ -50,8 +51,11 @@
 	          </div>
 	          <div class="cmpn-bottom-area">
 	            <div class="cmpn-content-area">
-		            <div>이미지</div>
 					<ul class="campaign-detail-table">
+					  <li>
+                        <label for="">이미지</label>
+					    
+					  </li>
 					  <li>
 	                    <label for="">설명</label>
 	                    <div>${detail.cmpnCn }</div>				  
@@ -76,25 +80,16 @@
 	                    <label for="">위치</label>
 	                    <div>${detail.addrs }</div>
 	                  </li>
+	                  <li>
+	                    <label>지도</label>
+	                    <div id="map" style="width:500px;height:400px;" data-location="${detail.addrs }"></div>
+	                    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=75d2ae10ae5482a8868edf8364c88dad&libraries=services"></script>
+	                    <script type="text/javascript" src="/js/common/map.js"></script>
+	                  </li>
 					</ul>
-                    <div>지도</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
-                    <div>aaaaaaaaaaa</div>
+ 
+                    
+                    
 	            </div>
 	            <div class="cmpn-rightbar-area">
 	              <div class="right-bar">
@@ -112,13 +107,50 @@
 	          </div>
           </div>
         </div>
-        <div class = "submit-modal-area display-none">
-            <div class="submit-modal">
-            dd
-            
-            </div>
-        </div>
-        
+        <form class="submit-modal-form display-none">
+	    	<div class = "submit-modal-area" data-cmpn-id= "${detail.cmpnId}">
+	            <div class="submit-modal">
+	            	<div class="submit-modal-title height-center">포스팅 입력</div>
+	            	<div class="submit-modal-field middle-center">
+	            		<label class="submit-modal-label" for="post-title">포스팅 제목</label>
+	            		<input class="submit-modal-input" id="post-title" type="text" name="postTitle">
+	            	</div> 
+				    <div class="submit-modal-field middle-center">
+				    	<label class="submit-modal-label" for="post-url">포스팅 주소</label>
+				    	<input class="submit-modal-input" id="post-url" type="url" placeholder="https://" name="postUrl">
+				    </div>
+					<div class="submit-modal-actions flex-row">
+					   <div class="submit-modal-btn submit-modal-btn-close middle-center">닫기</div>
+					   <div class="submit-modal-btn submit-modal-btn-ok middle-center" >제출</div>
+					</div>
+	            </div>
+	    	</div>
+	    </form>
+	    
+       <form class="re-submit-modal-form display-none">
+	    	<div class = "submit-modal-area" data-cmpn-id= "${detail.cmpnId}">
+	            <div class="submit-modal">
+	            	<div class="submit-modal-title height-center">포스팅 재 제출</div>
+	            	<div class="submit-modal-field middle-center re-submit-area">
+	            		<label class="submit-modal-label " for="re-post-cn">수정된 내용</label>
+	            		<textarea class="submit-modal-input re-submit-cn" id="re-post-cn" type="text" name="rePostCn"></textarea>
+	            	</div> 
+	            	<div class="submit-modal-field middle-center">
+	            		<label class="submit-modal-label" for="re-post-title">포스팅 제목</label>
+	            		<input class="submit-modal-input" id="re-post-title" type="text" name="rePostTitle">
+	            	</div> 
+				    <div class="submit-modal-field middle-center">
+				    	<label class="submit-modal-label" for="re-post-url">포스팅 주소</label>
+				    	<input class="submit-modal-input" id="re-post-url" type="url" placeholder="https://" name="rePostUrl">
+				    </div>
+					<div class="submit-modal-actions flex-row">
+					   <div class="re-submit-modal-btn submit-modal-btn-close middle-center">닫기</div>
+					   <div class="submit-modal-btn re-submit-modal-btn-ok middle-center" >제출</div>
+					</div>
+	            </div>
+	    	</div>
+	    </form>	    
+	    
 <jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
   
 

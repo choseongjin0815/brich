@@ -2,6 +2,8 @@ package com.ktdsuniversity.edu.domain.user.vo.request;
 
 public class RequestUserAccountPasswordVO {
 
+	private String usrId;
+	
 	private String currentPswrd;
 	
 	private String newPswrd;
@@ -9,6 +11,14 @@ public class RequestUserAccountPasswordVO {
 	private String newPswrdConfirm;
 	
 	private String salt;
+
+	public String getUsrId() {
+		return this.usrId;
+	}
+
+	public void setUsrId(String usrId) {
+		this.usrId = usrId;
+	}
 
 	public String getCurrentPswrd() {
 		return this.currentPswrd;
@@ -44,9 +54,11 @@ public class RequestUserAccountPasswordVO {
 
 	@Override
 	public String toString() {
-		return "RequestUserAccountPasswordVO [currentPswrd=" + currentPswrd + ", newPswrd=" + newPswrd
-				+ ", newPswrdConfirm=" + newPswrdConfirm + ", salt=" + salt + "]";
+		return "RequestUserAccountPasswordVO [usrId=" + usrId + ", currentPswrd=" + currentPswrd + ", newPswrd="
+				+ newPswrd + ", newPswrdConfirm=" + newPswrdConfirm + ", salt=" + salt + "]";
 	}
+
+
 	
 	
 }

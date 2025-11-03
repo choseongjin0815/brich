@@ -5,10 +5,11 @@ var myName = null;
 var myCmpny = null;
 var auth = null;
 var startUrl = null;
+var targetId = null;
 
 // 페이징 관련 변수
 var currentPage = 0;
-var pageSize = 20;
+var pageSize = 10;
 var isLoading = false;
 var hasMoreMessages = true;
 
@@ -33,6 +34,11 @@ $().ready(function() {
     $(".chat-leave-btn-rm").on("click", function(event) {
         event.stopPropagation();
         $(".report-btn-rm, .leave-chat-btn-rm").show();
+    });
+    
+    //신고하기 버튼 클릭 후 신고 페이지로 이동
+    $(".report-btn-rm").on("click", function () {
+        window.location.href = "/report/write/" + targetId; 
     });
 
     // 메시지 전송 버튼 클릭
@@ -170,7 +176,10 @@ function loadChatMessages(page) {
                 });
                 
                 // 스크롤을 최하단으로
-                scrollToBottom();
+                //DOM이 로딩되고 실행 - 껌뻑이는 현상 개선용
+                requestAnimationFrame(function() {
+                    scrollToBottom();
+                });
             } else {
                 // 추가 로딩: 기존 메시지 위에 추가
                 var oldScrollHeight = chatArea[0].scrollHeight;
@@ -239,6 +248,10 @@ function createMessageHtml(message) {
     } 
     // 상대방 메시지
     else {
+        //신고를 위해 상대방 아이디를 저장
+        if(targetId === null) {
+            targetId = message.usrId;
+        }
         var senderName = message.cmpny && message.cmpny.trim() 
             ? message.cmpny 
             : message.usrNm;

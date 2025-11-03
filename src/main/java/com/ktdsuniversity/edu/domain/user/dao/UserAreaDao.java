@@ -10,4 +10,10 @@ public interface UserAreaDao {
 
 	public List<AreaCode> selectUserAreaByUserId(String usrId);
 
+	public int updateDltYnByUsrId(String usrId);
+
+	public int insertArea(UserAreaVO area);
+
+	
+
 }

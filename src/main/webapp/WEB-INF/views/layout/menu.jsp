@@ -10,9 +10,11 @@ pageEncoding="UTF-8"%>
     <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="/js/common/layoutmenu.js"></script>
     
+    
     ${param.css }
     ${param.chatCss}
     ${param.accountCss}
+    ${param.reportCss}
     ${param.scripts}
     ${param.chatroomListscripts}
     ${param.chatscripts}
@@ -20,6 +22,7 @@ pageEncoding="UTF-8"%>
     ${param.sockjs}
     ${param.stompjs}
     ${param.accountJs}
+    ${param.reportscripts}
   </head>
   <body>
     <div class="wrapper">
@@ -39,7 +42,14 @@ pageEncoding="UTF-8"%>
 	            <div class="top-menu-profile-area flex-row">
 	            	<div class="menu-profile"></div>
 	            	<div class="menu-profilename height-center">${sessionScope.__LOGIN_USER__.logId}</div>
-	            	<a class="logout" href="/logout">로그아웃</a>
+	            	<c:choose>
+	            	  <c:when test="${sessionScope.__LOGIN_USER__ ne null}">
+	            	      <a class="logout" href="/logout">로그아웃</a>
+	            	  </c:when>
+	            	  <c:otherwise>
+	            	      <a class="logout" href="/login">로그인</a>
+	            	  </c:otherwise>
+	            	</c:choose>
 	            	<div class="menu-alert"></div>
 				</div>
         	</div>
@@ -127,7 +137,7 @@ pageEncoding="UTF-8"%>
                         </c:otherwise>   
                     </c:choose>
                     <li><a href="">Help</a></li>
-                    <li><a href="">신고</a></li>
+                    <li><a href="/report/list">신고</a></li>
                   </ul>
                 </li>
             </c:if>

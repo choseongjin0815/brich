@@ -5,14 +5,14 @@ import com.ktdsuniversity.edu.global.common.AbstractSearchVO;
 /**
  * 캠페인 메인 정렬 기준을 입력받는 VO
  */
-public class RequestSearchCampaignVO extends AbstractSearchVO {
+public class RequestSearchCampaignVO extends AbstractSearchVO{
 	
 	
-	public String category;
-	public String sortBy;
-	public String searchKeyword;
-	public String loginId;
-	private String cmpnId;
+	private String category;
+	private String sortBy;
+	private String searchKeyword;
+	private String loginId;
+  private String cmpnId;
 	
 	
 	public String getLoginId() {

@@ -59,4 +59,14 @@ public class BlogCategoryDaoImpl extends SqlSessionDaoSupport implements BlogCat
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectUserCategoryByUserId", usrId);
 	}
 
+	@Override
+	public int updateDltYnByUsrId(String usrId) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateDltYnByUsrId", usrId);
+	}
+
+	@Override
+	public int mergeBlogCategory(BlogCategoryVO category) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "mergeBlogCategory", category);
+	}
+
 }

@@ -11,12 +11,12 @@ public class ResponseCampaignListVO {
 	/**
 	 * 캠페인 리스트
 	 */
-	public List<ResponseCampaignVO> ResponseCampaignList;
+	private List<ResponseCampaignVO> ResponseCampaignList;
 	
 	/**
 	 * 카테고리 리스트
 	 */
-	public List<CommonCodeVO> CategoryList;
+	private List<CommonCodeVO> CategoryList;
 	
 	private boolean isDeny;
 	

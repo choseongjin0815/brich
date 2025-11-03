@@ -29,6 +29,7 @@ ul {
       border-bottom: 1px solid #D9D9D9;
 
       & > .top-menu-left {
+        min-width: 290px;
         background-color: #F1F2F7;
         flex-basis: 290px;
         padding: 23px 0 23px 45px;
@@ -97,6 +98,7 @@ ul {
       position: sticky;
       top: 73px;
       flex-basis: 290px;
+      min-width: 290px;
      /*  세로방향 스크롤 안생김 */
       height: calc(100vh - 73px);
       align-self: flex-start;

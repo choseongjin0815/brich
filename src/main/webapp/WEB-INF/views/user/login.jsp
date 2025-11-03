@@ -26,6 +26,7 @@
 			        <label for="password" class="require-login"></label>
 			        <input type="password" class="login-input"  id="password" name="pswrd" placeholder="PASSWORD">
 		        </div>
+		        <div class="login-error-message">${errorMessage}</div>
 		         <button type="button" class="login-button">SIGN IN</button>
 		    </form>
 		    <a href="/find/id" class="login-page-btn">로그인 정보를 잊으셨나요?</a>
