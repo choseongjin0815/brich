@@ -8,4 +8,10 @@ public interface AdminCategoryService {
 
 	List<AdminCampaignCategoryVO> readCampaignCategoryList();
 
+	List<AdminCampaignCategoryVO> readChildrenCategoryList(String parentCdId);
+
+	List<AdminCampaignCategoryVO> readParentCategoryList(String excludeCdId);
+
+	boolean createNewCampaignCategory(AdminCampaignCategoryVO adminCampaignCategoryVO);
+
 }

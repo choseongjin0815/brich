@@ -197,7 +197,7 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	@Override
 	public int udpateCmpnDateByCmpnId(RequestDenyVO requestDenyVO) {
 		return super.getSqlSession().update(this.NAME_SPACE + "udpateCmpnDateByCmpnId", requestDenyVO);
-	
+	}
 	@Override
 	public String selecthasAdoptYn(Map<String, String> param) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selecthasAdoptYn" ,param);

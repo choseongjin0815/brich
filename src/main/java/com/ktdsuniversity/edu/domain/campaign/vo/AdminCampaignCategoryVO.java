@@ -1,6 +1,8 @@
 package com.ktdsuniversity.edu.domain.campaign.vo;
 
 public class AdminCampaignCategoryVO {
+	
+	private String adminId;
 
 	private int level;
 	
@@ -16,6 +18,14 @@ public class AdminCampaignCategoryVO {
 	private String dltYn;
 	
 	private String prntCdNm;
+	
+	public String getAdminId() {
+		return this.adminId;
+	}
+
+	public void setAdminId(String adminId) {
+		this.adminId = adminId;
+	}
 
 	public int getLevel() {
 		return this.level;
