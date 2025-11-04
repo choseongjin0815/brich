@@ -72,6 +72,7 @@ public class CrawlingController {
                 this.blogDataService.runPythonInitialPostData(blogInfo.getBlgAddrs());
             });
             boolean update = this.blogDataService.runPythonBlogStats(blogInfo.getBlgAddrs());
+            boolean updatetitle = this.blogDataService.runPythonBlogTitle(blogInfo.getBlgAddrs());
             
         }
         
