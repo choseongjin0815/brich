@@ -96,7 +96,7 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
 	}
 
 	@Override
-<<<<<<< HEAD
+
 	public String selectUserPswrdByPswrd(Map<String, String> currentUserPswrd) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectUserPswrdByPswrd", currentUserPswrd);
 	}
@@ -111,8 +111,6 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectSaltByUsrId", usrId);
 	}
 	@Override
-=======
->>>>>>> d4232c45d637ccfb95a9109c73c5af652040cfbd
 	public int updateBlogScrapNeighbor(RequestBlogInfoVO request) {
 		return super.getSqlSession().update(this.NAME_SPACE + "updateBlogScrapNeighborById", request);
 	}

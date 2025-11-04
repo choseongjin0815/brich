@@ -33,6 +33,8 @@ public interface BlogDataService {
 
 	boolean runPythonBlogStats(String blgAddrs);
 
+	boolean runPythonBlogTitle(String blgAddrs);
+
 
 
 

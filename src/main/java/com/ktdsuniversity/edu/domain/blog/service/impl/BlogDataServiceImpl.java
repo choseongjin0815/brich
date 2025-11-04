@@ -111,6 +111,15 @@ public class BlogDataServiceImpl implements BlogDataService{
 		return false;
 	}
 
+	@Override
+	public boolean runPythonBlogTitle(String blgAddrs) {
+		String pythonOutput = PythonExecutor.runPython(this.NAME_SPACE + "blog-title-crawler.py", blgAddrs);
+		if(pythonOutput.contains("success")) {
+			return true;
+		}
+		return false;
+	}
+
 
 
 

@@ -244,7 +244,6 @@ public class UserServiceImpl implements UserService {
 		return userInfo;
 	}
 
-<<<<<<< HEAD
   @Override
   public ResponseUserSubscriptionInfoVO readSubscriptionInfoByUserId(String usrId) {
 	return this.subscriptionPaymentDao.selectSubscriptionInfoByUserId(usrId);
@@ -332,8 +331,6 @@ public class UserServiceImpl implements UserService {
 	 }
 
 
-=======
->>>>>>> d4232c45d637ccfb95a9109c73c5af652040cfbd
   @Transactional
   @Override
   public boolean updateBlogInfo(RequestBlogInfoVO request) {
@@ -349,12 +346,6 @@ public class UserServiceImpl implements UserService {
 	  
 	return updateCount > 0;
   }
-
-<<<<<<< HEAD
-
-=======
->>>>>>> d4232c45d637ccfb95a9109c73c5af652040cfbd
-
 
 
 }
