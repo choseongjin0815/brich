@@ -15,6 +15,7 @@ pageEncoding="UTF-8"%>
     ${param.chatCss}
     ${param.accountCss}
     ${param.reportCss}
+    ${param.helpCss}
     ${param.scripts}
     ${param.chatroomListscripts}
     ${param.chatscripts}
@@ -136,7 +137,7 @@ pageEncoding="UTF-8"%>
                             <li><a href="/blgr/account/info">계정 관리</a></li>
                         </c:otherwise>   
                     </c:choose>
-                    <li><a href="">Help</a></li>
+                    <li><a href="/help/inqr/list">Help</a></li>
                     <li><a class="menu-report-selected" href="/report/list">신고</a></li>
                   </ul>
                 </li>

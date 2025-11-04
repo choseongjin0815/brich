@@ -3,5 +3,43 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ktdsuniversity.edu.domain.inqr.dao.impl.InqrDaoImpl">
-    
+    <select id="selectInqrCategory"
+            resultType="com.ktdsuniversity.edu.global.common.CommonCodeVO">
+         SELECT CD_ID
+		      , CD_NM
+		   FROM CM_CD
+		  WHERE PRNT_CD_ID = '7000' 
+     </select>
+     
+     <insert id="insertInqr"
+             parameterType="com.ktdsuniversity.edu.domain.inqr.vo.request.RequestInqrCreateVO">
+         <selectKey keyProperty="inqrId" order="BEFORE" resultType="string">
+         SELECT 'INQR-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_INQR_PK.NEXTVAL, 6, 0)
+           FROM DUAL
+         </selectKey>
+         
+        INSERT INTO INQR
+	   	( INQR_ID
+	   	, INQR_USR_ID
+	   	, INQR_TITLE
+	   	, INQR_CN
+	   	, INQR_CTG
+	   	, INQR_FL_GRP_ID
+	   	, CRT_DT
+	   	, CRTR
+	   	, UPDT_DT
+	   	, MTTR)
+	   	VALUES
+	   	( #{inqrId}
+	   	, #{inqrUsrId}
+	   	, #{inqrTitle}
+	   	, #{inqrCn}
+	   	, #{inqrCtg}
+	   	, #{inqrFlGrpId}
+	   	, SYSDATE
+	   	, #{inqrUsrId}
+	   	, SYSDATE
+	   	, #{inqrUsrId})
+     </insert>
+     
 </mapper>

@@ -1,11 +1,15 @@
 package com.ktdsuniversity.edu.domain.inqr.dao.impl;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.domain.inqr.dao.InqrDao;
+import com.ktdsuniversity.edu.domain.inqr.vo.request.RequestInqrCreateVO;
+import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 @Repository
 public class InqrDaoImpl extends SqlSessionDaoSupport implements InqrDao {
@@ -17,6 +21,16 @@ public class InqrDaoImpl extends SqlSessionDaoSupport implements InqrDao {
     public void setSqlSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {
         super.setSqlSessionTemplate(sqlSessionTemplate);
     }
+
+	@Override
+	public List<CommonCodeVO> selectInqrCategory() {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectInqrCategory");
+	}
+
+	@Override
+	public int insertInqr(RequestInqrCreateVO requestInqrCreateVO) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertInqr", requestInqrCreateVO);
+	}
 
 
 }

@@ -1,0 +1,57 @@
+.account-menu-box.help {
+	border: 0;
+	margin-left: 75px;
+	flex-grow: 0;
+	border: 0;
+	box-sizing: border-box;
+	
+}
+.account-top-menu {
+	border-bottom: 1px solid #C6C2DE;
+	&.point {
+	  border-bottom : 3px solid #333;
+	   
+	}
+}
+
+.faq-category {
+	margin-top: 20px;
+	margin-left: 75px;
+	display: flex;
+	gap: 20px;
+}
+
+.report-title.inqr-page {
+	margin-top: 30px;
+}
+
+.chat-main.inqr-page {
+	min-width: 1350px;
+	margin-top: 15px;
+	align-items: center;
+	height: 80%;
+	
+}
+
+.content-box.inqr-page {
+    height: 95%;
+	padding: 0;
+	margin: 0;
+}
+.btn-submit {
+	background-color: #7B61FF;
+	font-size: 1.5rem;
+    border-radius: 5px;
+    padding: 10px 20px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    
+    &:hover {
+       transform: scale(1.05)
+    }
+	
+}

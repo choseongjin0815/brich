@@ -30,17 +30,10 @@
     <div class="header-title">HELP</div>
     <div class="campaign-tab">
         <div class="account-menu-box help">
-            <div class="account-top-menu inqr-list">1대1 문의 내역</div>
+            <div class="account-top-menu inqr-list point">1대1 문의 내역</div>
             <div class="account-top-menu inqr-write">1대1 문의하기</div>
-            <div class="account-top-menu faq-list point">자주 찾는 도움말</div>
+            <div class="account-top-menu faq-list">자주 찾는 도움말</div>
         </div>
-    </div>
-    <div class="faq-category">
-        <div>전체</div>
-        <div>결제/환불</div>
-        <div>기술 지원</div>
-        <div>계정 관련</div>
-        <div>기타</div>
     </div>
 </div>
 </body>

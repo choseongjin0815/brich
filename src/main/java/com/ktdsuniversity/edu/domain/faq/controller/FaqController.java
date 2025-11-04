@@ -8,17 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.ktdsuniversity.edu.domain.faq.service.FaqService;
 
 @Controller
-@RequestMapping("/help")
+@RequestMapping("/help/faq")
 public class FaqController {
 
     @Autowired
     private FaqService faqService;
     
-    @GetMapping("/faq")
+    @GetMapping
     public String viewFaqPage() {
-    	
-    	
-    	
     	return "faq/faq";
     }
     
