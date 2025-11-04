@@ -30,6 +30,7 @@
 		     , U.DLT_YN
 		  FROM CMPN_PST_ADPT CPA
 		 INNER JOIN (SELECT USR_ID
+		                  , AUTR
 		                  , LOG_ID
 		                  , PNLT_CNT
 		                  , BLG_ADDRS
@@ -47,17 +48,19 @@
 	   <if test="searchKeyword != null and searchKeyword != ''">
 	       AND U.LOG_ID LIKE '%' || #{searchKeyword} || '%'
 	   </if>
+	    ORDER BY AUTR ASC
        <if test='sortCol != null and sortCol != ""'>
-		  ORDER BY NVL(${sortCol}, 0) ${order}  
+		    , NVL(${sortCol}, 0) ${order}  
        </if>
        <include refid="Common.paginationFooter" />
     </select>
     
     <select id="selectCampaignInfoByCmpnId"
             parameterType="string"
-            resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
+            resultMap="ResponseCampaignVOMap">
         SELECT C.CMPN_ID
              , C.STTS_CD
+             , C.USR_ID
 		     , C.RCRT_PRSNN
 		     , C.CMPN_TITLE
 		     , TO_CHAR(C.CNFM_DT + 3, 'YYYY-MM-DD') AS CNFM_DT
@@ -65,8 +68,15 @@
 		     , TO_CHAR(C.RCRT_END_DT, 'YYYY-MM-DD') AS RCRT_END_DT
 		     , TO_CHAR(C.PST_END_DT, 'YYYY-MM-DD') AS PST_END_DT
 		     , TO_CHAR(C.CMPN_END_DT, 'YYYY-MM-DD') AS CMPN_END_DT
+		     , C.ATTCH_GRP_ID
+             , F.FL_ID
 		  FROM CMPN C
+	     INNER JOIN CM_CD CC
+            ON C.STTS_CD = CC.CD_ID
+          LEFT OUTER JOIN FL F
+            ON F.FL_GRP_ID = C.ATTCH_GRP_ID 
          WHERE CMPN_ID = #{_parameter}
+           AND C.DLT_YN = 'N'
     </select>
     
     <update id="updateAdptYnByCmpnPstAdptId"
@@ -360,8 +370,8 @@
         , #{offrCn}
         , #{offrPrc}
         , #{pstMssn}
-        , #{ntfcn}
         , #{hstg}
+        , #{ntfcn}
         , 0
         , NULL
         , SYSDATE
@@ -371,11 +381,32 @@
         , 'N')
     </insert>
     
+    <update id="updateCmpnPrntIdByCmpnId"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO">
+        UPDATE CMPN
+		   SET CMPN_PRNT_ID = #{cmpnId}
+		     , UPDT_DT = SYSDATE
+		     , MTTR = #{usrId}
+		 WHERE CMPN_ID = #{denyCmpnId}
+    </update>
+    
+    <resultMap type="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO"
+               id = "ResponseCampaignVOMap"
+               autoMapping="true">
+        <id column="CMPN_ID" property="cmpnId" />
+        <collection property="fileVoList"
+                    javaType="list"
+                    ofType="com.ktdsuniversity.edu.domain.file.vo.FileVO"
+                    autoMapping="true">
+            <id column="FL_ID" property="flId" />
+        </collection>
+    </resultMap>
     <select id="selectCampaignListByUsrId"
             parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO"
-            resultType="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO">
+            resultMap="ResponseCampaignVOMap">
         <include refid="Common.paginationHeader" />
         SELECT C.CMPN_ID
+             , C.USR_ID
              , C.STTS_CD 
              , CC.CD_NM AS STTS_CD_NM
              , TO_CHAR(C.RCRT_STRT_DT, 'YYYY-MM-DD') AS RCRT_STRT_DT
@@ -384,11 +415,15 @@
              , TO_CHAR(C.CMPN_END_DT, 'YYYY-MM-DD') AS CMPN_END_DT
              , C.ATTCH_GRP_ID
              , C.CMPN_TITLE
+             , F.FL_ID
           FROM CMPN C
          INNER JOIN CM_CD CC
             ON C.STTS_CD = CC.CD_ID
+          LEFT OUTER JOIN FL F
+            ON F.FL_GRP_ID = C.ATTCH_GRP_ID 
          WHERE C.USR_ID = #{loginId}
            AND C.DLT_YN = 'N'
+           AND C.CMPN_PRNT_ID IS NULL
         <if test="searchKeyword != null and searchKeyword != ''">
            AND C.CMPN_TITLE LIKE '%' || #{searchKeyword} || '%'
        </if>

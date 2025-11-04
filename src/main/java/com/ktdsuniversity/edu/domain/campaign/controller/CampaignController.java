@@ -243,8 +243,9 @@ public class CampaignController {
     }
     
     @GetMapping("/adv/campaign/adopt/{cmpnId}")
-    public String readAdoptList(Model model, @PathVariable String cmpnId,
-    		RequestApplicantVO requestApplicantVO) {
+    public String readAdoptList(Model model
+    							, @PathVariable String cmpnId
+    							,RequestApplicantVO requestApplicantVO) {
     	requestApplicantVO.setListSize(10);
     	requestApplicantVO.setPageCountInGroup(10);
 		requestApplicantVO.setCmpnId(cmpnId);
@@ -252,6 +253,7 @@ public class CampaignController {
     	ResponseAdoptListVO adoptList = this.campaignService.readResponseAdoptListByCmpnId(requestApplicantVO);
     	model.addAttribute("adoptList", adoptList);
     	model.addAttribute("search",requestApplicantVO);
+    	log.info("camapainInfo:" + adoptList.getCampaignInfo().toString());
     	return "campaign/adopt";
     }
 
@@ -288,7 +290,7 @@ public class CampaignController {
 	}
 	
 	@GetMapping("/adv/campaign/write")
-	public String doCreateCampaignAction(Model model) {
+	public String createCampaign(Model model) {
 		ResponseCampaignwriteVO common = this.campaignService.createCampaign();
 		model.addAttribute("common", common);
 		return "campaign/write";
@@ -318,6 +320,32 @@ public class CampaignController {
 		}
 	}
 	
+	@GetMapping("/adv/campaign/modify/{cmpnId}")
+	public String modifyCampaign(Model model
+								 , @PathVariable String cmpnId) {
+		ResponseCampaignwriteVO common = this.campaignService.createCampaign();
+		ResponseCampaignVO campaign = this.campaignService.readCampaignDetail(cmpnId);
+		log.info("campaign read---" + campaign.toString());
+		
+		model.addAttribute("common", common);
+		model.addAttribute("campaign", campaign);
+		return "campaign/modify";
+	}
+	
+	@PostMapping("/adv/campaign/modify/{denyCmpnId}")
+	public String doModifyNewCampaignAction(RequestCreateCmpnVO requestCreateCmpnVO,
+											@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
+		requestCreateCmpnVO.setUsrId(loginUser.getUsrId());
+		boolean modify = this.campaignService.modifyNewCampaign(requestCreateCmpnVO);
+		if (modify) {
+			return "redirect:/adv/campaign/list";
+		}
+		
+		else {
+			return "";
+		}
+	}
+	
 	@GetMapping("/adv/campaign/list")
 	public String readCampaignListByUsrId(@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser
 										  , Model model
@@ -329,6 +357,7 @@ public class CampaignController {
 		ResponseCampaignListVO campaignList = this.campaignService.readCampaignListByUsrId(requestSearchCampaignVO);
 		model.addAttribute("campaignList", campaignList);
 		model.addAttribute("search", requestSearchCampaignVO);
+		log.info("campaignFilecheck : " + campaignList.getResponseCampaignList().toString());
 		return "campaign/list";
 	}
 	

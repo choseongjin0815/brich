@@ -4,7 +4,7 @@
 
 <c:set var="scripts">
        <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
-       <script type="text/javascript" src="/js/campaign/applicantAdopt.js"></script>
+       <script type="text/javascript" src="/js/campaign/campaignmain.js"></script>
        <script type="text/javascript" src="/js/common/paginator.js"></script>
        <script type="text/javascript" src="/js/common/validate.js"></script>
 </c:set>
@@ -34,6 +34,24 @@
 					<div class="cmpn-title-content">
 						<c:if test="${not empty detail.parentArea}">[ ${detail.parentArea} ]</c:if> 
 						 ${detail.cmpnTitle }
+						<c:choose>
+				            <c:when test="${detail.sttsCdNm eq '승인' || detail.sttsCdNm eq '모집중'
+				                            || detail.sttsCdNm eq '선정중' || detail.sttsCdNm eq '진행중'}">
+				                <span class="font-green">${detail.sttsCdNm}</span>
+				            </c:when>
+				            
+				            <c:when test="${detail.sttsCdNm eq '시작대기' || detail.sttsCdNm eq '검토중' || detail.sttsCdNm eq '임시저장'}">
+				                <span class="font-brown">${detail.sttsCdNm}</span>
+				            </c:when>
+				            
+				            <c:when test="${detail.sttsCdNm eq '반려'}">
+				                <span class="font-red">${detail.sttsCdNm}</span>
+				            </c:when>
+				            
+				            <c:when test="${detail.sttsCdNm eq '종료'}">
+				                <span class="font-gray">${detail.sttsCdNm}</span>
+				            </c:when>
+				        </c:choose>
 					</div>
 				    <c:if test="${not empty sessionScope.__LOGIN_USER__ }" > 
 						<div class="cmpn-title-love">
@@ -98,7 +116,10 @@
 					<jsp:include page="/WEB-INF/views/campaign/campaigndetailrightbar.jsp">
 					    <jsp:param name="scripts" value="
 					        <script type='text/javascript' src='/js/campaign/campaignmain.js'></script>
-					    " />					   
+					    " />
+					    <jsp:param value="${detail.usrId}" name="usrId" />
+					    <jsp:param value="${detail.sttsCd}" name="sttsCd" />
+					    <jsp:param value="${detail.rtrnRsn}" name="rtrnRsn" />
 	                </jsp:include>
 	              <!-- 오른쪽 창 -->
 	              

@@ -13,6 +13,7 @@ function makeCheckedList(insertClassName) {
             city = $(this).closest(".check-city").children("div:first-child").text();
             checkedList = checkedList.filter((e) => e.name !== city);
             $(this).closest(".check-city").remove();
+            beforeChecked = JSON.parse(JSON.stringify(checkedList));
         });
         
         cityBlock.append(cityName);
@@ -23,6 +24,7 @@ function makeCheckedList(insertClassName) {
 }
 
 var checkedList = [];
+var beforeChecked = [];
 
 $().ready(function() {
     $("input[name=do-city]").on("click", function() {
@@ -44,7 +46,7 @@ $().ready(function() {
                         cityCode = $(this).data("city-code");
                         
                         var arCnt = 3;
-                        if(checkedList.includes(cityName)) {
+                        if(checkedList.some(item => item.name === cityName)) {
                             // 리스트 특정 값 제거 방법 : 삭제해야하는 value와 안겹친 경우만 array로 다시 반환
                             checkedList = checkedList.filter((e) => e.name !== cityName);
                         }
@@ -77,9 +79,15 @@ $().ready(function() {
         $(".modal").css("display", "flex");
         makeCheckedList(".checked-cities");
     });
+    
+    $(".area-close").on("click", function() {
+        checkedList = JSON.parse(JSON.stringify(beforeChecked));
+    });
         
     $(".modal-submit").on("click", function() {
         $(".modal").css("display", "none");
         makeCheckedList(".area-list");
+        // 리스트 복사 - 문자로 만들고 다시 JSON parse
+        beforeChecked = JSON.parse(JSON.stringify(checkedList));
     });
 });

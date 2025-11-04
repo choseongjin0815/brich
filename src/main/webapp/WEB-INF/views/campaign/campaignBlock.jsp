@@ -3,7 +3,14 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <div class="campaign-block" data-cmpn-id="${param.cmpnId}">
-    <img src="/img/image13.png" />
+    <c:choose>
+        <c:when test="${not empty param.flId}">
+            <img src="/file/${param.usrId}/${param.flGrpId}/${param.flId}" />
+        </c:when>
+        <c:otherwise>
+            <img src="/img/image13.png" />
+        </c:otherwise>
+    </c:choose>
     <div class="flex-grow-1">
         <div>${param.cmpnTitle}</div>
         <c:choose>

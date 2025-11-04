@@ -245,12 +245,14 @@ public class CampaignServiceImpl implements CampaignService {
 		int adoptCount = this.campaignDao.selectAdoptPaginationCount(requestApplicantVO);
 		requestApplicantVO.setPageCount(adoptCount);
 		
-		CampaignVO campaign = this.campaignDao.selectCampaignInfoByCmpnId(requestApplicantVO.getCmpnId());
+		ResponseCampaignVO campaign = this.campaignDao.selectCampaignInfoByCmpnId(requestApplicantVO.getCmpnId());
 		
 		ResponseAdoptListVO adoptList = new ResponseAdoptListVO();
 		adoptList.setAdoptList(adopt);
 		adoptList.setCampaignInfo(campaign);
 		adoptList.setCmpnCdNm(this.campaignDao.selectStateNameByStateCode(adoptList.getCampaignInfo().getSttsCd()));
+		
+		// TODO: ResponseAdoptVO에 chtRmId 채팅방 아이디 들어갈 수 있게 service dao mapper 짤 것. query는 짰다 성공!
 		
 		return adoptList;
 	}
@@ -429,8 +431,10 @@ public class CampaignServiceImpl implements CampaignService {
 	@Override
 	@Transactional
 	public boolean createNewCampaign(RequestCreateCmpnVO requestCreateCmpnVO) {
-		String addr = requestCreateCmpnVO.getRoadAddress() + " " + requestCreateCmpnVO.getDetailAddress();
-		requestCreateCmpnVO.setAddrs(addr);
+		if (requestCreateCmpnVO.getRoadAddress() != null || requestCreateCmpnVO.getDetailAddress() != null) {
+			String addr = requestCreateCmpnVO.getRoadAddress() + " " + requestCreateCmpnVO.getDetailAddress();
+			requestCreateCmpnVO.setAddrs(addr);
+		}
 		
 		FileVO uploadResult = this.multipartFileHandler.upload(requestCreateCmpnVO.getFile());
 		
@@ -499,5 +503,14 @@ public class CampaignServiceImpl implements CampaignService {
 		return returnReason;
 	}
 
-	
+  @Transactional
+  @Override
+  public boolean modifyNewCampaign(RequestCreateCmpnVO requestCreateCmpnVO) {
+	boolean insert = this.createNewCampaign(requestCreateCmpnVO);
+	boolean modify = false;
+	if (insert) {
+		modify = this.campaignDao.updateCmpnPrntIdByCmpnId(requestCreateCmpnVO) == 1;
+	}
+	return modify;
+  }
 }

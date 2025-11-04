@@ -22,5 +22,9 @@ public class AjaxResponse {
 	public void setBody(Object body) {
 		this.body = body;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "AjaxResponse [error=" + error + ", body=" + body + "]";
+	}
 }

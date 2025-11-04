@@ -86,12 +86,7 @@
       <optional>true</optional>
     </dependency>
 
-    <!-- ===== Jackson XML (groupId 보정) ===== -->
-    <dependency>
-      <groupId>com.fasterxml.jackson.dataformat</groupId>
-      <artifactId>jackson-dataformat-xml</artifactId>
-      <!-- 버전은 Spring Boot BOM이 관리 -->
-    </dependency>
+    
 
     <!-- ===== Apache POI / Tika ===== -->
     <dependency>

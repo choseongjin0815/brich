@@ -45,7 +45,10 @@
 		        <c:forEach items="${adoptList.adoptList}" var="adopt">
 		            <div class="grid-list-header list-adopt applicant">
 		                <div class="user">
-		                    <div class="logId" data-cmpn-apply-id="${adopt.cmpnPstAdptId}">${adopt.userInfo.logId}</div>
+		                    <div class="logId" 
+		                         data-cmpn-apply-id="${adopt.cmpnPstAdptId}"
+		                         data-user-id="${adopt.userInfo.usrId}">
+		                         ${adopt.userInfo.logId}</div>
 		                    <div><a href="${adopt.userInfo.blgAddrs}" target="_blank">${adopt.userInfo.blgAddrs}</a></div>
 		                </div>
 		                <c:choose>
@@ -72,7 +75,7 @@
 		                    </c:when>
                         </c:choose>
 		                <div>${adopt.pstDdln}</div>
-		                <div><a class="button_50_30 abled button_a_50_30" href="">채팅</a></div>
+		                <div><a class="button_50_30 abled button_a_50_30 go-chat">채팅</a></div>
 		                <div><a class="button_50_30 button-report button_a_50_30" href="">신고</a></div>
 		                
 		            </div>
@@ -101,6 +104,9 @@
 		              <jsp:param value="${adoptList.campaignInfo.rcrtEndDt}" name="rcrtEndDt" />
 		              <jsp:param value="${adoptList.campaignInfo.pstEndDt}" name="pstEndDt" />
 		              <jsp:param value="${adoptList.campaignInfo.cmpnEndDt}" name="cmpnEndDt" />
+		              <jsp:param value="${adoptList.campaignInfo.usrId}" name="usrId"/>
+                      <jsp:param value="${adoptList.campaignInfo.attchGrpId}" name="flGrpId"/>
+                      <jsp:param value="${adoptList.campaignInfo.fileVoList[0].flId}" name="flId"/>
 		            </jsp:include>
 		            
 		            <div>포스팅 보기</div>
