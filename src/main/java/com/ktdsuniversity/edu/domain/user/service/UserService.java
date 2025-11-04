@@ -2,6 +2,8 @@ package com.ktdsuniversity.edu.domain.user.service;
 
 import java.util.List;
 
+import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogInfoVO;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogTitleVO;
 import com.ktdsuniversity.edu.domain.user.vo.BlogCategoryVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserFindIdVO;
@@ -27,6 +29,10 @@ public interface UserService {
 
 	public UserVO readUserByLogId(String id);
 	public ResponseUserInfoVO readUserByUserId(String usrId);
+
+	public boolean updateBlogInfo(RequestBlogInfoVO request);
+
+	public boolean updateBlogTitle(RequestBlogTitleVO request);
 
 
 }

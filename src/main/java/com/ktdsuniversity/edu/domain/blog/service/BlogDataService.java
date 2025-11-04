@@ -8,6 +8,7 @@ import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
 import com.ktdsuniversity.edu.domain.blog.vo.PostDataInsertVO;
 import com.ktdsuniversity.edu.domain.blog.vo.PostDataVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogIndexListVO;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogInfoVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestModifyBlogAddrsVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
@@ -29,6 +30,10 @@ public interface BlogDataService {
 	List<PostDataVO> readPostStatsByDate(String usrId, String date);
 
 	List<BlogIndexVO> readDailyIndex(String usrId, String date);
+
+	boolean runPythonBlogStats(String blgAddrs);
+
+
 
 
 

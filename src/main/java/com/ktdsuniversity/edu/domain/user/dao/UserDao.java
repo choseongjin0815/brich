@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.domain.user.dao;
 
+import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogInfoVO;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogTitleVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestModifyBlogAddrsVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserFindIdVO;
@@ -33,6 +35,10 @@ public interface UserDao {
 
 	public UserVO selectUserByLogId(String id);
 	public UserVO selectUserByUserId(String usrId);
+
+	public int updateBlogScrapNeighbor(RequestBlogInfoVO request);
+
+	public int updateBlogTitle(RequestBlogTitleVO request);
 
 
 

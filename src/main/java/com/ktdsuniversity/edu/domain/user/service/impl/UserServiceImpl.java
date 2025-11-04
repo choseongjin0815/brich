@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ktdsuniversity.edu.domain.blog.controller.SearchBlogController;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogInfoVO;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogTitleVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.file.dao.FileDao;
 import com.ktdsuniversity.edu.domain.file.dao.FileGroupDao;
@@ -215,6 +217,22 @@ public class UserServiceImpl implements UserService {
 		
 		return userInfo;
 	}
+
+  @Transactional
+  @Override
+  public boolean updateBlogInfo(RequestBlogInfoVO request) {
+
+	  int updateCount = this.userDao.updateBlogScrapNeighbor(request);
+	  return updateCount > 0;
+  }
+
+  @Transactional
+  @Override
+  public boolean updateBlogTitle(RequestBlogTitleVO request) {
+	  int updateCount = this.userDao.updateBlogTitle(request);
+	  
+	return updateCount > 0;
+  }
 
 
 
