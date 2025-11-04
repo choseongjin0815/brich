@@ -156,6 +156,8 @@ function loadChatMessages(page) {
     
     isLoading = true;
     
+    
+    
     $.get(startUrl + "/chat/room/" + chtRmId + "/messages", {
         page: page,
         size: pageSize
