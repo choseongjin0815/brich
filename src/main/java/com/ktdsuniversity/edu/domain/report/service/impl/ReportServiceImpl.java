@@ -2,6 +2,7 @@ package com.ktdsuniversity.edu.domain.report.service.impl;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import com.ktdsuniversity.edu.domain.report.service.ReportService;
 import com.ktdsuniversity.edu.domain.report.vo.ReportSearchVO;
 import com.ktdsuniversity.edu.domain.report.vo.request.RequestReportCreateVO;
 import com.ktdsuniversity.edu.domain.report.vo.response.ResponseMyReportInfoVO;
+import com.ktdsuniversity.edu.domain.report.vo.response.ResponseReportDetailVO;
 import com.ktdsuniversity.edu.domain.report.vo.response.ResponseReportVO;
 import com.ktdsuniversity.edu.domain.user.dao.UserDao;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
@@ -94,11 +96,17 @@ public class ReportServiceImpl implements ReportService {
 		return insertResult > 0;
 	}
 
+	/**
+	 * 지울거임 사용안함
+	 */
 	@Override
 	public List<ResponseMyReportInfoVO> selectListByUsrId(String usrId) {
 		return this.reportDao.selectReportListByUsrId(usrId);
 	}
 	
+	/**
+	 * 신고글 목록 조회 (페이징)
+	 */
 	@Override
 	public List<ResponseMyReportInfoVO> readMyReportListWithPaging(ReportSearchVO reportSearchVO) {
 	    // 1. 총 신고 건수 조회
@@ -106,11 +114,33 @@ public class ReportServiceImpl implements ReportService {
 	    
 	    // 2. 페이지 정보 설정
 	    reportSearchVO.setPageCount(reportCount);
+	    log.info("reportCount : {}", reportCount);
+	    
+	    if (reportCount == 0) {
+	        return new ArrayList<>();
+	    }
 	    
 	    // 3. 신고 목록 조회
 	    List<ResponseMyReportInfoVO> reportList = this.reportDao.selectMyReportListWithPaging(reportSearchVO);
 	    
 	    return reportList;
+	}
+
+	/**
+	 * 신고글 상세보기
+	 */
+	@Override
+	public ResponseReportDetailVO readReportDetailByReportId(String reportId) {
+		
+		ResponseReportDetailVO reportDetail = this.reportDao.selectReportDetailByReportId(reportId);
+		
+		//신고 정보에 파일 그룹 아이디가 비어있지 않으면 파일 정보 등록
+		if(reportDetail.getRptFlGrpId() != null && !reportDetail.getRptFlGrpId().isEmpty()) {
+            List<FileVO> files = fileDao.selectFilesByGroupId(reportDetail.getRptFlGrpId());
+            reportDetail.setFileList(files);
+		}
+		
+		return reportDetail;
 	}
 
 }

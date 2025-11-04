@@ -67,7 +67,6 @@
             </c:forEach>
         </c:otherwise>
     </c:choose>
-    
    
     <c:if test="${not empty reportList and reportSearchVO.pageCount > 1}">
         <div class="paginator-wrapper">

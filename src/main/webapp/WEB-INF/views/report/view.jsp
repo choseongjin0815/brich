@@ -22,38 +22,52 @@
     <div class="content-box">
         <div class="report-input">
             <label class="report-title">신고 제목</label>
-            <input class="report-input-tag ttl" id="rptTitle" name="rptTitle" disabled>
+            <input class="report-input-tag ttl view-detail" id="rptTitle" name="rptTitle" value="${report.rptTitle}" disabled>
         </div>
 
         <div class="report-input">
-            <label class="report-title">신고 대상</label> <input class="report-input-tag" id="rptedUsrId" name="rptedUsrId"
-                value="${reportInfo.targetName}" disabled> <input
+            <label class="report-title">신고 대상</label> 
+            <c:choose>
+	            <c:when test="${sessionScope.__LOGIN_USER__.autr eq 1004}">
+		            <input class="report-input-tag view-detail" id="rptedUsrId" name="rptedUsrId"
+		                value="${report.rptedUsrNm}" disabled>
+	             </c:when>
+	             <c:otherwise>
+	                 <input class="report-input-tag view-detail" id="rptedUsrId" name="rptedUsrId"
+                        value="${report.rptedUsrCmpny}" disabled>
+	             </c:otherwise>
+             </c:choose> <input
                 type="hidden" id="rptedUsrIdHidden" name="rptedUsrId"
-                value="${reportInfo.targetId}">
+                value="${report.rptedUsrId}">
         </div>
 
         <div class="report-input">
             <label class="report-title">신고 사유</label>
-            <select id="rptRsn" name="rptRsn">
-                <option value="">선택</option>
-                <c:forEach items="${reportInfo.rptCategory}" var="category">
-                    <option value="${category.cdId}">${category.cdNm}</option>
-                </c:forEach>
+            <select id="rptRsn" name="rptRsn" disabled>
+                    <option value="">${report.rptRsnNm}</option>
             </select>
         </div>
 
         <div class="report-input">
             <label class="report-title">신고 내용</label>
-            <textarea class="report-input-tag text" id="rptCn" name="rptCn"></textarea>
+            <textarea class="report-input-tag text view-detail" id="rptCn" name="rptCn" disabled>${report.rptCn}</textarea>
         </div>
 
         <div class="report-input">
-            <label class="report-title">자료 첨부 </label> <input type="file"
-                id="reportFiles" name="file" multiple>
+            <label class="report-title">첨부한 자료 </label>
+            <c:choose>
+            <c:when test="${report.fileList ne null}">
+	            <c:forEach items="${report.fileList}" var="fileItem">
+	               <a class="report-file" href="/file/${report.rptId}/${fileItem.flGrpId}/${fileItem.flId}">${fileItem.flNm}</a>
+	            </c:forEach>
+            </c:when>
+            <c:otherwise>
+                <div class="no-report-file">없음</div>
+            </c:otherwise>
+            </c:choose>
         </div>
         <div class="btn-flex">
-            <div class="btn-back">돌아가기</div>
-            <div class="btn-report">신고하기</div>
+            <div class="btn-back">신고 내역으로</div>
         </div>
     </div>
 

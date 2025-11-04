@@ -137,7 +137,7 @@ pageEncoding="UTF-8"%>
                         </c:otherwise>   
                     </c:choose>
                     <li><a href="">Help</a></li>
-                    <li><a href="/report/list">신고</a></li>
+                    <li><a class="menu-report-selected" href="/report/list">신고</a></li>
                   </ul>
                 </li>
             </c:if>

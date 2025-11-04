@@ -11,6 +11,7 @@ import com.ktdsuniversity.edu.domain.report.dao.ReportDao;
 import com.ktdsuniversity.edu.domain.report.vo.ReportSearchVO;
 import com.ktdsuniversity.edu.domain.report.vo.request.RequestReportCreateVO;
 import com.ktdsuniversity.edu.domain.report.vo.response.ResponseMyReportInfoVO;
+import com.ktdsuniversity.edu.domain.report.vo.response.ResponseReportDetailVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 @Repository
@@ -34,6 +35,9 @@ public class ReportDaoImpl extends SqlSessionDaoSupport implements ReportDao {
 		return super.getSqlSession().insert(this.NAME_SPACE + "insertReport", requestReportCreateVO);
 	}
 
+	/**
+	 * 지울 예정 사용안함
+	 */
 	@Override
 	public List<ResponseMyReportInfoVO> selectReportListByUsrId(String usrId) {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectReportListByUsrId", usrId);
@@ -47,5 +51,10 @@ public class ReportDaoImpl extends SqlSessionDaoSupport implements ReportDao {
 	@Override
 	public List<ResponseMyReportInfoVO> selectMyReportListWithPaging(ReportSearchVO reportSearchVO) {
 	    return super.getSqlSession().selectList(this.NAME_SPACE + "selectMyReportListWithPaging", reportSearchVO);
+	}
+
+	@Override
+	public ResponseReportDetailVO selectReportDetailByReportId(String reportId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectReportDetailByReportId", reportId);
 	}
 }

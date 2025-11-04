@@ -20,6 +20,7 @@ import com.ktdsuniversity.edu.domain.report.vo.ReportSearchVO;
 import com.ktdsuniversity.edu.domain.report.vo.ReportVO;
 import com.ktdsuniversity.edu.domain.report.vo.request.RequestReportCreateVO;
 import com.ktdsuniversity.edu.domain.report.vo.response.ResponseMyReportInfoVO;
+import com.ktdsuniversity.edu.domain.report.vo.response.ResponseReportDetailVO;
 import com.ktdsuniversity.edu.domain.report.vo.response.ResponseReportVO;
 import com.ktdsuniversity.edu.domain.user.service.UserService;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
@@ -67,7 +68,13 @@ public class ReportController {
      * 신고 상세 보기
      */
     @GetMapping("/view/{reportId}")
-    public String viewReportDetailPage(@SessionAttribute(name = "__LOGIN_USER__") UserVO loginUser) {
+    public String viewReportDetailPage(@SessionAttribute(name = "__LOGIN_USER__") UserVO loginUser
+    								 , @PathVariable String reportId
+    								 , Model model) {
+    	
+    	ResponseReportDetailVO reportDetail = this.reportService.readReportDetailByReportId(reportId);
+    	
+    	model.addAttribute("report", reportDetail);
     	
     	return "report/view";
     }

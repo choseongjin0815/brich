@@ -279,3 +279,30 @@ textarea {
 .paginator li:last-child a {
     font-weight: 600;
 }
+
+.report-file{
+	width: 200px;
+	display: block;
+	font-size: 12px;
+	&:hover {
+	   text-decoration: underline;
+	}
+	
+}
+
+.no-report-file {
+	border-radius: 5px;
+	width: 50px;
+	font-size: 14px;
+	display: flex;
+	background-color: #F3F3F3;
+	font-weight: 700;
+	padding: 5px 10px;
+	justify-content: center;
+	align-items: center;
+}
+
+.report-input-tag.view-detail {
+	color: #333;
+	background-color: #fff;
+}

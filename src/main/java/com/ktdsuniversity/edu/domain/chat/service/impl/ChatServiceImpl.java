@@ -90,7 +90,6 @@ public class ChatServiceImpl implements ChatService {
 				ChatMessageVO lastMessage = messages;
 				chatRoom.setLastMsgCn(lastMessage.getMsgCn());
 				chatRoom.setLastMsgUsrId(lastMessage.getUsrId());
-				log.info("lastMessageCrtDt : {}", lastMessage.getCrtDt());
 				chatRoom.setLastMsgCrtDt(TimeFormatUtil.format(lastMessage.getCrtDt()));
 				chatRoom.setCrtDt(lastMessage.getCrtDt());
 			}
@@ -188,7 +187,6 @@ public class ChatServiceImpl implements ChatService {
 	public SearchChatVO readAllCampaignList(SearchChatVO searchChatVO) {
 		// 1. 총 개수 조회
 		int totalCount = chatDao.selectAllCampaignListCount(searchChatVO);
-		log.info("TOTALCOUNT {}", totalCount);
 
 		// 2. 목록 조회
 		List<ResponseChatCampaignListVO> campaigns = chatDao.selectAllCampaignList(searchChatVO);

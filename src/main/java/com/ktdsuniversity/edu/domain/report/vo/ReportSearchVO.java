@@ -8,6 +8,7 @@ public class ReportSearchVO extends AbstractSearchVO {
 
 	public ReportSearchVO() {
 		super();
+		this.setListSize(10);
 		this.setPageCountInGroup(5);
 	}
 
