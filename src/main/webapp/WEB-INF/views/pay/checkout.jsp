@@ -94,13 +94,22 @@
         // @docs https://docs.tosspayments.com/sdk/v2/js#widgetsrequestpayment
         button.addEventListener("click", async function () {
           // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
+		  await fetch('/orders/prepay', {
+		    method: 'POST',
+		    headers: {'Content-Type':'application/json'},
+		    body: JSON.stringify({
+		      orderId: orderId,
+		      usrId: usrId,
+		      orderName: cdNm,
+		      price: price,
+		    })
+		  });          
           // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
           await widgets.requestPayment({
             orderId: orderId,
             orderName: cdNm ,
             successUrl: window.location.origin + "/success",
             failUrl: window.location.origin + "/fail",
-            usrId : usrId,
           });
         });
       }

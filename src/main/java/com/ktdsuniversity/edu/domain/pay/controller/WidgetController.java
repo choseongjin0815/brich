@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,7 +44,37 @@ public class WidgetController {
     	model.addAttribute("cdNm",cdNm);
     	model.addAttribute("usrId", loginUser.getUsrId());
     	return "pay/checkout";
-    }    
+    }
+    
+    @PostMapping("/orders/prepay")
+    public ResponseEntity<Void> prepay(@RequestBody String jsonBody) {
+        // orderId, usrId, orderName, amount 를 DB나 세션에 저장
+    	JSONParser parser = new JSONParser();
+    	JSONObject requestData;
+		try {
+			requestData = (JSONObject) parser.parse(jsonBody);
+			String clientOrderName = (String) requestData.get("orderName");
+			String clientUsrId = (String) requestData.get("usrId");
+			String clientOrderId = (String) requestData.get("orderId");
+			String clientPrice = String.valueOf(requestData.get("price"));
+			
+			// 숫자로 왔든 "10"으로 왔든 안전하게 문자열화됨
+
+			
+            logger.info("클라이언트가 보내준 값 (비굣값)");            
+            logger.info("clientOrderName : " + clientOrderName);        
+            logger.info("clientUsrId : " + clientUsrId); 
+            logger.info("clientOrderId : " + clientOrderId); 
+            logger.info("clientPrice : " + clientPrice); 
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    	
+    	
+        // 이후 /confirm에서 orderId로 조회해서 검증/사용
+        return ResponseEntity.ok().build();
+    }
+    
     
     @RequestMapping(value = "/confirm")
     public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
@@ -66,6 +97,7 @@ public class WidgetController {
             paymentKey = (String) requestData.get("paymentKey");
             orderId = (String) requestData.get("orderId");
             amount = (String) requestData.get("amount");
+            
             clientOrderName = (String) requestData.get("orderName");
             clientUsrId = (String) requestData.get("usrId");
             logger.info("결제 요청값 : " + requestData.toString());
@@ -123,10 +155,6 @@ public class WidgetController {
             logger.info("orderName : " + orderName);
             logger.info("paymentKey : " + paymentKey);
             logger.info("easyAmount : " + easyAmount);
-            logger.info("클라이언트가 보내준 값 (비굣값)");            
-            logger.info("clientOrderName : " + clientOrderName);        
-            logger.info("clientUsrId : " + clientUsrId); 
-
             
         }
 
