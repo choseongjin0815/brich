@@ -33,16 +33,22 @@ public interface UserService {
 	public UserVO readUserByLogId(String id);
 	public ResponseUserInfoVO readUserByUserId(String usrId);
 
+<<<<<<< HEAD
 	public ResponseUserSubscriptionInfoVO readSubscriptionInfoByUserId(String usrId);
 
 	public boolean updatePswrdByUsrId(RequestUserAccountPasswordVO requestUserAccountPasswordVO);
 
 	public boolean updateUserInfoByUsrId(RequestUserInfoModifyVO requestUserInfoModifyVO);
 
+=======
+>>>>>>> d4232c45d637ccfb95a9109c73c5af652040cfbd
 	public boolean updateBlogInfo(RequestBlogInfoVO request);
 
 	public boolean updateBlogTitle(RequestBlogTitleVO request);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> d4232c45d637ccfb95a9109c73c5af652040cfbd
 
 }

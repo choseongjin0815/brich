@@ -1,8 +1,11 @@
 package com.ktdsuniversity.edu.domain.user.dao;
 
+<<<<<<< HEAD
 
 import java.util.Map;
 
+=======
+>>>>>>> d4232c45d637ccfb95a9109c73c5af652040cfbd
 import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogInfoVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogTitleVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestModifyBlogAddrsVO;
@@ -39,6 +42,10 @@ public interface UserDao {
 
 	public UserVO selectUserByLogId(String id);
 	public UserVO selectUserByUserId(String usrId);
+
+	public int updateBlogScrapNeighbor(RequestBlogInfoVO request);
+
+	public int updateBlogTitle(RequestBlogTitleVO request);
 
 
 	public String selectUserPswrdByPswrd(Map<String, String> currentUserPswrd);
