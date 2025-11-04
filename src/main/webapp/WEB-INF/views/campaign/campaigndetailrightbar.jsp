@@ -24,6 +24,7 @@
                         </ul>
                     </div>
                   </div>
+                  
                   <div class="right-bar-bottom"> 여기는 통계 영역입니다 </div>
                   
                   

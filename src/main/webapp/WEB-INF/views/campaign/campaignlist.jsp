@@ -7,10 +7,8 @@ pageEncoding="UTF-8"%>
       <div class="campaign-main-block" data-cmpn-id="${campaignList.cmpnId}">
         <div class="campaign-thumbnail">
         <c:if test="${not empty campaignList.fileVoList[0].flPth}" > 
-              <div class="cmpn-image">
-                <img src="${campaignList.fileVoList[0].flPth}" 
-                     alt="${campaignList.fileVoList[0].flPth}"/>
-              </div>
+      <!-- <img class = "cmpn-image" src=" /file/1234/${campaignList.flGrpId}/${campaignList.fileVoList[0].flId}"/>  -->
+           <img class = "cmpn-image" src=" /file/1234/FG-20251104-000155/FL-20251104-000279"/>
         </c:if>
          <c:if test="${not empty sessionScope.__LOGIN_USER__ }" > 
               <c:set var="love" value="${campaignList.favYn eq 'Y'}" />
@@ -21,12 +19,8 @@ pageEncoding="UTF-8"%>
                   <div class="love-on ${love ? '' : 'display-none'}"></div>
                   <div class="love-off ${love ? 'display-none' : ''}"></div>
               </div>
-           </c:if>  
-           
-           
-           
+           </c:if>
         </div>
-
         <div class="campaign-one-title padding-10px">
           <c:if test="${not empty campaignList.parentArea}">
             [ ${campaignList.parentArea} ]

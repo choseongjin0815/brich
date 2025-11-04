@@ -194,6 +194,9 @@ ul {
   .text-align {
     text-align: center;
   }
+  .display-none{
+    display:none;
+  }
 
   .menu-selected {
     background-color: #E9EBF6;

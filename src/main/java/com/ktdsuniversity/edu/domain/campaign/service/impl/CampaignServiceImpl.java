@@ -32,6 +32,7 @@ import com.ktdsuniversity.edu.domain.file.dao.FileGroupDao;
 import com.ktdsuniversity.edu.domain.file.util.MultipartFileHandler;
 import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
 import com.ktdsuniversity.edu.domain.file.vo.FileVO;
+import com.ktdsuniversity.edu.domain.report.vo.request.RequestReportCreateVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 import com.ktdsuniversity.edu.global.config.WebSocketConfig;
 
@@ -344,30 +345,43 @@ public class CampaignServiceImpl implements CampaignService {
 	@Override
 	public int rePostSubmit(RequestPostSubmitVO requestPostSubmitVO) {
 		
+    	List<FileVO> uploadResult = this.multipartFileHandler.upload(requestPostSubmitVO.getFile());
+    	
+    	if(uploadResult != null && uploadResult.size() > 0) {
+			//1.File Group Insert
+			FileGroupVO fileGroupVO = new FileGroupVO();
+			fileGroupVO.setFlCnt(uploadResult != null ? uploadResult.size(): 0);
+			int insertGroupCount = this.fileGroupDao.insertFileGroup(fileGroupVO);
+			
+			//2.File Insert
+			
+			for(FileVO result : uploadResult) {
+				result.setFlGrpId(fileGroupVO.getFlGrpId());
+				int insertFileCount = this.fileDao.insertFile(result);
+			}
+			//게시글에 첨부되어있는 파일 그룹의 아이디가 무엇인지 알수있다.
+			requestPostSubmitVO.setPostFlGrpId(fileGroupVO.getFlGrpId());
+		}
+    	
+    	
 		int count = 0;
 		// 재재출 변경내용 업데이트
 		int postSubmitCount = campaignDao.updateRePostSubmit(requestPostSubmitVO);
 		
 		// 재재출 변경 제목 url 업데이트
-		
 		int postSubmitCnCount = campaignDao.updatePostSubmit(requestPostSubmitVO);
 		
 		// 포스트 상태 변경    반려 -> 검토중    6003 -> 6002
 		int postSttsCount = campaignDao.updateRePostSubmitStts(requestPostSubmitVO);
 		
 		
-		if (postSubmitCount == 1 && postSttsCount ==1 && postSubmitCnCount  ==1) {
+		if (postSubmitCount == 1 && postSttsCount == 1 && postSubmitCnCount  == 1) {
+			log.info("정상처리");
 			count = 1;
 		}
 		
 		return count;
 	}
-	
-
-
-
-
-
 
 	@Transactional
 	@Override

@@ -40,7 +40,7 @@
                     만료일이 지났음에도 구독중 상태라서 보이는 현상있음  -->
                     <div class="sub-info-bottom">
                         <div class="expire-date">만료일 : ${subInfo.expireDate}</div>
-                        <div class="go-expand-page">연장하기</div>
+                        <a href="/blgr/pay/subscribe"> <div class="go-expand-page">연장하기</div> </a> 
                     </div>
                 </div>
             </div>

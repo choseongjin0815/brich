@@ -8,11 +8,14 @@
     <meta charset="utf-8" />
     <link rel="icon" href="https://static.toss.im/icons/png/4x/icon-toss-logo.png" />
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <link type="text/css" rel="stylesheet" href="/css/layoutmenu.css" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>토스페이먼츠 샘플 프로젝트</title>
     <!-- 토스페이먼츠 SDK 추가 -->
     <script src="https://js.tosspayments.com/v2/standard"></script>
+    <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" src="/js/common/layoutmenu.js"></script>    
   </head>
 
   <body>
@@ -26,9 +29,6 @@
         <!-- 쿠폰 체크박스 -->
         <div style="padding-left: 25px">
           <div class="checkable typography--p">
-            <label for="coupon-box" class="checkable__label typography--regular"
-              ><input id="coupon-box" class="checkable__input" type="checkbox" aria-checked="true" /><span class="checkable__label-text">5,000원 쿠폰 적용</span></label
-            >
           </div>
         </div>
         <!-- 결제하기 버튼 -->
@@ -38,15 +38,20 @@
           </button>
         </div>
       </div>
+      <div id="payment-info" class="display-none" data-cdnm="${cdNm}" data-amount="${amount}" data-usrId="${usrId}"></div>
     <script>
       main();
 
       async function main() {
         const button = document.getElementById("payment-button");
-        const coupon = document.getElementById("coupon-box");
+        const price = parseInt(document.getElementById("payment-info").getAttribute('data-amount'));
+        const usrId = document.getElementById("payment-info").getAttribute('data-usrId');
+        const cdNm = document.getElementById("payment-info").getAttribute('data-cdnm');
+        const orderId = generateRandomString();
+        
         const amount = {
           currency: "KRW",
-          value: 6500,
+          value: price,
         };
         // ------  결제위젯 초기화 ------
         // TODO: clientKey는 개발자센터의 결제위젯 연동 키 > 클라이언트 키로 바꾸세요.
@@ -83,21 +88,7 @@
 
         // ------  주문서의 결제 금액이 변경되었을 경우 결제 금액 업데이트 ------
         // @docs https://docs.tosspayments.com/sdk/v2/js#widgetssetamount
-        coupon.addEventListener("change", async function () {
-          if (coupon.checked) {
-            await widgets.setAmount({
-              currency: "KRW",
-              value: amount.value - 5000,
-            });
 
-            return;
-          }
-
-          await widgets.setAmount({
-            currency: "KRW",
-            value: amount,
-          });
-        });
 
         // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
         // @docs https://docs.tosspayments.com/sdk/v2/js#widgetsrequestpayment
@@ -105,13 +96,11 @@
           // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
           // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
           await widgets.requestPayment({
-            orderId: generateRandomString(),
-            orderName: "토스 티셔츠 외 2건",
+            orderId: orderId,
+            orderName: cdNm ,
             successUrl: window.location.origin + "/success",
             failUrl: window.location.origin + "/fail",
-            customerEmail: "customer123@gmail.com",
-            customerName: "김토스",
-            customerMobilePhone: "01012341234",
+            usrId : usrId,
           });
         });
       }

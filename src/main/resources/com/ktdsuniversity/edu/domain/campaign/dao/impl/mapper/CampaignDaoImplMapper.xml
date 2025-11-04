@@ -501,6 +501,16 @@
                   , FG.FL_GRP_ID 
                   , FL.FL_NM                             AS FL_NM
                   , FL.FL_PTH                           AS FL_PTH
+                  , FL.FL_ID
+                  , CASE WHEN EXISTS (SELECT 1
+                                        FROM FAV_CMPN FC
+                                       WHERE FC.CMPN_ID    = CMPN.CMPN_ID
+                                        <if test="blgId != null and blgId != ''">
+                                         AND FC.BLG_USR_ID = #{blgId}
+                                        </if> 
+                                         AND FC.DLT_YN     = 'N'
+                                      ) THEN 'Y' ELSE 'N'
+                    END                  AS FAVYN                  
                   , CASE WHEN EXISTS (SELECT 1
                                         FROM CMPN_PST_ADPT 
                                        WHERE CMPN_ID = #{campaignId} 
@@ -575,6 +585,7 @@
           , DLT_YN 
       FROM CM_CD
      WHERE PRNT_CD_ID= '3000'
+     ORDER BY SRT
     </select>
     
      
@@ -614,6 +625,8 @@ ORDER BY RCRT_END_DT ASC
                            ofType="com.ktdsuniversity.edu.domain.file.vo.FileVO">
                            <result property="flNm" column="FL_NM"/>
                            <result property="flPth" column="FL_PTH"/>
+                           <result property="flId" column="FL_ID"/>
+                           
                </collection>               
     </resultMap>
     
@@ -973,7 +986,8 @@ ORDER BY RCRT_END_DT ASC
 	<update id="updateRePostSubmit"
 			parameterType = "com.ktdsuniversity.edu.domain.campaign.vo.request.RequestPostSubmitVO">
 			UPDATE POST_RTRN_HIST
-			   SET POST_SUBMIT_CHG_CN = '테스트'
+			   SET POST_SUBMIT_CHG_CN = #{postSubmitChgCn}
+			     , SUBMIT_FL_GRP_ID = #{postFlGrpId}
 			 WHERE POST_RTRN_HIST_ID = (   SELECT POST_RTRN_HIST_ID
 			                                 FROM (SELECT POST_RTRN_HIST_ID
 			                                         FROM POST_RTRN_HIST

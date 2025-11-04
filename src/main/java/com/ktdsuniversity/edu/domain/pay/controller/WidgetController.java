@@ -1,4 +1,4 @@
-package com.ktdsuniversity.edu.global.controller;
+package com.ktdsuniversity.edu.domain.pay.controller;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,36 +18,56 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttribute;
+
+import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class WidgetController {
-
+	
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     
-    @GetMapping("/blgr/pay")
-    public String pay() {
-      return "pay/checkout";
+    @GetMapping("/blgr/pay/{cdId}")
+    public String pay(@PathVariable String cdId, Model model,
+			 @SessionAttribute(value = "__LOGIN_USER__", required = false) UserVO loginUser ) {
+    	
+    	String amount = "10";
+    	String cdNm="상품";
+    	model.addAttribute("amount", amount);
+    	model.addAttribute("cdNm",cdNm);
+    	model.addAttribute("usrId", loginUser.getUsrId());
+    	return "pay/checkout";
     }    
     
     @RequestMapping(value = "/confirm")
     public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
     	
         JSONParser parser = new JSONParser();
+        // api 응답값
         String orderId;
         String amount;
         String paymentKey;
+        JSONObject easyPay;
+        Long easyAmount;
+        String orderName;  
+        
+        // 클라이언트가 보내준 값 (비굣값)
+        String clientOrderName;
+        String clientUsrId;
         try {
             // 클라이언트에서 받은 JSON 요청 바디입니다.
             JSONObject requestData = (JSONObject) parser.parse(jsonBody);
             paymentKey = (String) requestData.get("paymentKey");
             orderId = (String) requestData.get("orderId");
             amount = (String) requestData.get("amount");
-            
+            clientOrderName = (String) requestData.get("orderName");
+            clientUsrId = (String) requestData.get("usrId");
             logger.info("결제 요청값 : " + requestData.toString());
         } catch (ParseException e) {
             throw new RuntimeException(e);
@@ -84,12 +104,33 @@ public class WidgetController {
 
         int code = connection.getResponseCode();
         boolean isSuccess = code == 200;
-
+        
         InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
 
         // TODO: 결제 성공 및 실패 비즈니스 로직을 구현하세요.
         Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
+        
+        if (code == 200) {
+        	orderId      = (String) jsonObject.get("orderId");
+            orderName    = (String) jsonObject.get("orderName");
+        	paymentKey   = (String) jsonObject.get("paymentKey");
+        	easyPay = (JSONObject) jsonObject.get("easyPay");
+            easyAmount    = (easyPay != null && easyPay.get("amount") != null)
+                               ? ((Number) easyPay.get("amount")).longValue() : null;
+            
+            logger.info("orderId : " + orderId);
+            logger.info("orderName : " + orderName);
+            logger.info("paymentKey : " + paymentKey);
+            logger.info("easyAmount : " + easyAmount);
+            logger.info("클라이언트가 보내준 값 (비굣값)");            
+            logger.info("clientOrderName : " + clientOrderName);        
+            logger.info("clientUsrId : " + clientUsrId); 
+
+            
+        }
+
+        
         responseStream.close();
         
         logger.info("응답값  [tosspay] raw response: {}", jsonObject.toJSONString());
@@ -128,7 +169,7 @@ public class WidgetController {
         model.addAttribute("code", failCode);
         model.addAttribute("message", failMessage);
 
-        return "/fail";
+        return "/pay/fail";
     }
 }
 
