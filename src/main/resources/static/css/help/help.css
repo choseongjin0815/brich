@@ -53,5 +53,49 @@
     &:hover {
        transform: scale(1.05)
     }
-	
+}
+.list-head.inqr {
+	margin-top: 15px;
+}
+
+
+.f4.detail span{
+    border-radius: 5px;
+    color: #fff;
+    background-color: #7B61FF;
+    padding: 5px 10px;
+    cursor: pointer;
+    &:hover {
+       transform: scale(1.05);
+    }
+}
+
+.list-item.white.inqr {
+	padding: 10px 20px; 
+}
+
+
+.f1.inqr {
+	flex-basis: 15%;
+}
+.f2.inqr,
+.f3.inqr {
+	flex-basis: 20%;
+}
+
+.seperate {
+	border: 0;
+	height: 1px;
+	background-color: #11111333;
+}
+.report-input-tag.answer {
+	height: 100px;
+}
+
+.require-mark.ctg {
+	font-size: 14px;
+	padding: 0;
+}
+.report-input-tag {
+	background-color: #fff;
 }

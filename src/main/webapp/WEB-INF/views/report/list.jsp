@@ -26,7 +26,7 @@
         <div class="f2">신고 제목</div>
         <div class="f3">신고 대상</div>
         <div class="f4">처리 여부</div>
-        <div class="f5">신고내용 보기</div>    
+        <div class="f5">신고 내용 보기</div>    
     </div>
     
     <c:choose>
@@ -62,7 +62,7 @@
                             </c:otherwise>
                         </c:choose>
                     </div>
-                    <div class="f5 detail" data-report-id="${report.rptId}">내용 보기</div>
+                    <div class="f5 detail" data-report-id="${report.rptId}"><span>내용 보기</span></div>
                 </div>
             </c:forEach>
         </c:otherwise>

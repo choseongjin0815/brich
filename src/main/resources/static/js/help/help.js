@@ -3,6 +3,12 @@ $().ready(function() {
     $(".inqr-list").on("click", function() {
         window.location.href = "/help/inqr/list";
     });
+    
+    // 문의 내용 보기 버튼 클릭
+     $(".f4.detail").on("click", function() {
+         var inqrId = $(this).data("inqr-id");
+         window.location.href = "/help/inqr/view/" + inqrId;
+     });
     //문의 작성으로 이동
     $(".inqr-write").on("click", function() {
         window.location.href = "/help/inqr/write"; 

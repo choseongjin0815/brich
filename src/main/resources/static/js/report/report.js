@@ -6,7 +6,7 @@ $().ready(function() {
     
 
        // 신고 내용 보기 버튼 클릭
-    $(".detail").on("click", function() {
+    $(".f5.detail").on("click", function() {
         var reportId = $(this).data("report-id");
         window.location.href = "/report/view/" + reportId;
     });

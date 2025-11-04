@@ -180,6 +180,7 @@ textarea {
 .f3,
 .f4,
 .f5 {
+	flex-grow: 1;
 	color: #6E6893;
 	min-width: 100px;
 	display: flex;
@@ -187,11 +188,12 @@ textarea {
 	align-items: center;
 }
 
-.f5.detail {
+.f5.detail span{
+	cursor: pointer;
 	border-radius: 5px;
 	color: #fff;
 	background-color: #7B61FF;
-	padding: 4px 0;
+    padding: 5px 10px;
 	
 	&:hover {
 	   transform: scale(1.05);
@@ -226,8 +228,6 @@ textarea {
     color: #D30000;
     background-color: #FFE0E0;
 }
-
-/* 기존 CSS 아래에 추가 */
 
 /* 페이지네이터 래퍼 - 중앙 정렬 */
 .paginator-wrapper {
@@ -281,7 +281,7 @@ textarea {
 }
 
 .report-file{
-	width: 200px;
+	width: 300px;
 	display: block;
 	font-size: 12px;
 	&:hover {

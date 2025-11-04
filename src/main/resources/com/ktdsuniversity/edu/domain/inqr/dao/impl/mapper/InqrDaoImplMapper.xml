@@ -42,4 +42,42 @@
 	   	, #{inqrUsrId})
      </insert>
      
+     <select id="selectMyInqrCount"
+             parameterType="com.ktdsuniversity.edu.domain.inqr.vo.InqrSearchVO"
+             resultType="_int">
+         SELECT COUNT(1)
+		   FROM INQR 
+		  WHERE INQR_USR_ID = #{inqrUsrId}
+      </select>
+      
+      <select id="selectMyInqrListWithPaging"
+              parameterType="com.ktdsuniversity.edu.domain.inqr.vo.InqrSearchVO"
+              resultType="com.ktdsuniversity.edu.domain.inqr.vo.InqrVO">
+          <include refid="Common.paginationHeader" />
+          SELECT INQR_ID 
+			   , CRT_DT 
+			   , INQR_TITLE 
+			   , ANSR_USR_ID 
+			FROM INQR
+		   WHERE INQR_USR_ID = #{inqrUsrId}
+		   ORDER BY CRT_DT DESC
+		  <include refid="Common.paginationFooter" />
+      </select>
+      
+      <select id="selectInqrDetailByInqrId"
+              parameterType="string"
+              resultType="com.ktdsuniversity.edu.domain.inqr.vo.response.ResponseInqrVO">
+          SELECT I.INQR_TITLE 
+			   , I.INQR_CN 
+			   , CC.CD_NM AS inqrCtgNm
+	           , I.ANSR_CN 
+			   , I.INQR_FL_GRP_ID 
+			   , I.ANSR_FL_GRP_ID 
+			FROM INQR I
+		   INNER JOIN CM_CD CC
+			  ON I.INQR_CTG = CC.CD_ID 
+		   WHERE I.INQR_ID = #{inqrId}
+      </select>
+      
+     
 </mapper>
