@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import com.ktdsuniversity.edu.domain.blog.controller.SearchBlogController;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogInfoVO;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogTitleVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignwriteVO;
 import com.ktdsuniversity.edu.domain.file.dao.FileDao;
@@ -327,6 +329,24 @@ public class UserServiceImpl implements UserService {
 		}
 		return true;
 	 }
+
+
+  @Transactional
+  @Override
+  public boolean updateBlogInfo(RequestBlogInfoVO request) {
+
+	  int updateCount = this.userDao.updateBlogScrapNeighbor(request);
+	  return updateCount > 0;
+  }
+
+  @Transactional
+  @Override
+  public boolean updateBlogTitle(RequestBlogTitleVO request) {
+	  int updateCount = this.userDao.updateBlogTitle(request);
+	  
+	return updateCount > 0;
+  }
+
 
 
 

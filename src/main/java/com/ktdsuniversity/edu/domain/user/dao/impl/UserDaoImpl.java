@@ -7,6 +7,8 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogInfoVO;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogTitleVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestModifyBlogAddrsVO;
 import com.ktdsuniversity.edu.domain.user.dao.UserDao;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
@@ -18,6 +20,7 @@ import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserResetPasswordVO;
 
 @Repository
 public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
+	
 
     private final String NAME_SPACE = "com.ktdsuniversity.edu.domain.user.dao.impl.UserDaoImpl.";
 
@@ -105,6 +108,15 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
 	@Override
 	public String selectSaltByUsrId(String usrId) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectSaltByUsrId", usrId);
+	}
+	@Override
+	public int updateBlogScrapNeighbor(RequestBlogInfoVO request) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateBlogScrapNeighborById", request);
+	}
+
+	@Override
+	public int updateBlogTitle(RequestBlogTitleVO request) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateBlogTitle", request);
 	}
 
 
