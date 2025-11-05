@@ -3,7 +3,6 @@ var currentFilter = 'all'; // 'all', 'unread'
 var currentPage = 0;
 var auth = 0;
 var cmpnId = "";
-
 $().ready(function() {
     auth = $(".content-box").data("auth");
     cmpnId = $(".chat-main").data("cmpn");
@@ -68,6 +67,11 @@ $().ready(function() {
         var parent = $(this).closest(".chatroom-content-item");
         parent.find(".report-btn, .leave-chat-btn").show();
     });
+    
+    $(document).on("click", ".report-btn", function() {
+        console.log("ddd");
+        window.location.href = "/report/write/" + $(this).closest(".chatroom-content-item").data("target-id");
+    })
 
     // 메뉴 외부 클릭시 메뉴 숨김
     $(document).on("click", function() {
@@ -181,7 +185,8 @@ function loadChatRoomList(filter, pageNo) {
                     .replace("#lastmessage#", lastMsg)
                     .replace("#latesttime#", item.lastMsgCrtDt || "")
                     .replace("#unreadcount#", item.unreadCnt || 0)
-                    .replace("#chatroomid#", item.chtRmId);
+                    .replace("#chatroomid#", item.chtRmId)
+                    .replace("#targetid#", item.targetId);
                 
                 if (auth === 1004) {
                     template = template.replace("#blogername#", item.nm || "");

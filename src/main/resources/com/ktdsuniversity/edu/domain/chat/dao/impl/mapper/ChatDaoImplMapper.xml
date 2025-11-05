@@ -20,13 +20,13 @@
 			          AND CP2.USR_ID != #{usrId}
 			          AND CP2.LFT_YN = 'N'
 			          AND ROWNUM = 1) AS nm
-			     ,  (SELECT U.LOG_ID 
+			     ,  (SELECT U.USR_ID 
 			         FROM CHT_PRTCPNT CP2
 			        INNER JOIN USR U ON CP2.USR_ID = U.USR_ID
 			        WHERE CP2.CHT_RM_ID = CR.CHT_RM_ID
 			          AND CP2.USR_ID != #{usrId}
 			          AND CP2.LFT_YN = 'N'
-			          AND ROWNUM = 1) AS logId
+			          AND ROWNUM = 1) AS targetId
 			  FROM CHT_PRTCPNT CP
 			 INNER JOIN CHT_RM CR ON CP.CHT_RM_ID = CR.CHT_RM_ID
 			 INNER JOIN CMPN C ON CR.CMPN_ID = C.CMPN_ID
@@ -70,6 +70,7 @@
                  , CD.CD_NM AS cdNm
                  , U.NM AS nm
                  , U.LOG_ID AS logId
+                 , CP2.USR_ID AS targetId
               FROM CHT_RM CR
              INNER JOIN CMPN C 
                 ON CR.CMPN_ID = C.CMPN_ID

@@ -6,6 +6,7 @@ var myCmpny = null;
 var auth = null;
 var startUrl = null;
 var targetId = null;
+var cmpnId = null;
 
 // 페이징 관련 변수
 var currentPage = 0;
@@ -21,6 +22,7 @@ $().ready(function() {
     myCmpny = $(".content-box").data("cmpny");
     startUrl = auth === 1004 ? '/adv' : '/blgr';
     chtRmId = $(".chat-main").data("chtrm-id");
+    cmpnId = $(".content-title-text").data("cmpn-id");
 
     console.log("채팅방 ID:", chtRmId);
     console.log("내 ID:", myId);
@@ -77,6 +79,11 @@ $().ready(function() {
         disconnect();
     });
 
+    //캠페인 상세로 이동
+    $(".content-title-text").on("click", function() {
+        window.location.href = "/campaigndetail/" + cmpnId;
+    });
+    
     // 스크롤 이벤트 초기화
     initScrollEvent();
 
@@ -167,7 +174,7 @@ function loadChatMessages(page) {
             hasMoreMessages = response.body.hasNext;
             
             var chatArea = $(".message-container");
-            
+            /*
             if (page === 0) {
                 // 첫 로딩: 기존 메시지 삭제
                 chatArea.empty();
@@ -182,7 +189,72 @@ function loadChatMessages(page) {
                 requestAnimationFrame(function() {
                     scrollToBottom();
                 });
-            } else {
+            } */
+            
+            //메시지 로딩 시 스크롤 상단 찍었다가 아래로 내려오는 현상 수정
+            if (page === 0) {
+                var chatArea = $(".message-container");
+                chatArea.css('visibility', 'hidden');
+                chatArea.empty();
+                
+                messages.forEach(function(message) {
+                    var messageHtml = createMessageHtml(message);
+                    chatArea.append(messageHtml);
+                });
+                
+                // 이미지 찾기
+                var images = chatArea.find("img");
+                
+                function showChat() {
+                    chatArea.scrollTop(chatArea[0].scrollHeight);
+                    chatArea.css('visibility', 'visible');
+                }
+                
+                if (images.length === 0) {
+                    //이미지 없으면 즉시 표시
+                    showChat();
+                } else {
+                    //이미지 있으면 로딩 대기
+                    var loadedCount = 0;
+                    var totalImages = images.length;
+                    var hasShown = false;
+                    
+                    images.each(function() {
+                        var img = this;
+                        
+                        if (img.complete) {
+                            // 이미 로드됨
+                            loadedCount++;
+                        } else {
+                            // 로딩 중
+                            $(img).on("load error", function() {
+                                loadedCount++;
+                                checkComplete();
+                            });
+                        }
+                    });
+                    
+                    //됐는지 체크 함수
+                    function checkComplete() {
+                        if (!hasShown && loadedCount === totalImages) {
+                            hasShown = true;
+                            showChat();
+                        }
+                    }
+                    
+                    //이미 다 로드된 경우
+                    checkComplete();
+                    
+                    //안전장치: 2초 넘으면 강제 표시
+                    setTimeout(function() {
+                        if (!hasShown) {
+                            hasShown = true;
+                            showChat();
+                        }
+                    }, 2000);
+                }
+            }
+            else {
                 // 추가 로딩: 기존 메시지 위에 추가
                 var oldScrollHeight = chatArea[0].scrollHeight;
                 
@@ -214,8 +286,8 @@ function initScrollEvent() {
     var container = $(".message-container");
     
     container.on("scroll", function() {
-        // 스크롤이 맨 위에서 50px 이내면 이전 메시지 로드함
-        if (container.scrollTop() < 50 && !isLoading && hasMoreMessages) {
+        // 스크롤이 맨 위에서 20px 이내면 이전 메시지 로드함
+        if (container.scrollTop() < 20 && !isLoading && hasMoreMessages) {
             console.log("이전 메시지 로드...");
             loadChatMessages(currentPage + 1);
         }
@@ -465,4 +537,3 @@ function formatChatDate(isoString) {
 
     return `${y}.${two(m)}.${two(d)}`;
 }
-

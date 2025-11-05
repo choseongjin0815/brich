@@ -17,6 +17,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.BulkOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +62,9 @@ public class ChatServiceImpl implements ChatService {
 	@Autowired
 	private FileDao fileDao;
 
+	@Autowired
+	private MongoTemplate mongoTemplate;
+
 	@Override
 	public SearchChatVO readAllChatRoomList(SearchChatVO searchChatVO) {
 		String auth = searchChatVO.getAuth();
@@ -67,7 +75,6 @@ public class ChatServiceImpl implements ChatService {
 
 		if (!auth.equals("1004")) {
 			// 블로거용
-			log.info("{}", System.currentTimeMillis());
 			totalCount = chatDao.selectUserChatRoomsCount(searchChatVO);
 			chatRooms = chatDao.selectUserChatRooms(searchChatVO);
 			log.info("{}", System.currentTimeMillis());
@@ -84,7 +91,8 @@ public class ChatServiceImpl implements ChatService {
 		for (ResponseChatRoomInfoVO chatRoom : chatRooms) {
 			// 최신 메시지 조회
 
-			ChatMessageVO messages = chatMessageRepository.findTop1ByChtRmIdAndDltYnOrderByCrtDtDesc(chatRoom.getChtRmId(), "N");
+			ChatMessageVO messages = chatMessageRepository
+					.findTop1ByChtRmIdAndDltYnOrderByCrtDtDesc(chatRoom.getChtRmId(), "N");
 			log.info("messages: {}", messages);
 			if (messages != null) {
 				ChatMessageVO lastMessage = messages;
@@ -100,12 +108,12 @@ public class ChatServiceImpl implements ChatService {
 			chatRoom.setUnreadCnt((int) unreadCount);
 			log.info("chatroomCrtDt {}", chatRoom.getCrtDt());
 		}
-		//최근 메시지 온 순서대로 정렬
-		//채팅방이 생성되었을때 메시지가 하나도 없기 때문에 에러나던 문제 수정함
-		 chatRooms.sort(Comparator.comparing(
-			        ResponseChatRoomInfoVO::getCrtDt, 
-			        Comparator.nullsFirst(Comparator.naturalOrder())).reversed());
-		
+		// 최근 메시지 온 순서대로 정렬
+		// 채팅방이 생성되었을때 메시지가 하나도 없기 때문에 에러나던 문제 수정함
+		chatRooms.sort(
+				Comparator.comparing(ResponseChatRoomInfoVO::getCrtDt, Comparator.nullsFirst(Comparator.naturalOrder()))
+						.reversed());
+
 		// 4. 결과 목록을 SearchChatVO에 설정
 		searchChatVO.setChatRoomList(chatRooms);
 
@@ -144,7 +152,8 @@ public class ChatServiceImpl implements ChatService {
 
 		for (ResponseChatRoomInfoVO chatRoom : allChatRooms) {
 			// 최신 메시지 조회
-			ChatMessageVO messages = chatMessageRepository.findTop1ByChtRmIdAndDltYnOrderByCrtDtDesc(chatRoom.getChtRmId(), "N");
+			ChatMessageVO messages = chatMessageRepository
+					.findTop1ByChtRmIdAndDltYnOrderByCrtDtDesc(chatRoom.getChtRmId(), "N");
 
 			if (messages != null) {
 				ChatMessageVO lastMessage = messages;
@@ -164,8 +173,7 @@ public class ChatServiceImpl implements ChatService {
 				unreadRooms.add(chatRoom);
 			}
 		}
-			unreadRooms.sort(Comparator.comparing(ResponseChatRoomInfoVO::getCrtDt).reversed());
-		
+		unreadRooms.sort(Comparator.comparing(ResponseChatRoomInfoVO::getCrtDt).reversed());
 
 		// 3. 필터링된 결과에서 페이징 적용
 		int startIndex = searchChatVO.getPageNo() * searchChatVO.getListSize();
@@ -240,40 +248,40 @@ public class ChatServiceImpl implements ChatService {
 		int result = chatDao.updateChatRoomLeave(participant);
 		return result > 0;
 	}
-	
+
 	@Transactional
 	@Override
 	public Map<String, Object> readChatMessageListPaged(String chtRmId, String usrId, int page, int size) {
-	    // 페이징 설정 (최신순 내림차순)
-	    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "crtDt"));
-	    
-	    // 메시지 조회
-	    Slice<ChatMessageVO> messageSlice = chatMessageRepository
-	        .findByChtRmIdAndDltYnOrderByCrtDtDesc(chtRmId, "N", pageable);
-	    
-	    //Reverse되게 하기 위해서 List로
-	    List<ChatMessageVO> messages = new ArrayList<>(messageSlice.getContent());
-	    
-	    // 파일이 있다면 파일 정보 추가
-	    for (ChatMessageVO message : messages) {
-	        if (message.getAttchGrpId() != null && !message.getAttchGrpId().isEmpty()) {
-	            List<FileVO> files = fileDao.selectFilesByGroupId(message.getAttchGrpId());
-	            message.setFileList(files);
-	        }
-	    }
-	    
-	    Collections.reverse(messages);
-	    
-	    // 첫 페이지일 때만 읽음 처리
-	    if (page == 0) {
-	        updateMessagesAsRead(chtRmId, usrId);
-	    }
-	    
-	    Map<String, Object> result = new HashMap<>();
-	    result.put("messages", messages);
-	    result.put("hasNext", messageSlice.hasNext());
-	    
-	    return result;
+		// 페이징 설정 (최신순 내림차순)
+		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "crtDt"));
+
+		// 메시지 조회
+		Slice<ChatMessageVO> messageSlice = chatMessageRepository.findByChtRmIdAndDltYnOrderByCrtDtDesc(chtRmId, "N",
+				pageable);
+
+		// Reverse되게 하기 위해서 List로
+		List<ChatMessageVO> messages = new ArrayList<>(messageSlice.getContent());
+
+		// 파일이 있다면 파일 정보 추가
+		for (ChatMessageVO message : messages) {
+			if (message.getAttchGrpId() != null && !message.getAttchGrpId().isEmpty()) {
+				List<FileVO> files = fileDao.selectFilesByGroupId(message.getAttchGrpId());
+				message.setFileList(files);
+			}
+		}
+
+		Collections.reverse(messages);
+
+		// 첫 페이지일 때만 읽음 처리
+		if (page == 0) {
+			updateMessagesAsRead(chtRmId, usrId);
+		}
+
+		Map<String, Object> result = new HashMap<>();
+		result.put("messages", messages);
+		result.put("hasNext", messageSlice.hasNext());
+
+		return result;
 	}
 
 	@Transactional
@@ -337,22 +345,38 @@ public class ChatServiceImpl implements ChatService {
 		List<ChatMessageVO> unreadMessages = chatMessageRepository.findUnreadMessages(chtRmId, usrId);
 		String now = DateTimeFormatter.ISO_INSTANT.format(Instant.now());
 
-		// 읽음 처리
-		for (ChatMessageVO msg : unreadMessages) {
-			msg.setRdYn("Y");
-			msg.setUpdtDt(now);
-			chatMessageRepository.save(msg);
+//		// 읽음 처리
+//		for (ChatMessageVO msg : unreadMessages) {
+//			msg.setRdYn("Y");
+//			msg.setUpdtDt(now);
+//			chatMessageRepository.save(msg);
+//		}
+		//Bulk operation으로 N+1해소
+		// 1번의 조회 - n개의 데이터 
+		// n번만큼 업데이트 - n번 
+		// 업데이트를 한번의 실행으로 끝냄
+		if (unreadMessages.isEmpty()) {
+			return;
 		}
+		BulkOperations bulkOps = mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, ChatMessageVO.class);
+
+		for (ChatMessageVO msg : unreadMessages) {
+			Query query = new Query(Criteria.where("_id").is(msg.getChtMsgId()));
+			Update update = new Update().set("rdYn", "Y").set("updtDt", now);
+			bulkOps.updateOne(query, update);
+		}
+
+		bulkOps.execute();
 	}
 
 	@Override
 	public CampaignVO readCampaignByChtRmId(String chtRmId) {
-		
+
 		CampaignVO campaignVO = this.chatDao.selectCampaignByChtRmId(chtRmId);
-		if(campaignVO == null) {
+		if (campaignVO == null) {
 			throw new IllegalArgumentException(chtRmId + "에 해당하는 캠페인이 없습니다.");
 		}
-		
+
 		return campaignVO;
 	}
 

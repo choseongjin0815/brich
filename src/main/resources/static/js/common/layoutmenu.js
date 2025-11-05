@@ -31,6 +31,19 @@ $(document).ready(function(){
   if ( here.includes('favcampaign')) {
       $('.menu-my-fav-campaign-selected').addClass('menu-selected')
   }
+  
+  if ( here.includes("chat")) {
+    $('.menu-message-selected').addClass('menu-selected');
+  }
+  
+  if ( here.includes("help")) {
+      $('.menu-help-selected').addClass('menu-selected');
+    }
+    
+  if ( here.includes("account")) {
+      $('.menu-account-selected').addClass('menu-selected');
+  }
+  
   if ( here[0].includes('report')) {
       $('.menu-report-selected').addClass('menu-selected');
   }

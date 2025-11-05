@@ -90,7 +90,7 @@ pageEncoding="UTF-8"%>
 	                      </ul>
 	                </li>
                     <li><a href="/blog/${sessionScope.__LOGIN_USER__.usrId}/manage">블로그 관리</a></li>
-                    <li><a href="/blgr/chat/rooms">메세지</a></li>
+                    <li class="menu-message-selected"><a href="/blgr/chat/rooms">메세지</a></li>
                   </ul>
                 </li>
               </c:if>
@@ -103,7 +103,7 @@ pageEncoding="UTF-8"%>
                     <li class="menu-campaignmain-selected"><a href="/campaignmain">캠페인</a></li>
                     <li><a href="/adv/campaign/list">MY 캠페인</a></li> 
                     <li><a href="/adv/campaign/write">캠페인 만들기</a></li>
-                    <li><a href="/adv/chat/campaigns">메세지</a></li>
+                    <li class="menu-message-selected"><a href="/adv/chat/campaigns">메세지</a></li>
                   </ul>
                 </li>
               </c:if>
@@ -131,14 +131,14 @@ pageEncoding="UTF-8"%>
                   <ul class="menu-content">
                     <c:choose>
                         <c:when test="${sessionScope.__LOGIN_USER__.autr eq 1004}">
-                            <li><a href="/adv/account/info">계정 관리</a></li>
+                            <li class="menu-account-selected"><a href="/adv/account/info">계정 관리</a></li>
                         </c:when>
                         <c:otherwise> 
-                            <li><a href="/blgr/account/info">계정 관리</a></li>
+                            <li class="menu-account-selected"><a href="/blgr/account/info">계정 관리</a></li>
                         </c:otherwise>   
                     </c:choose>
-                    <li><a href="/help/inqr/list">Help</a></li>
-                    <li><a class="menu-report-selected" href="/report/list">신고</a></li>
+                    <li class="menu-help-selected"><a href="/help/inqr/list">Help</a></li>
+                    <li class="menu-report-selected"><a href="/report/list">신고</a></li>
                   </ul>
                 </li>
             </c:if>
