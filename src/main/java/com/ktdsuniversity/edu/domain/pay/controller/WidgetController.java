@@ -14,6 +14,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +27,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.ktdsuniversity.edu.domain.pay.service.PayService;
+import com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
+import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -33,17 +38,29 @@ import jakarta.servlet.http.HttpServletRequest;
 public class WidgetController {
 	
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Value("${app.api.key}")
+    String widgetSecretKey;
+    
+	@Autowired
+    private PayService payService;
     
     @GetMapping("/blgr/pay/{cdId}")
     public String pay(@PathVariable String cdId, Model model,
 			 @SessionAttribute(value = "__LOGIN_USER__", required = false) UserVO loginUser ) {
     	
-    	String amount = "10";
-    	String cdNm="상품";
+    	// 결제 cdId 로 클라이언트에서 전달할 정보 조회하기
+    	CommonCodeVO commonCodeVO = this.payService.payInfoService(cdId);
+    	
+    	String amount = commonCodeVO.getValue1();   // 가격
+    	String cdNm= commonCodeVO.getCdNm();		// 상품명
     	model.addAttribute("amount", amount);
     	model.addAttribute("cdNm",cdNm);
+    	model.addAttribute("cdId",cdId);
     	model.addAttribute("usrId", loginUser.getUsrId());
     	return "pay/checkout";
+    	
+    	//cmpnid 광고주는 이거 넣어주기
     }
     
     @PostMapping("/orders/prepay")
@@ -54,18 +71,31 @@ public class WidgetController {
 		try {
 			requestData = (JSONObject) parser.parse(jsonBody);
 			String clientOrderName = (String) requestData.get("orderName");
+			String clientCdId = (String) requestData.get("cdId");
 			String clientUsrId = (String) requestData.get("usrId");
 			String clientOrderId = (String) requestData.get("orderId");
+			String clientCmpnId = (String) requestData.get("cmpnid");
 			String clientPrice = String.valueOf(requestData.get("price"));
 			
-			// 숫자로 왔든 "10"으로 왔든 안전하게 문자열화됨
-
-			
-            logger.info("클라이언트가 보내준 값 (비굣값)");            
-            logger.info("clientOrderName : " + clientOrderName);        
-            logger.info("clientUsrId : " + clientUsrId); 
-            logger.info("clientOrderId : " + clientOrderId); 
-            logger.info("clientPrice : " + clientPrice); 
+            logger.info("-----클라이언트가 보내준 값 ----- : " + 
+            			" clientOrderName : " + clientOrderName +
+            			" clientUsrId : " + clientUsrId +
+            			" clientOrderId : " + clientOrderId +
+            			" clientCdId : " + clientCdId +
+            			" clientCmpnid: " + clientCmpnId +
+            			" clientPrice : " + clientPrice);
+            
+            // 결제 전 정보 db에 선 저장
+            // 결제 후 응답값과 비교하여 유효성 체크 할 예정
+            RequestPaymentVO requestPaymentVO = new RequestPaymentVO();
+            requestPaymentVO.setClientOrderId(clientOrderId);
+            requestPaymentVO.setClientOrderName(clientOrderName);
+            requestPaymentVO.setClientUsrId(clientUsrId);
+            requestPaymentVO.setClientPrice(clientPrice);
+            requestPaymentVO.setClientCdId(clientCdId);
+            requestPaymentVO.setClientCmpnId(clientCmpnId);
+            int count = this.payService.beforePaymentInfoSave(requestPaymentVO);
+            
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -78,9 +108,9 @@ public class WidgetController {
     
     @RequestMapping(value = "/confirm")
     public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
-    	
+        logger.info("============= 결제 시작 =============" ); 
+
         JSONParser parser = new JSONParser();
-        // api 응답값
         String orderId;
         String amount;
         String paymentKey;
@@ -88,9 +118,7 @@ public class WidgetController {
         Long easyAmount;
         String orderName;  
         
-        // 클라이언트가 보내준 값 (비굣값)
-        String clientOrderName;
-        String clientUsrId;
+
         try {
             // 클라이언트에서 받은 JSON 요청 바디입니다.
             JSONObject requestData = (JSONObject) parser.parse(jsonBody);
@@ -98,8 +126,7 @@ public class WidgetController {
             orderId = (String) requestData.get("orderId");
             amount = (String) requestData.get("amount");
             
-            clientOrderName = (String) requestData.get("orderName");
-            clientUsrId = (String) requestData.get("usrId");
+
             logger.info("결제 요청값 : " + requestData.toString());
         } catch (ParseException e) {
             throw new RuntimeException(e);
@@ -111,7 +138,6 @@ public class WidgetController {
 
         // TODO: 개발자센터에 로그인해서 내 결제위젯 연동 키 > 시크릿 키를 입력하세요. 시크릿 키는 외부에 공개되면 안돼요.
         // @docs https://docs.tosspayments.com/reference/using-api/api-keys
-        String widgetSecretKey = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6";
 
         // 토스페이먼츠 API는 시크릿 키를 사용자 ID로 사용하고, 비밀번호는 사용하지 않습니다.
         // 비밀번호가 없다는 것을 알리기 위해 시크릿 키 뒤에 콜론을 추가합니다.
@@ -151,10 +177,16 @@ public class WidgetController {
             easyAmount    = (easyPay != null && easyPay.get("amount") != null)
                                ? ((Number) easyPay.get("amount")).longValue() : null;
             
-            logger.info("orderId : " + orderId);
-            logger.info("orderName : " + orderName);
-            logger.info("paymentKey : " + paymentKey);
-            logger.info("easyAmount : " + easyAmount);
+            logger.info("응답값 파라미터 : " +
+            		"orderId : " + orderId + 
+            		"orderName : " + orderName + 
+            		"paymentKey : " + paymentKey + 
+            		"easyAmount : " + easyAmount);
+            boolean paymentValidationCheck = this.payService.paymentValidationCheck(orderId, paymentKey, orderName, easyAmount);
+            if(paymentValidationCheck) {
+            	int paymentSuccessUpdateCount = this.payService.paymentSuccessUpdate(orderId, paymentKey, orderName, easyAmount);
+            }
+            
             
         }
 

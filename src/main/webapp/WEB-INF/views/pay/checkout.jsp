@@ -38,7 +38,7 @@
           </button>
         </div>
       </div>
-      <div id="payment-info" class="display-none" data-cdnm="${cdNm}" data-amount="${amount}" data-usrId="${usrId}"></div>
+      <div id="payment-info" class="display-none" data-cdid="${cdId}" data-cdnm="${cdNm}" data-cmpnid="${cmpnId}" data-amount="${amount}" data-usrId="${usrId}"></div>
     <script>
       main();
 
@@ -47,6 +47,8 @@
         const price = parseInt(document.getElementById("payment-info").getAttribute('data-amount'));
         const usrId = document.getElementById("payment-info").getAttribute('data-usrId');
         const cdNm = document.getElementById("payment-info").getAttribute('data-cdnm');
+        const cdId = document.getElementById("payment-info").getAttribute('data-cdid');
+        const cmpnId = document.getElementById("payment-info").getAttribute('data-cmpnid');
         const orderId = generateRandomString();
         
         const amount = {
@@ -102,6 +104,8 @@
 		      usrId: usrId,
 		      orderName: cdNm,
 		      price: price,
+		      cdId: cdId,
+		      cmpnId: cmpnId,
 		    })
 		  });          
           // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.

@@ -25,10 +25,10 @@ public class payController {
     @GetMapping("/blgr/pay/subscribe")
     public String subscribePayPage( Model model, @SessionAttribute(value = "__LOGIN_USER__", required = false) UserVO loginUser) {
     	
-    	List<CommonCodeVO> commonCodeVoList = this.payService.payInfoService();
+    	List<CommonCodeVO> commonCodeVoList = this.payService.payInfoServiceList();
     	model.addAttribute("payInfoList", commonCodeVoList);
     	
-    	log.info("결제정보 : " + commonCodeVoList.toString());
+    	log.info("상품정보 : " + commonCodeVoList.toString());
     	
     	return "pay/subscribe";
     }
