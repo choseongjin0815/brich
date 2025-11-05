@@ -21,7 +21,7 @@
 			</div>
 			<div class="verification-content">
 			블로그 등록을 진행해주세요.
-			</div class="verification-content">
+			</div>
 			<button id="verify-btn"> 등록하기</button>
 			<div id="verify-modal" class="modal">
 				<div class="modal-content">

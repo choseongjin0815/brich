@@ -18,6 +18,9 @@ public class AccessControlInterceptor implements HandlerInterceptor{
         if(loginUser != null) {
         	auth = loginUser.getAutr();
         }
+        if (uri.startsWith("/api/")) {
+            return true; // 모든 /api/** 요청은 세션 없이 통과
+        }
         
         //TODO 예외 걸렸을 때 처리할 페이지 혹은 화면에 보여줄 메시지
         //관리자 페이지는 관리자(1001)만 접근가능
