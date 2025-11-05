@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.domain.campaign.vo;
 
+import java.util.List;
+
 public class AdminCampaignCategoryVO {
 	
 	private String adminId;
@@ -18,6 +20,9 @@ public class AdminCampaignCategoryVO {
 	private String dltYn;
 	
 	private String prntCdNm;
+	
+	// 노출 순서가 변경된 결과대로 cdId를 담은 리스트
+	private List<String> orderedCdIdList;
 	
 	public String getAdminId() {
 		return this.adminId;
@@ -121,6 +126,14 @@ public class AdminCampaignCategoryVO {
 
 	public void setPrntCdNm(String prntCdNm) {
 		this.prntCdNm = prntCdNm;
+	}
+
+	public List<String> getOrderedCdIdList() {
+		return this.orderedCdIdList;
+	}
+
+	public void setOrderedCdIdList(List<String> orderedCdIdList) {
+		this.orderedCdIdList = orderedCdIdList;
 	}
 	
 }

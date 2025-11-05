@@ -4,6 +4,9 @@
 $().ready(function() {
     
     var adminId = $("#adminId").val();
+    var saveBtn = $(".save-btn");
+    var revertBtn = $(".revert-btn");
+    
     var targetCdId;
     var targetCdNm;
     var targetSrt;
@@ -16,9 +19,21 @@ $().ready(function() {
     var modalCloseBtn = $(".modal-close-btn");    // 모달 닫기 버튼
     var modalSaveBtn = $(".modal-save-btn");    // 모달 확인 버튼
     
+    var isOrderChanged = false;    // 카테고리 순서 변경이 되었는가?
+    var originalOrderList = [];    // 초기 카테고리ID(cdId)의  순서를 저장할 배열
+    
+    /* 저장 버튼 비활성화 (노출 순서) */
+    saveBtn.hide()
+           .prop("disabled", true)
+           .removeClass("active");
+                  
+    /* 되돌리기 버튼 비활성화 (노출 순서) */
+    revertBtn.hide()
+             .prop("disabled", true);
+    
     /* 카테고리 추가 */
     var addCategoryButton = $(".add-btn");    // 카테고리 추가 버튼
-    var addCategoryArea =$("#addCategoryArea");    // 카테고리 추가 영역
+    var addCategoryArea = $("#addCategoryArea");    // 카테고리 추가 영역
     var newCategoryName = $("#newCategoryName");    // 추가시킬 카테고리 이름 input
     $(addCategoryButton).on("click", function() {
         modalAction("ADD", null);
@@ -38,7 +53,225 @@ $().ready(function() {
         modalAction("MERGE", $(this));
     });
     
+    /* 카테고리 순위 변동 시 순위 텍스트 변경 */
+    var updateVisualSrt = function() {
+        
+        var items = $(".container").find(".category-item");
+        
+        items.each(function(index) {
+            var srtSpan = $(this).find(".category-srt span");
+            srtSpan.text("순위: " + (index + 1));
+        });
+        
+    };
+    
+    /* 카테고리 순서가 기존 순서와 같은지 체크 */
+    var orderChengedCheck = function() {
+        
+        var currentOrderList = $(".container").find(".category-item").map(function() {
+            
+            // cdId 값 추출하여 배열에 저장
+            return $(this).find("input[type='hidden']").data("parent-cd-id");
+        }).get();
+        
+        if(currentOrderList.length !== originalOrderList.length) {
+            return true;
+        }
+        
+        for(var i = 0; i < currentOrderList.length; i++) {
+            
+            // 하나라도 기존 순서와 다르면 return
+            if(currentOrderList[i] !== originalOrderList[i]) {
+                return true;
+            }
+        }
+        return false;
+    };
+    
+    /* 카테고리 순서 변경 액션 + 버튼 활성화 */
+    var clickToMoveCategoryItem = function(currentItem, direction) {
+        
+        // 이동할 대상 찾기 (.category-item)
+        var targetItem = (direction === "UP")
+                       ? currentItem.prev(".category-item")
+                       : currentItem.next(".category-item");
+        
+        // 더 이상 움직일 수 없는 경우, 
+        if(targetItem.length === 0) {
+            alert("더 이상 순서를 변경할 수 없습니다.");
+            return;
+        }
+        
+        if(direction === "UP") {
+            currentItem.insertBefore(targetItem);
+        }
+        else {
+            currentItem.insertAfter(targetItem);
+        }
+        
+        // 시각적 순위 업데이트
+        updateVisualSrt();
+        
+        // 카테고리 순서가 바뀌었는지 체크 (boolean)
+        var orderHasChanged = orderChengedCheck();
+        
+        // 변경 상태 표시 및 저장/되돌리기 버튼 활성화/표시
+        if(orderHasChanged) {    // 순서가 바뀌었다면, 
+            isOrderChanged = true;
+            
+            saveBtn.show().prop("disabled", false).addClass("active");
+            revertBtn.show().prop("disabled", false);
+            
+            console.log(saveBtn);
+        }
+        else {    // 순서가 기존과 동일하다면, 
+            isOrderChanged = false;
+            saveBtn.hide().prop("disabled", true).removeClass("active");
+            revertBtn.hide().prop("disabled", true);
+        }
+        
+    };
+    
     /* 카테고리 순서 변경 (저장 버튼 눌러서 적용) */
+    $(".up-btn, .down-btn").on("click", function() {
+        
+        var buttonType = $(this);
+        var currentItem = $(buttonType).closest(".category-item");
+        var direction = buttonType.hasClass("up-btn") ? "UP" : "DOWN";
+        
+        // .category-item을 찾을 수 없을 경우, 
+        if(currentItem === 0) {
+            alert("이동시킬 카테고리 데이터를 찾을 수 없습니다.");
+            return;
+        }
+        
+        clickToMoveCategoryItem(currentItem, direction);
+    });
+    
+    /* 저장 버튼 클릭 시 */
+    saveBtn.on("click", function() {
+        saveOrderBySrt();
+    });
+    
+    /* 되돌리기 버튼 클릭 시 */
+    revertBtn.on("click", function() {
+        revertOrderBySrt();
+    });
+    
+    /* 기존 카테고리 순서대로 카테고리 ID 저장 */
+    var saveOriginalOrder = function() {
+        originalOrderList = $(".container").find(".category-item").map(function() {
+            return $(this).find("input[type='hidden']").data("parent-cd-id");
+        }).get();
+        
+        // console.log("초기 카테고리 순서: " + originalOrderList);
+    };
+    
+    /* 되돌리기 - 기존 카테고리 순서대로 UI 초기화 */
+    var revertOrderBySrt = function() {
+        
+        // 카테고리 순서가 기존 순서와 같다면(방지용), 
+        if(!isOrderChanged) {
+            return;
+        }
+        
+        // 방지턱
+        if(!confirm("카테고리를 기존 순서대로 되돌립니다.")) {
+            return;
+        }
+        else {
+            // 기존 카테고리를 돌면서 정보를 모두 map(객체)에 저장해 둠.
+            // 그리고 초기에 저장해 두었던 ID 값/순서에 맞춰서 데이터를 붙여서 순서를 되돌림.
+            var itemMap = {};
+            $(".container").find(".category-item").each(function() {
+                
+                var item = $(this);    // 순회 중인 카테고리 하나의 틀 (.category-item)
+                var cdId = item.find("input[type='hidden']").data("parent-cd-id");
+                itemMap[cdId] = item;    // Key(cdId) : Value(.category-item)
+                item.detach();    // 순서 변경 이벤트(스티커) 유지 목적으로 detach() 사용.
+            });
+            
+            // 원래 순서(originalOrderList)대로 되돌리기
+            $.each(originalOrderList, function(index, cdId) {
+                if(itemMap[cdId]) {
+                    $(".category-append-area").append(itemMap[cdId]);
+                }
+            });
+            
+            // 시각적 순위 업데이트
+            // 해당 함수를 호출하지 않으면 순서는 돌아가지만, 
+            // 마지막으로 위치했던... 바뀌기 전의 순위 값이 뜨게 됨.
+            updateVisualSrt();
+            
+            // 상태 및 UI 초기화
+            isOrderChanged = false;
+            saveBtn.hide().prop("disabled", true).removeClass("active");
+            revertBtn.hide().prop("disabled", true);
+            
+            alert("되돌리기 완료");
+        }
+    };
+    
+    /* 순서 저장 (Ajax 전송) */
+    var saveOrderBySrt = function() {
+        
+        // 순서가 기존과 같다면, (방지용)
+        // 원래 기존과 같을 경우 버튼은 뜨지 않지만...
+        if(!isOrderChanged) {
+            alert("변경사항이 없습니다."); 
+            return;
+        }
+        
+        // 방지턱
+        if(!confirm("카테고리 노출 순서를 변경하시겠습니까?")) {
+            return;
+        }
+        else {
+            saveBtn.prop("disabled", true).text("순서 변경 요청 중...");
+            
+            // 최종 순서대로 cdId 값을 가져와 List에 할당
+            var orderedCdIdList = $(".container").find(".category-item").map(function() {
+                return $(this).find("input[type='hidden']").data("parent-cd-id");
+            }).get();
+            
+            if(orderedCdIdList.length === 0) {
+                alert("저장할 카테고리 목록이 비어있습니다.");
+                saveBtn.prop("disabled", false).addClass("active");
+                return;
+            }
+            
+            var dataToSend = {
+                adminId : adminId, 
+                orderedCdIdList : orderedCdIdList
+            };
+            
+            $.ajax({
+               url: "/admin/category-manage/change-order", 
+               method: "POST", 
+               contentType: "application/json", 
+               data: JSON.stringify(dataToSend), 
+               
+               success: function(response) {
+                   alert("카테고리 노출 순서 변경 사항을 저장하였습니다.");
+                   
+                   isOrderChanged = false;
+                   saveBtn.hide();
+                   revertBtn.hide();
+                   saveBtn.prop("disabled", true);
+                   location.reload();
+               }, 
+               error: function(xhr) {
+                   var errorMessage = "HTTP status: " + xhr.status + ": " + (xhr.responseText || "서버 응답 없음");
+                   alert("error\n" + errorMessage + "\n콘솔에서 정보 확인 필요");
+                   console.error("Ajax Error: " + xhr);
+               }, 
+               complete: function() {
+                   saveBtn.prop("disabled", false).removeClass("active");
+               }
+            });
+        }
+        
+    }
     
     /* 모달 닫기 버튼 클릭 시 창 닫기 */
     modalCloseBtn.on("click", function() {
@@ -72,7 +305,7 @@ $().ready(function() {
     
     /* 모달 열기 전, select 태그 내 option 값 채우기 */
     // type: 기능 종류
-    // currentCdId: 선택된 기능에 맞는 카테고리 ID
+    // currentCdId: 선택된 기능에 맞는 카테고리 ID (cdId)
     var loadCategoryList = function(type, currentCdId) {
         
         var selectedList = (type === "DIV") 
@@ -111,7 +344,6 @@ $().ready(function() {
                         selectedList.append("<option name='categoryOption' value='" + category.cdId + "'>" 
                                                 + category.cdNm + 
                                             "</option>");
-                        
                     });
                 }
                 else {
@@ -240,7 +472,7 @@ $().ready(function() {
             data: JSON.stringify(dataToSend), 
             
             success: function(response) {
-                alert(categoryName + " 카테고리 추가 완료");
+                alert(categoryName + " 카테고리 추가를 완료하였습니다.");
                 location.reload();
             }, 
             complete: function() {
@@ -253,6 +485,7 @@ $().ready(function() {
     var divCategory = function() {
         
         var selectedOptionCdId = $("option[name='categoryOption']:selected").val();
+        var selectedOptionCdNm = $("option[name='categoryOption']:selected").text();
         
         if(!selectedOptionCdId) {
             alert("분할할 카테고리를 선택해 주세요.");
@@ -266,10 +499,63 @@ $().ready(function() {
             cdId : selectedOptionCdId
         };
         
+        $.ajax({
+            url: "/admin/category-manage/div", 
+            method: "POST", 
+            contentType: "application/json", 
+            data: JSON.stringify(dataToSend), 
+            
+            success: function(response) {
+                alert(targetCdNm + "에서 " + selectedOptionCdNm + " 분할을 완료하였습니다.");
+                location.reload();
+            }, 
+            complete: function() {
+                modalSaveBtn.prop("disabled", false);
+            }
+        });
         
     };
     
     /* 카테고리 병합 (Ajax 전송) */
+    var mergeCategory = function() {
+        
+        var selectedOptionCdId = $("option[name='categoryOption']:selected").val();
+        var selectedOptionCdNm = $("option[name='categoryOption']:selected").text();
+        
+        if(!selectedOptionCdId) {
+            alert("병합할 카테고리를 선택해 주세요.");
+            return;
+        }
+        
+        modalSaveBtn.prop("disabled", true).text("병합 요청 중...");
+        
+        var dataToSend = {
+            adminId : adminId, 
+            prntCdId: selectedOptionCdId, 
+            srt: targetSrt, 
+            cdId : targetCdId
+        };
+        
+        $.ajax({
+            url: "/admin/category-manage/merge", 
+            method: "POST", 
+            contentType: "application/json", 
+            data: JSON.stringify(dataToSend), 
+            
+            success: function(response) {
+                alert(targetCdNm + "을(를) " + selectedOptionCdNm + "에 병합을 완료하였습니다.");
+                location.reload();
+            }, 
+            complete: function() {
+                modalSaveBtn.prop("disabled", false);
+            }
+        });
+    };
     
+    // 페이지 로드 시 기존 카테고리 순서 저장 (최초 1회 실행)
+    saveOriginalOrder();
+    
+    // 페이지 로드 시 순위 텍스트 업데이트 (카테고리 순서에 맞게 SRT 값 재계산 후 표시)
+    updateVisualSrt();
     
 });

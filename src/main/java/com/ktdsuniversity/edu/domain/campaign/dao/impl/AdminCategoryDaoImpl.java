@@ -51,4 +51,24 @@ public class AdminCategoryDaoImpl extends SqlSessionDaoSupport implements AdminC
 		return super.getSqlSession().insert(this.NAME_SPACE + "insertNewCampaignCategory", adminCampaignCategoryVO);
 	}
 
+	@Override
+	public int updateDivCampaignCategory(AdminCampaignCategoryVO adminCampaignCategoryVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateDivCampaignCategory", adminCampaignCategoryVO);
+	}
+
+	@Override
+	public int updateMergeCampaignCategory(AdminCampaignCategoryVO adminCampaignCategoryVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateMergeCampaignCategory", adminCampaignCategoryVO);
+	}
+
+	@Override
+	public int updateMergeAfterSrtValueOneMinus(AdminCampaignCategoryVO adminCampaignCategoryVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateMergeAfterSrtValueOneMinus", adminCampaignCategoryVO);
+	}
+
+	@Override
+	public int updateChangeOrderCampaignCategory(AdminCampaignCategoryVO adminCampaignCategoryVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateChangeOrderCampaignCategory", adminCampaignCategoryVO);
+	}
+
 }
