@@ -15,7 +15,7 @@ public interface PayService {
 
 	CommonCodeVO payInfoService(String cdId);
 
-	int beforePaymentInfoSave(RequestPaymentVO requestPaymentVO);
+	String beforePaymentInfoSave(RequestPaymentVO requestPaymentVO);
 
 
 }

@@ -40,6 +40,10 @@
  </select>
  <insert id="insertBeforeSubscribePaymentInfoSave"
          parameterType = "com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO">
+	    <selectKey keyProperty="PKkey" order="BEFORE" resultType="string">
+	    SELECT 'SBSCRPTN_PYMNT-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_SBSCRPTN_PYMNT_PK.NEXTVAL, 6, 0)
+	           FROM DUAL
+	    </selectKey>
 		INSERT INTO SBSCRPTN_PYMNT
 		(SBSCRPTN_PYMNT_ID
 		, USR_ID
@@ -54,7 +58,7 @@
 		, ORDER_ID
 		, PAYMENT_KEY)
 		VALUES
-		( 'SBSCRPTN_PYMNT-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_SBSCRPTN_PYMNT_PK.NEXTVAL, 6, 0)
+		( #{PKkey}
 		, #{clientUsrId}
 		, '9002'
 		, #{clientCdId}
@@ -70,6 +74,10 @@
  </insert>		
  <insert id="insertBeforeCampaignPaymentInfoSave"
          parameterType = "com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO">
+        <selectKey keyProperty="PKkey" order="BEFORE" resultType="string">
+        SELECT 'CMPN_PYMNT-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_SBSCRPTN_PYMNT_PK.NEXTVAL, 6, 0)
+               FROM DUAL
+        </selectKey>         
 		 INSERT INTO CMPN_PYMNT
 		(CMPN_PYMNT_ID
 		, CMPN_ID
@@ -82,7 +90,7 @@
 		, DLT_YN
 		, ORDER_ID
 		, PAYMENT_KEY)
-		VALUES( ( 'CMPN_PYMNT-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_CMPN_PYMNT_PK.NEXTVAL, 6, 0))
+		VALUES( #{PKkey}
 		, #{clientCmpnId}
 		, 9002
 		, #{clientPrice}

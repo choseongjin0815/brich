@@ -50,7 +50,7 @@ public class PayServiceImpl implements PayService{
 
 
 	@Override
-	public int beforePaymentInfoSave(RequestPaymentVO requestPaymentVO) {
+	public String beforePaymentInfoSave(RequestPaymentVO requestPaymentVO) {
 		
 		// 구독인지 캠페인 결제인지 확인
 		int count;
@@ -60,10 +60,10 @@ public class PayServiceImpl implements PayService{
 		} else if (autr.equals("1004")){
 			count = this.payDao.insertBeforeCampaignPaymentInfoSave(requestPaymentVO);
 		} else {
-			return 0;
+			return null ;
 		}
 		
-		return count;
+		return requestPaymentVO.getPKkey();
 	}
 	
 	

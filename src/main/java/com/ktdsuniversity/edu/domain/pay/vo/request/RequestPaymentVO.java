@@ -9,7 +9,14 @@ public class RequestPaymentVO {
 	String clientUsrId ;	// 주문자 id
 	String clientOrderId;	// 주문번호
 	String clientPrice;		// 가격
+	public String getPKkey() {
+		return this.PKkey;
+	}
+	public void setPKkey(String pKkey) {
+		PKkey = pKkey;
+	}
 	String clientCmpnId;	// 주문 캠페인
+	String PKkey;	// 테이블 PK값
 	public String getClientCmpnId() {
 		return this.clientCmpnId;
 	}
@@ -26,7 +33,7 @@ public class RequestPaymentVO {
 	public String toString() {
 		return "RequestPaymentVO [clientCdId=" + clientCdId + ", clientOrderName=" + clientOrderName + ", clientUsrId="
 				+ clientUsrId + ", clientOrderId=" + clientOrderId + ", clientPrice=" + clientPrice + ", clientCmpnId="
-				+ clientCmpnId + "]";
+				+ clientCmpnId + ", PKkey=" + PKkey + "]";
 	}
 	public String getClientOrderName() {
 		return this.clientOrderName;

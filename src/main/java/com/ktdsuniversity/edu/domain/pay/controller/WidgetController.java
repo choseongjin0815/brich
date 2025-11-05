@@ -96,7 +96,7 @@ public class WidgetController {
             requestPaymentVO.setClientPrice(clientPrice);
             requestPaymentVO.setClientCdId(clientCdId);
             requestPaymentVO.setClientCmpnId(clientCmpnId);
-            int count = this.payService.beforePaymentInfoSave(requestPaymentVO);
+            PKkey = this.payService.beforePaymentInfoSave(requestPaymentVO);
             
 		} catch (ParseException e) {
 			e.printStackTrace();
