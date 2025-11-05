@@ -147,15 +147,6 @@ public class ResponseCampaignVO extends CampaignVO{
 		 this.adptCnt = adptCnt;
 	 }
 
-	 @Override
-	public String toString() {
-		return "ResponseCampaignVO [flCnt=" + flCnt + ", flGrpId=" + flGrpId + ", fileVoList=" + fileVoList
-				+ ", likeCnt=" + likeCnt + ", adptCnt=" + adptCnt + ", area=" + area + ", parentArea=" + parentArea
-				+ ", pstSttsCd=" + pstSttsCd + ", pstSttsCdNm=" + pstSttsCdNm + ", favYn=" + favYn + ", adptYn="
-				+ adptYn + ", SttsCdNm=" + SttsCdNm + "]";
-	}
-
-
 	 public List<String> getArea() {
 		 return this.area;
 	 }
@@ -171,6 +162,36 @@ public class ResponseCampaignVO extends CampaignVO{
 	 public void setParentArea(String parentArea) {
 		 this.parentArea = parentArea;
 	 }
-	 
 
+	 public String getFlCnt() {
+		return this.flCnt;
+	}
+
+	 public void setFlCnt(String flCnt) {
+		 this.flCnt = flCnt;
+	 }
+
+	 public String getFlGrpId() {
+		 return this.flGrpId;
+	 }
+
+	 public void setFlGrpId(String flGrpId) {
+		 this.flGrpId = flGrpId;
+	 }
+
+	 public List<FileVO> getFileVoList() {
+		 return this.fileVoList;
+	 }
+
+	 public void setFileVoList(List<FileVO> fileVoList) {
+		 this.fileVoList = fileVoList;
+	 }
+
+	 @Override
+	 public String toString() {
+		return "ResponseCampaignVO [flCnt=" + flCnt + ", flGrpId=" + flGrpId + ", fileVoList=" + fileVoList
+				+ ", likeCnt=" + likeCnt + ", adptCnt=" + adptCnt + ", area=" + area + ", parentArea=" + parentArea
+				+ ", pstSttsCd=" + pstSttsCd + ", pstSttsCdNm=" + pstSttsCdNm + ", favYn=" + favYn + ", adptYn="
+				+ adptYn + ", SttsCdNm=" + SttsCdNm + super.toString() + "]";
+	 }
 }
