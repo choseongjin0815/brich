@@ -42,6 +42,8 @@ public class WidgetController {
     @Value("${app.api.key}")
     String widgetSecretKey;
     
+    private String PKkey;
+    
 	@Autowired
     private PayService payService;
     
