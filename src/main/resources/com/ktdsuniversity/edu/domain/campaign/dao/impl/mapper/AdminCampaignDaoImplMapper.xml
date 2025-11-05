@@ -65,41 +65,41 @@
                 </when>
                 <!-- 검토 중 (under-review) -->
                 <when test="sortBy == 'under-review'">
-                  AND CMPN.STTS_CD = '2001'  /* 💡 실제 승인 STTS_CD로 변경하세요. */
+                  AND CMPN.STTS_CD = '2001'
                 </when>
                 <!-- 승인 (cnfm) -->
                 <when test="sortBy == 'cnfm'">
-                  AND CMPN.STTS_CD = '2002'  /* 💡 실제 승인 STTS_CD로 변경하세요. */
+                  AND CMPN.STTS_CD = '2002'
                 </when>
                 
                 <!-- 반려 (rtrn) -->
                 <when test="sortBy == 'rtrn'">
-                  AND CMPN.STTS_CD = '2003'  /* 💡 실제 반려 STTS_CD로 변경하세요. */
+                  AND CMPN.STTS_CD = '2003'
                 </when>
                 
                 <!-- 시작 대기 (start-waiting) -->
                 <when test="sortBy == 'start-waiting'">
-                  AND CMPN.STTS_CD = '2004'  /* 💡 실제 시작 대기 STTS_CD로 변경하세요. */
+                  AND CMPN.STTS_CD = '2004'
                 </when>
                 
                 <!-- 모집 중 (recruiting) -->
                 <when test="sortBy == 'recruiting'">
-                  AND CMPN.STTS_CD = '2005'  /* 💡 실제 모집 중 STTS_CD로 변경하세요. */
+                  AND CMPN.STTS_CD = '2005'
                 </when>
                 
                 <!-- 선정 중 (choice) -->
                 <when test="sortBy == 'choice'">
-                  AND CMPN.STTS_CD = '2006'  /* 💡 실제 선정 중 STTS_CD로 변경하세요. */
+                  AND CMPN.STTS_CD = '2006'
                 </when>
                 
                 <!-- 진행 중 (start) -->
                 <when test="sortBy == 'start'">
-                  AND CMPN.STTS_CD = '2007'  /* 💡 실제 진행 중 STTS_CD로 변경하세요. */
+                  AND CMPN.STTS_CD = '2007'
                 </when>
 
                 <!-- 종료 (end) -->
                 <when test="sortBy == 'end'">
-                  AND CMPN.STTS_CD = '2009'  /* 💡 실제 종료 STTS_CD로 변경하세요. */
+                  AND CMPN.STTS_CD = '2009'
                 </when>
                 
                 <otherwise>
