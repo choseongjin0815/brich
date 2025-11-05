@@ -85,4 +85,55 @@ public class AdminCategoryController {
 		return ajaxResponse;
 	}
 	
+	/**
+	 * 카테고리 분할 (UPDATE)
+	 * @param adminCampaignCategoryVO
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping("/admin/category-manage/div")
+	public AjaxResponse doDivCampaignCategoryAction(@RequestBody AdminCampaignCategoryVO adminCampaignCategoryVO) {
+		
+		boolean isSuccess = this.adminCategoryService.updateDivCampaignCategory(adminCampaignCategoryVO);
+		
+		AjaxResponse ajaxResponse = new AjaxResponse();
+		ajaxResponse.setBody(isSuccess);
+		
+		return ajaxResponse;
+	}
+	
+	/**
+	 * 카테고리 병합 (UPDATE)
+	 * @param adminCampaignCategoryVO
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping("/admin/category-manage/merge")
+	public AjaxResponse doMergeCampaignCategoryAction(@RequestBody AdminCampaignCategoryVO adminCampaignCategoryVO) {
+		
+		boolean isSuccess = this.adminCategoryService.updateMergeCampaignCategory(adminCampaignCategoryVO);
+		
+		AjaxResponse ajaxResponse = new AjaxResponse();
+		ajaxResponse.setBody(isSuccess);
+		
+		return ajaxResponse;
+	}
+	
+	/**
+	 * 카테고리 노출 순서 변경 (UPDATE)
+	 * @param adminCampaignCategoryVO
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping("/admin/category-manage/change-order")
+	public AjaxResponse doChangeOrderCampaignCategoryAction(@RequestBody AdminCampaignCategoryVO adminCampaignCategoryVO) {
+		
+		boolean isSuccess = this.adminCategoryService.updateChangeOrderCampaignCategory(adminCampaignCategoryVO);
+		
+		AjaxResponse ajaxResponse = new AjaxResponse();
+		ajaxResponse.setBody(isSuccess);
+		
+		return ajaxResponse;
+		
+	}
 }

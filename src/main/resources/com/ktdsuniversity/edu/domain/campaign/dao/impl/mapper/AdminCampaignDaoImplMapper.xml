@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktdsuniversity.edu.domain.campaign.dao.impl.AdminCampaignDaoImpl">
+
+    <select id="selectAdminCategoryParent" parameterType="string" resultType="string">
+        SELECT CTG.CD_ID
+          FROM (
+                SELECT LEVEL AS LV, CD_ID, CD_NM, MAX(LEVEL) OVER () AS MAX_LV
+                  FROM CM_CD
+                 START WITH CD_ID = (SELECT CD_ID
+                                       FROM CM_CD
+                                      WHERE CD_NM = #{_parameter})
+               CONNECT BY PRIOR PRNT_CD_ID = CD_ID
+              ) CTG
+          WHERE CTG.LV = CTG.MAX_LV - 1
+    </select>
+    
+    <resultMap type="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminCampaignVO" 
+               id="RequestAdminCampaignVOMap"
+               autoMapping="true">
+               <id column="CMPN_ID" property="cmpnId"/>
+               <collection property="area"
+                           javaType="list"
+                           ofType="java.lang.String">
+                           <result property="area" column="AREA"/>
+               </collection>
+    </resultMap>
+    <select id="selectAdminCampaignListCategoryAndSortBy"
+            resultMap="RequestAdminCampaignVOMap"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminSearchCampaignVO">
+            <include refid="Common.paginationHeader" />
+        SELECT CMPN.CMPN_ID 
+                 , CMPN.OFFR_CN 
+                 , CMPN.RCRT_PRSNN 
+                 , CMPN.CMPN_TITLE
+                 , CMPN.STTS_CD
+                 , NVL(ADPT_TABLE.ADPT_CNT,0) AS ADPT_CNT
+                 , CMPN.RCRT_STRT_DT 
+                 , CMPN.RCRT_END_DT
+                 , PARCD.CD_NM AS PARENT_AREA  
+                 , ARCD.CD_NM AS AREA
+              FROM CMPN CMPN 
+              LEFT JOIN (SELECT CMPN_ID 
+                              , COUNT(CMPN_ID) AS ADPT_CNT
+                           FROM CMPN_PST_ADPT 
+                          WHERE DLT_YN = 'N'
+                          GROUP BY CMPN_ID) ADPT_TABLE
+                     ON CMPN.CMPN_ID = ADPT_TABLE.CMPN_ID 
+              LEFT JOIN CMPN_AR CMPNAR
+                ON CMPN.CMPN_ID = CMPNAR.CMPN_ID 
+              LEFT JOIN AR_CD ARCD
+                ON CMPNAR.AR_CD = ARCD.CD_ID
+              LEFT JOIN AR_CD PARCD
+                ON PARCD.CD_ID = ARCD.PRNT_CD_ID 
+             WHERE CMPN.CMPN_TITLE LIKE '%' || #{searchKeyword, jdbcType=VARCHAR} || '%'        
+               AND CMPN.CTG_CD IN (SELECT CD_ID
+                                     FROM CM_CD
+                                    START WITH CD_ID = NVL(#{category, jdbcType=VARCHAR}, '3000')        
+                                  CONNECT BY PRIOR CD_ID = PRNT_CD_ID)
+              <choose>
+                <!-- 최신순/기본 목록 (필터링 없음) -->
+                <when test="sortBy == 'latest'">
+                </when>
+                <!-- 검토 중 (under-review) -->
+                <when test="sortBy == 'under-review'">
+                  AND CMPN.STTS_CD = '2001'  /* 💡 실제 승인 STTS_CD로 변경하세요. */
+                </when>
+                <!-- 승인 (cnfm) -->
+                <when test="sortBy == 'cnfm'">
+                  AND CMPN.STTS_CD = '2002'  /* 💡 실제 승인 STTS_CD로 변경하세요. */
+                </when>
+                
+                <!-- 반려 (rtrn) -->
+                <when test="sortBy == 'rtrn'">
+                  AND CMPN.STTS_CD = '2003'  /* 💡 실제 반려 STTS_CD로 변경하세요. */
+                </when>
+                
+                <!-- 시작 대기 (start-waiting) -->
+                <when test="sortBy == 'start-waiting'">
+                  AND CMPN.STTS_CD = '2004'  /* 💡 실제 시작 대기 STTS_CD로 변경하세요. */
+                </when>
+                
+                <!-- 모집 중 (recruiting) -->
+                <when test="sortBy == 'recruiting'">
+                  AND CMPN.STTS_CD = '2005'  /* 💡 실제 모집 중 STTS_CD로 변경하세요. */
+                </when>
+                
+                <!-- 선정 중 (choice) -->
+                <when test="sortBy == 'choice'">
+                  AND CMPN.STTS_CD = '2006'  /* 💡 실제 선정 중 STTS_CD로 변경하세요. */
+                </when>
+                
+                <!-- 진행 중 (start) -->
+                <when test="sortBy == 'start'">
+                  AND CMPN.STTS_CD = '2007'  /* 💡 실제 진행 중 STTS_CD로 변경하세요. */
+                </when>
+
+                <!-- 종료 (end) -->
+                <when test="sortBy == 'end'">
+                  AND CMPN.STTS_CD = '2009'  /* 💡 실제 종료 STTS_CD로 변경하세요. */
+                </when>
+                
+                <otherwise>
+                  <!-- sortBy 파라미터가 유효하지 않은 경우 (기본값) -->
+                  <!-- 필터링 없음. 모든 상태를 조회 -->
+                </otherwise>
+              </choose>
+              
+              ORDER BY
+                <!-- sortBy='latest'일 때 '2001' (검토 중) 캠페인을 최우선 정렬 -->
+                CASE 
+                    WHEN #{sortBy} = 'latest' 
+                    THEN CASE 
+                             WHEN CMPN.STTS_CD = '2001' 
+                             THEN 0 ELSE 1 
+                          END
+                 END ASC 
+                 <!-- sortBy가 다른 경우일 때, 모든 필터링 및 정렬 조건에서 생성일 기준 최신순 정렬 -->
+                   , CMPN.CRT_DT DESC
+            
+          <include refid="Common.paginationFooter" />
+    </select>
+
+</mapper>

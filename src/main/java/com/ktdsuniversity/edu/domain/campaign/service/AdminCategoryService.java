@@ -14,4 +14,10 @@ public interface AdminCategoryService {
 
 	boolean createNewCampaignCategory(AdminCampaignCategoryVO adminCampaignCategoryVO);
 
+	boolean updateDivCampaignCategory(AdminCampaignCategoryVO adminCampaignCategoryVO);
+
+	boolean updateMergeCampaignCategory(AdminCampaignCategoryVO adminCampaignCategoryVO);
+
+	boolean updateChangeOrderCampaignCategory(AdminCampaignCategoryVO adminCampaignCategoryVO);
+
 }

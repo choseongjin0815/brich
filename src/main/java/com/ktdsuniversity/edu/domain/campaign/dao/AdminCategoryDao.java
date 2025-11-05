@@ -18,4 +18,12 @@ public interface AdminCategoryDao {
 
 	int insertNewCampaignCategory(AdminCampaignCategoryVO adminCampaignCategoryVO);
 
+	int updateDivCampaignCategory(AdminCampaignCategoryVO adminCampaignCategoryVO);
+
+	int updateMergeCampaignCategory(AdminCampaignCategoryVO adminCampaignCategoryVO);
+
+	int updateMergeAfterSrtValueOneMinus(AdminCampaignCategoryVO adminCampaignCategoryVO);
+
+	int updateChangeOrderCampaignCategory(AdminCampaignCategoryVO adminCampaignCategoryVO);
+
 }

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -14,7 +14,7 @@
 	<body>
 	    <jsp:include page="/WEB-INF/views/layout/menu.jsp">
            <jsp:param name='css' value="
-        <link type='text/css' rel='stylesheet' href='/css/campaignmain.css' />
+                <link type='text/css' rel='stylesheet' href='/css/campaignmain.css' />
             " />
         </jsp:include>
 	    <div class="wrapper">
@@ -27,39 +27,44 @@
 	                <button type="button" class="add-btn pointer-cursor">+ 카테고리 추가</button>
 	            </div>
 	            
-				<c:forEach items="${campaignCategoryList}" var="parentCtg">
-				<c:if test="${parentCtg.level eq 1}">
-				    <div class="category-item">
-				        <div class="category-up-down">
-				            <div class="up-btn">▲</div>
-				            <div class="down-btn">▼</div>
-				        </div>
-				        
-				        <div class="category-info">
-				            <input type="hidden" data-parent-cd-id="${parentCtg.cdId}"/>
-						    <span class="category-parent">${parentCtg.cdNm}</span>
-					    
-						    <c:forEach items="${campaignCategoryList}" var="childCtg">
-						    <c:if test="${parentCtg.cdId eq childCtg.prntCdId}">
-						        <span class="category-child">&nbsp;| ${childCtg.cdNm}</span>
-						    </c:if>
-						    </c:forEach>
-					    
-						    <c:if test="${parentCtg.useYn eq 'Y' and parentCtg.srt ne 999}">
-							    <div class="category-btn-group">
-							        <button type="button" class="div-btn pointer-cursor">분할</button>
-							        <button type="button" class="merge-btn pointer-cursor">병합</button>
-							    </div>
-						    </c:if>
-						    <div class="category-srt">
-					            <span>순위: ${parentCtg.srt}</span>
+	            <div class="category-append-area">
+					<c:forEach items="${campaignCategoryList}" var="parentCtg">
+					<c:if test="${parentCtg.level eq 1}">
+					    <div class="category-item">
+					        <div class="category-up-down">
+					            <div class="up-btn">▲</div>
+					            <div class="down-btn">▼</div>
 					        </div>
-				        </div>
-				    </div>
-				</c:if>
-				</c:forEach>
+					        
+					        <div class="category-info">
+					            <input type="hidden" data-parent-cd-id="${parentCtg.cdId}"/>
+							    <span class="category-parent">${parentCtg.cdNm}</span>
+						    
+							    <c:forEach items="${campaignCategoryList}" var="childCtg">
+							    <c:if test="${parentCtg.cdId eq childCtg.prntCdId}">
+							        <span class="category-child">&nbsp;| ${childCtg.cdNm}</span>
+							    </c:if>
+							    </c:forEach>
+						    
+							    <c:if test="${parentCtg.useYn eq 'Y' and parentCtg.srt ne 999}">
+								    <div class="category-btn-group">
+								        <button type="button" class="div-btn pointer-cursor">분할</button>
+								        <button type="button" class="merge-btn pointer-cursor">병합</button>
+								    </div>
+							    </c:if>
+							    <div class="category-srt">
+						            <span>순위: ${parentCtg.srt}</span>
+						        </div>
+					        </div>
+					    </div>
+					</c:if>
+					</c:forEach>
+	            </div>
 	            
-	            <button type="button" class="save-btn">저장</button>
+	            <div class="btn-group">
+		            <button type="button" class="revert-btn" style="display: none;">되돌리기</button>
+		            <button type="button" class="save-btn" style="display: none;">순서 저장</button>
+	            </div>
 	        </div>
 	    </div>
 	</body>

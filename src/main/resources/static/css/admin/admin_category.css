@@ -149,6 +149,7 @@ h1 {
     color: #FFF;
     font-size: 1.1rem;
     
+    margin-top: 40px;
     padding: 6px 20px;
 }
 
@@ -156,3 +157,20 @@ h1 {
 	background-color: rgba(81, 59, 190);
 }
 
+.revert-btn {
+	cursor: pointer;
+    
+    border: 0px solid #FF676A;    
+    border-radius: 5px;
+    background-color: #FF676A;
+    
+    color: #FFF;
+    font-size: 1.1rem;
+    
+    margin-top: 40px;
+    padding: 6px 20px;
+}
+
+.revert-btn:active {
+    background-color: rgba(190, 59, 61);
+}

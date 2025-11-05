@@ -124,6 +124,7 @@ public class CampaignServiceImpl implements CampaignService {
 		responseCampaignListVO.setCategoryList(CategoryList);
 		log.info("카테고리 목록 : "+ CategoryList.toString());
 		
+		log.info("getCategory: " + requestSearchCampaignVO.getCategory());
 		// Level 2 조회조건 세팅
 		if(requestSearchCampaignVO.getCategory() != null ) {
 			// 부모 카테고리 조회
