@@ -12,8 +12,10 @@ function makeCheckedList(insertClassName) {
         deleteCity.on("click", function() {
             city = $(this).closest(".check-city").children("div:first-child").text();
             checkedList = checkedList.filter((e) => e.name !== city);
+            if ($(this).closest(".check-city").parents().hasClass("area-list")) {
+                beforeChecked = JSON.parse(JSON.stringify(checkedList));
+            }
             $(this).closest(".check-city").remove();
-            beforeChecked = JSON.parse(JSON.stringify(checkedList));
         });
         
         cityBlock.append(cityName);
@@ -29,6 +31,7 @@ var beforeChecked = [];
 $().ready(function() {
     $("input[name=do-city]").on("click", function() {
         var id = $(this).attr("id");
+        beforeChecked = JSON.parse(JSON.stringify(checkedList));
         
         $.get("/adv/campaign/write/" + id, function(response) {
             $(".city-gu-gun").empty();

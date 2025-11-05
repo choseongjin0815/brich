@@ -12,7 +12,7 @@ public class RequestSearchCampaignVO extends AbstractSearchVO{
 	private String sortBy;
 	private String searchKeyword;
 	private String loginId;
-  private String cmpnId;
+	private String cmpnId;
 	
 	
 	public String getLoginId() {

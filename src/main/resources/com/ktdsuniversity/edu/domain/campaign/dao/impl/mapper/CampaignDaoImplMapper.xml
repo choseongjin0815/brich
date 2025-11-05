@@ -172,14 +172,30 @@
 		     , U.USR_ID
 		     , U.LOG_ID
 		     , U.BLG_ADDRS
+		     , (SELECT CP1.CHT_RM_ID 
+		          FROM CHT_PRTCPNT CP1
+		         INNER JOIN CHT_PRTCPNT CP2
+		            ON CP1.CHT_RM_ID = CP2.CHT_RM_ID
+		         INNER JOIN CHT_RM CR
+		            ON CP1.CHT_RM_ID = CR.CHT_RM_ID
+		         WHERE CP2.USR_ID != CP1.USR_ID
+		           AND CP1.USR_ID = C.USR_ID 
+		           AND CP2.USR_ID = U.USR_ID 
+		           AND CR.CMPN_ID = C.CMPN_ID
+		           AND CP1.LFT_YN = 'N'
+		           AND CP1.DLT_YN = 'N'
+		           AND CP2.DLT_YN = 'N'
+		           AND CR.DLT_YN = 'N') AS CHT_RM_ID
 		  FROM CMPN_PST_ADPT CPA
 		 INNER JOIN (SELECT USR_ID
-                          , LOG_ID
-                          , BLG_ADDRS
+		                  , LOG_ID
+		                  , BLG_ADDRS
 		               FROM USR
-                      WHERE DLT_YN  = 'N'
-                        AND AUTR != '1005') U
+		              WHERE DLT_YN  = 'N'
+		                AND AUTR != '1005') U
 		    ON CPA.BLG_USR_ID = U.USR_ID
+		 INNER JOIN CMPN C
+		    ON C.CMPN_ID = CPA.CMPN_ID 
 		 INNER JOIN CM_CD CC
 		    ON CPA.PST_STTS_CD = CC.CD_ID 
 		 WHERE CPA.CMPN_ID = #{cmpnId}
@@ -405,7 +421,8 @@
             parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO"
             resultMap="ResponseCampaignVOMap">
         <include refid="Common.paginationHeader" />
-        SELECT C.CMPN_ID
+        SELECT ROW_NUMBER() OVER(ORDER BY C.CRT_DT) "NUMBER"
+             , C.CMPN_ID
              , C.USR_ID
              , C.STTS_CD 
              , CC.CD_NM AS STTS_CD_NM
@@ -430,6 +447,7 @@
        <if test="sortBy != null and sortBy != ''">
            AND C.STTS_CD = #{sortBy}
        </if>
+        ORDER BY "NUMBER" DESC
         <include refid="Common.paginationFooter" />
     </select>
     

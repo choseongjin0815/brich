@@ -253,7 +253,7 @@ public class CampaignController {
     	ResponseAdoptListVO adoptList = this.campaignService.readResponseAdoptListByCmpnId(requestApplicantVO);
     	model.addAttribute("adoptList", adoptList);
     	model.addAttribute("search",requestApplicantVO);
-    	log.info("camapainInfo:" + adoptList.getCampaignInfo().toString());
+    	log.info("adoptList---:" + adoptList);
     	return "campaign/adopt";
     }
 
@@ -333,7 +333,7 @@ public class CampaignController {
 	}
 	
 	@PostMapping("/adv/campaign/modify/{denyCmpnId}")
-	public String doModifyNewCampaignAction(RequestCreateCmpnVO requestCreateCmpnVO,
+	public String doModifyCampaignAction(RequestCreateCmpnVO requestCreateCmpnVO,
 											@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
 		requestCreateCmpnVO.setUsrId(loginUser.getUsrId());
 		boolean modify = this.campaignService.modifyNewCampaign(requestCreateCmpnVO);

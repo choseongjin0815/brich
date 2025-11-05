@@ -21,7 +21,7 @@
 	    </jsp:include>
 	    <div class="campaign-list-wrapper">
 		    <div class="campaign-title">
-	            <div>캠페인 신청자</div>
+	            <div>채택 블로거</div>
 	            <span class="enddate">~${adoptList.campaignInfo.cmpnEndDt}</span>
 	        </div>
 	        
@@ -75,8 +75,8 @@
 		                    </c:when>
                         </c:choose>
 		                <div>${adopt.pstDdln}</div>
-		                <div><a class="button_50_30 abled button_a_50_30 go-chat">채팅</a></div>
-		                <div><a class="button_50_30 button-report button_a_50_30" href="">신고</a></div>
+		                <div><a class="button_50_30 abled button_a_50_30 go-chat" href="/adv/chat/room/${adopt.chtRmId}" target="_blank">채팅</a></div>
+		                <div><a class="button_50_30 button-report button_a_50_30" href="/report/write/${adopt.userInfo.usrId}" target="_blank">신고</a></div>
 		                
 		            </div>
 		        </c:forEach>
