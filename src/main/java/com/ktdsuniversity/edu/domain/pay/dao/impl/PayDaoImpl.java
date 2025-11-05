@@ -57,6 +57,21 @@ public class PayDaoImpl extends SqlSessionDaoSupport implements PayDao{
 	public String selectSbscrptnCd(String easyAmount) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectSbscrptnCd", easyAmount);
 	}
+
+	@Override
+	public void updatePaymentFailSubscribe(String pKkey) {
+		super.getSqlSession().update(this.NAME_SPACE + "updatePaymentFailSubscribe" , pKkey);
+	}
+
+	@Override
+	public void updatePaymentFailCampaign(String pKkey) {
+		super.getSqlSession().update(this.NAME_SPACE + "updatePaymentFailCampaign" , pKkey);
+	}
+
+	@Override
+	public int updatePaymentSuccessDate(RequestPaymentVO requestPaymentVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updatePaymentSuccessDate" ,requestPaymentVO);
+	}
     
     
 }

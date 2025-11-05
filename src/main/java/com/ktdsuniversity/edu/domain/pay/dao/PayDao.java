@@ -22,4 +22,10 @@ public interface PayDao {
 
 	String selectSbscrptnCd(String easyAmount);
 
+	void updatePaymentFailSubscribe(String pKkey);
+
+	void updatePaymentFailCampaign(String pKkey);
+
+	int updatePaymentSuccessDate(RequestPaymentVO requestPaymentVO);
+
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
+import jakarta.servlet.http.HttpSession;
+
 public interface PayService {
 
 	List<CommonCodeVO> payInfoServiceList();

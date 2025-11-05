@@ -33,6 +33,7 @@ import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class WidgetController {
@@ -115,7 +116,7 @@ public class WidgetController {
     
     
     @RequestMapping(value = "/confirm")
-    public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
+    public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody, HttpSession httpSession) throws Exception {
         logger.info("============= 결제 시작 =============" ); 
 
         JSONParser parser = new JSONParser();
@@ -199,6 +200,9 @@ public class WidgetController {
             boolean paymentValidationCheck = this.payService.paymentValidationCheck(requestPaymentVO);
             if(paymentValidationCheck) {
             	int paymentSuccessUpdateCount = this.payService.paymentSuccessUpdate(requestPaymentVO);
+            }else {
+            	jsonObject.put("status", "ABORTED");
+                return ResponseEntity.status(HttpURLConnection.HTTP_BAD_REQUEST).body(jsonObject);
             }
             
             

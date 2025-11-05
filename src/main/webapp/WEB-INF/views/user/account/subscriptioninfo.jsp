@@ -28,7 +28,7 @@
         <c:when test="${sessionScope.__LOGIN_USER__.autr eq 1003 }">
             <div class="no-sub-wrapper">
                 <div class="sub-alert">현재 이용중인 이용권이 없습니다.</div>
-                <div class="go-sub-page">이용권 구매로 이동</div>
+                <a href="/blgr/pay/subscribe"><div class="go-sub-page">이용권 구매로 이동</div></a>
             </div>
         </c:when>
         <c:otherwise>

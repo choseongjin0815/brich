@@ -134,10 +134,40 @@
            FROM CM_CD
           WHERE VALUE1 = #{_parameter}
  </select>
+ <update id="updatePaymentFailSubscribe"
+         parameterType="string">
+         UPDATE SBSCRPTN_PYMNT
+            SET PYMNT_CD = '9003'
+          WHERE SBSCRPTN_PYMNT_ID = #{_parameter}
+ </update>
+ <update id="updatePaymentFailCampaign"
+         parameterType="string">
+         UPDATE CMPN_PYMNT
+            SET PYMNT_CD = '9003'
+          WHERE CMPN_PYMNT_ID = #{_parameter}
+ </update>
+ <update id="updatePaymentSuccessDate"
+         parameterType = "com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO">
+		UPDATE USR
+		   SET SBSCRPTN_EXPRS_DT = CASE
+		                               WHEN SBSCRPTN_EXPRS_DT IS NULL THEN SYSDATE + 
+		                               <if test="sbscrptnCd == 'A001' "> 30 </if>
+		                               <if test="sbscrptnCd == 'A002' "> 365 </if>
+		                               WHEN SBSCRPTN_EXPRS_DT  <![CDATA[<]]> SYSDATE THEN SYSDATE + 
+                                       <if test="sbscrptnCd == 'A001' "> 30 </if>
+                                       <if test="sbscrptnCd == 'A002' "> 365 </if>
+		                               ELSE SBSCRPTN_EXPRS_DT + 
+                                       <if test="sbscrptnCd == 'A001' "> 30 </if>
+                                       <if test="sbscrptnCd == 'A002' "> 365 </if>
+		                           END
+		     , AUTR = '1002'
+		 WHERE USR_ID = #{clientUsrId}
+ </update>
 </mapper>
 
 
-
+       
+       
 
 
 
