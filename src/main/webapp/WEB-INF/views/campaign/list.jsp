@@ -66,6 +66,9 @@
                     <jsp:param value="${campaign.rcrtEndDt}" name="rcrtEndDt"/>
                     <jsp:param value="${campaign.cmpnEndDt}" name="cmpnEndDt"/>
                     <jsp:param value="${campaign.rcrtStrtDt}" name="rcrtStrtDt"/>
+                    <jsp:param value="${campaign.usrId}" name="usrId"/>
+                    <jsp:param value="${campaign.attchGrpId}" name="flGrpId"/>
+                    <jsp:param value="${campaign.fileVoList[0].flId}" name="flId"/>
                 </jsp:include>
             </c:forEach>
         </div>

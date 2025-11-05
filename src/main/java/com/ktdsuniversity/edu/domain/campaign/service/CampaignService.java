@@ -61,4 +61,6 @@ public interface CampaignService {
 	int rePostSubmit(RequestPostSubmitVO requestPostSubmitVO);
 
 	String postReturnReason(String campaignId, String usrId);
+
+	boolean modifyNewCampaign(RequestCreateCmpnVO requestCreateCmpnVO);
 }

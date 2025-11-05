@@ -46,7 +46,9 @@
 </div>
 </div>
 <template id="chat-room-list">
-	<div class="chatroom-content-item" data-chat-room="#chatroomid#">
+	<div class="chatroom-content-item" 
+	     data-chat-room="#chatroomid#"
+	     data-target-id="#targetid#">
 		<div class="chatroom-info">
 			<div class="chatroom-campaign-title">
 				<div class="campaign-title camp">#campaigntitle#</div>

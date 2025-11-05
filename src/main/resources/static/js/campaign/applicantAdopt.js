@@ -154,6 +154,12 @@ $().ready(function() {
                 }
             }
         });
-        
+    });
+    
+    $(".go-chat").on("click", function() {
+        usrId = $(".logId").data("user-id");
+        $.get("/adv/go-chat/" + usrId, function(response) {
+            console.log(response);
+        });
     });
 });

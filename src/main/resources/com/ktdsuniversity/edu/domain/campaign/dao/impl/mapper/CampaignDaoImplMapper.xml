@@ -30,6 +30,7 @@
 		     , U.DLT_YN
 		  FROM CMPN_PST_ADPT CPA
 		 INNER JOIN (SELECT USR_ID
+		                  , AUTR
 		                  , LOG_ID
 		                  , PNLT_CNT
 		                  , BLG_ADDRS
@@ -47,17 +48,19 @@
 	   <if test="searchKeyword != null and searchKeyword != ''">
 	       AND U.LOG_ID LIKE '%' || #{searchKeyword} || '%'
 	   </if>
+	    ORDER BY AUTR ASC
        <if test='sortCol != null and sortCol != ""'>
-		  ORDER BY NVL(${sortCol}, 0) ${order}  
+		    , NVL(${sortCol}, 0) ${order}  
        </if>
        <include refid="Common.paginationFooter" />
     </select>
     
     <select id="selectCampaignInfoByCmpnId"
             parameterType="string"
-            resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
+            resultMap="ResponseCampaignVOMap">
         SELECT C.CMPN_ID
              , C.STTS_CD
+             , C.USR_ID
 		     , C.RCRT_PRSNN
 		     , C.CMPN_TITLE
 		     , TO_CHAR(C.CNFM_DT + 3, 'YYYY-MM-DD') AS CNFM_DT
@@ -65,8 +68,15 @@
 		     , TO_CHAR(C.RCRT_END_DT, 'YYYY-MM-DD') AS RCRT_END_DT
 		     , TO_CHAR(C.PST_END_DT, 'YYYY-MM-DD') AS PST_END_DT
 		     , TO_CHAR(C.CMPN_END_DT, 'YYYY-MM-DD') AS CMPN_END_DT
+		     , C.ATTCH_GRP_ID
+             , F.FL_ID
 		  FROM CMPN C
+	     INNER JOIN CM_CD CC
+            ON C.STTS_CD = CC.CD_ID
+          LEFT OUTER JOIN FL F
+            ON F.FL_GRP_ID = C.ATTCH_GRP_ID 
          WHERE CMPN_ID = #{_parameter}
+           AND C.DLT_YN = 'N'
     </select>
     
     <update id="updateAdptYnByCmpnPstAdptId"
@@ -162,14 +172,30 @@
 		     , U.USR_ID
 		     , U.LOG_ID
 		     , U.BLG_ADDRS
+		     , (SELECT CP1.CHT_RM_ID 
+		          FROM CHT_PRTCPNT CP1
+		         INNER JOIN CHT_PRTCPNT CP2
+		            ON CP1.CHT_RM_ID = CP2.CHT_RM_ID
+		         INNER JOIN CHT_RM CR
+		            ON CP1.CHT_RM_ID = CR.CHT_RM_ID
+		         WHERE CP2.USR_ID != CP1.USR_ID
+		           AND CP1.USR_ID = C.USR_ID 
+		           AND CP2.USR_ID = U.USR_ID 
+		           AND CR.CMPN_ID = C.CMPN_ID
+		           AND CP1.LFT_YN = 'N'
+		           AND CP1.DLT_YN = 'N'
+		           AND CP2.DLT_YN = 'N'
+		           AND CR.DLT_YN = 'N') AS CHT_RM_ID
 		  FROM CMPN_PST_ADPT CPA
 		 INNER JOIN (SELECT USR_ID
-                          , LOG_ID
-                          , BLG_ADDRS
+		                  , LOG_ID
+		                  , BLG_ADDRS
 		               FROM USR
-                      WHERE DLT_YN  = 'N'
-                        AND AUTR != '1005') U
+		              WHERE DLT_YN  = 'N'
+		                AND AUTR != '1005') U
 		    ON CPA.BLG_USR_ID = U.USR_ID
+		 INNER JOIN CMPN C
+		    ON C.CMPN_ID = CPA.CMPN_ID 
 		 INNER JOIN CM_CD CC
 		    ON CPA.PST_STTS_CD = CC.CD_ID 
 		 WHERE CPA.CMPN_ID = #{cmpnId}
@@ -360,8 +386,8 @@
         , #{offrCn}
         , #{offrPrc}
         , #{pstMssn}
-        , #{ntfcn}
         , #{hstg}
+        , #{ntfcn}
         , 0
         , NULL
         , SYSDATE
@@ -371,11 +397,33 @@
         , 'N')
     </insert>
     
+    <update id="updateCmpnPrntIdByCmpnId"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO">
+        UPDATE CMPN
+		   SET CMPN_PRNT_ID = #{cmpnId}
+		     , UPDT_DT = SYSDATE
+		     , MTTR = #{usrId}
+		 WHERE CMPN_ID = #{denyCmpnId}
+    </update>
+    
+    <resultMap type="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO"
+               id = "ResponseCampaignVOMap"
+               autoMapping="true">
+        <id column="CMPN_ID" property="cmpnId" />
+        <collection property="fileVoList"
+                    javaType="list"
+                    ofType="com.ktdsuniversity.edu.domain.file.vo.FileVO"
+                    autoMapping="true">
+            <id column="FL_ID" property="flId" />
+        </collection>
+    </resultMap>
     <select id="selectCampaignListByUsrId"
             parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO"
-            resultType="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO">
+            resultMap="ResponseCampaignVOMap">
         <include refid="Common.paginationHeader" />
-        SELECT C.CMPN_ID
+        SELECT ROW_NUMBER() OVER(ORDER BY C.CRT_DT) "NUMBER"
+             , C.CMPN_ID
+             , C.USR_ID
              , C.STTS_CD 
              , CC.CD_NM AS STTS_CD_NM
              , TO_CHAR(C.RCRT_STRT_DT, 'YYYY-MM-DD') AS RCRT_STRT_DT
@@ -384,17 +432,22 @@
              , TO_CHAR(C.CMPN_END_DT, 'YYYY-MM-DD') AS CMPN_END_DT
              , C.ATTCH_GRP_ID
              , C.CMPN_TITLE
+             , F.FL_ID
           FROM CMPN C
          INNER JOIN CM_CD CC
             ON C.STTS_CD = CC.CD_ID
+          LEFT OUTER JOIN FL F
+            ON F.FL_GRP_ID = C.ATTCH_GRP_ID 
          WHERE C.USR_ID = #{loginId}
            AND C.DLT_YN = 'N'
+           AND C.CMPN_PRNT_ID IS NULL
         <if test="searchKeyword != null and searchKeyword != ''">
            AND C.CMPN_TITLE LIKE '%' || #{searchKeyword} || '%'
        </if>
        <if test="sortBy != null and sortBy != ''">
            AND C.STTS_CD = #{sortBy}
        </if>
+        ORDER BY "NUMBER" DESC
         <include refid="Common.paginationFooter" />
     </select>
     
@@ -497,6 +550,20 @@
                   , ARCD.CD_NM                                 AS AREA
                   , PARCD.CD_NM                                AS PARENT_AREA   
                   , ADPT.PST_STTS_CD
+                  , FG.FL_CNT                               
+                  , FG.FL_GRP_ID 
+                  , FL.FL_NM                             AS FL_NM
+                  , FL.FL_PTH                           AS FL_PTH
+                  , FL.FL_ID
+                  , CASE WHEN EXISTS (SELECT 1
+                                        FROM FAV_CMPN FC
+                                       WHERE FC.CMPN_ID    = CMPN.CMPN_ID
+                                        <if test="blgId != null and blgId != ''">
+                                         AND FC.BLG_USR_ID = #{blgId}
+                                        </if> 
+                                         AND FC.DLT_YN     = 'N'
+                                      ) THEN 'Y' ELSE 'N'
+                    END                  AS FAVYN                  
                   , CASE WHEN EXISTS (SELECT 1
                                         FROM CMPN_PST_ADPT 
                                        WHERE CMPN_ID = #{campaignId} 
@@ -535,6 +602,10 @@
                            AND BLG_USR_ID = #{blgId}
                            </if>             ) ADPT
                ON CMPN.CMPN_ID = ADPT.CMPN_ID                
+             LEFT JOIN FL_GRP FG
+               ON CMPN.ATTCH_GRP_ID = FG.FL_GRP_ID 
+             LEFT JOIN FL FL
+               ON FG.FL_GRP_ID = FL.FL_GRP_ID                
             WHERE CMPN.CMPN_ID = #{campaignId}
     </select>
     
@@ -567,6 +638,7 @@
           , DLT_YN 
       FROM CM_CD
      WHERE PRNT_CD_ID= '3000'
+     ORDER BY SRT
     </select>
     
      
@@ -601,6 +673,14 @@ ORDER BY RCRT_END_DT ASC
                            ofType="java.lang.String">
                            <result property="area" column="AREA"/>
                </collection>
+               <collection property="fileVoList"
+                           javaType="list"
+                           ofType="com.ktdsuniversity.edu.domain.file.vo.FileVO">
+                           <result property="flNm" column="FL_NM"/>
+                           <result property="flPth" column="FL_PTH"/>
+                           <result property="flId" column="FL_ID"/>
+                           
+               </collection>               
     </resultMap>
     
     <select id="selectCampaignListCategoryAndSortBy"
@@ -617,6 +697,10 @@ ORDER BY RCRT_END_DT ASC
 			     , CMPN.RCRT_END_DT
 			     , PARCD.CD_NM      AS PARENT_AREA  
 			     , ARCD.CD_NM       AS AREA
+                 , FG.FL_CNT                               
+                 , FG.FL_GRP_ID 
+                 , FL.FL_NM 
+                 , FL.FL_PTH 			     
                  , CASE WHEN EXISTS (
                                      SELECT 1
                                        FROM FAV_CMPN FC
@@ -660,6 +744,10 @@ ORDER BY RCRT_END_DT ASC
 			    ON CMPNAR.AR_CD = ARCD.CD_ID
 			  LEFT JOIN AR_CD PARCD
 			    ON PARCD.CD_ID = ARCD.PRNT_CD_ID 
+              LEFT JOIN FL_GRP FG
+                ON CMPN.ATTCH_GRP_ID = FG.FL_GRP_ID 
+              LEFT JOIN FL FL
+                ON FG.FL_GRP_ID = FL.FL_GRP_ID 			    
 			 WHERE CMPN.CMPN_TITLE LIKE '%' || #{searchKeyword, jdbcType=VARCHAR} || '%'        
 			   AND CMPN.CTG_CD IN (   SELECT CD_ID
 			                            FROM CM_CD
@@ -669,7 +757,7 @@ ORDER BY RCRT_END_DT ASC
                                      FROM CM_CD
                                     START WITH CD_ID= NVL(#{category, jdbcType=VARCHAR}, '3000')        
                                   CONNECT BY PRIOR CD_ID = PRNT_CD_ID)  
-			  AND CMPN.STTS_CD = '2005'   
+			  AND CMPN.STTS_CD = '2005'   			  
 			  ORDER BY
 		        CASE WHEN #{sortBy} = 'latest'   THEN CMPN.RCRT_STRT_DT END  DESC ,
 		        CASE WHEN #{sortBy} = 'deadline' THEN CMPN.RCRT_END_DT  END  ASC  ,
@@ -718,6 +806,10 @@ ORDER BY RCRT_END_DT ASC
 			            ELSE 'Y'
 			       END                                     AS FAV_YN
 			     , ADPT.PST_STTS_CD       
+                 , FG.FL_CNT                               
+                 , FG.FL_GRP_ID 
+                 , FL.FL_NM 
+                 , FL.FL_PTH 			     
 			  FROM USR U
 			 INNER JOIN CMPN_PST_ADPT ADPT
 			    ON U.USR_ID = ADPT.BLG_USR_ID
@@ -728,8 +820,7 @@ ORDER BY RCRT_END_DT ASC
 			  LEFT JOIN (SELECT CMPN_ID
 			                  , COUNT(CMPN_ID) AS CNT
 			               FROM CMPN_PST_ADPT
-			              WHERE ADPT_YN = 'Y'
-			                AND DLT_YN  = 'N'
+			              WHERE DLT_YN  = 'N'
 			              GROUP BY CMPN_ID
 			             ) ADPT_CNT
 			    ON ADPT_CNT.CMPN_ID = ADPT.CMPN_ID
@@ -743,6 +834,10 @@ ORDER BY RCRT_END_DT ASC
 			    ON CMPNAR.AR_CD = ARCD.CD_ID
 			  LEFT JOIN AR_CD PARCD
 			    ON PARCD.CD_ID = ARCD.PRNT_CD_ID   
+              LEFT JOIN FL_GRP FG
+                ON CMPN.ATTCH_GRP_ID = FG.FL_GRP_ID 
+              LEFT JOIN FL FL
+                ON FG.FL_GRP_ID = FL.FL_GRP_ID 			    
 			 WHERE U.USR_ID    = #{blgId}
 			   AND ADPT.DLT_YN = 'N'
 			  <if test="statuses != null and statuses.size() > 0">
@@ -820,6 +915,10 @@ ORDER BY RCRT_END_DT ASC
                  , PARCD.CD_NM                             AS PARENT_AREA   
                  , NVL(ADPT_CNT.CNT, 0)                    AS ADPT_CNT
                  , (SELECT 'Y' FROM DUAL)                  AS FAV_YN
+                 , FG.FL_CNT                               
+                 , FG.FL_GRP_ID 
+                 , FL.FL_NM 
+                 , FL.FL_PTH                  
               FROM CMPN CMPN
               LEFT JOIN CMPN_AR CMPNAR
                 ON CMPN.CMPN_ID = CMPNAR.CMPN_ID 
@@ -827,11 +926,14 @@ ORDER BY RCRT_END_DT ASC
                 ON CMPNAR.AR_CD = ARCD.CD_ID
               LEFT JOIN AR_CD PARCD
                 ON PARCD.CD_ID = ARCD.PRNT_CD_ID   
+              LEFT JOIN FL_GRP FG
+                ON CMPN.ATTCH_GRP_ID = FG.FL_GRP_ID 
+              LEFT JOIN FL FL
+                ON FG.FL_GRP_ID = FL.FL_GRP_ID                 
               LEFT JOIN (SELECT CMPN_ID
                               , COUNT(CMPN_ID) AS CNT
                            FROM CMPN_PST_ADPT
-                          WHERE ADPT_YN = 'Y'
-                            AND DLT_YN  = 'N'
+                          WHERE DLT_YN  = 'N'
                           GROUP BY CMPN_ID
                          ) ADPT_CNT
                 ON ADPT_CNT.CMPN_ID = CMPN.CMPN_ID    
@@ -937,7 +1039,8 @@ ORDER BY RCRT_END_DT ASC
 	<update id="updateRePostSubmit"
 			parameterType = "com.ktdsuniversity.edu.domain.campaign.vo.request.RequestPostSubmitVO">
 			UPDATE POST_RTRN_HIST
-			   SET POST_SUBMIT_CHG_CN = '테스트'
+			   SET POST_SUBMIT_CHG_CN = #{postSubmitChgCn}
+			     , SUBMIT_FL_GRP_ID = #{postFlGrpId}
 			 WHERE POST_RTRN_HIST_ID = (   SELECT POST_RTRN_HIST_ID
 			                                 FROM (SELECT POST_RTRN_HIST_ID
 			                                         FROM POST_RTRN_HIST

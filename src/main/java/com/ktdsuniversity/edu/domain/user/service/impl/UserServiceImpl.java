@@ -120,7 +120,6 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
-    //추후 파일 업로드 카테고리 추가 예정
     @Transactional
 	@Override
 	public boolean createNewUser(RequestUserRegistVO requestUserRegistVO) {
@@ -199,6 +198,7 @@ public class UserServiceImpl implements UserService {
 		return this.userDao.selectUserLogIdByNameAndEmail(requestUserFindIdVO);
 	}
 
+    @Transactional
 	@Override
 	public boolean updatePswrdByLogIdAndPswrd(RequestUserResetPasswordVO resetPasswordInfo) {
 		//재설정할 비밀번호를 암호화한다. 
@@ -250,6 +250,7 @@ public class UserServiceImpl implements UserService {
   /*
    * 계정 관리 - 비밀번호 재설정용
    */
+  @Transactional
   @Override
   public boolean updatePswrdByUsrId(RequestUserAccountPasswordVO requestUserAccountPasswordVO) {
 	  //우선 입력한 현재 비밀번호와 나의 비밀번호가 일치하는지 확인 해야함

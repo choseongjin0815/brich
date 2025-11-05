@@ -34,7 +34,8 @@
 		data-nm = "${sessionScope.__LOGIN_USER__.nm}"
 		data-cmpny = "${sessionScope.__LOGIN_USER__.cmpny}">
 		<div class="content-title">
-			<div class="content-title-text">${campaign.cmpnTitle}</div>
+			<div class="content-title-text"
+			     data-cmpn-id="${campaign.cmpnId}">${campaign.cmpnTitle}</div>
 			<div class="chatroom-extra">
 				<img src="/img/more-horizontal.png" class="chat-leave-btn-rm">
 				<div class="report-btn-rm">신고하기</div>
