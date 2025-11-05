@@ -131,14 +131,14 @@ pageEncoding="UTF-8"%>
                   <ul class="menu-content">
                     <c:choose>
                         <c:when test="${sessionScope.__LOGIN_USER__.autr eq 1004}">
-                            <li class="menu-account-selected"><a href="/adv/account/info">계정 관리</a></li>
+                            <li class="menu-account-selected other-item"><a href="/adv/account/info">계정 관리</a></li>
                         </c:when>
                         <c:otherwise> 
-                            <li class="menu-account-selected"><a href="/blgr/account/info">계정 관리</a></li>
+                            <li class="menu-account-selected other-item"><a href="/blgr/account/info">계정 관리</a></li>
                         </c:otherwise>   
                     </c:choose>
-                    <li class="menu-help-selected"><a href="/help/inqr/list">Help</a></li>
-                    <li class="menu-report-selected"><a href="/report/list">신고</a></li>
+                    <li class="menu-help-selected other-item"><a href="/help/inqr/list">Help</a></li>
+                    <li class="menu-report-selected other-item"><a href="/report/list">신고</a></li>
                   </ul>
                 </li>
             </c:if>

@@ -15,7 +15,7 @@
         <div class="choose-message">회원가입 유형 선택</div>
         <div class="choose-box">
             <div class="role-box" data-role="blogger">
-                <img class="role-image"/>
+                <img src="img/blogger.png" class="role-image"/>
                 <div class="role">블로거 (개인)</div>
                 <ul>
                     <li>내 블로그 순위 관리</li>
@@ -26,7 +26,7 @@
                 <div class="go-regist">가입하기</div>
             </div>
             <div class="role-box" data-role="advertiser">
-                <img class="role-image"/>
+                <img src="img/advertiser.png" class="role-image"/>
                 <div class="role">광고주 (업체)</div>
                 <ul>
                     <li>체계적인 광고 진행</li>

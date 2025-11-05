@@ -68,29 +68,7 @@ public class ResponseCampaignVO extends CampaignVO{
 	 private String SttsCdNm;
 	 
 	 	 
-	 public String getFlCnt() {
-		 return this.flCnt;
-	 }
-	 
-	 public void setFlCnt(String flCnt) {
-		 this.flCnt = flCnt;
-	 }
-	 
-	 public String getFlGrpId() {
-		 return this.flGrpId;
-	 }
-	 
-	 public void setFlGrpId(String flGrpId) {
-		 this.flGrpId = flGrpId;
-	 }
-	 
-	 public List<FileVO> getFileVoList() {
-		 return this.fileVoList;
-	 }
-	 
-	 public void setFileVoList(List<FileVO> fileVoList) {
-		 this.fileVoList = fileVoList;
-	 }
+	
 	 public String getSttsCdNm() {
 		return this.SttsCdNm;
 	}

@@ -114,7 +114,7 @@ ul {
 
       .menu-content {
        /*하단 메뉴 선택시 배경 색 크기 조정용*/
-        & li {
+        & li.other-item {
             width: 218px;
         }
         & > li > a {
