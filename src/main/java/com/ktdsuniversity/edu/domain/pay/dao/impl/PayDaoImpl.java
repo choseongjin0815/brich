@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.domain.pay.dao.PayDao;
 import com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO;
+import com.ktdsuniversity.edu.domain.pay.vo.response.ResponsePaymentVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 @Repository
@@ -40,6 +41,21 @@ public class PayDaoImpl extends SqlSessionDaoSupport implements PayDao{
 	@Override
 	public int insertBeforeCampaignPaymentInfoSave(RequestPaymentVO requestPaymentVO) {
 		return super.getSqlSession().insert(this.NAME_SPACE + "insertBeforeCampaignPaymentInfoSave" , requestPaymentVO);
+	}
+
+	@Override
+	public ResponsePaymentVO selectBeforeSaveInfo(String pKkey) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectBeforeSaveInfo" , pKkey);
+	}
+
+	@Override
+	public int updatePaymentSuccessSubscribe(RequestPaymentVO requestPaymentVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updatePaymentSuccessSubscribe", requestPaymentVO);
+	}
+
+	@Override
+	public String selectSbscrptnCd(String easyAmount) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectSbscrptnCd", easyAmount);
 	}
     
     

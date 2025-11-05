@@ -59,9 +59,9 @@
 		, PAYMENT_KEY)
 		VALUES
 		( #{PKkey}
-		, #{clientUsrId}
+		, #{clientId}
 		, '9002'
-		, #{clientCdId}
+		, NULL
 		, #{clientPrice}
 		, SYSDATE
 		, 'SYSTEM'
@@ -91,7 +91,7 @@
 		, ORDER_ID
 		, PAYMENT_KEY)
 		VALUES( #{PKkey}
-		, #{clientCmpnId}
+		, #{clientId}
 		, 9002
 		, #{clientPrice}
 		, SYSDATE
@@ -102,6 +102,46 @@
 		, #{clientOrderId}
 		, NULL
 		)
- 
  </insert>
+ 
+ <select id="selectBeforeSaveInfo"
+         parameterType="string"
+         resultType="com.ktdsuniversity.edu.domain.pay.vo.response.ResponsePaymentVO">
+		SELECT ORDER_ID AS ORDER_ID
+		     , AMNT AS AMOUNT
+		  FROM CMPN_PYMNT
+		 WHERE CMPN_PYMNT_ID = #{_parameter}
+		 UNION ALL
+		SELECT ORDER_ID AS ORDER_ID 
+		     , AMNT AS AMOUNT
+		  FROM SBSCRPTN_PYMNT
+		 WHERE SBSCRPTN_PYMNT_ID=  #{_parameter}
+ </select>
+ <update id="updatePaymentSuccessSubscribe"
+         parameterType = "com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO">
+		UPDATE SBSCRPTN_PYMNT
+		   SET USR_ID       = #{clientUsrId}
+		     , PYMNT_CD     = '9001'
+		     , SBSCRPTN_CD  = #{sbscrptnCd}
+		     , PAYMENT_KEY  = #{paymentKey}
+		 WHERE SBSCRPTN_PYMNT_ID = #{PKkey}       
+ </update>
+ 
+ <select id="selectSbscrptnCd"
+         resultType="string"
+         parameterType = "string">
+         SELECT CD_ID 
+           FROM CM_CD
+          WHERE VALUE1 = #{_parameter}
+ </select>
 </mapper>
+
+
+
+
+
+
+
+
+
+

@@ -11,7 +11,7 @@
     <link type="text/css" rel="stylesheet" href="/css/layoutmenu.css" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>토스페이먼츠 샘플 프로젝트</title>
+    <title>상품 결제</title>
     <!-- 토스페이먼츠 SDK 추가 -->
     <script src="https://js.tosspayments.com/v2/standard"></script>
     <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
@@ -38,14 +38,14 @@
           </button>
         </div>
       </div>
-      <div id="payment-info" class="display-none" data-cdid="${cdId}" data-cdnm="${cdNm}" data-cmpnid="${cmpnId}" data-amount="${amount}" data-usrId="${usrId}"></div>
+      <div id="payment-info" class="display-none" data-cdid="${cdId}" data-cdnm="${cdNm}" data-cmpnid="${cmpnId}" data-amount="${amount}" data-usrid="${usrId}"></div>
     <script>
       main();
 
       async function main() {
         const button = document.getElementById("payment-button");
         const price = parseInt(document.getElementById("payment-info").getAttribute('data-amount'));
-        const usrId = document.getElementById("payment-info").getAttribute('data-usrId');
+        const usrId = document.getElementById("payment-info").getAttribute('data-usrid');
         const cdNm = document.getElementById("payment-info").getAttribute('data-cdnm');
         const cdId = document.getElementById("payment-info").getAttribute('data-cdid');
         const cmpnId = document.getElementById("payment-info").getAttribute('data-cmpnid');

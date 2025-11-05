@@ -1070,7 +1070,7 @@ ORDER BY RCRT_END_DT ASC
             SELECT POST_RETN_RSN
              FROM (SELECT POST_RTRN_HIST_ID, POST_RETN_RSN
                      FROM POST_RTRN_HIST
-                    WHERE POST_ID = ( SELECT CMPN_PST_ADPT_ID
+                    WHERE POST_ID IN ( SELECT CMPN_PST_ADPT_ID
                                         FROM CMPN_PST_ADPT
                                        WHERE BLG_USR_ID = #{blgId}
                                          AND CMPN_ID   = #{cmpnId}

@@ -1,3 +1,4 @@
+
 $(document).ready(function(){
   var here = location.pathname.replace(/^\/+|\/+$/g, '').split('/');
   console.log(here[0]);

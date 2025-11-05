@@ -9,9 +9,9 @@ public interface PayService {
 
 	List<CommonCodeVO> payInfoServiceList();
 
-	boolean paymentValidationCheck(String orderId, String paymentKey, String orderName, Long easyAmount);
+	boolean paymentValidationCheck(RequestPaymentVO requestPaymentVO);
 
-	int paymentSuccessUpdate(String orderId, String paymentKey, String orderName, Long easyAmount);
+	int paymentSuccessUpdate(RequestPaymentVO requestPaymentVO);
 
 	CommonCodeVO payInfoService(String cdId);
 
