@@ -85,7 +85,6 @@
       <artifactId>lombok</artifactId>
       <optional>true</optional>
     </dependency>
-
     <!-- ===== Apache POI / Tika ===== -->
     <dependency>
       <groupId>org.apache.poi</groupId>

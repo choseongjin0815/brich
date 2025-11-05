@@ -7,6 +7,7 @@
        <script type="text/javascript" src="/js/campaign/applicantAdopt.js"></script>
        <script type="text/javascript" src="/js/common/paginator.js"></script>
        <script type="text/javascript" src="/js/common/validate.js"></script>
+       <script type="text/javascript" src="/js/campaign/campaignmain.js"></script>
 </c:set>
 
 <c:set var="css">
@@ -37,7 +38,15 @@
 					</div>
 				    <c:if test="${not empty sessionScope.__LOGIN_USER__ }" > 
 						<div class="cmpn-title-love">
-							하트
+				            <c:if test="${not empty sessionScope.__LOGIN_USER__ }" > 
+				                <c:set var="love" value="${detail.favYn eq 'Y'}" />
+				                <div class="campaign-fav love-${detail.favYn}"
+				                     data-usr-id="${sessionScope.__LOGIN_USER__.usrId}"
+				                     data-cmpn-id="${detail.cmpnId}"> 
+				                <div class="love-on ${love ? '' : 'display-none'}"></div>
+				                <div class="love-off ${love ? 'display-none' : ''}"></div>
+				              </div>
+				            </c:if>							
     					</div>
 					</c:if>
 				</div>
@@ -53,8 +62,19 @@
 	            <div class="cmpn-content-area">
 					<ul class="campaign-detail-table">
 					  <li>
-                        <label for="">이미지</label>
-					    
+						<c:if test="${not empty detail.fileVoList}">
+						  <div class="cmpn-images">
+						    <c:forEach var="f" items="${detail.fileVoList}" varStatus="st">
+						      <div class="cmpn-image">
+						        <div class="path">
+						        /file/1234/${detail.flGrpId}/${f.flId}
+						        </div>
+						      <!-- <img src="/file/1234/${detail.flGrpId}/${f.flId}"/>   -->  
+						           <img class = "cmpn-detail-image" src=" /file/1234/FG-20251104-000155/FL-20251104-000279"/>
+						      </div>
+						    </c:forEach>
+						  </div>
+						</c:if>
 					  </li>
 					  <li>
 	                    <label for="">설명</label>
@@ -127,29 +147,37 @@
 	    	</div>
 	    </form>
 	    
-       <form class="re-submit-modal-form display-none">
-	    	<div class = "submit-modal-area" data-cmpn-id= "${detail.cmpnId}">
-	            <div class="submit-modal">
-	            	<div class="submit-modal-title height-center">포스팅 재 제출</div>
-	            	<div class="submit-modal-field middle-center re-submit-area">
-	            		<label class="submit-modal-label " for="re-post-cn">수정된 내용</label>
-	            		<textarea class="submit-modal-input re-submit-cn" id="re-post-cn" type="text" name="rePostCn"></textarea>
-	            	</div> 
-	            	<div class="submit-modal-field middle-center">
-	            		<label class="submit-modal-label" for="re-post-title">포스팅 제목</label>
-	            		<input class="submit-modal-input" id="re-post-title" type="text" name="rePostTitle">
-	            	</div> 
-				    <div class="submit-modal-field middle-center">
-				    	<label class="submit-modal-label" for="re-post-url">포스팅 주소</label>
-				    	<input class="submit-modal-input" id="re-post-url" type="url" placeholder="https://" name="rePostUrl">
-				    </div>
-					<div class="submit-modal-actions flex-row">
-					   <div class="re-submit-modal-btn submit-modal-btn-close middle-center">닫기</div>
-					   <div class="submit-modal-btn re-submit-modal-btn-ok middle-center" >제출</div>
-					</div>
-	            </div>
-	    	</div>
-	    </form>	    
+<form class="re-submit-modal-form display-none" enctype="multipart/form-data">
+  <div class="submit-modal-area" data-cmpn-id="${detail.cmpnId}">
+    <div class="submit-modal">
+      <div class="submit-modal-title height-center">포스팅 재 제출</div>
+      <div class="submit-modal-field middle-center re-submit-area">
+        <label class="submit-modal-label" for="re-post-cn">수정된 내용</label>
+        <textarea class="submit-modal-input re-submit-cn" id="re-post-cn" name="postSubmitChgCn"></textarea>
+      </div>
+      <div class="submit-modal-field middle-center">
+        <label class="submit-modal-label" for="re-post-title">포스팅 제목</label>
+        <input class="submit-modal-input" id="re-post-title" type="text" name="postTitle">
+      </div>
+      <div class="submit-modal-field middle-center">
+        <label class="submit-modal-label" for="re-post-url">포스팅 주소</label>
+        <input class="submit-modal-input" id="re-post-url" type="url" placeholder="https://" name="postUrl">
+      </div>
+      <div class="submit-modal-field middle-center">
+        <label class="submit-modal-label" for="re-post-file">파일추가</label>
+        <div class="submit-modal-file">
+          <input type="file" id="file-input" name="file" multiple style="display:none;">
+          <img class="file-insert" id="re-post-file" src="/img/file.png" alt="파일 추가">
+        </div>
+      </div>
+      <div class="submit-modal-actions flex-row">
+        <div class="re-submit-modal-btn submit-modal-btn-close middle-center">닫기</div>
+        <div class="submit-modal-btn re-submit-modal-btn-ok middle-center">제출</div>
+      </div>
+    </div>
+  </div>
+</form>
+
 	    
 <jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
   

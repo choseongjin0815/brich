@@ -497,6 +497,20 @@
                   , ARCD.CD_NM                                 AS AREA
                   , PARCD.CD_NM                                AS PARENT_AREA   
                   , ADPT.PST_STTS_CD
+                  , FG.FL_CNT                               
+                  , FG.FL_GRP_ID 
+                  , FL.FL_NM                             AS FL_NM
+                  , FL.FL_PTH                           AS FL_PTH
+                  , FL.FL_ID
+                  , CASE WHEN EXISTS (SELECT 1
+                                        FROM FAV_CMPN FC
+                                       WHERE FC.CMPN_ID    = CMPN.CMPN_ID
+                                        <if test="blgId != null and blgId != ''">
+                                         AND FC.BLG_USR_ID = #{blgId}
+                                        </if> 
+                                         AND FC.DLT_YN     = 'N'
+                                      ) THEN 'Y' ELSE 'N'
+                    END                  AS FAVYN                  
                   , CASE WHEN EXISTS (SELECT 1
                                         FROM CMPN_PST_ADPT 
                                        WHERE CMPN_ID = #{campaignId} 
@@ -535,6 +549,10 @@
                            AND BLG_USR_ID = #{blgId}
                            </if>             ) ADPT
                ON CMPN.CMPN_ID = ADPT.CMPN_ID                
+             LEFT JOIN FL_GRP FG
+               ON CMPN.ATTCH_GRP_ID = FG.FL_GRP_ID 
+             LEFT JOIN FL FL
+               ON FG.FL_GRP_ID = FL.FL_GRP_ID                
             WHERE CMPN.CMPN_ID = #{campaignId}
     </select>
     
@@ -567,6 +585,7 @@
           , DLT_YN 
       FROM CM_CD
      WHERE PRNT_CD_ID= '3000'
+     ORDER BY SRT
     </select>
     
      
@@ -601,6 +620,14 @@ ORDER BY RCRT_END_DT ASC
                            ofType="java.lang.String">
                            <result property="area" column="AREA"/>
                </collection>
+               <collection property="fileVoList"
+                           javaType="list"
+                           ofType="com.ktdsuniversity.edu.domain.file.vo.FileVO">
+                           <result property="flNm" column="FL_NM"/>
+                           <result property="flPth" column="FL_PTH"/>
+                           <result property="flId" column="FL_ID"/>
+                           
+               </collection>               
     </resultMap>
     
     <select id="selectCampaignListCategoryAndSortBy"
@@ -617,6 +644,10 @@ ORDER BY RCRT_END_DT ASC
 			     , CMPN.RCRT_END_DT
 			     , PARCD.CD_NM      AS PARENT_AREA  
 			     , ARCD.CD_NM       AS AREA
+                 , FG.FL_CNT                               
+                 , FG.FL_GRP_ID 
+                 , FL.FL_NM 
+                 , FL.FL_PTH 			     
                  , CASE WHEN EXISTS (
                                      SELECT 1
                                        FROM FAV_CMPN FC
@@ -660,6 +691,10 @@ ORDER BY RCRT_END_DT ASC
 			    ON CMPNAR.AR_CD = ARCD.CD_ID
 			  LEFT JOIN AR_CD PARCD
 			    ON PARCD.CD_ID = ARCD.PRNT_CD_ID 
+              LEFT JOIN FL_GRP FG
+                ON CMPN.ATTCH_GRP_ID = FG.FL_GRP_ID 
+              LEFT JOIN FL FL
+                ON FG.FL_GRP_ID = FL.FL_GRP_ID 			    
 			 WHERE CMPN.CMPN_TITLE LIKE '%' || #{searchKeyword, jdbcType=VARCHAR} || '%'        
 			   AND CMPN.CTG_CD IN (   SELECT CD_ID
 			                            FROM CM_CD
@@ -669,7 +704,7 @@ ORDER BY RCRT_END_DT ASC
                                      FROM CM_CD
                                     START WITH CD_ID= NVL(#{category, jdbcType=VARCHAR}, '3000')        
                                   CONNECT BY PRIOR CD_ID = PRNT_CD_ID)  
-			  AND CMPN.STTS_CD = '2005'   
+			  AND CMPN.STTS_CD = '2005'   			  
 			  ORDER BY
 		        CASE WHEN #{sortBy} = 'latest'   THEN CMPN.RCRT_STRT_DT END  DESC ,
 		        CASE WHEN #{sortBy} = 'deadline' THEN CMPN.RCRT_END_DT  END  ASC  ,
@@ -718,6 +753,10 @@ ORDER BY RCRT_END_DT ASC
 			            ELSE 'Y'
 			       END                                     AS FAV_YN
 			     , ADPT.PST_STTS_CD       
+                 , FG.FL_CNT                               
+                 , FG.FL_GRP_ID 
+                 , FL.FL_NM 
+                 , FL.FL_PTH 			     
 			  FROM USR U
 			 INNER JOIN CMPN_PST_ADPT ADPT
 			    ON U.USR_ID = ADPT.BLG_USR_ID
@@ -728,8 +767,7 @@ ORDER BY RCRT_END_DT ASC
 			  LEFT JOIN (SELECT CMPN_ID
 			                  , COUNT(CMPN_ID) AS CNT
 			               FROM CMPN_PST_ADPT
-			              WHERE ADPT_YN = 'Y'
-			                AND DLT_YN  = 'N'
+			              WHERE DLT_YN  = 'N'
 			              GROUP BY CMPN_ID
 			             ) ADPT_CNT
 			    ON ADPT_CNT.CMPN_ID = ADPT.CMPN_ID
@@ -743,6 +781,10 @@ ORDER BY RCRT_END_DT ASC
 			    ON CMPNAR.AR_CD = ARCD.CD_ID
 			  LEFT JOIN AR_CD PARCD
 			    ON PARCD.CD_ID = ARCD.PRNT_CD_ID   
+              LEFT JOIN FL_GRP FG
+                ON CMPN.ATTCH_GRP_ID = FG.FL_GRP_ID 
+              LEFT JOIN FL FL
+                ON FG.FL_GRP_ID = FL.FL_GRP_ID 			    
 			 WHERE U.USR_ID    = #{blgId}
 			   AND ADPT.DLT_YN = 'N'
 			  <if test="statuses != null and statuses.size() > 0">
@@ -820,6 +862,10 @@ ORDER BY RCRT_END_DT ASC
                  , PARCD.CD_NM                             AS PARENT_AREA   
                  , NVL(ADPT_CNT.CNT, 0)                    AS ADPT_CNT
                  , (SELECT 'Y' FROM DUAL)                  AS FAV_YN
+                 , FG.FL_CNT                               
+                 , FG.FL_GRP_ID 
+                 , FL.FL_NM 
+                 , FL.FL_PTH                  
               FROM CMPN CMPN
               LEFT JOIN CMPN_AR CMPNAR
                 ON CMPN.CMPN_ID = CMPNAR.CMPN_ID 
@@ -827,11 +873,14 @@ ORDER BY RCRT_END_DT ASC
                 ON CMPNAR.AR_CD = ARCD.CD_ID
               LEFT JOIN AR_CD PARCD
                 ON PARCD.CD_ID = ARCD.PRNT_CD_ID   
+              LEFT JOIN FL_GRP FG
+                ON CMPN.ATTCH_GRP_ID = FG.FL_GRP_ID 
+              LEFT JOIN FL FL
+                ON FG.FL_GRP_ID = FL.FL_GRP_ID                 
               LEFT JOIN (SELECT CMPN_ID
                               , COUNT(CMPN_ID) AS CNT
                            FROM CMPN_PST_ADPT
-                          WHERE ADPT_YN = 'Y'
-                            AND DLT_YN  = 'N'
+                          WHERE DLT_YN  = 'N'
                           GROUP BY CMPN_ID
                          ) ADPT_CNT
                 ON ADPT_CNT.CMPN_ID = CMPN.CMPN_ID    
@@ -937,7 +986,8 @@ ORDER BY RCRT_END_DT ASC
 	<update id="updateRePostSubmit"
 			parameterType = "com.ktdsuniversity.edu.domain.campaign.vo.request.RequestPostSubmitVO">
 			UPDATE POST_RTRN_HIST
-			   SET POST_SUBMIT_CHG_CN = '테스트'
+			   SET POST_SUBMIT_CHG_CN = #{postSubmitChgCn}
+			     , SUBMIT_FL_GRP_ID = #{postFlGrpId}
 			 WHERE POST_RTRN_HIST_ID = (   SELECT POST_RTRN_HIST_ID
 			                                 FROM (SELECT POST_RTRN_HIST_ID
 			                                         FROM POST_RTRN_HIST
