@@ -119,7 +119,13 @@ $().ready(function() {
         
     $(".campaign-block").on("click", function() {
         cmpnId = $(this).data("cmpn-id");
-        window.location.href = "/campaigndetail/" + cmpnId;
+        if ($(this).children(".font-brown").text() === "임시저장") {
+            window.location.href = "/adv/campaign/modify?cmpnId=" + cmpnId + "&sttsCd=2008";
+        }
+        
+        else {
+            window.location.href = "/campaigndetail/" + cmpnId;
+        }
     });
     
     // campaignTab js

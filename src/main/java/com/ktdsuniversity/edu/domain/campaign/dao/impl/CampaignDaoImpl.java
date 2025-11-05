@@ -263,4 +263,9 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	public int updateCmpnPrntIdByCmpnId(RequestCreateCmpnVO requestCreateCmpnVO) {
 		return super.getSqlSession().update(this.NAME_SPACE + "updateCmpnPrntIdByCmpnId", requestCreateCmpnVO);
 	}
+
+	@Override
+	public int updateTemporaryCampaignByCmpnId(RequestCreateCmpnVO requestCreateCmpnVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateTemporaryCampaignByCmpnId", requestCreateCmpnVO);
+	}
 }

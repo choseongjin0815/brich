@@ -366,7 +366,7 @@
         ( #{cmpnId}
         , #{usrId}
         , #{ctgCd}
-        , '2001'
+        , #{sttsCd}
         , NULL
         , NULL
         , NULL
@@ -397,13 +397,34 @@
         , 'N')
     </insert>
     
+    <update id="updateTemporaryCampaignByCmpnId"
+            parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO">
+    UPDATE CMPN
+       SET USR_ID=#{usrId}
+         , CTG_CD=#{ctgCd}
+         , STTS_CD=#{sttsCd}
+         , RCRT_PRSNN=#{rcrtPrsnn}
+         , ADDRS=#{addrs}
+         , ATTCH_GRP_ID=#{attchGrpId}
+         , CMPN_TITLE=#{cmpnTitle}
+         , CMPN_CN=#{cmpnCn}
+         , OFFR_CN=#{offrCn}
+         , OFFR_PRC=#{offrPrc}
+         , PST_MSSN=#{pstMssn}
+         , HSTG=#{hstg}
+         , NTFCN=#{ntfcn}
+         , UPDT_DT=SYSDATE
+         , MTTR=#{usrId}
+     WHERE CMPN_ID=#{prevCmpnId}
+    </update>
+    
     <update id="updateCmpnPrntIdByCmpnId"
             parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO">
         UPDATE CMPN
 		   SET CMPN_PRNT_ID = #{cmpnId}
 		     , UPDT_DT = SYSDATE
 		     , MTTR = #{usrId}
-		 WHERE CMPN_ID = #{denyCmpnId}
+		 WHERE CMPN_ID = #{prevCmpnId}
     </update>
     
     <resultMap type="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO"

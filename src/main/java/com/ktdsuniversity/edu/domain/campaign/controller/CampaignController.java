@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
+import com.ktdsuniversity.edu.domain.campaign.vo.ResponseModifyCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
@@ -24,12 +25,6 @@ import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListV
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignwriteVO;
-import com.ktdsuniversity.edu.domain.file.dao.FileDao;
-import com.ktdsuniversity.edu.domain.file.dao.FileGroupDao;
-import com.ktdsuniversity.edu.domain.file.util.MultipartFileHandler;
-import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
-import com.ktdsuniversity.edu.domain.file.vo.FileVO;
-import com.ktdsuniversity.edu.domain.report.vo.request.RequestReportCreateVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.global.common.AjaxResponse;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
@@ -319,6 +314,7 @@ public class CampaignController {
 	public String doCreateNewCampaignAction(RequestCreateCmpnVO requestCreateCmpnVO,
 											@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
 		requestCreateCmpnVO.setUsrId(loginUser.getUsrId());
+		
 		boolean insert = this.campaignService.createNewCampaign(requestCreateCmpnVO);
 		if (insert) {
 			return "redirect:/adv/campaign/list";
@@ -329,19 +325,17 @@ public class CampaignController {
 		}
 	}
 	
-	@GetMapping("/adv/campaign/modify/{cmpnId}")
+	@GetMapping("/adv/campaign/modify")
 	public String modifyCampaign(Model model
-								 , @PathVariable String cmpnId) {
-		ResponseCampaignwriteVO common = this.campaignService.createCampaign();
-		ResponseCampaignVO campaign = this.campaignService.readCampaignDetail(cmpnId);
-		log.info("campaign read---" + campaign.toString());
-		
-		model.addAttribute("common", common);
-		model.addAttribute("campaign", campaign);
+								 , String cmpnId) {
+		ResponseModifyCampaignVO responseModifyCampaignVO = this.campaignService.readModifyInfoByCmpnId(cmpnId);
+//		
+		model.addAttribute("common", responseModifyCampaignVO.getCommon());
+		model.addAttribute("campaign", responseModifyCampaignVO.getCampaign());
 		return "campaign/modify";
 	}
 	
-	@PostMapping("/adv/campaign/modify/{denyCmpnId}")
+	@PostMapping("/adv/campaign/modify")
 	public String doModifyCampaignAction(RequestCreateCmpnVO requestCreateCmpnVO,
 											@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
 		requestCreateCmpnVO.setUsrId(loginUser.getUsrId());
@@ -381,5 +375,15 @@ public class CampaignController {
 		model.addAttribute("search", requestSearchCampaignVO);
 		
 		return "campaign/list";
+	}
+	
+	@PostMapping("/adv/campaign/temporary")
+	public String doCreateTemporaryCampaignAction(RequestCreateCmpnVO requestCreateCmpnVO
+												  , @SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
+		requestCreateCmpnVO.setUsrId(loginUser.getUsrId());
+		log.info("--temporary--" + requestCreateCmpnVO.toString());
+		boolean create = this.campaignService.createTemporaryCampaign(requestCreateCmpnVO);
+		
+		return "redirect:/adv/campaign/list";
 	}
 }

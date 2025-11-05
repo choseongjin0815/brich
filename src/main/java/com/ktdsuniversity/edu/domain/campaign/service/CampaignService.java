@@ -4,6 +4,7 @@ package com.ktdsuniversity.edu.domain.campaign.service;
 
 import java.util.List;
 
+import com.ktdsuniversity.edu.domain.campaign.vo.ResponseModifyCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
@@ -63,4 +64,8 @@ public interface CampaignService {
 	String postReturnReason(String campaignId, String usrId);
 
 	boolean modifyNewCampaign(RequestCreateCmpnVO requestCreateCmpnVO);
+
+	boolean createTemporaryCampaign(RequestCreateCmpnVO requestCreateCmpnVO);
+
+	ResponseModifyCampaignVO readModifyInfoByCmpnId(String cmpnId);
 }

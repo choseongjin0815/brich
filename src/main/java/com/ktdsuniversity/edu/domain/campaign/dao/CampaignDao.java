@@ -107,4 +107,6 @@ public interface CampaignDao {
 	String selectReturnReason(Map<String, String> param);
 
 	int updateCmpnPrntIdByCmpnId(RequestCreateCmpnVO requestCreateCmpnVO);
+
+	int updateTemporaryCampaignByCmpnId(RequestCreateCmpnVO requestCreateCmpnVO);
 }

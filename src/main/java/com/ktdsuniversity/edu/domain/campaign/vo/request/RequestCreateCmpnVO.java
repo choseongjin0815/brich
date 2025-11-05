@@ -12,7 +12,7 @@ public class RequestCreateCmpnVO extends CampaignVO {
 	private String detailAddress;
 	private List<String> area;
 	private MultipartFile file;
-	private String denyCmpnId;
+	private String prevCmpnId;
 	
 	public String getRoadAddress() {
 		return this.roadAddress;
@@ -38,15 +38,16 @@ public class RequestCreateCmpnVO extends CampaignVO {
 	public void setFile(MultipartFile file) {
 		this.file = file;
 	}
+	public String getPrevCmpnId() {
+		return this.prevCmpnId;
+	}
+	public void setPrevCmpnId(String prevCmpnId) {
+		this.prevCmpnId = prevCmpnId;
+	}
 	
-	public String getDenyCmpnId() {
-		return this.denyCmpnId;
-	}
-	public void setDenyCmpnId(String denyCmpnId) {
-		this.denyCmpnId = denyCmpnId;
-	}
 	@Override
 	public String toString() {
-		return "RequestCreateCmpnVO [roadAddress=" + roadAddress + ", detailAddress=" + detailAddress + ", area=" + area + ", file=" + file + super.toString() + "]";
+		return "RequestCreateCmpnVO [roadAddress=" + roadAddress + ", detailAddress=" + detailAddress + ", area=" + area
+				+ ", file=" + file + ", prevCmpnId=" + prevCmpnId + super.toString() + "]";
 	}
 }

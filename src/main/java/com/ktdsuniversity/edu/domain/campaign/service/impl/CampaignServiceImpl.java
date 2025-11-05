@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.ResponseModifyCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCampaignAreaVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
@@ -480,6 +481,7 @@ public class CampaignServiceImpl implements CampaignService {
 			requestCreateCmpnVO.setAttchGrpId(fileGroupVO.getFlGrpId());
 		}
 		
+		requestCreateCmpnVO.setSttsCd("2001");
 		int insertCmpnCount = this.campaignDao.insertNewCampaign(requestCreateCmpnVO);
 		
 		if (requestCreateCmpnVO.getArea() != null && insertCmpnCount == 1) {
@@ -535,11 +537,79 @@ public class CampaignServiceImpl implements CampaignService {
   @Transactional
   @Override
   public boolean modifyNewCampaign(RequestCreateCmpnVO requestCreateCmpnVO) {
-	boolean insert = this.createNewCampaign(requestCreateCmpnVO);
-	boolean modify = false;
-	if (insert) {
-		modify = this.campaignDao.updateCmpnPrntIdByCmpnId(requestCreateCmpnVO) == 1;
+	int modify = 0;
+	if (requestCreateCmpnVO.getSttsCd().equals("2008")) {
+		if (requestCreateCmpnVO.getRoadAddress() != null || requestCreateCmpnVO.getDetailAddress() != null) {
+			String addr = requestCreateCmpnVO.getRoadAddress() + " " + requestCreateCmpnVO.getDetailAddress();
+			requestCreateCmpnVO.setAddrs(addr);
+		}
+		
+		FileVO uploadResult = this.multipartFileHandler.upload(requestCreateCmpnVO.getFile());
+		
+		if (uploadResult != null) {
+			// 1. File Group Insert
+			FileGroupVO fileGroupVO = new FileGroupVO();
+			fileGroupVO.setFlCnt(1);
+			int insertGroupCount = this.fileGroupDao.insertFileGroup(fileGroupVO);
+			
+			// 2. File Insert
+			uploadResult.setFlGrpId(fileGroupVO.getFlGrpId());
+			int insertFileCount = this.fileDao.insertFile(uploadResult);
+			
+			requestCreateCmpnVO.setAttchGrpId(fileGroupVO.getFlGrpId());
+		}
+		requestCreateCmpnVO.setSttsCd("2001");
+		modify = this.campaignDao.updateTemporaryCampaignByCmpnId(requestCreateCmpnVO);
+		
+		if (requestCreateCmpnVO.getArea() != null && modify == 1) {
+			RequestCampaignAreaVO requestCampaignAreaVO = new RequestCampaignAreaVO();
+			requestCampaignAreaVO.setCmpnId(requestCreateCmpnVO.getPrevCmpnId());
+			requestCampaignAreaVO.setUsrId(requestCreateCmpnVO.getUsrId());
+			
+			for(String arCd : requestCreateCmpnVO.getArea()) {
+				requestCampaignAreaVO.setArCd(arCd);
+				int insertAreaCount = this.campaignDao.insertCampaignCategory(requestCampaignAreaVO);
+			}
+		}
 	}
-	return modify;
+	else {
+		requestCreateCmpnVO.setSttsCd("2001");
+		boolean insert = this.createNewCampaign(requestCreateCmpnVO);
+		if (insert) {
+			modify = this.campaignDao.updateCmpnPrntIdByCmpnId(requestCreateCmpnVO);
+		}
+	}
+	return modify == 1;
+  }
+
+  @Override
+  public boolean createTemporaryCampaign(RequestCreateCmpnVO requestCreateCmpnVO) {
+	int count = 0;
+	if (requestCreateCmpnVO.getSttsCd() == null) {
+		requestCreateCmpnVO.setSttsCd("2008");
+		count = this.campaignDao.insertNewCampaign(requestCreateCmpnVO);
+	}
+	else if (requestCreateCmpnVO.getSttsCd().equals("2008")) {
+		count = this.campaignDao.updateTemporaryCampaignByCmpnId(requestCreateCmpnVO);
+	}
+	else if (requestCreateCmpnVO.getSttsCd().equals("2003")) {
+		requestCreateCmpnVO.setSttsCd("2008");
+		count = this.campaignDao.insertNewCampaign(requestCreateCmpnVO);
+		if (count == 1) {
+			count = this.campaignDao.updateCmpnPrntIdByCmpnId(requestCreateCmpnVO);
+		}
+	}
+	return count == 1;
+  }
+
+  @Override
+  public ResponseModifyCampaignVO readModifyInfoByCmpnId(String cmpnId) {
+	ResponseCampaignwriteVO common = this.createCampaign();
+	ResponseCampaignVO campaign = this.readCampaignDetail(cmpnId);
+	
+	ResponseModifyCampaignVO modifyInfo = new ResponseModifyCampaignVO();
+	modifyInfo.setCampaign(campaign);
+	modifyInfo.setCommon(common);
+	return modifyInfo;
   }
 }

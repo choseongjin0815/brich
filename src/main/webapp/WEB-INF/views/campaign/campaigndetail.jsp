@@ -35,24 +35,27 @@
 					<div class="cmpn-title-content">
 						<c:if test="${not empty detail.parentArea}">[ ${detail.parentArea} ]</c:if> 
 						 ${detail.cmpnTitle }
-						<c:choose>
-				            <c:when test="${detail.sttsCdNm eq '승인' || detail.sttsCdNm eq '모집중'
-				                            || detail.sttsCdNm eq '선정중' || detail.sttsCdNm eq '진행중'}">
-				                <span class="font-green">${detail.sttsCdNm}</span>
-				            </c:when>
-				            
-				            <c:when test="${detail.sttsCdNm eq '시작대기' || detail.sttsCdNm eq '검토중' || detail.sttsCdNm eq '임시저장'}">
-				                <span class="font-brown">${detail.sttsCdNm}</span>
-				            </c:when>
-				            
-				            <c:when test="${detail.sttsCdNm eq '반려'}">
-				                <span class="font-red">${detail.sttsCdNm}</span>
-				            </c:when>
-				            
-				            <c:when test="${detail.sttsCdNm eq '종료'}">
-				                <span class="font-gray">${detail.sttsCdNm}</span>
-				            </c:when>
-				        </c:choose>
+						<c:if test="${sessionScope.__LOGIN_USER__.autr eq 1004
+                                and detail.usrId eq sessionScope.__LOGIN_USER__.usrId}">
+							<c:choose>
+					            <c:when test="${detail.sttsCdNm eq '승인' || detail.sttsCdNm eq '모집중'
+					                            || detail.sttsCdNm eq '선정중' || detail.sttsCdNm eq '진행중'}">
+					                <span class="font-green">${detail.sttsCdNm}</span>
+					            </c:when>
+					            
+					            <c:when test="${detail.sttsCdNm eq '시작대기' || detail.sttsCdNm eq '검토중' || detail.sttsCdNm eq '임시저장'}">
+					                <span class="font-brown">${detail.sttsCdNm}</span>
+					            </c:when>
+					            
+					            <c:when test="${detail.sttsCdNm eq '반려'}">
+					                <span class="font-red">${detail.sttsCdNm}</span>
+					            </c:when>
+					            
+					            <c:when test="${detail.sttsCdNm eq '종료'}">
+					                <span class="font-gray">${detail.sttsCdNm}</span>
+					            </c:when>
+					        </c:choose>
+				        </c:if>
 					</div>
 				    <c:if test="${not empty sessionScope.__LOGIN_USER__ }" > 
 						<div class="cmpn-title-love">
@@ -87,7 +90,7 @@
 						        <div class="path">
 						        /file/1234/${detail.flGrpId}/${f.flId}
 						        </div>
-						      <!-- <img src="/file/1234/${detail.flGrpId}/${f.flId}"/>   -->  
+						           <img src="/file/1234/${detail.flGrpId}/${f.flId}"/>
 						           <img class = "cmpn-detail-image" src=" /file/1234/FG-20251104-000155/FL-20251104-000279"/>
 						      </div>
 						    </c:forEach>
