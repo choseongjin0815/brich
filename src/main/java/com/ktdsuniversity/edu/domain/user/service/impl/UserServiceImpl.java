@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import com.ktdsuniversity.edu.domain.blog.controller.SearchBlogController;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogInfoVO;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogTitleVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignwriteVO;
 import com.ktdsuniversity.edu.domain.file.dao.FileDao;
@@ -120,7 +122,6 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
-    //추후 파일 업로드 카테고리 추가 예정
     @Transactional
 	@Override
 	public boolean createNewUser(RequestUserRegistVO requestUserRegistVO) {
@@ -199,6 +200,7 @@ public class UserServiceImpl implements UserService {
 		return this.userDao.selectUserLogIdByNameAndEmail(requestUserFindIdVO);
 	}
 
+    @Transactional
 	@Override
 	public boolean updatePswrdByLogIdAndPswrd(RequestUserResetPasswordVO resetPasswordInfo) {
 		//재설정할 비밀번호를 암호화한다. 
@@ -250,6 +252,7 @@ public class UserServiceImpl implements UserService {
   /*
    * 계정 관리 - 비밀번호 재설정용
    */
+  @Transactional
   @Override
   public boolean updatePswrdByUsrId(RequestUserAccountPasswordVO requestUserAccountPasswordVO) {
 	  //우선 입력한 현재 비밀번호와 나의 비밀번호가 일치하는지 확인 해야함
@@ -329,6 +332,21 @@ public class UserServiceImpl implements UserService {
 	 }
 
 
+  @Transactional
+  @Override
+  public boolean updateBlogInfo(RequestBlogInfoVO request) {
+
+	  int updateCount = this.userDao.updateBlogScrapNeighbor(request);
+	  return updateCount > 0;
+  }
+
+  @Transactional
+  @Override
+  public boolean updateBlogTitle(RequestBlogTitleVO request) {
+	  int updateCount = this.userDao.updateBlogTitle(request);
+	  
+	return updateCount > 0;
+  }
 
 
 }

@@ -101,20 +101,38 @@ $().ready(function() {
 		})
 	})
 	
-	reSubmitModalBtnOk.on("click", function() {
-		var campaignId = $(".submit-modal-area").data("cmpn-id");
-		
-		var postData = {
-		     postTitle: $("#re-post-title").val(),
-		     postUrl: $("#re-post-url").val(),
-			 postSubmitChgCn: $(".re-submit-cn").val()
-		 };
-		$.post("/blgr/repstsubmit/" + campaignId , postData, function() {
-		    alert("수정제출완료!");
-			$(".re-submit-modal-form").addClass("display-none");
-			location.reload();
-		})
-	})
+    
+    /* */
+    // 파일 아이콘 클릭 시 파일 선택 창 열기
+    reSubmitModalBtnOk.on('click', function (e) {
+      e.preventDefault();
+
+      const campaignId = $('.submit-modal-area').data('cmpn-id');
+      const form = $('.re-submit-modal-form')[0];
+      const fd = new FormData(form);
+      const url = '/blgr/repstsubmit/' + campaignId;
+      $.ajax({
+        url: url,
+        type: 'POST',
+        data: fd,
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function () {
+          alert('수정제출완료!');
+          $('.re-submit-modal-form').addClass('display-none');
+          location.reload();
+        },
+        error: function (xhr) {
+          console.error(xhr.responseText || xhr.statusText);
+          alert('제출 실패: ' + xhr.status);
+        }
+      });
+    });
+    
+    
+    /* */
+    
     
 	$(".status--draft").on("click",function() {
 		$(".submit-modal-form").removeClass("display-none");
@@ -156,7 +174,13 @@ $().ready(function() {
 	  }
 	});
 	
-
+    $(".button-campaign-modify").on("click", function() {
+        cmpnId = $("input[name=campaign-tab]").data("cmpn-id");
+        window.location.href = "/adv/campaign/modify/" + cmpnId;
+    });
+    $(".file-insert").off("click").on("click", function() {
+        $("#file-input").click();
+    });
     
     
 });

@@ -51,7 +51,8 @@
 	                <img class="sort desc" data-sort-type="TTL_VSTR_CNT" src="/img/arrow-bottom.png" />
 	            </div>
 	            <div>채택
-	                <span class="adopt-count">${applicantList.adoptCount}</span> / <span class="total-adopt-count">${applicantList.campaignInfo.rcrtPrsnn}</span>
+	                <span class="adopt-count">${applicantList.adoptCount}
+	                   </span> / <span class="total-adopt-count">${applicantList.campaignInfo.rcrtPrsnn}</span>
 	                <img class="sort desc" data-sort-type="ADPT_YN" src="/img/arrow-bottom.png" />
 	            </div>
 	        </div>

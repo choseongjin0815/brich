@@ -28,9 +28,17 @@ $().ready(function() {
         }).open();
     });
     
+    
+    var price = parseInt($("input[name=rcrtPrsnn]").data("person-price"));
+    $(".rcrtPrsnn-price").text($("input[name=rcrtPrsnn]").val() * price);
+    
     $("input[name=rcrtPrsnn]").on("keyup", function() {
         var price = parseInt($(this).data("person-price"));
         $(".rcrtPrsnn-price").text($(this).val() * price);
+    });
+    
+    $(".cancel-button").on("click",function() {
+        window.location.href = "/adv/campaign/list";
     });
     
     $(".submit-button").on("click", function() {

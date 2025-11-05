@@ -8,13 +8,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
+
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ktdsuniversity.edu.domain.report.service.ReportService;
+import com.ktdsuniversity.edu.domain.report.vo.ReportSearchVO;
 import com.ktdsuniversity.edu.domain.report.vo.ReportVO;
 import com.ktdsuniversity.edu.domain.report.vo.request.RequestReportCreateVO;
+import com.ktdsuniversity.edu.domain.report.vo.response.ResponseMyReportInfoVO;
+import com.ktdsuniversity.edu.domain.report.vo.response.ResponseReportDetailVO;
 import com.ktdsuniversity.edu.domain.report.vo.response.ResponseReportVO;
 import com.ktdsuniversity.edu.domain.user.service.UserService;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
@@ -37,10 +43,40 @@ public class ReportController {
     @Autowired
     private UserService userService;
     
+    /*
+     * 나의 신고 내역 확인 - 페이징 적용
+     */
     @GetMapping("/list")
-    public String viewMyReportListPage(@SessionAttribute(name = "__LOGIN_USER__") UserVO loginUser) {
-    	String usrId = loginUser.getUsrId();
-    	return "report/list";
+    public String viewMyReportListPage(@SessionAttribute(name = "__LOGIN_USER__") UserVO loginUser
+                                     , ReportSearchVO reportSearchVO
+                                     , Model model) {
+        // 로그인한 사용자 ID 설정
+        String usrId = loginUser.getUsrId();
+        reportSearchVO.setRptrUsrId(usrId);
+        
+        // 신고 목록 조회 (페이징)
+        List<ResponseMyReportInfoVO> reportList = this.reportService.readMyReportListWithPaging(reportSearchVO);
+        
+        // Model에 데이터 추가
+        model.addAttribute("reportList", reportList);
+        model.addAttribute("reportSearchVO", reportSearchVO);
+        
+        return "report/list";
+    }
+    
+    /*
+     * 신고 상세 보기
+     */
+    @GetMapping("/view/{reportId}")
+    public String viewReportDetailPage(@SessionAttribute(name = "__LOGIN_USER__") UserVO loginUser
+    								 , @PathVariable String reportId
+    								 , Model model) {
+    	
+    	ResponseReportDetailVO reportDetail = this.reportService.readReportDetailByReportId(reportId);
+    	
+    	model.addAttribute("report", reportDetail);
+    	
+    	return "report/view";
     }
     
     /**

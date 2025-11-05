@@ -8,7 +8,7 @@ import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 public class ResponseAdoptListVO {
 
 	private List<ResponseAdoptVO> adoptList;
-	private CampaignVO campaignInfo;
+	private ResponseCampaignVO campaignInfo;
 	private String cmpnCdNm;
 	
 	public List<ResponseAdoptVO> getAdoptList() {
@@ -17,10 +17,10 @@ public class ResponseAdoptListVO {
 	public void setAdoptList(List<ResponseAdoptVO> adoptList) {
 		this.adoptList = adoptList;
 	}
-	public CampaignVO getCampaignInfo() {
+	public ResponseCampaignVO getCampaignInfo() {
 		return this.campaignInfo;
 	}
-	public void setCampaignInfo(CampaignVO campaignInfo) {
+	public void setCampaignInfo(ResponseCampaignVO campaignInfo) {
 		this.campaignInfo = campaignInfo;
 	}
 	public String getCmpnCdNm() {

@@ -835,10 +835,52 @@ input[name="cmpnTitle"] {
 	color: #FB3535;
 }
 
+.font-gray {
+	color: #999;
+}
+
 .deny-container {
   display: none;
 }
 
 .flex-grow-1 {
   flex-grow: 1;
+}
+
+.button_200_30 {
+	width: 200px;
+	height: 30px;
+	border-radius: 5px;
+	margin: 10px 0;
+	
+	font-size: 1rem;
+	background-color: #fff;
+}
+
+.cmpn-title-content {
+	& span {
+	   font-size: 1.25rem;
+	}
+}
+
+.button-payment {
+	border: 1px solid #7B61FF;
+	
+	&:hover {
+	   background-color: #7B61FF;
+	   color: #fff;
+	}
+}
+
+.button-campaign-modify {
+	border: 1px solid #7B61FF;
+    
+    &:hover {
+       background-color: #7B61FF;
+       color: #fff;
+    }
+}
+
+.deny-reason {
+	padding: 13px 33px 0 33px;
 }

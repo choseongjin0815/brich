@@ -5,27 +5,31 @@
                   <div class="right-bar-top">
                     <div class="right-bor-top-wrapper">
                         <ul class="right-bar-detail-table">
-                          <li>
-                            <label for="">캠페인 신청기간</label>
-                            <div>${detail.rcrtStrtDt } ~ ${detail.pstEndDt }</div>
-                          </li>
-                          <li>
-                            <label for="">선정자 발표일</label>
-                            <div>몇일할껀지??</div>
-                          </li>
-                          <li>
-                            <label for="">캠페인 종료일</label>
-                            <div>${detail.cmpnEndDt }</div>
-                          </li>
-                          <li>
-                            <label for="">신청</label>
-                            <div>${detail.adptCnt } / ${detail.rcrtPrsnn }</div>
-                          </li>
+                            <c:if test="${not empty detail.rcrtStrtDt}">
+		                          <li>
+		                            <label for="">캠페인 신청기간</label>
+		                            <div>${detail.rcrtStrtDt } ~ ${detail.pstEndDt }</div>
+		                          </li>
+	                          </c:if>
+	                          <%-- <li>
+		                            <label for="">선정자 발표일</label>
+		                            <div>몇일할껀지??</div>
+		                          </li> --%>
+	                           <c:if test="${not empty detail.cmpnEndDt}">
+		                          <li>
+		                            <label for="">캠페인 종료일</label>
+		                            <div>${detail.cmpnEndDt }</div>
+		                          </li>
+	                          </c:if>
+	                          <c:if test="${not empty detail.rcrtPrsnn}">
+		                          <li>
+		                            <label for="">신청</label>
+		                            <div>${detail.adptCnt } / ${detail.rcrtPrsnn }</div>
+		                          </li>
+	                          </c:if>
                         </ul>
                     </div>
                   </div>
-                  <div class="right-bar-bottom"> 여기는 통계 영역입니다 </div>
-                  
                   
                   <!-- 신청 버튼 영역 -->
                   <c:if test="${sessionScope.__LOGIN_USER__ ne null 
@@ -33,6 +37,7 @@
 			                or  sessionScope.__LOGIN_USER__.autr == 1003)
 			               and detail.pstSttsCd eq null
 			                }">
+                        <div class="right-bar-bottom"> 여기는 통계 영역입니다 </div>
 			            <c:set var="isApplied" value="${detail.adptYn eq 'Y'}" />
                         <div class="right-bar-bottom apply-cancel-blg middle-center ${isApplied ? 'display-none' : ''}" data-campaign-id="${detail.cmpnId}">
                         신청취소
@@ -90,11 +95,27 @@
                             </c:if>
                   </c:if>
                   
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
+                  <c:if test="${sessionScope.__LOGIN_USER__.autr eq 1004
+                                and param.usrId eq sessionScope.__LOGIN_USER__.usrId}">
+	                   <c:if test="${param.sttsCd eq 2002}">
+	                       <div class="middle-center">
+			                   <button type="button" class="button_200_30 button-payment">결제</button>
+			               </div>
+	                  </c:if>
+	                  
+	                  <c:if test="${param.sttsCd eq 2003}">
+	                       <div class="deny-reason">
+	                           <div class="font-red">반려 사유</div>
+	                           <div>${param.rtrnRsn}</div>
+	                       </div>
+	                       <div class="middle-center">
+                               <button type="button" class="button_200_30 button-campaign-modify">수정</button>
+                           </div>
+	                  </c:if>
+	                  
+	                  <c:if test="${param.sttsCd eq 2004}">
+	                       <div class="middle-center">
+                               <button type="button" class="button_200_30 button-report">취소</button>
+                           </div>
+	                  </c:if>
+                  </c:if>

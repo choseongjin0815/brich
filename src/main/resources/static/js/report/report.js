@@ -3,7 +3,24 @@ $().ready(function() {
     $(".btn-back").on("click", function() {
         window.history.back();
     });
+    
 
+       // 신고 내용 보기 버튼 클릭
+    $(".f5.detail").on("click", function() {
+        var reportId = $(this).data("report-id");
+        window.location.href = "/report/view/" + reportId;
+    });
+    
+    $(".fileInput").on("change", function() {
+           var files = this.files;
+           var fileList = $(".fileList");
+           fileList.empty(); // 초기화
+
+           $.each(files, function(index, file) {
+               fileList.append("<div style='font-size: 10px'>" + file.name + "</div>");
+           });
+       });
+    
     // 신고하기
     $(".btn-report").on("click", function(){
         // 필수 입력 검증

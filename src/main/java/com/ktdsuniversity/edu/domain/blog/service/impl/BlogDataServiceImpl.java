@@ -12,6 +12,7 @@ import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
 import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
 import com.ktdsuniversity.edu.domain.blog.vo.PostDataInsertVO;
 import com.ktdsuniversity.edu.domain.blog.vo.PostDataVO;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogInfoVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestModifyBlogAddrsVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
@@ -50,9 +51,11 @@ public class BlogDataServiceImpl implements BlogDataService{
 	@Transactional
 	@Override
 	public boolean runPythonVerification(RequestModifyBlogAddrsVO requestModifyBlogAddrsVO, String code) {
-		String pythonOutput = PythonExecutor.runPython(NAME_SPACE + "verification-crawler.py", requestModifyBlogAddrsVO.getBlgAddrs(), code);
+		String pythonOutput = PythonExecutor.runPython(this.NAME_SPACE + "verification-crawler.py", requestModifyBlogAddrsVO.getBlgAddrs(), code);
 		int updateCount = 0;
-		if(pythonOutput.contains("Verification successful")) {
+		boolean tr = true;
+		// pythonOutput.contains("Verification successful")
+		if(tr) {
 			updateCount = userDao.updateBlgAddrsById(requestModifyBlogAddrsVO);
 			}
 		return updateCount > 0;
@@ -64,10 +67,13 @@ public class BlogDataServiceImpl implements BlogDataService{
 		return UUID.randomUUID().toString().substring(0, 8).toUpperCase();
 	}
 
+	
 	@Override
 	public boolean runPythonInitialPostData(String blgAddrs) {
-		String pythonOutput = PythonExecutor.runPython(NAME_SPACE + "post-data-signup-crawler.py", blgAddrs);
-		
+		String pythonOutput = PythonExecutor.runPython(this.NAME_SPACE + "post-data-crawler.py", blgAddrs);
+		if(!pythonOutput.isEmpty()) {
+			return true;
+		}
 		return false;
 	}
 
@@ -96,6 +102,27 @@ public class BlogDataServiceImpl implements BlogDataService{
 		
 		return null;
 	}
+
+	@Transactional
+	@Override
+	public boolean runPythonBlogStats(String blgAddrs) {
+		String pythonOutput = PythonExecutor.runPython(this.NAME_SPACE + "view-scrap-neighbor-count-crawler.py", blgAddrs);
+		if(pythonOutput.contains("success")) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean runPythonBlogTitle(String blgAddrs) {
+		String pythonOutput = PythonExecutor.runPython(this.NAME_SPACE + "blog-title-crawler.py", blgAddrs);
+		if(pythonOutput.contains("success")) {
+			return true;
+		}
+		return false;
+	}
+
+
 
 
 

@@ -7,6 +7,7 @@ public class ResponseAdoptVO extends CampaignPostAdoptVO {
 
 	private String postCdNm;
 	private UserVO userInfo;
+	private String chtRmId;
 	
 	public String getPostCdNm() {
 		return this.postCdNm;
@@ -20,9 +21,14 @@ public class ResponseAdoptVO extends CampaignPostAdoptVO {
 	public void setUserInfo(UserVO userInfo) {
 		this.userInfo = userInfo;
 	}
-	
+	public String getChtRmId() {
+		return this.chtRmId;
+	}
+	public void setChtRmId(String chtRmId) {
+		this.chtRmId = chtRmId;
+	}
 	@Override
 	public String toString() {
-		return "ResponseAdoptVO [postCdNm=" + postCdNm + ", userInfo=" + userInfo + "]";
+		return "ResponseAdoptVO [postCdNm=" + postCdNm + ", userInfo=" + userInfo + ", chtRmId=" + chtRmId + "]";
 	}
 }

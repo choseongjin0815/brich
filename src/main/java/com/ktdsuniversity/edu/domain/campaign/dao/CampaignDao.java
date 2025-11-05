@@ -30,7 +30,7 @@ public interface CampaignDao {
 
 	int selectAdoptCountByCmpnId(String cmpnId);
 
-	CampaignVO selectCampaignInfoByCmpnId(String cmpnId);
+	ResponseCampaignVO selectCampaignInfoByCmpnId(String cmpnId);
 
 	int selectApplicantCountByCmpnId(RequestApplicantVO requestApplicantVO);
 
@@ -105,4 +105,6 @@ public interface CampaignDao {
 	int updateRePostSubmitStts(RequestPostSubmitVO requestPostSubmitVO);
 
 	String selectReturnReason(Map<String, String> param);
+
+	int updateCmpnPrntIdByCmpnId(RequestCreateCmpnVO requestCreateCmpnVO);
 }

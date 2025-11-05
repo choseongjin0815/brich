@@ -61,7 +61,7 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	}
 
 	@Override
-	public CampaignVO selectCampaignInfoByCmpnId(String cmpnId) {
+	public ResponseCampaignVO selectCampaignInfoByCmpnId(String cmpnId) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignInfoByCmpnId", cmpnId);
 	}
 
@@ -233,7 +233,7 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	public List<ResponseCampaignVO> selectDenyListByCmpnId(RequestSearchCampaignVO requestSearchCampaignVO) {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectDenyListByCmpnId", requestSearchCampaignVO);
 	}
-	
+
 	@Override
 	public int updatePostSubmit(RequestPostSubmitVO requestPostSubmitVO) {
 		return super.getSqlSession().update(this.NAME_SPACE + "updatePostSubmit" ,requestPostSubmitVO );
@@ -257,5 +257,10 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	@Override
 	public String selectReturnReason(Map<String, String> param) {
 		return  super.getSqlSession().selectOne(this.NAME_SPACE + "selectReturnReason" ,param );
+	}
+
+	@Override
+	public int updateCmpnPrntIdByCmpnId(RequestCreateCmpnVO requestCreateCmpnVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateCmpnPrntIdByCmpnId", requestCreateCmpnVO);
 	}
 }

@@ -18,7 +18,7 @@
         </div>
         
         <div class="modal-button-list grid-item">
-            <button type="button" class="modal-close">닫기</button>
+            <button type="button" class="modal-close area-close">닫기</button>
             <button type="button" class="modal-submit">선택</button>
         </div>
     </div>
