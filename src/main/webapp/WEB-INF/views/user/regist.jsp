@@ -41,7 +41,7 @@
                          <form:errors path="nm" cssClass="validate-require" />
                     </div>
                     <div class="input-flex">
-                        <label for="company" class="require cmpny-name">회사명 <span class="require-mark">*</span></label>
+                        <label for="company" class="require cmpny-name">사업자명 <span class="require-mark">*</span></label>
                         <input type="text" id="company" name="cmpny" placeholder="사업자명을 입력해주세요" value="${registData.cmpny}"/>
                         <form:errors path="cmpny" cssClass="validate-require" />
                         
