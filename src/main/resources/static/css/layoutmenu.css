@@ -113,6 +113,10 @@ ul {
       }
 
       .menu-content {
+       /*하단 메뉴 선택시 배경 색 크기 조정용*/
+        & li {
+            width: 218px;
+        }
         & > li > a {
           padding-left: 55px;
         }
@@ -193,6 +197,9 @@ ul {
 
   .text-align {
     text-align: center;
+  }
+  .display-none{
+    display:none;
   }
 
   .menu-selected {

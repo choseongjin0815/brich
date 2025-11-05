@@ -24,6 +24,12 @@ import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListV
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignwriteVO;
+import com.ktdsuniversity.edu.domain.file.dao.FileDao;
+import com.ktdsuniversity.edu.domain.file.dao.FileGroupDao;
+import com.ktdsuniversity.edu.domain.file.util.MultipartFileHandler;
+import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
+import com.ktdsuniversity.edu.domain.file.vo.FileVO;
+import com.ktdsuniversity.edu.domain.report.vo.request.RequestReportCreateVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.global.common.AjaxResponse;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
@@ -192,6 +198,7 @@ public class CampaignController {
     @PostMapping("/blgr/repstsubmit/{campaignId}")
     public AjaxResponse rePostSubmit(RequestPostSubmitVO requestPostSubmitVO ,@SessionAttribute(value = "__LOGIN_USER__") UserVO loginUser, 
     		@PathVariable String campaignId) {
+    	
     	requestPostSubmitVO.setBlgId(loginUser.getUsrId());
     	requestPostSubmitVO.setCmpnId(campaignId);
     	int count = this.campaignService.rePostSubmit(requestPostSubmitVO);
@@ -199,11 +206,13 @@ public class CampaignController {
     	
     	
     	AjaxResponse ajaxResponse = new AjaxResponse();
-    	ajaxResponse.setBody(count);
+    	ajaxResponse.setBody(1);
     	
     	return ajaxResponse;
     }
     
+
+
     
     @GetMapping("/adv/campaign/applicant/{cmpnId}")
     public String readApplicantList(Model model, @PathVariable String cmpnId,

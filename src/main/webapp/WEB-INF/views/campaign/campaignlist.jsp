@@ -6,18 +6,21 @@ pageEncoding="UTF-8"%>
     <c:forEach items="${campaignList}" var="campaignList">
       <div class="campaign-main-block" data-cmpn-id="${campaignList.cmpnId}">
         <div class="campaign-thumbnail">
-           <c:if test="${not empty sessionScope.__LOGIN_USER__ }" > 
-	          <c:set var="love" value="${campaignList.favYn eq 'Y'}" />
-	          <div
-	            class="campaign-fav love-${campaignList.favYn}"
-	            data-usr-id="${sessionScope.__LOGIN_USER__.usrId}"
-	            data-cmpn-id="${campaignList.cmpnId}"> 
-	              <div class="love-on ${love ? '' : 'display-none'}"></div>
-	              <div class="love-off ${love ? 'display-none' : ''}"></div>
-	          </div>
+        <c:if test="${not empty campaignList.fileVoList[0].flPth}" > 
+      <!-- <img class = "cmpn-image" src=" /file/1234/${campaignList.flGrpId}/${campaignList.fileVoList[0].flId}"/>  -->
+           <img class = "cmpn-image" src=" /file/1234/FG-20251104-000155/FL-20251104-000279"/>
+        </c:if>
+         <c:if test="${not empty sessionScope.__LOGIN_USER__ }" > 
+              <c:set var="love" value="${campaignList.favYn eq 'Y'}" />
+              <div
+                class="campaign-fav love-${campaignList.favYn}"
+                data-usr-id="${sessionScope.__LOGIN_USER__.usrId}"
+                data-cmpn-id="${campaignList.cmpnId}"> 
+                  <div class="love-on ${love ? '' : 'display-none'}"></div>
+                  <div class="love-off ${love ? 'display-none' : ''}"></div>
+              </div>
            </c:if>
         </div>
-
         <div class="campaign-one-title padding-10px">
           <c:if test="${not empty campaignList.parentArea}">
             [ ${campaignList.parentArea} ]
@@ -30,7 +33,18 @@ pageEncoding="UTF-8"%>
         </div>
 
         <div class="campaign-one-adptcnt padding-10px flex-row flex-space-between">
-          <div>신청 ${campaignList.adptCnt} / ${campaignList.rcrtPrsnn}</div>
+          <c:choose>
+            <c:when test="${campaignList.sttsCd == 2009}">
+                <div></div>
+            </c:when>
+            <c:when test="${campaignList.sttsCd != 2007}">
+                <div>신청 ${campaignList.adptCnt} / ${campaignList.rcrtPrsnn}</div>
+            </c:when>
+            <c:when test="${campaignList.sttsCd == 2007}">
+                <div></div>
+            </c:when>
+          </c:choose>
+
           <div class="campaign-now-status-${campaignList.sttsCd} campaign-status campaign-pst-status-${campaignList.pstSttsCd}">
 			<c:choose>
 			  <c:when test="${campaignList.sttsCd == 2005}">모집중</c:when>

@@ -33,7 +33,7 @@
            <div class="campaign-status end">#campaignstatus#</div>
          </div>
          <!--추후 이동할 엔드포인트 삽입-->
-         <a href="/#campaignid#" class="campaign-link">캠페인으로</a>
+         <a href="/campaigndetail/#campaignid#" class="campaign-link">캠페인으로</a>
         </div> 
     </template>
   </body>
