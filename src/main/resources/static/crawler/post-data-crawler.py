@@ -18,6 +18,8 @@ import time
 import math
 import sys
 
+
+sys.stdout.reconfigure(encoding='utf-8')
 # # Chrome 드라이버 옵션 설정
 options = Options()
 options.add_argument("--headless")  # 화면 없이 실행
@@ -38,7 +40,7 @@ options.add_argument(f'user-agent={user_agent}')
 
 
 # service = Service("/path/to/chromedriver")  # chromedriver 경로
-driver = webdriver.Chrome()
+driver = webdriver.Chrome(options)
 
 def is_toplist_open(driver):
     try:
@@ -59,63 +61,135 @@ def is_toplist_open(driver):
         return False
 
 
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
+
 def ensure_toplist_open(driver, timeout=5):
     """
     네이버 블로그의 Toplist(목록)가 닫혀 있을 경우 열리도록 보장한다.
+    StaleElementReferenceException 발생 시 재시도하도록 수정.
     """
     try:
+        # 이미 프레임 안이라면 생략
+        try:
+            driver.find_element(By.ID, "toplistWrapper")
+        except:
+            switched = switch_to_main_frame(driver)
+            if not switched:
+                print(" mainFrame 전환 실패 → toplist 열기 건너뜀")
+                return
+
         span_elem = WebDriverWait(driver, timeout).until(
             EC.presence_of_element_located((By.ID, "toplistSpanBlind"))
         )
         span_text = span_elem.text.strip()
         print(f"현재 목록 상태 텍스트: {span_text}")
 
-        # 이미 열린 경우
         if "목록닫기" in span_text:
-            print("목록이 이미 열려 있음 → 클릭 생략")
+            print(" 목록이 이미 열려 있음 → 클릭 생략")
             return
 
-        print("목록이 닫혀 있음 → 목록 열기 시도")
+        print("목록이 닫혀 있음 → 열기 시도")
 
-        # 토글 버튼 찾기
-        toggle_btn = WebDriverWait(driver, timeout).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "a._toggleTopList"))
-        )
+        # 1초 대기 (네이버 내부 JS 핸들러 로드 대기)
+        time.sleep(1)
 
-        # 내부 JS 이벤트로 강제 트리거 (기본 click()은 동작 안 함)
-        driver.execute_script("""
-            const el = arguments[0];
-            const evt = document.createEvent('MouseEvents');
-            evt.initEvent('click', true, true);
-            el.dispatchEvent(evt);
-        """, toggle_btn)
+        # 최대 3번 재시도
+        for attempt in range(3):
+            try:
+                toggle_btn = WebDriverWait(driver, timeout).until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, "a.btn_openlist._toggleTopList"))
+                )
 
-        # 목록 열릴 때까지 재시도하며 기다리기
-        WebDriverWait(driver, timeout * 2, ignored_exceptions=[StaleElementReferenceException]).until(
-            lambda d: "목록닫기" in d.find_element(By.ID, "toplistSpanBlind").text
-        )
+                driver.execute_script("""
+                    const el = arguments[0];
+                    el.scrollIntoView({behavior:'instant', block:'center'});
+                    const evt = new MouseEvent('click', {bubbles:true, cancelable:true, view:window});
+                    el.dispatchEvent(evt);
+                """, toggle_btn)
 
-        print("✅ 목록 열림 확인 완료")
+                print(f"클릭 시도 {attempt+1}회 완료")
+
+                # display 상태가 block으로 바뀔 때까지 대기
+                WebDriverWait(driver, timeout * 3).until(
+                    lambda d: d.execute_script(
+                        "return window.getComputedStyle(document.querySelector('#toplistWrapper')).display"
+                    ) != "none"
+                )
+                print(" 목록 열림 확인 완료")
+                return
+            except StaleElementReferenceException:
+                print(f" StaleElementReference 발생 → {attempt+1}번째 재시도")
+                time.sleep(0.5)
+                continue
+
+        print(" 3회 재시도 후 실패")
 
     except TimeoutException:
-        print("⚠️ Timeout: 목록이 열리지 않음 (이미 열려 있거나 없는 경우)")
-    except StaleElementReferenceException:
-        print("⚠️ StaleElementReference 발생 → 재시도 중...")
-        time.sleep(0.5)
-        return ensure_toplist_open(driver, timeout)
+        print(" Timeout: 목록이 열리지 않음 (이미 열려 있거나 토글 실패)")
+
+def switch_to_main_frame(driver, timeout=10):
+    """
+    mainFrame을 안전하게 전환하는 함수.
+    ID 또는 NAME 기준으로 모두 탐색, 없을 경우 스킵.
+    """
+    try:
+        WebDriverWait(driver, timeout).until(
+            EC.any_of(
+                EC.frame_to_be_available_and_switch_to_it((By.ID, "mainFrame")),
+                EC.frame_to_be_available_and_switch_to_it((By.NAME, "mainFrame"))
+            )
+        )
+        print(" mainFrame 전환 성공")
+        return True
+    except TimeoutException:
+        print(" mainFrame을 찾지 못했습니다. 현재 URL:", driver.current_url)
+        # 디버깅용 HTML 저장
+        with open("no_frame_debug.html", "w", encoding="utf-8") as f:
+            f.write(driver.page_source)
+        return False
 
 
-def load_last_url():
-    if os.path.exists("latest_post.json"):
-        with open("latest_post.json", "r", encoding="utf-8") as f:
-            return json.load(f).get("latest_post_url", None)
+def save_last_url(blog_url, url):
+    """
+    각 블로그 주소별로 최신 포스트 URL을 저장.
+    예: latest_post/kse4966.json
+    """
+    # 블로그 ID 추출
+    match = re.search(r'blog.naver.com/([^/?]+)', blog_url)
+    blog_id = match.group(1) if match else "unknown"
+
+    # 저장 폴더 생성 (없으면 자동 생성)
+    folder = "latest_post"
+    os.makedirs(folder, exist_ok=True)
+
+    # 파일 경로
+    filepath = os.path.join(folder, f"{blog_id}.json")
+
+    # 데이터 저장
+    with open(filepath, "w", encoding="utf-8") as f:
+        json.dump({"latest_post_url": url}, f, ensure_ascii=False, indent=2)
+
+    print(f" 최신 포스트 URL 저장 완료 → {filepath}")
+
+
+def load_last_url(blog_url):
+    """
+    각 블로그 주소별로 저장된 최신 포스트 URL 불러오기.
+    예: latest_post/kse4966.json
+    """
+    match = re.search(r'blog.naver.com/([^/?]+)', blog_url)
+    blog_id = match.group(1) if match else "unknown"
+
+    folder = "latest_post"
+    filepath = os.path.join(folder, f"{blog_id}.json")
+
+    if os.path.exists(filepath):
+        with open(filepath, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            return data.get("latest_post_url", None)
+
+    print(f" {filepath} 파일이 존재하지 않습니다.")
     return None
-
-def save_last_url(url):
-    with open("latest_post.json", "w", encoding="utf-8") as f:
-        json.dump({"latest_post_url": url}, f, ensure_ascii=False)
-
-
 
 # 네이버 블로그 진입
 blg_url = sys.argv[1]
@@ -123,7 +197,9 @@ driver.get(blg_url) # 블로그 ID를 인자로 받음
 wait = WebDriverWait(driver, 30)
 
 # 1. iframe이 로드될 때까지 대기 후 전환
-wait.until(EC.frame_to_be_available_and_switch_to_it((By.ID, "mainFrame")))
+if not switch_to_main_frame(driver):
+    print(" mainFrame이 없는 페이지로 판단되어 프레임 전환 생략")
+
 
 blog_link = WebDriverWait(driver, 3).until(
     EC.element_to_be_clickable((By.XPATH, "//a[contains(@href, 'PostList.naver') and contains(@class, 'itemfont') and contains(@class, '_doNclick') and contains(@class, '_param(false|blog|)')]"))
@@ -131,7 +207,7 @@ blog_link = WebDriverWait(driver, 3).until(
 )
 blog_link.click()
 
-# ✅ 전체보기 클릭
+# 전체보기 클릭
 try:
     all_posts_link = WebDriverWait(driver, 5).until(
         EC.element_to_be_clickable((By.XPATH, "//a[@id='category0' and contains(text(), '전체보기')]"))
@@ -144,7 +220,7 @@ except TimeoutException:
 
 
 
-# 1️⃣ 목록 열림 상태 보장
+#  목록 열림 상태 보장
 ensure_toplist_open(driver)
 
 # 2️⃣ 잠깐 대기 (목록 DOM 완전히 갱신될 때까지)
@@ -161,7 +237,7 @@ numeric_string = "".join(numeric_chars)
 
 # list_size = soup.select_one('#listCountView').text
 # list_size = re.findall(r'\d+', list_size)[0]
-last_url = load_last_url()
+last_url = load_last_url(blg_url)
 stop_collecting = False
 links = []  # ✅ set으로 중복 방지
 seen = set()
@@ -169,7 +245,7 @@ total_pages = math.ceil(int(numeric_string) / 5)
 
 
 
-for page_num in range(1, 50):
+for page_num in range(1, 30):
     # ✅ 현재 페이지 HTML 새로 파싱
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     
@@ -185,7 +261,7 @@ for page_num in range(1, 50):
             href not in seen
         ):
             if last_url and href == last_url:
-                print(f"✅ 마지막 수집 포스트 도달: {href} → 크롤링 중단")
+                print(f" 마지막 수집 포스트 도달: {href} → 크롤링 중단")
                 stop_collecting = True
                 break
             
@@ -289,14 +365,19 @@ for idx, post_url in enumerate(links):
 
 # ====== 날짜 기준 정렬 ======
 # results.sort(key=lambda x: x["date"], reverse=False)
+
 if results:
     # 결과 중 가장 최신(날짜가 가장 큰) 포스트 찾기
     newest = max(results, key=lambda r: r["date"])
-    save_last_url(newest["url"])
+
+    # 블로그별 최신 포스트 URL 저장 (인자 수정)
+    save_last_url(blg_url, newest["url"])
+
     print(f"🆕 최신 포스트 URL 저장 완료 → {newest['url']}")
 else:
-    print("새로운 포스트가 없습니다. (모두 5일 이내)")
+    print("⚠️ 새로운 포스트가 없습니다. (모두 5일 이내 또는 수집 실패)")
 
+# ====== API 전송 ======
 url = "http://localhost:8080/api/results"
 
 def safe_int(value):
