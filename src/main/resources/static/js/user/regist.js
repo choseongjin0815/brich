@@ -53,6 +53,8 @@ $().ready(function() {
         var id = $(this).attr("id");
         
         $.get("/regist/area/" + id, function(response) { 
+            console.log("sdasdsda")
+            console.log(response);
             $(".city-gu-gun").empty();
             if(response.body) {
                 city = response.body;

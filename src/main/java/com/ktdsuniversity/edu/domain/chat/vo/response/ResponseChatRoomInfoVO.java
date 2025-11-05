@@ -24,6 +24,8 @@ public class ResponseChatRoomInfoVO {
 	private int unreadCnt;
 	
 	private String crtDt;
+	
+	private String targetId;
 
 	public String getChtRmId() {
 		return this.chtRmId;
@@ -122,6 +124,14 @@ public class ResponseChatRoomInfoVO {
 
 	public void setCrtDt(String crtDt) {
 		this.crtDt = crtDt;
+	}
+
+	public String getTargetId() {
+		return this.targetId;
+	}
+
+	public void setTargetId(String targetId) {
+		this.targetId = targetId;
 	}
 
 	@Override
