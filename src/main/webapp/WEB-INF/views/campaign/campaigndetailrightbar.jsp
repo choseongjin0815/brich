@@ -99,10 +99,11 @@
                                 and param.usrId eq sessionScope.__LOGIN_USER__.usrId}">
 	                   <c:if test="${param.sttsCd eq 2002}">
 	                       <div class="middle-center">
-			                   <button type="button" class="button_200_30 button-payment">결제</button>
+			                   <a href="/adv/pay/campaign/${detail.cmpnId}">
+			                     <button type="button" class="button_200_30 button-payment">결제</button>
+			                   </a>
 			               </div>
 	                  </c:if>
-	                  
 	                  <c:if test="${param.sttsCd eq 2003}">
 	                       <div class="deny-reason">
 	                           <div class="font-red">반려 사유</div>

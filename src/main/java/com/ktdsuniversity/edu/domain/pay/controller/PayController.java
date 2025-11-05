@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.ktdsuniversity.edu.domain.pay.service.PayService;
@@ -15,15 +16,15 @@ import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 @Controller
-public class payController {
+public class PayController {
 	
-	private static final Logger log = LoggerFactory.getLogger(payController.class);
+	private static final Logger log = LoggerFactory.getLogger(PayController.class);
 	
 	@Autowired
     private PayService payService;
     
     @GetMapping("/blgr/pay/subscribe")
-    public String subscribePayPage( Model model, @SessionAttribute(value = "__LOGIN_USER__", required = false) UserVO loginUser) {
+    public String subscribePayPage( Model model, @SessionAttribute(value = "__LOGIN_USER__") UserVO loginUser) {
     	
     	List<CommonCodeVO> commonCodeVoList = this.payService.payInfoServiceList();
     	model.addAttribute("payInfoList", commonCodeVoList);
@@ -32,5 +33,12 @@ public class payController {
     	
     	return "pay/subscribe";
     }
-
+    
+	
+	@GetMapping("/adv/pay/campaign/{cmpnId}")
+	public String advCampaignPayPage(@PathVariable String cmpnId, Model model, @SessionAttribute(value = "__LOGIN_USER__") UserVO loginUser) {
+    	
+		model.addAttribute("cmpnId", cmpnId);
+    	return "pay/campaign";
+    }
 }
