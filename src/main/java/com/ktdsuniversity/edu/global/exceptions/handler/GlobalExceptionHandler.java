@@ -40,6 +40,7 @@ public class GlobalExceptionHandler {
 		
 		errorResponse.setError(errorMap);
 		
+		
 		return errorResponse;
 	}
 	

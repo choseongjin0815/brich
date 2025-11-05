@@ -36,11 +36,11 @@
 		<div class="report-input">
 			<label class="report-title">신고 사유 <span class="require-mark">*</span></label>
 			<select id="rptRsn" name="rptRsn">
-				<option value="">선택</option>
+				<option value="">선택</option>   
 				<c:forEach items="${reportInfo.rptCategory}" var="category">
 					<option value="${category.cdId}">${category.cdNm}</option>
 				</c:forEach>
-			</select>
+			</select>     
 		</div>
 
 		<div class="report-input">
@@ -50,7 +50,8 @@
 
 		<div class="report-input">
 			<label class="report-title">자료 첨부 </label> <input type="file"
-				id="reportFiles" name="file" multiple>
+				id="reportFiles" class="fileInput" name="file" multiple>
+				<div class="fileList"></div>
 		</div>
 		<div class="btn-flex">
 			<div class="btn-back">돌아가기</div>

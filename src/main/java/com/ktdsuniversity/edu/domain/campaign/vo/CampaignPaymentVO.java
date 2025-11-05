@@ -36,12 +36,28 @@ public class CampaignPaymentVO extends BaseVO{
      */
     private int amnt;
 
-    /**
-     * @ColumnName PG_PYMNT_CD
-     * @ColumnType VARCHAR2(100)
-     * @ColumnComment 결제 대행사에서 주는 코드
-     */
-    private String pgPymntCd;
+    private String orderId;
+    
+    private String paymentKey;
+    
+    public String getOrderId() {
+		return this.orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
+	public String getPaymentKey() {
+		return this.paymentKey;
+	}
+
+	public void setPaymentKey(String paymentKey) {
+		this.paymentKey = paymentKey;
+	}
+
+
+
 
   
     public String getCmpnPymntId() {
@@ -76,18 +92,12 @@ public class CampaignPaymentVO extends BaseVO{
         this.amnt = amnt;
     }
     
-    public String getPgPymntCd() {
-        return this.pgPymntCd;
-    }
-    
-    public void setPgPymntCd(String pgPymntCd) {
-        this.pgPymntCd = pgPymntCd;
-    }
+
 
 	@Override
 	public String toString() {
 		return "CampaignPaymentVO [cmpnPymntId=" + cmpnPymntId + ", cmpnId=" + cmpnId + ", pymntCd=" + pymntCd
-				+ ", amnt=" + amnt + ", pgPymntCd=" + pgPymntCd + ", toString()=" + super.toString() + "]";
+				+ ", amnt=" + amnt + ", orderId=" + orderId + ", paymentKey=" + paymentKey + "]";
 	}
     
    

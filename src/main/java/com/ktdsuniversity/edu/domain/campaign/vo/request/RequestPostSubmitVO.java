@@ -1,5 +1,9 @@
 package com.ktdsuniversity.edu.domain.campaign.vo.request;
 
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 public class RequestPostSubmitVO {
 	
 	private String postTitle;
@@ -12,6 +16,26 @@ public class RequestPostSubmitVO {
 	
 	private String postSubmitChgCn;
 	
+	private List<MultipartFile> file;
+	
+	private String postFlGrpId;
+	
+	public String getPostFlGrpId() {
+		return this.postFlGrpId;
+	}
+
+	public void setPostFlGrpId(String postFlGrpId) {
+		this.postFlGrpId = postFlGrpId;
+	}
+
+	public List<MultipartFile> getFile() {
+		return this.file;
+	}
+
+	public void setFile(List<MultipartFile> file) {
+		this.file = file;
+	}
+
 	public String getPostSubmitChgCn() {
 		return postSubmitChgCn;
 	}
@@ -56,7 +80,8 @@ public class RequestPostSubmitVO {
 	@Override
 	public String toString() {
 		return "RequestPostSubmitVO [postTitle=" + postTitle + ", postUrl=" + postUrl + ", cmpnId=" + cmpnId
-				+ ", blgId=" + blgId + ", postSubmitChgCn=" + postSubmitChgCn + "]";
+				+ ", blgId=" + blgId + ", postSubmitChgCn=" + postSubmitChgCn + ", file=" + file + ", postFlGrpId="
+				+ postFlGrpId + "]";
 	}
 
 }

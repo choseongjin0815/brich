@@ -24,6 +24,12 @@ import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListV
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignwriteVO;
+import com.ktdsuniversity.edu.domain.file.dao.FileDao;
+import com.ktdsuniversity.edu.domain.file.dao.FileGroupDao;
+import com.ktdsuniversity.edu.domain.file.util.MultipartFileHandler;
+import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
+import com.ktdsuniversity.edu.domain.file.vo.FileVO;
+import com.ktdsuniversity.edu.domain.report.vo.request.RequestReportCreateVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.global.common.AjaxResponse;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
@@ -192,6 +198,7 @@ public class CampaignController {
     @PostMapping("/blgr/repstsubmit/{campaignId}")
     public AjaxResponse rePostSubmit(RequestPostSubmitVO requestPostSubmitVO ,@SessionAttribute(value = "__LOGIN_USER__") UserVO loginUser, 
     		@PathVariable String campaignId) {
+    	
     	requestPostSubmitVO.setBlgId(loginUser.getUsrId());
     	requestPostSubmitVO.setCmpnId(campaignId);
     	int count = this.campaignService.rePostSubmit(requestPostSubmitVO);
@@ -199,11 +206,13 @@ public class CampaignController {
     	
     	
     	AjaxResponse ajaxResponse = new AjaxResponse();
-    	ajaxResponse.setBody(count);
+    	ajaxResponse.setBody(1);
     	
     	return ajaxResponse;
     }
     
+
+
     
     @GetMapping("/adv/campaign/applicant/{cmpnId}")
     public String readApplicantList(Model model, @PathVariable String cmpnId,
@@ -243,8 +252,9 @@ public class CampaignController {
     }
     
     @GetMapping("/adv/campaign/adopt/{cmpnId}")
-    public String readAdoptList(Model model, @PathVariable String cmpnId,
-    		RequestApplicantVO requestApplicantVO) {
+    public String readAdoptList(Model model
+    							, @PathVariable String cmpnId
+    							,RequestApplicantVO requestApplicantVO) {
     	requestApplicantVO.setListSize(10);
     	requestApplicantVO.setPageCountInGroup(10);
 		requestApplicantVO.setCmpnId(cmpnId);
@@ -252,6 +262,7 @@ public class CampaignController {
     	ResponseAdoptListVO adoptList = this.campaignService.readResponseAdoptListByCmpnId(requestApplicantVO);
     	model.addAttribute("adoptList", adoptList);
     	model.addAttribute("search",requestApplicantVO);
+    	log.info("adoptList---:" + adoptList);
     	return "campaign/adopt";
     }
 
@@ -288,7 +299,7 @@ public class CampaignController {
 	}
 	
 	@GetMapping("/adv/campaign/write")
-	public String doCreateCampaignAction(Model model) {
+	public String createCampaign(Model model) {
 		ResponseCampaignwriteVO common = this.campaignService.createCampaign();
 		model.addAttribute("common", common);
 		return "campaign/write";
@@ -318,6 +329,32 @@ public class CampaignController {
 		}
 	}
 	
+	@GetMapping("/adv/campaign/modify/{cmpnId}")
+	public String modifyCampaign(Model model
+								 , @PathVariable String cmpnId) {
+		ResponseCampaignwriteVO common = this.campaignService.createCampaign();
+		ResponseCampaignVO campaign = this.campaignService.readCampaignDetail(cmpnId);
+		log.info("campaign read---" + campaign.toString());
+		
+		model.addAttribute("common", common);
+		model.addAttribute("campaign", campaign);
+		return "campaign/modify";
+	}
+	
+	@PostMapping("/adv/campaign/modify/{denyCmpnId}")
+	public String doModifyCampaignAction(RequestCreateCmpnVO requestCreateCmpnVO,
+											@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
+		requestCreateCmpnVO.setUsrId(loginUser.getUsrId());
+		boolean modify = this.campaignService.modifyNewCampaign(requestCreateCmpnVO);
+		if (modify) {
+			return "redirect:/adv/campaign/list";
+		}
+		
+		else {
+			return "";
+		}
+	}
+	
 	@GetMapping("/adv/campaign/list")
 	public String readCampaignListByUsrId(@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser
 										  , Model model
@@ -329,6 +366,7 @@ public class CampaignController {
 		ResponseCampaignListVO campaignList = this.campaignService.readCampaignListByUsrId(requestSearchCampaignVO);
 		model.addAttribute("campaignList", campaignList);
 		model.addAttribute("search", requestSearchCampaignVO);
+		log.info("campaignFilecheck : " + campaignList.getResponseCampaignList().toString());
 		return "campaign/list";
 	}
 	

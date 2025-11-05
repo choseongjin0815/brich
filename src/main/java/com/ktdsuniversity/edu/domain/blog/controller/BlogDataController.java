@@ -6,6 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ktdsuniversity.edu.domain.blog.service.DailyVisitorService;
+import com.ktdsuniversity.edu.domain.blog.service.GoldenKeyWordService;
+import com.ktdsuniversity.edu.domain.blog.vo.*;
+import com.ktdsuniversity.edu.global.common.CommonCodeVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
@@ -16,10 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
-import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
-import com.ktdsuniversity.edu.domain.blog.vo.PostDataVO;
-import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogIndexListVO;
-import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 
@@ -30,26 +34,47 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class BlogDataController {
 
+	private static final Logger log = LoggerFactory.getLogger(BlogDataController.class);
+
 	@Autowired BlogDataService blogDataService;
-	
+
+	@Autowired
+	DailyVisitorService dailyVisitorService;
+
+	@Autowired
+	GoldenKeyWordService goldenKeyWordService;
+
 	@GetMapping("/blog/{usrId}/dashboard")
-	public String viewBlogDashBoard(@PathVariable String usrId, HttpSession session, Model model, RequestExpireSoonCampaignVO requestExpireSoonCampaignVO, RequestBlogIndexListVO requestBlogIndexListVO){
+	public String viewBlogDashBoard(@PathVariable String usrId, HttpSession session, Model model, RequestExpireSoonCampaignVO requestExpireSoonCampaignVO, RequestBlogIndexListVO requestBlogIndexListVO) throws JsonProcessingException {
 	    
 		UserVO loginUser = (UserVO) session.getAttribute("__LOGIN_USER__");
 	    if (loginUser == null || !loginUser.getUsrId().equals(usrId)) {
 	        return "redirect:/access-denied";
 	    }
-		
+
 		requestExpireSoonCampaignVO.setListSize(4);
 		requestExpireSoonCampaignVO.setPageCount(1);
-		ResponseExpireSoonListVO result = 
+
+		ResponseExpireSoonListVO result =
 				this.blogDataService.readExpireSoonCampaignList(requestExpireSoonCampaignVO);
 		List<BlogIndexVO>indexResult = 
 				this.blogDataService.readBlogIndexList(usrId);
+
+		List<DailyVisitorVO> dailyVisitorsResult =
+				this.dailyVisitorService.selectDailyVisitors(usrId);
+		List<CommonCodeVO> goldenKeywordList =
+				this.goldenKeyWordService.selectUserCategoryKeywords(usrId);
+
+		model.addAttribute("user", loginUser);
+		model.addAttribute("dailyVisitorsResult", dailyVisitorsResult);
 		model.addAttribute("list", result);
 		model.addAttribute("user", loginUser);
 		model.addAttribute("paginator", requestExpireSoonCampaignVO);
 		model.addAttribute("index", indexResult);
+		model.addAttribute("goldenKeywordListJson", goldenKeywordList);
+
+		log.info("황키 : {}", goldenKeywordList);
+
 		return "blog/dashboard";
 	}
 	

@@ -58,6 +58,6 @@ public class ResponseCampaignListVO {
 	@Override
 	public String toString() {
 		return "ResponseCampaignListVO [ResponseCampaignList=" + ResponseCampaignList + ", CategoryList=" + CategoryList
-				+ ", isDeny=" + isDeny + "]";
+				+ ", isDeny=" + isDeny + ", campaignInfo=" + campaignInfo + "]";
 	}
 }
