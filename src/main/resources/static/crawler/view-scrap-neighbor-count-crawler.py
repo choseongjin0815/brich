@@ -92,6 +92,6 @@ try:
     if response.status_code == 200:
         print("success")
     else:
-        print(f"faild: {response.status_code} {response.text}")
+        print(f"failed: {response.status_code} {response.text}")
 except Exception as e:
-    print("faild with: ", e)
+    print("failed with: ", e)

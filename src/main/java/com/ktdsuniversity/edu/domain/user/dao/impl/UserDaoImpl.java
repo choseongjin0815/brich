@@ -112,7 +112,7 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
 	}
 	@Override
 	public int updateBlogScrapNeighbor(RequestBlogInfoVO request) {
-		return super.getSqlSession().update(this.NAME_SPACE + "updateBlogScrapNeighborById", request);
+		return super.getSqlSession().update(this.NAME_SPACE + "updateBlogScrapNeighbor", request);
 	}
 
 	@Override

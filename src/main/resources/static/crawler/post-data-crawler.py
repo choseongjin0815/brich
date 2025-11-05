@@ -38,7 +38,7 @@ options.add_argument(f'user-agent={user_agent}')
 
 
 # service = Service("/path/to/chromedriver")  # chromedriver 경로
-driver = webdriver.Chrome(options)
+driver = webdriver.Chrome()
 
 def is_toplist_open(driver):
     try:
@@ -59,36 +59,50 @@ def is_toplist_open(driver):
         return False
 
 
-def ensure_toplist_open(driver, timeout=3):
+def ensure_toplist_open(driver, timeout=5):
+    """
+    네이버 블로그의 Toplist(목록)가 닫혀 있을 경우 열리도록 보장한다.
+    """
     try:
-        # 먼저 span 텍스트로 상태 판단
         span_elem = WebDriverWait(driver, timeout).until(
             EC.presence_of_element_located((By.ID, "toplistSpanBlind"))
         )
         span_text = span_elem.text.strip()
         print(f"현재 목록 상태 텍스트: {span_text}")
 
-        # 이미 열려 있는 경우
+        # 이미 열린 경우
         if "목록닫기" in span_text:
             print("목록이 이미 열려 있음 → 클릭 생략")
             return
-        print("목록이 닫혀 있음 → 목록 열기 클릭")
+
+        print("목록이 닫혀 있음 → 목록 열기 시도")
+
+        # 토글 버튼 찾기
         toggle_btn = WebDriverWait(driver, timeout).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "a._toggleTopList"))
+            EC.presence_of_element_located((By.CSS_SELECTOR, "a._toggleTopList"))
         )
 
-        driver.execute_script("arguments[0].scrollIntoView(true);", toggle_btn)
-        driver.execute_script("arguments[0].click();", toggle_btn)
+        # 내부 JS 이벤트로 강제 트리거 (기본 click()은 동작 안 함)
+        driver.execute_script("""
+            const el = arguments[0];
+            const evt = document.createEvent('MouseEvents');
+            evt.initEvent('click', true, true);
+            el.dispatchEvent(evt);
+        """, toggle_btn)
 
-        # 열릴 때까지 대기 (span 텍스트가 '목록닫기'로 바뀌는지 확인)
-        WebDriverWait(driver, timeout).until(
+        # 목록 열릴 때까지 재시도하며 기다리기
+        WebDriverWait(driver, timeout * 2, ignored_exceptions=[StaleElementReferenceException]).until(
             lambda d: "목록닫기" in d.find_element(By.ID, "toplistSpanBlind").text
         )
 
-        print("목록 열림 확인 완료")
+        print("✅ 목록 열림 확인 완료")
 
     except TimeoutException:
-        print("⚠️ Timeout: 목록이 열리지 않았습니다. (이미 열려 있거나 목록 없음일 수 있음)")
+        print("⚠️ Timeout: 목록이 열리지 않음 (이미 열려 있거나 없는 경우)")
+    except StaleElementReferenceException:
+        print("⚠️ StaleElementReference 발생 → 재시도 중...")
+        time.sleep(0.5)
+        return ensure_toplist_open(driver, timeout)
 
 
 def load_last_url():
@@ -312,4 +326,3 @@ response = requests.post(
     json=data  
 )
 driver.quit()
-
