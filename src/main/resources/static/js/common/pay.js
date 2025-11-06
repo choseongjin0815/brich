@@ -29,4 +29,7 @@ $().ready(function() {
 	function sanitize() {
 	  el.value = el.value.replace(/\D+/g,''); // 안전망: 숫자 외 제거
 	}
+	
+	
+	
 });

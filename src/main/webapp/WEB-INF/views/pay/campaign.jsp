@@ -25,29 +25,33 @@ pageEncoding="UTF-8"%>
     		<div class="campaign-payment-content">${detail.cmpnTitle }</div>
     	</div>
     	<div class="campaign-payment-block">
-    		<div class="campaign-payment-title">모집일 선택</div> 
-    		
-    		<div class="campaign-payment-content flex-row">
-    			<div>
-    				<div>모집 시작일</div>
-    				<input type="date" name="rcrtStrtDt" required /> 
-    			</div>
-    			<div>
-    				<div>구매 기간</div>
-					<input id="day" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />    			</div>
-    			<div>
-    				<div>모집 마감일</div>
-    				<input type="date" name="rcrtStrtDt" required /> 
-    			</div>
-    			<div>
-    				<div>캠페인 시작일</div>
-    				<input type="date" name="rcrtStrtDt" required /> 
-    			</div>
-    			<div>
-    				<div>캠페인 마감일</div>
-    				<input type="date" name="rcrtStrtDt" required /> 
-    			</div>
-    		</div>
+    		<div class="campaign-payment-title">모집일 선택</div>     		
+				<div class="campaign-payment-content flex-row">
+				  <div>
+				    <div>모집 시작일</div>
+				    <input type="date" id="startDate" name="rcrtStrtDt" required />
+				  </div>
+				
+				  <div>
+				    <div>구매 기간(일)</div>
+				    <input id="buyDays" name="prgrssDrtn" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
+				  </div>
+				
+				  <div>
+				    <div>모집 마감일</div>
+				    <input type="date" id="endDate" name="rcrtEndDt" disabled/>
+				  </div>
+				
+				  <div>
+				    <div>캠페인 시작일</div>
+				    <input type="date" id="campStartDate" disabled/>
+				  </div>
+				
+				  <div>
+				    <div>캠페인 마감일</div>
+				    <input type="date" id="pstEndDt" name="campEndDt" />
+				  </div>
+				</div>
     	</div>
     	<div class="campaign-payment-block">
     		<div class="campaign-payment-title">인원 수</div>
