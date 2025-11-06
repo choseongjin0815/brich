@@ -11,7 +11,7 @@ from fake_useragent import UserAgent
 import sys
 
 
-
+sys.stdout.reconfigure(encoding='utf-8')
 # Chrome 드라이버 옵션 설정
 options = Options()
 options.add_argument("--headless")  # 화면 없이 실행

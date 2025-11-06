@@ -16,73 +16,78 @@
 	" />
 </jsp:include>
 <div class="dashboard-container">
-    <div class="title">Dashboard</div>
-    <div class="grid">
-        <div>마감 임박 캠페인
-            <table>
-                <tbody>
-                <c:choose>
-                    <c:when test="${not empty list.list}">
-                        <c:forEach items="${list.list}" var="recommend">
-                            <tr>
-                                <td>${recommend.cmpnId}</td>
-                                <td>${recommend.cmpnTitle}</td>
-                                <td>${recommend.rcrtEndDt}</td>
-                                <td>${recommend.offrCn}</td>
-                            </tr>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <tr>
-                            <td colspan="6" class="no-data">표시할 캠페인 없음</td>
-                        </tr>
-                    </c:otherwise>
-                </c:choose>
-                </tbody>
-            </table>
-            <jsp:include page="/WEB-INF/views/layout/paginator-simple.jsp">
-                <jsp:param name="havePrevPageGroup" value="${paginator.havePrevPageGroup}" />
-                <jsp:param name="pageNo" value="${paginator.pageNo}" />
-                <jsp:param name="haveNextPageGroup" value="${paginator.haveNextPageGroup}" />
-            </jsp:include>
-        </div>
-        <div>추천 캠페인</div>
+	<div class="title">Dashboard</div>
+	<div class="grid">
+		<div>마감 임박 캠페인
+			<table>
+				<tbody>
+				<c:choose>
+					<c:when test="${not empty list.list}">
+						<c:forEach items="${list.list}" var="recommend">
+							<tr>
+								<td>${recommend.cmpnId}</td>
+								<td>${recommend.cmpnTitle}</td>
+								<td>${recommend.rcrtEndDt}</td>
+								<td>${recommend.offrCn}</td>
+							</tr>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<tr>
+							<td colspan="6" class="no-data">표시할 캠페인 없음</td>
+						</tr>
+					</c:otherwise>
+				</c:choose>
+				</tbody>
+			</table>
+			<jsp:include page="/WEB-INF/views/layout/paginator-simple.jsp">
+				<jsp:param name="havePrevPageGroup" value="${paginator.havePrevPageGroup}" />
+				<jsp:param name="pageNo" value="${paginator.pageNo}" />
+				<jsp:param name="haveNextPageGroup" value="${paginator.haveNextPageGroup}" />
+			</jsp:include>
+		</div>
+		<div>추천 캠페인</div>
+		<div>
+			<div class="flex-grow dashboard-title golden-keyword">핵심 황금 키워드</div>
+			<div class="flex-grow dashboard-detail golden-keyword">추천 키워드 줄 경쟁률이 낮고, 상위 노출 가능성이 높음</div>
+			<button id="golden-keyword-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="dashboard-detail-btn">자세히 보기</button>
+			<div id="golden-keyword-modal" class="modal">
+				<div class="modal-content golden-keyword">
+					<span class="close">&times;</span>
+					<h3>핵심 황금 키워드</h3>
+					<h6>상세보기</h6>
 
-        <div>
-            <div class="flex-grow dashboard-title golden-keyword">핵심 황금 키워드</div>
-            <div class="flex-grow dashboard-detail golden-keyword">추천 키워드 줄 경쟁률이 낮고, 상위 노출 가능성이 높음</div>
-            <button id="golden-keyword-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="dashboard-detail-btn">자세히 보기</button>
-            <div id="golden-keyword-modal" class="modal">
-                <div class="modal-content golden-keyword">
-                    <span class="close">&times;</span>
-                    <h3>핵심 황금 키워드</h3>
-                    <h6>상세보기</h6>
+					<button class="btn close-btn">닫기</button>
+				</div>
+			</div>
+			<div style="width: 100%; max-width: 800px; margin: 0 auto;">
+				<canvas id="bubbleChart"></canvas>
+			</div>
 
-                    <button class="btn close-btn">닫기</button>
-                </div>
-            </div>
-            <div style="width: 100%; max-width: 800px; margin: 0 auto;">
-                <canvas id="bubbleChart"></canvas>
-            </div>
+		</div>
+		<div>
+			<h4 >내 블로그 지수</h4> 
+			<div class="flex-row">
+				<div>현재 블로그 지수: <span class="blog-index">${currentIndex}</span></div>
+				<button id="blog-index-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="blog-index-detail-btn">자세히 보기</button>
+			</div>
+			
+			<div id="blog-index-modal" class="modal">
+				<div class="modal-content">
+    				<span class="close">&times;</span>
+    				<h3>블로그 상세 통계</h3>
+    				<div class="table-container">
+    					<table id="blog-detail-table" border="1">
+      						<thead></thead>
+      						<tbody></tbody>
+    					</table>
+    				</div>
+    				
+  				</div>
+			</div>
 
-        </div>
-
-        <div>
-            <div class="flex-grow">내 블로그 지수</div>
-            <button id="blog-index-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="dashboard-detail-btn">자세히 보기</button>
-            <div id="blog-index-modal" class="modal">
-                <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <h3>내 블로그 지수</h3>
-
-
-                    <button class="btn right-align" id="download-excel">엑셀 다운로드</button>
-
-                </div>
-            </div>
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-
+			<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+			<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
             <div style="width: 100%; max-width: 800px; margin: 0 auto;">
                 <canvas id="blogIndexChart"></canvas>
             </div>
@@ -134,7 +139,7 @@
             const xPadding = cellWidth / 2;
             const yPadding = cellHeight / 2;
 
-            const canvasWidth = bubbleCtx.clientWidth;
+			const canvasWidth = bubbleCtx.clientWidth;
             const canvasHeight = bubbleCtx.clientHeight;
 
             let row = 0;
@@ -310,61 +315,91 @@
             // 블로그 지수
 
             const labels = [
-                <c:forEach items="${index}" var="row" varStatus="st">
-                "${row.statDt}"<c:if test="${!st.last}">,</c:if>
-                </c:forEach>
-            ];
+				<c:forEach items="${index}" var="row" varStatus="st">
+					"${row.statDt}"<c:if test="${!st.last}">,</c:if>
+				</c:forEach>
+			];
 
-            const avg5d = [
-                <c:forEach items="${index}" var="row" varStatus="st">
-                ${row.indxValAvg5d}<c:if test="${!st.last}">,</c:if>
-                </c:forEach>
-            ];
+			const avg5d = [
+				<c:forEach items="${index}" var="row" varStatus="st">
+					${row.indxValAvg5d}<c:if test="${!st.last}">,</c:if>
+				</c:forEach>
+			];
 
-            const ctx = document.getElementById('blogIndexChart').getContext('2d');
-            const chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [
+			const ovll = [
+				<c:forEach items="${index}" var="row" varStatus="st">
+					${row.ovllBlgIndx}<c:if test="${!st.last}">,</c:if>
+				</c:forEach>
+			];
 
-                        {
-                            label: '5일 평균 지수',
-                            data: avg5d,
-                            borderColor: '#7B61FF',
-                            backgroundColor: 'rgba(123, 97, 255, 0.1)',
-                            tension: 0.5,
-                            fill: true,
-                            pointRadius: 3,
-                            pointHoverRadius: 5
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { position: 'top' },
-                        title: {
-                            display: true,
-                            text: '최근 블로그 지수 변화'
-                        }
-                    },
-                    scales: {
-                        x: {
-                            title: { display: true, text: '날짜' }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            title: { display: true, text: '지수' },
-                            ticks: {
-                                stepSize: 10
-                            }
-                        }
-                    }
-                }
-            });
-        </script>
-    </div>
+			const ctx = document.getElementById('blogIndexChart').getContext('2d');
+			const chart = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: labels,
+					datasets: [
+						{
+							label: '5일 평균 지수',
+							data: avg5d,
+							borderColor: '#7B61FF',
+							backgroundColor: 'rgba(123, 97, 255, 0.1)',
+							tension: 0.4,
+							fill: true,
+							pointRadius: 3,
+							pointHoverRadius: 5,
+							borderWidth: 2
+						},
+						{
+							label: '전체 평균 지수',
+							data: ovll,
+							borderColor: '#00B8A9',
+							backgroundColor: 'rgba(0, 184, 169, 0.1)',
+							tension: 0.4,
+							fill: true,
+							pointRadius: 3,
+							pointHoverRadius: 5,
+							borderWidth: 2
+						}
+					]
+				},
+				options: {
+					responsive: true,
+					plugins: {
+						legend: {
+							position: 'top',
+							labels: {
+								color: '#333',
+								font: { size: 13 }
+							}
+						},
+						title: {
+							display: true,
+							text: '블로그 지수 추이 (5일 평균 | 전체 평균)',
+							color: '#333',
+							font: { size: 15, weight: 'bold' }
+						},
+						tooltip: {
+							mode: 'index',
+							intersect: false
+						}
+					},
+					scales: {
+						x: {
+							ticks: { color: '#555' },
+							grid: { color: 'rgba(0,0,0,0.05)' }
+						},
+						y: {
+							beginAtZero: false,
+							ticks: { color: '#555' },
+							grid: { color: 'rgba(0,0,0,0.05)' }
+						}
+					}
+				}
+			});
+
+
+		</script>
+	</div>
 </div>
 </body>
 </html>

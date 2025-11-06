@@ -6,8 +6,16 @@ public class BlogIndexVO {
 	private String statDt;
 	private double indxVal;
 	private double indxValAvg5d;
+	private double ovllBlgIndx;
 	
 	
+	
+	public double getOvllBlgIndx() {
+		return ovllBlgIndx;
+	}
+	public void setOvllBlgIndx(double ovllBlgIndx) {
+		this.ovllBlgIndx = ovllBlgIndx;
+	}
 	public String getUsrId() {
 		return this.usrId;
 	}

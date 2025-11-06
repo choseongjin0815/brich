@@ -10,6 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
 
+import com.ktdsuniversity.edu.domain.user.service.UserService;
 import com.ktdsuniversity.edu.global.common.AjaxResponse;
 
 @RestController
@@ -17,6 +18,9 @@ import com.ktdsuniversity.edu.global.common.AjaxResponse;
 public class EmailCheckController {
     @Autowired
     private JavaMailSender mailSender;
+    
+    @Autowired 
+    private UserService userService;
 
     private static final long EXPIRE_MS = 3 * 60 * 1000L; // 3분
 
@@ -58,6 +62,21 @@ public class EmailCheckController {
         return ajaxResponse;
     }
 
+    /*
+     * 이메일 중복 체크
+     */
+    @GetMapping("/duplicate/{email}")
+    public AjaxResponse checkDuplicatedEmail(@PathVariable String email) {
+    	
+    	AjaxResponse ajaxResponse = new AjaxResponse();
+    	
+    	boolean isDuplicated = this.userService.readEmailByInputEmail(email);
+    	ajaxResponse.setBody(isDuplicated);
+ 
+    	return ajaxResponse;
+    }
+    
+    
     @PostMapping("/verify")
     public AjaxResponse verifyCode(@RequestParam String email,
                                    @RequestParam String code,

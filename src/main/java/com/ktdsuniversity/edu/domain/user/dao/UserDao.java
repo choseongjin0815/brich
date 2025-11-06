@@ -51,6 +51,8 @@ public interface UserDao {
 
 	public int updateBlogTitle(RequestBlogTitleVO request);
 
+	public int selectEmailCountByInputEmail(String email);
+
 
 
 

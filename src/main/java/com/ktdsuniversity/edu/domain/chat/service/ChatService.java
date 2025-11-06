@@ -1,6 +1,7 @@
 package com.ktdsuniversity.edu.domain.chat.service;
 
 
+import java.util.List;
 import java.util.Map;
 
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
@@ -34,4 +35,7 @@ public interface ChatService {
 	public CampaignVO readCampaignByChtRmId(String chtRmId);
 	
 	public Map<String, Object> readChatMessageListPaged(String chtRmId, String usrId, int page, int size);
+
+	public List<String> readAllChtRmIdByUsrIdOrCmpnId(Map<String, String> parameter);
+
 }
