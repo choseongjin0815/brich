@@ -4,32 +4,93 @@ $().ready(function() {
 	const allowKeys = new Set([
 	  'Backspace','Delete','ArrowLeft','ArrowRight','Home','End','Tab'
 	]);
-	
-	const el = document.getElementById('day');
-	
-	let composing = false;
-	el.addEventListener('compositionstart', () => composing = true);
-	el.addEventListener('compositionend', () => { composing = false; sanitize(); });
-	
-	el.addEventListener('keydown', (e) => {
-	  if (composing) return;
-	  if (allowKeys.has(e.key)) return;
-	  if (e.ctrlKey || e.metaKey) return; // Ctrl+C/V/X/A 허용
-	  if (!onlyDigits.test(e.key)) e.preventDefault(); // 숫자 외 금지
+
+	const buyDays = $('#buyDays');
+
+	function sanitize(){
+	  buyDays.val((buyDays.val() || '').replace(/\D+/g, '')); 
+	}
+
+	buyDays.on('keydown', function(e){
+	  if (allowKeys.has(e.key)) {
+		return;
+	}
+	  if (!onlyDigits.test(e.key)) {
+	    e.preventDefault();
+	  }
 	});
 	
-	el.addEventListener('paste', (e) => {
-	  e.preventDefault();
-	  const text = (e.clipboardData || window.clipboardData).getData('text');
-	  const digits = text.replace(/\D+/g,'');
-	  document.execCommand('insertText', false, digits);
-	});
+	buyDays.on('input', sanitize);
 	
-	el.addEventListener('input', sanitize);
-	function sanitize() {
-	  el.value = el.value.replace(/\D+/g,''); // 안전망: 숫자 외 제거
+	
+///////
+	const start 	= $('#startDate');
+	const days  	= $('#buyDays');
+	const end       = $('#endDate');
+	const cmpnStart = $('#campStartDate');
+	const campEnd   = $('#pstEndDt');
+	// Date 형태 생성
+	function parseDate(yyyyMMdd) {
+		if (!yyyyMMdd) {
+			return null
+		};
+		const [y, m, d] = yyyyMMdd.split('-').map(Number);
+		if (!y || !m || !d){
+			return null;
+		} 
+		return new Date(y, m - 1, d);
 	}
 	
+	// Date → YYYY-MM-DD
+	function formatDate(dt) {
+	  const y = dt.getFullYear();
+	  const m = String(dt.getMonth() + 1).padStart(2, '0');
+	  const d = String(dt.getDate()).padStart(2, '0');
+	  return `${y}-${m}-${d}`;
+	}
+	
+	// dt + n일
+	function addDays(dt, n) {
+	  const copy = new Date(dt);
+	  copy.setDate(copy.getDate() + n);
+	  return copy;
+	}
+	
+	function recalc() {
+	  const startVal = start.val();
+	  const daysStr  = (days.val() || '').trim();
+	  const startDate = parseDate(startVal);
+	  const daysNum  = Number(daysStr);
+	  
+	  if (!startDate || !daysStr || !Number.isInteger(daysNum) || daysNum <= 0) {
+	    end.val('');
+		campEnd.attr('min','');
+	    return;
+	  }
+	  const endDate = addDays(startDate, daysNum);
+	  const cmpnStartDate = addDays(endDate, 3);
+	  end.val(formatDate(endDate));
+	  cmpnStart.val(formatDate(cmpnStartDate));	
+	  const campStartStr = formatDate(cmpnStartDate);
+	  campEnd.attr('min', campStartStr);
+	}
+	
+	start.on('change input', recalc);
+	days.on('input', function(){
+	  recalc();
+	});
+	
+	$(document).on('input', '#buyDays', function () {
+	  $('#payDay').text($(this).val());
+	  totalPay = ($(this).val()*$('.payPrice').data('dayprice'))
+	  				+ ($('.payPrice').data('rcrtprsnn')*Number($('.payPerson').data('person'))); 
+	  $('.total-pay').text(totalPay);
+	});
+	
+	// 초기 계산(페이지에 값이 미리 채워져 있을 경우 대비)
+	recalc();
+	
+
 	
 	
 });

@@ -55,13 +55,13 @@ pageEncoding="UTF-8"%>
     	</div>
     	<div class="campaign-payment-block">
     		<div class="campaign-payment-title">인원 수</div>
-    		<div class="campaign-payment-content">${detail.rcrtPrsnn} 명</div>
+    		<div class="campaign-payment-content payPerson" data-person="${detail.rcrtPrsnn}">${detail.rcrtPrsnn} 명</div>
     	</div>
     	<div> 총 모집일과 인원 수를 계산하여 총 결제 금액이 결정됩니다 </div>
     	<div class="campaign-payment-block">
     		<div class="campaign-payment-title">요금 상세</div>
-    		<div class="campaign-payment-content">
-    			(${detail.rcrtPrsnn} 명 x ${detail.personPrice }원) + ( 일 x ${detail.dayPrice }원) =  원 
+    		<div class="campaign-payment-content payPrice" data-rcrtprsnn=" ${detail.personPrice}" data-dayprice="${detail.dayPrice}">
+    			(${detail.rcrtPrsnn} 명 x ${detail.personPrice }원) + ( <span id="payDay"></span>일 x ${detail.dayPrice }원) =  <span class="total-pay"></span>원 
     		</div>
     	</div>
     	<div class="campaign-payment-block">
@@ -71,7 +71,7 @@ pageEncoding="UTF-8"%>
     </form>
     </div>
 	<div class ="payment-bottom flex-row">
-		<div class="payment-bottom-title">최종 금액  원</div>
+		<div class="payment-bottom-title">최종 금액 <span class="total-pay end-pay"></span> 원</div>
 		<a href="/adv/pay/{cdId}"><div class="payment-bottom-button middle-center">결제하기</div></a>
 	</div>    
 </div>
