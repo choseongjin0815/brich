@@ -23,6 +23,7 @@ $().ready(function() {
     startUrl = auth === 1004 ? '/adv' : '/blgr';
     chtRmId = $(".chat-main").data("chtrm-id");
     cmpnId = $(".content-title-text").data("cmpn-id");
+    targetId = $(".content-box").data("target-id");
 
     console.log("채팅방 ID:", chtRmId);
     console.log("내 ID:", myId);

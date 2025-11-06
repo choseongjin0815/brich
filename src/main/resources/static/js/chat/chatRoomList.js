@@ -30,6 +30,10 @@ $().ready(function() {
         currentPage = 0;
         loadChatRoomList('unread', 0);
     });
+    
+    $(".arrow-back").on("click", function() {
+        window.history.back();
+    });
 
     // 페이지 번호 클릭 이벤트 (동적 생성된 요소)
     $(document).on("click", ".page-item", function() {

@@ -42,6 +42,7 @@ import com.ktdsuniversity.edu.domain.file.dao.FileGroupDao;
 import com.ktdsuniversity.edu.domain.file.util.MultipartFileHandler;
 import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
 import com.ktdsuniversity.edu.domain.file.vo.FileVO;
+import com.ktdsuniversity.edu.global.util.SessionUtil;
 import com.ktdsuniversity.edu.global.util.TimeFormatUtil;
 
 @Service
@@ -409,10 +410,19 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public CampaignVO readCampaignByChtRmId(String chtRmId) {
 
+		String currentUsrId = SessionUtil.getLoginObject().getUsrId();
+		
+		Map<String, String> chtRoomInfo = new HashMap<>();
+		chtRoomInfo.put("chtRmId", chtRmId);
+		chtRoomInfo.put("currentUsrId", currentUsrId);
+		
 		CampaignVO campaignVO = this.chatDao.selectCampaignByChtRmId(chtRmId);
+		String targetUsrId = this.chatDao.selectTargetUsrIdByChtRmIdAndUsrId(chtRoomInfo);
+		log.info("targetUsrId{}" , targetUsrId);
 		if (campaignVO == null) {
 			throw new IllegalArgumentException(chtRmId + "에 해당하는 캠페인이 없습니다.");
 		}
+		campaignVO.setUsrId(targetUsrId);
 
 		return campaignVO;
 	}

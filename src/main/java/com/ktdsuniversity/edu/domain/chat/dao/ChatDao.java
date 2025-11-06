@@ -1,6 +1,7 @@
 package com.ktdsuniversity.edu.domain.chat.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.chat.vo.ChatParticipantVO;
@@ -41,4 +42,6 @@ public interface ChatDao {
 
     //채팅방에 해당하는 캠페인 정보 조회
 	public CampaignVO selectCampaignByChtRmId(String chtRmId);
+
+	public String selectTargetUsrIdByChtRmIdAndUsrId(Map<String, String> chtRoomInfo);
 }

@@ -11,7 +11,7 @@
     " />
 </jsp:include>
 <div class="chat-wrapper">
-	<div class="header-title">메시지</div>
+	<div class="header-title">메세지</div>
 	<div class="chat-main">
 		<div class="content-box">
 			<div class="content-title">캠페인 목록</div>

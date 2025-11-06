@@ -47,6 +47,7 @@ ul{
     color: #5A6ACF;
 }
 .content-box{
+	position: relative;
     margin-left: 50px;
     width: 1200px;
     height: 750px;
@@ -62,6 +63,14 @@ ul{
     color: #5A6ACF;
     font-weight: 700;
     border-bottom: 1px solid #C8CBD9;
+}
+.arrow-back {
+	position: absolute;
+	width: 35px;
+	height: 35px;
+	left: 20px;
+	top: 15px;
+	
 }
 .progress-check {
     align-items: center;

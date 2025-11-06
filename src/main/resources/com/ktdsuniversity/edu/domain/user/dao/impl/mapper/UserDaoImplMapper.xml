@@ -240,4 +240,11 @@
 	 WHERE BLG_ADDRS = #{blgAddrs}
 	
 	</update>
+	
+	<select id="selectEmailCountByInputEmail"
+	        resultType="int">
+	    SELECT COUNT(EML)
+	      FROM USR
+	     WHERE EML = #{email} 
+	</select>
 </mapper>

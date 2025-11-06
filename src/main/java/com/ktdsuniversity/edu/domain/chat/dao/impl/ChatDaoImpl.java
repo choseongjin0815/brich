@@ -1,6 +1,7 @@
 package com.ktdsuniversity.edu.domain.chat.dao.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
@@ -93,6 +94,12 @@ public class ChatDaoImpl extends SqlSessionDaoSupport implements ChatDao {
 	@Override
 	public CampaignVO selectCampaignByChtRmId(String chtRmId) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignByChtRmId", chtRmId);
+	}
+
+
+	@Override
+	public String selectTargetUsrIdByChtRmIdAndUsrId(Map<String, String> chtRoomInfo) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectTargetUsrIdByChtRmIdAndUsrId", chtRoomInfo);
 	}
     
 }

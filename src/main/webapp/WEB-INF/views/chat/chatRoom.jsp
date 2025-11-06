@@ -27,13 +27,15 @@
 		value='<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>' />
 </jsp:include>
 <div class="chat-wrapper">
-	<div class="header-title">메시지</div>
+	<div class="header-title">메세지</div>
 	<div class="chat-main" data-chtrm-id="${chtRmId}">
 		<div class="content-box"
 			data-auth="${sessionScope.__LOGIN_USER__.autr}"
 			data-usr-id="${sessionScope.__LOGIN_USER__.usrId}"
 			data-nm = "${sessionScope.__LOGIN_USER__.nm}"
-			data-cmpny = "${sessionScope.__LOGIN_USER__.cmpny}">
+			data-cmpny = "${sessionScope.__LOGIN_USER__.cmpny}"
+			data-target-Id="${campaign.usrId}">
+           <img src="/img/arrow-left.png" class="arrow-back"/>
 			<div class="content-title">
 				<div class="content-title-text"
 				     data-cmpn-id="${campaign.cmpnId}">${campaign.cmpnTitle}</div>

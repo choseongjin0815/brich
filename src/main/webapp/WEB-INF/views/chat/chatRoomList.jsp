@@ -19,10 +19,13 @@
 
 </jsp:include>
 <div class="chat-wrapper">
-	<div class="header-title">메시지</div>
+	<div class="header-title">메세지</div>
 	<div class="chat-main" data-cmpn="${cmpnId}">
 		<div class="content-box"
 			data-auth="${sessionScope.__LOGIN_USER__.autr}">
+			<c:if test="${sessionScope.__LOGIN_USER__.autr eq 1004 }">
+	           <img src="/img/arrow-left.png" class="arrow-back"/>
+	        </c:if>
 			<div class="content-title">채팅방 목록</div>
 			<div class="progress-check">
 				<div class="progress readall">전체</div>

@@ -354,5 +354,12 @@ public class UserServiceImpl implements UserService {
 	return updateCount > 0;
   }
 
+  @Override
+  public boolean readEmailByInputEmail(String email) {
+	int count = this.userDao.selectEmailCountByInputEmail(email);
+	  
+	return count < 1;
+  }
+
 
 }

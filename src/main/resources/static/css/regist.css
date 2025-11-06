@@ -106,9 +106,22 @@
      }
      
 }
+
+.signup-btn {
+	border: 0;
+	padding: 0;
+	border-radius: 5px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .login-button {
+	font-style: arial;
+	text-decoration: none;
     width: 320px;
     height: 45px;
+    font-size: 16px;
     font-weight: 500; 
     border: 0;
     border-radius: 5px;
@@ -226,7 +239,7 @@
 }
 .do-reset-btn {
     padding: 5px 0;
-    width: 100%;
+    width: 556px;
     border-radius: 8px;
     color: #fff;
     font-size: 24px;
@@ -307,4 +320,8 @@
 	line-height: 20px;
 	margin-bottom: 20px;
 	color: red;
+}
+
+.user-regist-form.reset{
+	margin-left: 0px;
 }
