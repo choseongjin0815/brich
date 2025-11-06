@@ -122,3 +122,132 @@
 h3{
     margin: 0;
 }
+
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background: #fff;
+    color: #333;
+    padding: 0 40px;
+}
+
+.title {
+    font-size: 2.25rem;
+    color: #5A6ACF;
+    font-weight: bold;
+    margin: 20px 0 10px 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 0;
+    border-collapse: collapse;
+}
+
+.grid > div {
+    border: none;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.grid > div:nth-child(-n+3) {
+    border-bottom: 1px solid #ccc;
+}
+
+.grid > div:nth-child(3n+1),
+.grid > div:nth-child(3n+2) {
+    border-right: 1px solid #ccc;
+}
+
+.grid > div:nth-child(1) {
+    border-right: none;
+}
+
+.grid > div:nth-child(n+4) {
+    border-top: none;
+}
+
+.grid {
+    border: none;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.dashboard-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #111;
+}
+
+.dashboard-detail {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.dashboard-detail-btn {
+    background: #F7F8FC;
+    border: 1px solid #DDE4F0;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    color: #5A6ACF;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.dashboard-detail-btn:hover {
+    background-color: #EEF0FF;
+}
+
+.golden-keyword-section {
+    color: #B45309;
+}
+.golden-keyword-section canvas {
+    display: block;
+    width: 100%;
+    max-width: 1000px;
+    height: 400px;
+    margin: 10px auto 0;
+}
+
+.blog-index-section .blog-index {
+    color: #fff;
+    background-color: #5A6ACF;
+    border-radius: 5px;
+    padding: 2px 5px;
+    margin: 0 3px;
+}
+.blog-index-section canvas {
+    display: block;
+    width: 100%;
+    max-width: 900px;
+    margin: 10px auto 0;
+}
+
+.daily-visitor-section {
+    color: #1D4ED8;
+}
+.daily-visitor-section #total-visitor {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 5px;
+}
+.daily-visitor-section .sub-info {
+    font-size: 0.9rem;
+    color: #666;
+}
+.daily-visitor-section canvas {
+    display: block;
+    width: 100%;
+    max-width: 900px;
+    margin: 10px auto 0;
+}
+

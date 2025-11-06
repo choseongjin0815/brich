@@ -18,7 +18,10 @@
 <div class="dashboard-container">
 	<div class="title">Dashboard</div>
 	<div class="grid">
-		<div>마감 임박 캠페인
+		<div>
+		<div class="section-header">
+			<div class="dashboard-title">마감임박 캠페인</div>
+		</div>
 			<table>
 				<tbody>
 				<c:choose>
@@ -46,74 +49,113 @@
 				<jsp:param name="haveNextPageGroup" value="${paginator.haveNextPageGroup}" />
 			</jsp:include>
 		</div>
-		<div>추천 캠페인</div>
-		<div>
-			<div class="flex-grow dashboard-title golden-keyword">핵심 황금 키워드</div>
-			<div class="flex-grow dashboard-detail golden-keyword">추천 키워드 줄 경쟁률이 낮고, 상위 노출 가능성이 높음</div>
-			<button id="golden-keyword-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="dashboard-detail-btn">자세히 보기</button>
-			<div id="golden-keyword-modal" class="modal">
-				<div class="modal-content golden-keyword">
-					<span class="close">&times;</span>
-					<h3>핵심 황금 키워드</h3>
-					<h6>상세보기</h6>
+		<div class="dashboard-title">추천 캠페인</div>
+<%--		<div>--%>
+<%--			<div class="flex-grow dashboard-title golden-keyword">핵심 황금 키워드</div>--%>
+<%--			<div class="flex-grow dashboard-detail golden-keyword">추천 키워드 줄 경쟁률이 낮고, 상위 노출 가능성이 높음</div>--%>
+<%--			<button id="golden-keyword-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="dashboard-detail-btn">자세히 보기</button>--%>
+<%--			<div id="golden-keyword-modal" class="modal">--%>
+<%--				<div class="modal-content golden-keyword">--%>
+<%--					<span class="close">&times;</span>--%>
+<%--					<h3>핵심 황금 키워드</h3>--%>
+<%--					<h6>상세보기</h6>--%>
 
-					<button class="btn close-btn">닫기</button>
-				</div>
-			</div>
-			<div style="width: 100%; max-width: 800px; margin: 0 auto;">
-				<canvas id="bubbleChart"></canvas>
-			</div>
+<%--					<button class="btn close-btn">닫기</button>--%>
+<%--				</div>--%>
+<%--			</div>--%>
+<%--			<div style="width: 100%; max-width: 800px; margin: 0 auto;">--%>
+<%--				<canvas id="bubbleChart"></canvas>--%>
+<%--			</div>--%>
 
+<%--		</div>--%>
+
+		<div class="dashboard-section golden-keyword-section">
+			<div class="section-header">
+				<div class="dashboard-title">핵심 황금 키워드</div>
+				<button id="golden-keyword-detail" class="dashboard-detail-btn">자세히 보기</button>
+			</div>
+			<div class="dashboard-detail">추천 키워드 중 경쟁률이 낮고, 상위 노출 가능성이 높음</div>
+			<canvas id="bubbleChart"></canvas>
 		</div>
-		<div>
-			<h4 >내 블로그 지수</h4> 
-			<div class="flex-row">
-				<div>현재 블로그 지수: <span class="blog-index">${currentIndex}</span></div>
+
+<%--		<div>--%>
+<%--			<h4 >내 블로그 지수</h4>--%>
+<%--			<div class="flex-row">--%>
+<%--				<div>현재 블로그 지수: <span class="blog-index">${currentIndex}</span></div>--%>
+<%--				<button id="blog-index-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="dashboard-detail-btn">자세히 보기</button>--%>
+<%--			</div>--%>
+
+<%--			<div id="blog-index-modal" class="modal">--%>
+<%--				<div class="modal-content">--%>
+<%--    				<span class="close">&times;</span>--%>
+<%--    				<h3>블로그 상세 통계</h3>--%>
+<%--    				<div class="table-container">--%>
+<%--    					<table id="blog-detail-table" border="1">--%>
+<%--      						<thead></thead>--%>
+<%--      						<tbody></tbody>--%>
+<%--    					</table>--%>
+<%--    				</div>--%>
+
+<%--  				</div>--%>
+<%--			</div>--%>
+
+<%--            <div style="width: 100%; max-width: 800px; margin: 0 auto;">--%>
+<%--                <canvas id="blogIndexChart"></canvas>--%>
+<%--            </div>--%>
+
+
+
+<%--        </div>--%>
+		<div class="dashboard-section blog-index-section">
+			<div class="section-header">
+				<div class="dashboard-title">내 블로그 지수</div>
 				<button id="blog-index-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="dashboard-detail-btn">자세히 보기</button>
 			</div>
-			
 			<div id="blog-index-modal" class="modal">
 				<div class="modal-content">
-    				<span class="close">&times;</span>
-    				<h3>블로그 상세 통계</h3>
-    				<div class="table-container">
-    					<table id="blog-detail-table" border="1">
-      						<thead></thead>
-      						<tbody></tbody>
-    					</table>
-    				</div>
-    				
-  				</div>
+					<span class="close">&times;</span>
+					<h3>블로그 상세 통계</h3>
+					<div class="table-container">
+						<table id="blog-detail-table" border="1">
+							<thead></thead>
+							<tbody></tbody>
+						</table>
+					</div>
+
+				</div>
 			</div>
-
-            <div style="width: 100%; max-width: 800px; margin: 0 auto;">
-                <canvas id="blogIndexChart"></canvas>
-            </div>
-
-
-
-        </div>
-
+			<div>현재 블로그 지수: <span class="blog-index">${currentIndex}</span></div>
+			<canvas id="blogIndexChart"></canvas>
+		</div>
         <div>신청한 캠페인</div>
 
-        <div>
-            <div class="flex-grow dashboard-title daily-visitor">나의 블로그 방문자 수</div>
-            <div id="total-visitor" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" >총 방문자 수</div>
-            <button id="daily-visitor-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="dashboard-detail-btn">자세히 보기</button>
-            <div id="daily-visitor-modal" class="modal">
-                <div class="modal-content daily-visitor">
-                    <span class="close">&times;</span>
-                    <h3>핵심 황금 키워드</h3>
-                    <h6>상세보기</h6>
+<%--        <div>--%>
+<%--			<div class="flex-grow dashboard-title daily-visitor">나의 블로그 방문자 수</div>--%>
+<%--				<div id="total-visitor" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" >총 방문자 수</div>--%>
+<%--				<button id="daily-visitor-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="dashboard-detail-btn">자세히 보기</button>--%>
+<%--					<div id="daily-visitor-modal" class="modal">--%>
+<%--					<div class="modal-content daily-visitor">--%>
+<%--						<span class="close">&times;</span>--%>
+<%--							<h3>핵심 황금 키워드</h3>--%>
+<%--							<h6>상세보기</h6>--%>
 
-                    <button class="btn close-btn">닫기</button>
-                </div>
-            </div>
-            <div style="width: 100%;  max-width: 800px;  margin: 0 30px;">
-                <canvas id="dailyVisitorChart"></canvas>
-            </div>
-        </div>
-
+<%--				<button class="btn close-btn">닫기</button>--%>
+<%--			</div>--%>
+<%--		</div>--%>
+<%--		<div style="width: 100%;  max-width: 800px;  margin: 0 30px;">--%>
+<%--			<canvas id="dailyVisitorChart"></canvas>--%>
+<%--		</div>--%>
+<%--	</div>--%>
+		<!-- 나의 블로그 방문자 수 -->
+		<div class="dashboard-section daily-visitor-section">
+			<div class="section-header">
+				<div class="dashboard-title">나의 블로그 방문자 수</div>
+				<button id="daily-visitor-detail" class="dashboard-detail-btn">자세히 보기</button>
+			</div>
+			<div id="total-visitor">총 방문자 수 1,119,000</div>
+			<span class="sub-info">▲ 2.1% 지난 주 대비</span>
+			<canvas id="dailyVisitorChart"></canvas>
+		</div>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
