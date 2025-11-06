@@ -69,7 +69,7 @@
 			<h4 >내 블로그 지수</h4> 
 			<div class="flex-row">
 				<div>현재 블로그 지수: <span class="blog-index">${currentIndex}</span></div>
-				<button id="blog-index-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="blog-index-detail-btn">자세히 보기</button>
+				<button id="blog-index-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="dashboard-detail-btn">자세히 보기</button>
 			</div>
 			
 			<div id="blog-index-modal" class="modal">
@@ -86,8 +86,6 @@
   				</div>
 			</div>
 
-			<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-			<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
             <div style="width: 100%; max-width: 800px; margin: 0 auto;">
                 <canvas id="blogIndexChart"></canvas>
             </div>
@@ -116,7 +114,8 @@
             </div>
         </div>
 
-
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
         <script>
 
@@ -139,8 +138,9 @@
             const xPadding = cellWidth / 2;
             const yPadding = cellHeight / 2;
 
-			const canvasWidth = bubbleCtx.clientWidth;
-            const canvasHeight = bubbleCtx.clientHeight;
+			// const canvasWidth = bubbleCtx.clientWidth;
+			const canvasWidth = 600;
+			const canvasHeight = bubbleCtx.clientHeight;
 
             let row = 0;
             let col = 0;
@@ -344,9 +344,9 @@
 							borderColor: '#7B61FF',
 							backgroundColor: 'rgba(123, 97, 255, 0.1)',
 							tension: 0.4,
-							fill: true,
-							pointRadius: 3,
-							pointHoverRadius: 5,
+							// fill: true,
+							// pointRadius: 3,
+							// pointHoverRadius: 5,
 							borderWidth: 2
 						},
 						{
@@ -355,9 +355,9 @@
 							borderColor: '#00B8A9',
 							backgroundColor: 'rgba(0, 184, 169, 0.1)',
 							tension: 0.4,
-							fill: true,
-							pointRadius: 3,
-							pointHoverRadius: 5,
+							// fill: true,
+							// pointRadius: 3,
+							// pointHoverRadius: 5,
 							borderWidth: 2
 						}
 					]
@@ -372,26 +372,29 @@
 								font: { size: 13 }
 							}
 						},
-						title: {
-							display: true,
-							text: '블로그 지수 추이 (5일 평균 | 전체 평균)',
-							color: '#333',
-							font: { size: 15, weight: 'bold' }
-						},
 						tooltip: {
 							mode: 'index',
 							intersect: false
 						}
 					},
 					scales: {
+						// x: {
+						// 	ticks: { color: '#555' },
+						// 	grid: { color: 'rgba(0,0,0,0.05)' }
+						// },
+						// y: {
+						// 	beginAtZero: false,
+						// 	ticks: { color: '#555' },
+						// 	grid: { color: 'rgba(0,0,0,0.05)' }
+						// }
 						x: {
-							ticks: { color: '#555' },
-							grid: { color: 'rgba(0,0,0,0.05)' }
+							grid: { display: false }
 						},
 						y: {
 							beginAtZero: false,
-							ticks: { color: '#555' },
-							grid: { color: 'rgba(0,0,0,0.05)' }
+							ticks: {
+								display: false
+							}
 						}
 					}
 				}
