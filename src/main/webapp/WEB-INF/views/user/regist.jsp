@@ -115,7 +115,7 @@
                            <label for="email-confirm" class="require">인증번호 입력 </span></label>
                            <input type="text" id="email-confirm" name="emailConfirm" placeholder="인증번호를 입력하세요"/>
                         </div>
-                        <div class="regist-side-btn email-verify"><div>인증 확인</div></div>
+                        <div class="regist-side-btn email-verify blogger"><div>인증 확인</div></div>
                     </div>
                     <span class="email-check-timer"></span>
                     <span class="email-confirm-message"></span>

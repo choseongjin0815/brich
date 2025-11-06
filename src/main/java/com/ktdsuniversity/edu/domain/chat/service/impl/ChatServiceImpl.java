@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -40,6 +42,7 @@ import com.ktdsuniversity.edu.domain.file.dao.FileGroupDao;
 import com.ktdsuniversity.edu.domain.file.util.MultipartFileHandler;
 import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
 import com.ktdsuniversity.edu.domain.file.vo.FileVO;
+import com.ktdsuniversity.edu.global.util.SessionUtil;
 import com.ktdsuniversity.edu.global.util.TimeFormatUtil;
 
 @Service
@@ -64,60 +67,95 @@ public class ChatServiceImpl implements ChatService {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
-
 	@Override
 	public SearchChatVO readAllChatRoomList(SearchChatVO searchChatVO) {
-		String auth = searchChatVO.getAuth();
+	    String auth = searchChatVO.getAuth();
 
-		// 1. 총 개수 조회
-		int totalCount = 0;
-		List<ResponseChatRoomInfoVO> chatRooms = null;
+	    // 1. 총 개수 조회
+	    int totalCount = 0;
+	    List<ResponseChatRoomInfoVO> chatRooms = null;
 
-		if (!auth.equals("1004")) {
-			// 블로거용
-			totalCount = chatDao.selectUserChatRoomsCount(searchChatVO);
-			chatRooms = chatDao.selectUserChatRooms(searchChatVO);
-			log.info("{}", System.currentTimeMillis());
-		} else {
-			// 광고주용
-			totalCount = chatDao.selectCampaignChatRoomsCount(searchChatVO);
-			chatRooms = chatDao.selectCampaignChatRooms(searchChatVO);
-		}
+	    if (!auth.equals("1004")) {
+	        totalCount = chatDao.selectUserChatRoomsCount(searchChatVO);
+	        chatRooms = chatDao.selectUserChatRooms(searchChatVO);
+	        log.info("{}", System.currentTimeMillis());
+	    } else {
+	        totalCount = chatDao.selectCampaignChatRoomsCount(searchChatVO);
+	        chatRooms = chatDao.selectCampaignChatRooms(searchChatVO);
+	    }
 
-		// 2. 페이지 정보 설정
-		searchChatVO.setPageCount(totalCount);
-		log.info("시간{}", System.currentTimeMillis());
-		// 3. MongoDB에서 각 채팅방의 최신 메시지 및 안읽은 수 조회
-		for (ResponseChatRoomInfoVO chatRoom : chatRooms) {
-			// 최신 메시지 조회
+	    searchChatVO.setPageCount(totalCount);
+	    
+	    if (chatRooms == null || chatRooms.isEmpty()) {
+	        searchChatVO.setChatRoomList(chatRooms);
+	        return searchChatVO;
+	    }
 
-			ChatMessageVO messages = chatMessageRepository
-					.findTop1ByChtRmIdAndDltYnOrderByCrtDtDesc(chatRoom.getChtRmId(), "N");
-			log.info("messages: {}", messages);
-			if (messages != null) {
-				ChatMessageVO lastMessage = messages;
-				chatRoom.setLastMsgCn(lastMessage.getMsgCn());
-				chatRoom.setLastMsgUsrId(lastMessage.getUsrId());
-				chatRoom.setLastMsgCrtDt(TimeFormatUtil.format(lastMessage.getCrtDt()));
-				chatRoom.setCrtDt(lastMessage.getCrtDt());
-			}
+	    // 2. 채팅방 ID 목록 추출
+	    List<String> chtRmIds = chatRooms.stream()
+	            .map(ResponseChatRoomInfoVO::getChtRmId)
+	            .collect(Collectors.toList());
 
-			// 안읽은 메시지 수 조회
-			long unreadCount = chatMessageRepository.countUnreadMessages(chatRoom.getChtRmId(),
-					searchChatVO.getUsrId());
-			chatRoom.setUnreadCnt((int) unreadCount);
-			log.info("chatroomCrtDt {}", chatRoom.getCrtDt());
-		}
-		// 최근 메시지 온 순서대로 정렬
-		// 채팅방이 생성되었을때 메시지가 하나도 없기 때문에 에러나던 문제 수정함
-		chatRooms.sort(
-				Comparator.comparing(ResponseChatRoomInfoVO::getCrtDt, Comparator.nullsFirst(Comparator.naturalOrder()))
-						.reversed());
+	    // 3. 최신 메시지 일괄 조회
+	    Aggregation aggLatest = Aggregation.newAggregation(
+	        Aggregation.match(Criteria.where("CHT_RM_ID").in(chtRmIds).and("DLT_YN").is("N")),
+	        Aggregation.sort(Sort.Direction.DESC, "CRT_DT"),
+	        Aggregation.group("CHT_RM_ID")
+	            .first("$$ROOT").as("message"),
+	        Aggregation.replaceRoot("message")
+	    );
+	    
+	    List<ChatMessageVO> lastMessages = mongoTemplate
+	        .aggregate(aggLatest, "CHT_MSG", ChatMessageVO.class)
+	        .getMappedResults();
+	    
+	    Map<String, ChatMessageVO> messageMap = lastMessages.stream()
+	            .collect(Collectors.toMap(ChatMessageVO::getChtRmId, msg -> msg));
+	    
+	    log.info("조회된 채팅방 수: {}, 최신 메시지 수: {}", chtRmIds.size(), messageMap.size());
 
-		// 4. 결과 목록을 SearchChatVO에 설정
-		searchChatVO.setChatRoomList(chatRooms);
+	    // 4. 안읽은 메시지 수 일괄 조회 
+	    Aggregation aggUnread = Aggregation.newAggregation(
+	        Aggregation.match(Criteria.where("CHT_RM_ID").in(chtRmIds)
+	            .and("DLT_YN").is("N")
+	            .and("RD_YN").is("N")
+	            .and("USR_ID").ne(searchChatVO.getUsrId())),
+	        Aggregation.group("CHT_RM_ID").count().as("count")
+	    );
+	    
+	    List<org.bson.Document> unreadResults = mongoTemplate
+	        .aggregate(aggUnread, "CHT_MSG", org.bson.Document.class)
+	        .getMappedResults();
+	    
+	    Map<String, Long> unreadCountMap = new HashMap<>();
+	    for (org.bson.Document doc : unreadResults) {
+	        String roomId = doc.getString("_id");
+	        Integer count = doc.getInteger("count", 0);
+	        unreadCountMap.put(roomId, count.longValue());
+	    }
 
-		return searchChatVO;
+	    // 5. 데이터 매칭
+	    for (ResponseChatRoomInfoVO chatRoom : chatRooms) {
+	        ChatMessageVO lastMessage = messageMap.get(chatRoom.getChtRmId());
+	        if (lastMessage != null) {
+	            chatRoom.setLastMsgCn(lastMessage.getMsgCn());
+	            chatRoom.setLastMsgUsrId(lastMessage.getUsrId());
+	            chatRoom.setLastMsgCrtDt(TimeFormatUtil.format(lastMessage.getCrtDt()));
+	            chatRoom.setCrtDt(lastMessage.getCrtDt());
+	        }
+
+	        chatRoom.setUnreadCnt(unreadCountMap.getOrDefault(chatRoom.getChtRmId(), 0L).intValue());
+	        log.info("chatroomCrtDt {}", chatRoom.getCrtDt());
+	    }
+
+	    // 6. 최근 메시지 온 순서대로 정렬
+	    chatRooms.sort(
+	        Comparator.comparing(ResponseChatRoomInfoVO::getCrtDt, 
+	            Comparator.nullsFirst(Comparator.naturalOrder()))
+	            .reversed());
+
+	    searchChatVO.setChatRoomList(chatRooms);
+	    return searchChatVO;
 	}
 
 	@Override
@@ -372,12 +410,35 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public CampaignVO readCampaignByChtRmId(String chtRmId) {
 
+		String currentUsrId = SessionUtil.getLoginObject().getUsrId();
+		
+		Map<String, String> chtRoomInfo = new HashMap<>();
+		chtRoomInfo.put("chtRmId", chtRmId);
+		chtRoomInfo.put("currentUsrId", currentUsrId);
+		
 		CampaignVO campaignVO = this.chatDao.selectCampaignByChtRmId(chtRmId);
+		String targetUsrId = this.chatDao.selectTargetUsrIdByChtRmIdAndUsrId(chtRoomInfo);
+		log.info("targetUsrId{}" , targetUsrId);
 		if (campaignVO == null) {
 			throw new IllegalArgumentException(chtRmId + "에 해당하는 캠페인이 없습니다.");
 		}
+		campaignVO.setUsrId(targetUsrId);
 
 		return campaignVO;
 	}
+
+	@Override
+	public List<String> readAllChtRmIdByUsrIdOrCmpnId(Map<String, String> parameter) {
+		List<String> chtRmIdList = null;
+		//캠페인 아이디가 있으면 캠페인에 대한 채팅방 목록 아이디를 가져온다.
+		if(parameter.get("cmpnId") != null) {
+			chtRmIdList = this.chatDao.selectChtRmIdListByCmpnId(parameter);
+		}
+		else {
+			chtRmIdList = this.chatDao.selectChtRmIdListByUsrId(parameter);
+		}
+		return chtRmIdList;
+	}
+
 
 }
