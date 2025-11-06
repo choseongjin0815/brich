@@ -14,7 +14,7 @@
 	" />
 </jsp:include>
 <div class="dashboard-container">
-	<div class="title">Dashboard</div>
+	<div class="header-title">Dashboard</div>
 	<div class="grid">
 		<div>마감 임박 캠페인
 			<table>
