@@ -1,4 +1,5 @@
 $().ready(function() {
+    var currentUrl = window.location.href;
     $(".role-box").on("click", function() {
         var role = $(this).data("role")
         window.location.href = "/terms/" + role;
@@ -143,7 +144,7 @@ $().ready(function() {
         var timerHtml = $(".email-check-timer");
         var duplicate = null;
         $.get("/email/duplicate/" + email, function(response) {
-            if (response.body === false) {
+            if (response.body === false && currentUrl.includes("regist")) {
                 duplicate = true;
                 timerHtml.text("이미 등록된 이메일입니다.");
                 return;
