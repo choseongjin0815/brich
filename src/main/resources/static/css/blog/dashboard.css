@@ -1,62 +1,143 @@
 @charset "UTF-8";
 
 .dashboard-container{
-	display: flex;
-	flex-direction: column;
-	flex-grow:1;
+    display: flex;
+    flex-direction: column;
+    flex-grow:1;
 }
 
 .grid {
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	grid-template-rows: 1fr 1fr;
-	& > tr {
-		text-align: center;
-	}
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    & > tr {
+        text-align: center;
+    }
 }
 .title{
-	display: flex;
-	font-size: 2.25rem;
-	color: #5A6ACF;
-	font-weight: bold;
+    display: flex;
+    font-size: 2.25rem;
+    color: #5A6ACF;
+    font-weight: bold;
 }
 
 .verification-container{
-	display: flex;
-	flex-direction: column;
-	justify-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
 }
 /* 모달 배경 */
 .modal {
-  display: none; /* 기본 비활성 */
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.5);
+    display: none; /* 기본 비활성 */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
 }
 
 /* 모달 내부 박스 */
 .modal-content {
-  background-color: #fff;
-  margin: 12% auto;
-  padding: 20px;
-  border-radius: 10px;
-  width: 400px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    background-color: #fff;
+    margin: 12% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
 /* 닫기 버튼 */
 .close {
-  float: right;
-  font-size: 20px;
-  cursor: pointer;
+    float: right;
+    font-size: 20px;
+    cursor: pointer;
 }
 
 .right-align{
-	text-align: right;
+    text-align: right;
 }
 
+/* ===============================
+   황금 키워드 & 방문자 구역 스타일
+================================= */
+.section {
+    background: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin: 15px 0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.section-header h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.section-desc {
+    flex-grow: 1;
+    font-size: 0.9rem;
+    color: #777;
+    margin-left: 12px;
+}
+
+.section-btn {
+    background-color: #5A6ACF;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.section-btn:hover {
+    background-color: #4c5bc5;
+}
+
+/* 차트 영역 */
+.chart-wrapper {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding-top: 10px;
+}
+
+.chart-wrapper canvas {
+    width: 100% !important;
+    height: 300px !important;
+}
+
+/* 방문자 수 정보 */
+.visitor-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.visitor-info #total-visitor {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #111;
+}
+
+/* 섹션별 색감 포인트 */
+.golden-section h3 {
+    color: #7B61FF;
+}
+
+.visitor-section h3 {
+    color: #00C7E2;
+}

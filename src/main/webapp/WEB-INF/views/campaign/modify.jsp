@@ -24,7 +24,7 @@
 	                   enctype="multipart/form-data"
 	                   id="campaign-submit">
 	        <div class="write-content">
-	            <div class="campaign-sub-title"">캠페인 제목</div>
+	            <div class="campaign-sub-title">캠페인 제목</div>
 		        <input type="text" class="text-input require-input" name="cmpnTitle"  value="${campaign.cmpnTitle}" />
 		        
 		        <div class="campaign-sub-title">카테고리</div>
