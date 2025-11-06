@@ -68,6 +68,7 @@ public class ResponseCampaignVO extends CampaignVO{
 	 private String SttsCdNm;
 	 
 	 	 
+	
 	 public String getSttsCdNm() {
 		return this.SttsCdNm;
 	}

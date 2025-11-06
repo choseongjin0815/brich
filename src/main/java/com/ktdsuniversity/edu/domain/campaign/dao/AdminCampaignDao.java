@@ -11,4 +11,6 @@ public interface AdminCampaignDao {
 
 	List<ResponseAdminCampaignVO> selectAdminCampaignListCategoryAndSortBy(RequestAdminSearchCampaignVO requestAdminSearchCampaignVO);
 
+	ResponseAdminCampaignVO selectAdminCampaignDetailById(String cmpnId);
+
 }

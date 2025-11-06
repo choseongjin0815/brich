@@ -63,12 +63,19 @@ public class ChatController {
 	public String viewChatRoomListPage(@SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser,
 			Model model, @RequestParam(required = false) String cmpnId) {
 		String usrId = loginUser.getUsrId();
+		Map<String, String> parameter = new HashMap<>();
+		parameter.put("usrId", usrId);
+		parameter.put("cmpnId", cmpnId);
+		List<String> allChtRmId = this.chatService.readAllChtRmIdByUsrIdOrCmpnId(parameter);
 		log.info(cmpnId);
 		model.addAttribute("usrId", usrId);
 		model.addAttribute("cmpnId", cmpnId);
+		model.addAttribute("allChtRmId", allChtRmId);
 		return "chat/chatRoomList";
 	}
 
+	//TODO 현재 로딩될때 상대방 메시지가 없으면 상대방 아이디를 못받아오는 이슈가 있음(신고를 못함)
+	//     따라서 VO를 새로 만들어서 상대방 아이디를 포함해서 반환해줄 필요가 있음
 	/**
 	 * 채팅방 페이지
 	 */
@@ -302,4 +309,6 @@ public class ChatController {
 		// 읽음 처리 알림을 채팅방 참가자에게 전송
 		messagingTemplate.convertAndSend("/topic/chat/" + chtRmId + "/read", payload);
 	}
+	
+	
 }
