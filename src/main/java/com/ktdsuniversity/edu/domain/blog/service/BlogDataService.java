@@ -4,6 +4,7 @@ package com.ktdsuniversity.edu.domain.blog.service;
 import java.util.List;
 import java.util.Map;
 
+import com.ktdsuniversity.edu.domain.blog.vo.BlogDetailStatVO;
 import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
 import com.ktdsuniversity.edu.domain.blog.vo.PostDataInsertVO;
 import com.ktdsuniversity.edu.domain.blog.vo.PostDataVO;
@@ -34,6 +35,10 @@ public interface BlogDataService {
 	boolean runPythonBlogStats(String blgAddrs);
 
 	boolean runPythonBlogTitle(String blgAddrs);
+
+	double selectMostRecentIndex(String usrId);
+
+	List<BlogDetailStatVO> readBlogDetailStat(String usrId);
 
 
 

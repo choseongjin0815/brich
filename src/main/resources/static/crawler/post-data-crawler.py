@@ -147,7 +147,9 @@ def switch_to_main_frame(driver, timeout=10):
         with open("no_frame_debug.html", "w", encoding="utf-8") as f:
             f.write(driver.page_source)
         return False
-
+    
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LATEST_POST_DIR = os.path.join(BASE_DIR, "latest_post")
 
 def save_last_url(blog_url, url):
     """
@@ -172,24 +174,73 @@ def save_last_url(blog_url, url):
     print(f" 최신 포스트 URL 저장 완료 → {filepath}")
 
 
+import os
+import json
+import re
+
+def find_project_root(target_folder_name="brich-project"):
+
+    current_dir = os.path.abspath(__file__)
+    while True:
+        current_dir = os.path.dirname(current_dir)
+        if os.path.basename(current_dir) == target_folder_name:
+            return current_dir
+        if current_dir == os.path.dirname(current_dir):  # 루트 도달
+            break
+    return None
+
 def load_last_url(blog_url):
-    """
-    각 블로그 주소별로 저장된 최신 포스트 URL 불러오기.
-    예: latest_post/kse4966.json
-    """
+
+    # ✅ 루트 자동 탐색
+    root_dir = find_project_root("brich-project")
+    if not root_dir:
+        print("❌ 프로젝트 루트를 찾을 수 없습니다.")
+        return None
+
+    folder = os.path.join(root_dir, "latest_post")
+
+    # ✅ 블로그 ID 추출
     match = re.search(r'blog.naver.com/([^/?]+)', blog_url)
     blog_id = match.group(1) if match else "unknown"
 
-    folder = "latest_post"
     filepath = os.path.join(folder, f"{blog_id}.json")
 
+    # ✅ 파일 확인
     if os.path.exists(filepath):
         with open(filepath, "r", encoding="utf-8") as f:
             data = json.load(f)
+            print(f"불러온 경로: {filepath}")
             return data.get("latest_post_url", None)
+    else:
+        print(f"⚠️ {filepath} 파일이 존재하지 않습니다.")
+        return None
 
-    print(f" {filepath} 파일이 존재하지 않습니다.")
-    return None
+from urllib.parse import urlparse, parse_qs
+
+def normalize_post_url(url: str) -> str:
+    """
+    네이버 블로그 포스트 URL에서 blogId와 logNo만 남기고 나머지 쿼리 파라미터 제거
+    예: https://blog.naver.com/PostView.naver?blogId=abc&logNo=123&categoryNo=0 -> 
+        https://blog.naver.com/PostView.naver?blogId=abc&logNo=123
+    """
+    try:
+        if not url.startswith("http"):
+            return url  # 절대경로 아닐 경우 그대로 반환
+
+        parsed = urlparse(url)
+        query = parse_qs(parsed.query)
+
+        blog_id = query.get("blogId", [None])[0]
+        log_no = query.get("logNo", [None])[0]
+
+        if blog_id and log_no:
+            return f"https://blog.naver.com/PostView.naver?blogId={blog_id}&logNo={log_no}"
+        else:
+            return url
+    except Exception as e:
+        print(f"URL 정규화 실패: {url} ({e})")
+        return url
+
 
 # 네이버 블로그 진입
 blg_url = sys.argv[1]
@@ -252,6 +303,7 @@ for page_num in range(1, 30):
     # ✅ 링크 수집 (절대경로 + 정확한 클래스 필터)
     for a in soup.find_all('a', href=True):
         href = a['href']
+        href = normalize_post_url(href)
         classes = a.get('class', [])
         if (
             href.startswith('https://blog.naver.com/PostView.naver?blogId=') and
