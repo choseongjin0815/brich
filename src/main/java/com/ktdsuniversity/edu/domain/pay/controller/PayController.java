@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.domain.pay.service.PayService;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
@@ -22,6 +24,9 @@ public class PayController {
 	
 	@Autowired
     private PayService payService;
+	
+	@Autowired 
+	private CampaignService campaignService;
     
     @GetMapping("/blgr/pay/subscribe")
     public String subscribePayPage( Model model, @SessionAttribute(value = "__LOGIN_USER__") UserVO loginUser) {
@@ -37,8 +42,17 @@ public class PayController {
 	
 	@GetMapping("/adv/pay/campaign/{cmpnId}")
 	public String advCampaignPayPage(@PathVariable String cmpnId, Model model, @SessionAttribute(value = "__LOGIN_USER__") UserVO loginUser) {
+
+    	ResponseCampaignVO detail = new ResponseCampaignVO(); 
+    	if(loginUser != null) {
+    		if(loginUser.getAutr().equals("1004")) {
+        		detail = payService.readCampaignPayment(cmpnId, loginUser.getUsrId());    	
+        	}
+    	}
     	
-		model.addAttribute("cmpnId", cmpnId);
+    	log.info( "캠페인 결제정보 조회 결과 : " + detail.toString());
+    	model.addAttribute("detail", detail);
+    	
     	return "pay/campaign";
     }
 }

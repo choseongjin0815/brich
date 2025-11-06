@@ -1,12 +1,14 @@
 package com.ktdsuniversity.edu.domain.pay.dao.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.domain.pay.dao.PayDao;
 import com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO;
 import com.ktdsuniversity.edu.domain.pay.vo.response.ResponsePaymentVO;
@@ -71,6 +73,11 @@ public class PayDaoImpl extends SqlSessionDaoSupport implements PayDao{
 	@Override
 	public int updatePaymentSuccessDate(RequestPaymentVO requestPaymentVO) {
 		return super.getSqlSession().update(this.NAME_SPACE + "updatePaymentSuccessDate" ,requestPaymentVO);
+	}
+
+	@Override
+	public ResponseCampaignVO selectReadCampaignPayment(Map<String, String> param) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectReadCampaignPayment" , param);
 	}
     
     

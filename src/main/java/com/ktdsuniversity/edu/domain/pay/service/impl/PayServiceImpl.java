@@ -1,22 +1,22 @@
 package com.ktdsuniversity.edu.domain.pay.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.domain.pay.dao.PayDao;
 import com.ktdsuniversity.edu.domain.pay.service.PayService;
 import com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO;
 import com.ktdsuniversity.edu.domain.pay.vo.response.ResponsePaymentVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 import com.ktdsuniversity.edu.global.util.SessionUtil;
-
-import jakarta.servlet.http.HttpSession;
 
 @Service
 public class PayServiceImpl implements PayService{
@@ -125,6 +125,16 @@ public class PayServiceImpl implements PayService{
 		}
 		
 		return requestPaymentVO.getPKkey();
+	}
+
+
+	@Override
+	public ResponseCampaignVO readCampaignPayment(String cmpnId, String usrId) {
+		Map<String,String> param = new HashMap<>();
+		param.put("cmpnId",cmpnId);	
+		param.put("usrId",usrId);	
+		ResponseCampaignVO detail = this.payDao.selectReadCampaignPayment(param);
+		return detail;
 	}
 	
 	
