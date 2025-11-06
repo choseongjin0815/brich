@@ -35,7 +35,7 @@
              , DLT_YN
          FROM USR
         WHERE LOG_ID = #{logId}
-          AND AUTR IN('1001', '1002', '1003', '1004')
+          AND AUTR IN('1001', '1002', '1003', '1004', '1007')
     </select>
     <insert parameterType="com.ktdsuniversity.edu.domain.user.vo.request.RequestUserRegistVO"
             id="insertNewUser">
@@ -240,4 +240,11 @@
 	 WHERE BLG_ADDRS = #{blgAddrs}
 	
 	</update>
+	
+	<select id="selectEmailCountByInputEmail"
+	        resultType="int">
+	    SELECT COUNT(EML)
+	      FROM USR
+	     WHERE EML = #{email} 
+	</select>
 </mapper>

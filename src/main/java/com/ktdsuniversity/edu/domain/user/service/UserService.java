@@ -44,5 +44,7 @@ public interface UserService {
 
 	public boolean updateBlogTitle(RequestBlogTitleVO request);
 
+	public boolean readEmailByInputEmail(String email);
+
 
 }

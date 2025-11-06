@@ -30,7 +30,7 @@
 		         <button type="button" class="login-button">SIGN IN</button>
 		    </form>
 		    <a href="/find/id" class="login-page-btn">로그인 정보를 잊으셨나요?</a>
-		    <a href="/choose-role" class="login-button">SIGN UP</a>
+		    <button class="signup-btn"><a href="/choose-role" class="login-button">SIGN UP</a></button>
 		    <a href="/campaignmain" class="login-page-btn">비회원으로 둘러보기</a>
         </div>
     </div>

@@ -114,7 +114,7 @@ ul {
 
       .menu-content {
        /*하단 메뉴 선택시 배경 색 크기 조정용*/
-        & li {
+        & li.other-item {
             width: 218px;
         }
         & > li > a {
@@ -271,12 +271,17 @@ ul {
 }
 
 .logout {
+	white-space: nowrap;
 	color: #333;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin-right: 20px;
+	margin: 0 20px;
 	font-size: 14px;
+}
+
+.admin-campaign {
+	padding-left: 55px;
 }
 
 
