@@ -48,27 +48,24 @@
         </div>
         <div>추천 캠페인</div>
 
-        <div class="section golden-section">
-            <div class="section-header">
-                <h3>핵심 황금 키워드</h3>
-                <p class="section-desc">추천 키워드 중 경쟁률이 낮고, 상위 노출 가능성이 높음</p>
-                <button id="golden-keyword-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="section-btn">자세히 보기</button>
-            </div>
-
+        <div>
+            <div class="flex-grow dashboard-title golden-keyword">핵심 황금 키워드</div>
+            <div class="flex-grow dashboard-detail golden-keyword">추천 키워드 줄 경쟁률이 낮고, 상위 노출 가능성이 높음</div>
+            <button id="golden-keyword-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="dashboard-detail-btn">자세히 보기</button>
             <div id="golden-keyword-modal" class="modal">
                 <div class="modal-content golden-keyword">
                     <span class="close">&times;</span>
                     <h3>핵심 황금 키워드</h3>
                     <h6>상세보기</h6>
+
                     <button class="btn close-btn">닫기</button>
                 </div>
             </div>
-
-            <div class="chart-wrapper">
+            <div style="width: 100%; max-width: 800px; margin: 0 auto;">
                 <canvas id="bubbleChart"></canvas>
             </div>
-        </div>
 
+        </div>
 
         <div>
             <div class="flex-grow">내 블로그 지수</div>
@@ -96,25 +93,20 @@
 
         <div>신청한 캠페인</div>
 
-        <div class="section visitor-section">
-            <div class="section-header">
-                <h3>나의 블로그 방문자 수</h3>
-                <div class="visitor-info">
-                    <span id="total-visitor" data-user-id="${sessionScope.__LOGIN_USER__.usrId}">총 방문자 수</span>
-                    <button id="daily-visitor-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="section-btn">자세히 보기</button>
-                </div>
-            </div>
-
+        <div>
+            <div class="flex-grow dashboard-title daily-visitor">나의 블로그 방문자 수</div>
+            <div id="total-visitor" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" >총 방문자 수</div>
+            <button id="daily-visitor-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="dashboard-detail-btn">자세히 보기</button>
             <div id="daily-visitor-modal" class="modal">
                 <div class="modal-content daily-visitor">
                     <span class="close">&times;</span>
-                    <h3>나의 블로그 방문자 수</h3>
+                    <h3>핵심 황금 키워드</h3>
                     <h6>상세보기</h6>
+
                     <button class="btn close-btn">닫기</button>
                 </div>
             </div>
-
-            <div class="chart-wrapper">
+            <div style="width: 100%;  max-width: 800px;  margin: 0 30px;">
                 <canvas id="dailyVisitorChart"></canvas>
             </div>
         </div>
