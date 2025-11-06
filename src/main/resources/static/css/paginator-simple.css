@@ -10,14 +10,15 @@
 }
 
 .simple-paginator button {
-  background-color: #5275C1;
-  color: white;
+  background-color: #FBFCFE;
+  color: #5A6ACF;
   border: none;
   padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
+  border: 1px solid #DDE4F0;
+  & > img{
+  	filter: sepia(100%) saturate(500%) hue-rotate(180deg);
+  	}
 }
 
-.simple-paginator button:hover {
-  background-color: #3f5b9b;
-}

@@ -13,11 +13,28 @@ import sys
 import re
 import json
 
+
+sys.stdout.reconfigure(encoding='utf-8')
 def to_mobile_blog_url(url: str) -> str:
     return url.replace("://blog.naver.com/", "://m.blog.naver.com/")
 
-# Chrome 드라이버 옵션 설정
+# # Chrome 드라이버 옵션 설정
 options = Options()
+options.add_argument("--headless")  # 화면 없이 실행
+options.add_argument("--disable-gpu")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+ua = UserAgent()
+
+# random user-agent 설정
+def get_pc_user_agent():
+    while True:
+        candidate = ua.random
+        if not re.search(r'Mobile|Android|iPhone', candidate, re.I):
+            return candidate
+user_agent = get_pc_user_agent()
+options.add_argument(f'user-agent={user_agent}')
+
 
 # service = Service("/path/to/chromedriver")  # chromedriver 경로
 driver = webdriver.Chrome(options)

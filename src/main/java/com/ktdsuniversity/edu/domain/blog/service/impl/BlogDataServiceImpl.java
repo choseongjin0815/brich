@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ktdsuniversity.edu.domain.blog.dao.PostDataDao;
 import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
+import com.ktdsuniversity.edu.domain.blog.vo.BlogDetailStatVO;
 import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
 import com.ktdsuniversity.edu.domain.blog.vo.PostDataInsertVO;
 import com.ktdsuniversity.edu.domain.blog.vo.PostDataVO;
@@ -120,6 +121,19 @@ public class BlogDataServiceImpl implements BlogDataService{
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public double selectMostRecentIndex(String usrId) {
+		
+		return postDataDao.selectRecentIndex(usrId);
+	}
+
+	@Override
+	public List<BlogDetailStatVO> readBlogDetailStat(String usrId) {
+		List<BlogDetailStatVO> list  = postDataDao.selectBlogDetailStat(usrId);
+		
+		return list;
 	}
 
 
