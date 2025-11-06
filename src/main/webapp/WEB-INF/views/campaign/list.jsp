@@ -56,22 +56,30 @@
         </c:choose>
 	        
         
-        <div class="campaign-list-content">
-            <c:forEach items="${campaignList.responseCampaignList}" var="campaign">
-                <jsp:include page="/WEB-INF/views/campaign/campaignBlock.jsp">
-                    <jsp:param value="${campaign.cmpnId}" name="cmpnId"/>
-                    <jsp:param value="${campaign.cmpnTitle}" name="cmpnTitle"/>
-                    <jsp:param value="${campaign.sttsCdNm}" name="cmpnCdNm"/>
-                    <jsp:param value="${campaign.cnfmDt}" name="cnfmDt"/>
-                    <jsp:param value="${campaign.rcrtEndDt}" name="rcrtEndDt"/>
-                    <jsp:param value="${campaign.cmpnEndDt}" name="cmpnEndDt"/>
-                    <jsp:param value="${campaign.rcrtStrtDt}" name="rcrtStrtDt"/>
-                    <jsp:param value="${campaign.usrId}" name="usrId"/>
-                    <jsp:param value="${campaign.attchGrpId}" name="flGrpId"/>
-                    <jsp:param value="${campaign.fileVoList[0].flId}" name="flId"/>
-                </jsp:include>
-            </c:forEach>
-        </div>
+        <c:choose>
+            <c:when test="${empty campaignList.responseCampaignList}">
+                <div class="empty-space">작성한 캠페인이 없습니다!</div>
+            </c:when>
+            <c:otherwise>
+                <div class="campaign-list-content">
+		            <c:forEach items="${campaignList.responseCampaignList}" var="campaign">
+		                <jsp:include page="/WEB-INF/views/campaign/campaignBlock.jsp">
+		                    <jsp:param value="${campaign.cmpnId}" name="cmpnId"/>
+		                    <jsp:param value="${campaign.cmpnTitle}" name="cmpnTitle"/>
+		                    <jsp:param value="${campaign.sttsCdNm}" name="cmpnCdNm"/>
+		                    <jsp:param value="${campaign.cnfmDt}" name="cnfmDt"/>
+		                    <jsp:param value="${campaign.rcrtEndDt}" name="rcrtEndDt"/>
+		                    <jsp:param value="${campaign.cmpnEndDt}" name="cmpnEndDt"/>
+		                    <jsp:param value="${campaign.rcrtStrtDt}" name="rcrtStrtDt"/>
+		                    <jsp:param value="${campaign.usrId}" name="usrId"/>
+		                    <jsp:param value="${campaign.attchGrpId}" name="flGrpId"/>
+		                    <jsp:param value="${campaign.fileVoList[0].flId}" name="flId"/>
+		                </jsp:include>
+		            </c:forEach>
+		        </div>
+            </c:otherwise>
+        </c:choose>
+        
             
             <c:choose>
                 <c:when test="${campaignList.isDeny eq false}">

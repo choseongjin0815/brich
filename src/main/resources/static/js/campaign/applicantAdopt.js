@@ -31,6 +31,9 @@ $().ready(function() {
                                         $(".adopt-count").text(parseInt($(".adopt-count").text()) + 1);
                                     }
                                 }
+                                else if (response.error) {
+                                    alert(response.error.message);
+                                }
                            });
                   }
             }
@@ -71,6 +74,59 @@ $().ready(function() {
     $(".view-post").on("click", function() {
         postState = $(this).closest("div.applicant").children("button[name=postState]").text();
         postId = $(this).closest(".applicant").children(".user").children(".logId").data("cmpn-apply-id");
+        
+        $.get("/adv/post-deny-history/" + postId, function(response) {
+            var deny = response.body;
+            var denyBlock = $(".deny-history");
+            for(i = 0; i < deny.length; i++) {
+                rsnCount = $("<div></div>");
+                rsnCount.text("반려 " + (i+1) + "회");
+                rsnCount.addClass("deny");
+                
+                denyRsn = $("<div></div>");
+                denyRsn.text("반려 사유 : " + deny[i].postRetnRsn);
+                denyRsn.addClass("deny-reason");
+                
+                if (deny[i].retnFile.length > 0) {
+                    files = deny[i].retnFile;
+                    fileGroup = deny[i].retnFlGrpId;
+                    fileBlock = $("<div></div>");
+                    fileBlock.addClass("deny-file");
+                    fileBlock.text("파일: ");
+                    for(j = 0; j < files.length; j++) {
+                        file = $("<a></a>");
+                        file.attr("href", "/file/" + postId + "/" + fileGroup + "/" + files[j].flId);
+                        file.text(files[j].flNm);
+                        fileBlock.append(file);
+                    }
+                    denyRsn.append(fileBlock);
+                }
+                rsnCount.append(denyRsn);
+                
+                submitChg = $("<div></div>");
+                submitChg.text("재제출 : " + deny[i].postSubmitChgCn);
+                submitChg.addClass("deny-submit");
+                
+                if (deny[i].submitFile.length > 0) {
+                    files = deny[i].submitFile;
+                    fileGroup = deny[i].submitFlGrpId;
+                    fileBlock = $("<div></div>");
+                    fileBlock.addClass("deny-file");
+                    fileBlock.text("파일: ");
+                    for(j = 0; j < files.length; j++) {
+                        file = $("<a></a>");
+                        file.attr("href", "/file/" + postId + "/" + fileGroup + "/" + files[j].flId);
+                        file.text(files[j].flNm);
+                        fileBlock.append(file);
+                    }
+                    submitChg.append(fileBlock);
+                }
+                rsnCount.append(submitChg);
+                
+               denyBlock.append(rsnCount);
+            }
+        });
+        
         if (postState === "검토중") {
             approveButton = $("<button type='button'></button>")
             approveButton.addClass("button_120_50");
@@ -82,6 +138,9 @@ $().ready(function() {
                     $.get("/adv/postapprove/" + postId, function(response) {
                         if (response) {
                             window.location.href = nowUrl;
+                        }
+                        else if (response.error) {
+                            alert(response.error.message);
                         }
                     });
                 });
@@ -120,6 +179,16 @@ $().ready(function() {
         });
     });
     
+    $(document).on("click", ".deny-history-show", function() {
+        $(".deny-history").css("display", "block");
+        $(this).addClass("deny-history-hide").removeClass("deny-history-show");
+    });
+
+    $(document).on("click", ".deny-history-hide", function() {
+        $(".deny-history").css("display", "none");
+        $(this).addClass("deny-history-show").removeClass("deny-history-hide");
+    });
+    
     $(".deny-submit").on("click", function() {
         var denyContainer = $(this).closest(".deny-container");
         var reason = denyContainer.children("#reason").val();
@@ -152,14 +221,14 @@ $().ready(function() {
                     $(".modal").css("display", "none");
                     window.location.reload();
                 }
+                else if (response.error) {
+                    alert(response.error.message);
+                }
             }
         });
     });
     
-    $(".go-chat").on("click", function() {
-        usrId = $(".logId").data("user-id");
-        $.get("/adv/go-chat/" + usrId, function(response) {
-            console.log(response);
-        });
+    $(".modal-close").on("click", function() {
+        $(".deny-history").empty();
     });
 });

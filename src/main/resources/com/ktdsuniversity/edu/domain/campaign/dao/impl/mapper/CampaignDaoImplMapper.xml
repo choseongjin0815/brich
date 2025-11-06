@@ -134,8 +134,9 @@
     
     <select id="selectCampaignStateByCmpnPstAdptId"
             parameterType="string"
-            resultType="string">
+            resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
         SELECT STTS_CD
+             , C.USR_ID
 		  FROM CMPN C
 		 INNER JOIN CMPN_PST_ADPT CPA
 		    ON C.CMPN_ID = CPA.CMPN_ID
@@ -231,6 +232,47 @@
        <if test='sortCol != null and sortCol != ""'>
           ORDER BY NVL(${sortCol}, 0) ${order}  
        </if>
+    </select>
+    
+    <resultMap id="ResponseDenyHsistoryVOMap"
+               type="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseDenyHistoryVO"
+               autoMapping="true">
+        <id column="POST_RTRN_HIST_ID" property="postRtrnHistId" />
+        <collection property="retnFile"
+                    javaType="list"
+                    ofType="com.ktdsuniversity.edu.domain.file.vo.FileVO"
+                    autoMapping="true">
+            <result column="RETN_FL_ID" property="flId" />
+            <result column="RETN_FL_NM" property="flNm" />
+        </collection>
+        <collection property="submitFile"
+                    javaType="list"
+                    ofType="com.ktdsuniversity.edu.domain.file.vo.FileVO"
+                    autoMapping="true">
+            <result column="SUBMIT_FL_ID" property="flId" />
+            <result column="SUBMIT_FL_NM" property="flNm" />
+        </collection>
+    </resultMap>
+    <select id="selectDenyHistoryByCmpnPstAdptId"
+            parameterType="string"
+            resultMap="ResponseDenyHsistoryVOMap">
+        SELECT PRH.POST_RTRN_HIST_ID 
+		     , PRH.POST_RETN_RSN 
+		     , PRH.POST_SUBMIT_CHG_CN
+		     , PRH.RETN_FL_GRP_ID 
+		     , PRH.SUBMIT_FL_GRP_ID 
+		     , F1.FL_ID AS RETN_FL_ID
+		     , F1.FL_NM AS RETN_FL_NM
+		     , F2.FL_ID AS SUBMIT_FL_ID
+		     , F2.FL_NM AS SUBMIT_FL_NM
+		  FROM POST_RTRN_HIST PRH
+		  LEFT OUTER JOIN FL F1
+		    ON F1.FL_GRP_ID = PRH.RETN_FL_GRP_ID 
+		  LEFT OUTER JOIN FL F2
+		    ON F2.FL_GRP_ID = PRH.SUBMIT_FL_GRP_ID
+		 WHERE PRH.POST_ID = #{_parameter}
+		   AND PRH.DLT_YN = 'N'
+		 ORDER BY PRH.CRT_DT ASC
     </select>
     
     <update id="updatePstSttsByCmpnPstAdoptId"
@@ -479,6 +521,7 @@
           FROM CMPN
          WHERE USR_ID = #{loginId}
            AND DLT_YN = 'N'
+           AND CMPN_PRNT_ID IS NULL
         <if test="searchKeyword != null and searchKeyword != ''">
            AND CMPN_TITLE LIKE '%' || #{searchKeyword} || '%'
        </if>

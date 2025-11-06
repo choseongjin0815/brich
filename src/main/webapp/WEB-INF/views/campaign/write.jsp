@@ -24,10 +24,10 @@
 	                   enctype="multipart/form-data"
 	                   id="campaign-submit">
 	        <div class="write-content">
-	            <div class="campaign-sub-title">캠페인 제목</div>
-		        <input type="text" class="text-input require-input require-empty" name="cmpnTitle" />
+	            <div class="campaign-sub-title require-after">캠페인 제목</div>
+		        <input type="text" class="text-input require-input" name="cmpnTitle" />
 		        
-		        <div class="campaign-sub-title">카테고리</div>
+		        <div class="campaign-sub-title require-after">카테고리</div>
 		        <div>
 		            <c:forEach items="${common.categoryList}" var="category">
 		                <input type="radio" name="ctgCd" value="${category.cdId}" />${category.cdNm}
@@ -59,27 +59,27 @@
 		            <input type="file" name="file" />
 		        </div>
 		        
-		        <div>
+		        <div class="require-after">
 		            <span class="campaign-sub-title">모집 인원</span>
 		            <input type="number" name="rcrtPrsnn" class="require-input" data-person-price="${common.personPrice}" />
 		            <span>예상 인원 가격 : <span class="rcrtPrsnn-price">0</span>원</span>
 		        </div>
 		        
-		        <div class="campaign-sub-title">설명</div>
-		        <textarea class="text-input write-input require-input require-empty" name="cmpnCn"></textarea>
-		        <div>
+		        <div class="campaign-sub-title require-after">설명</div>
+		        <textarea class="text-input write-input require-input " name="cmpnCn"></textarea>
+		        <div class="require-after">
 		            <span class="campaign-sub-title">제공</span>
 		            <span>금액</span>
 		            <input type="number" name="offrPrc" class="require-input" />
 		            <span>원</span>
 		        </div>
-		        <textarea class="text-input write-input require-input require-empty" name="offrCn"></textarea>
-		        <div class="campaign-sub-title">미션</div>
-		        <textarea class="text-input write-input require-input require-empty" name="pstMssn"></textarea>
-		        <div class="campaign-sub-title">해시태그</div>
-		        <textarea class="text-input write-input require-input require-empty" name="hstg"></textarea>
-		        <div class="campaign-sub-title">안내사항</div>
-		        <textarea class="text-input write-input require-input require-empty" name="ntfcn"></textarea>
+		        <textarea class="text-input write-input require-input" name="offrCn"></textarea>
+		        <div class="campaign-sub-title require-after">미션</div>
+		        <textarea class="text-input write-input require-input" name="pstMssn"></textarea>
+		        <div class="campaign-sub-title require-after">해시태그</div>
+		        <textarea class="text-input write-input require-input" name="hstg"></textarea>
+		        <div class="campaign-sub-title require-after">안내사항</div>
+		        <textarea class="text-input write-input require-input" name="ntfcn"></textarea>
 		        
 		        <div class="create-button-list grid-item">
 	                <button type="button" class="">미리보기</button>

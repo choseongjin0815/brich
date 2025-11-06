@@ -24,10 +24,10 @@
 	                   enctype="multipart/form-data"
 	                   id="campaign-submit">
 	        <div class="write-content">
-	            <div class="campaign-sub-title"">캠페인 제목</div>
+	            <div class="campaign-sub-title require-after">캠페인 제목</div>
 		        <input type="text" class="text-input require-input" name="cmpnTitle"  value="${campaign.cmpnTitle}" />
 		        
-		        <div class="campaign-sub-title">카테고리</div>
+		        <div class="campaign-sub-title require-after">카테고리</div>
 		        <div>
 		            <c:forEach items="${common.categoryList}" var="category">
 		                <c:choose>
@@ -66,27 +66,27 @@
 		            <input type="file" name="file" />
 		        </div>
 		        
-		        <div>
+		        <div class="require-after">
 		            <span class="campaign-sub-title">모집 인원</span>
 		            <input type="number" name="rcrtPrsnn" class="require-input" value="${campaign.rcrtPrsnn}"
 		              data-person-price="${common.personPrice}" />
 		            <span>예상 인원 가격 : <span class="rcrtPrsnn-price">0</span>원</span>
 		        </div>
 		        
-		        <div class="campaign-sub-title">설명</div>
+		        <div class="campaign-sub-title require-after">설명</div>
 		        <textarea class="text-input write-input require-input" name="cmpnCn">${campaign.cmpnCn}</textarea>
-		        <div>
+		        <div class="require-after">
 		            <span class="campaign-sub-title">제공</span>
 		            <span>금액</span>
 		            <input type="number" name="offrPrc" class="require-input" value="${campaign.offrPrc}" />
 		            <span>원</span>
 		        </div>
 		        <textarea class="text-input write-input require-input" name="offrCn">${campaign.offrCn}</textarea>
-		        <div class="campaign-sub-title">미션</div>
+		        <div class="campaign-sub-title require-after">미션</div>
 		        <textarea class="text-input write-input require-input" name="pstMssn">${campaign.pstMssn}</textarea>
-		        <div class="campaign-sub-title">해시태그</div>
+		        <div class="campaign-sub-title require-after">해시태그</div>
 		        <textarea class="text-input write-input require-input" name="hstg">${campaign.hstg}</textarea>
-		        <div class="campaign-sub-title">안내사항</div>
+		        <div class="campaign-sub-title require-after">안내사항</div>
 		        <textarea class="text-input write-input require-input" name="ntfcn">${campaign.ntfcn}</textarea>
 		        
 		        <div class="create-button-list grid-item">

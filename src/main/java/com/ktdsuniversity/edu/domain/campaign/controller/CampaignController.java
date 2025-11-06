@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
+import com.ktdsuniversity.edu.domain.campaign.vo.PostReturnHistoryVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseModifyCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
@@ -25,9 +27,13 @@ import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListV
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignwriteVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseDenyHistoryVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.global.common.AjaxResponse;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
+import com.ktdsuniversity.edu.global.exceptions.BrichException;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class CampaignController {
@@ -211,7 +217,13 @@ public class CampaignController {
     
     @GetMapping("/adv/campaign/applicant/{cmpnId}")
     public String readApplicantList(Model model, @PathVariable String cmpnId,
-    								RequestApplicantVO requestApplicantVO) {
+    								RequestApplicantVO requestApplicantVO,
+    								@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
+    	
+    	if (!loginUser.getAutr().equals("1004")) {
+			throw new BrichException("잘못된 접근입니다.", "error/403");
+		}
+    	
     	// TODO 캠페인 주인과 세션이 다를 때 접근 막을 것
 //    	if (!board.getEmail().equals(loginUser.getEmail())) {
 //			throw new HelloSpringException("잘못된 접근입니다.", "error/403");
@@ -294,7 +306,12 @@ public class CampaignController {
 	}
 	
 	@GetMapping("/adv/campaign/write")
-	public String createCampaign(Model model) {
+	public String createCampaign(Model model,
+								 @SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
+		if (!loginUser.getAutr().equals("1004")) {
+			throw new BrichException("잘못된 접근입니다.", "error/403");
+		}
+		
 		ResponseCampaignwriteVO common = this.campaignService.createCampaign();
 		model.addAttribute("common", common);
 		return "campaign/write";
@@ -311,8 +328,18 @@ public class CampaignController {
 	}
 	
 	@PostMapping("/adv/campaign/write")
-	public String doCreateNewCampaignAction(RequestCreateCmpnVO requestCreateCmpnVO,
+	public String doCreateNewCampaignAction(@Valid RequestCreateCmpnVO requestCreateCmpnVO,
+											BindingResult bindingResult,
+											Model model,
 											@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
+		if (!loginUser.getAutr().equals("1004")) {
+			throw new BrichException("잘못된 접근입니다.", "error/403");
+		}
+		
+		if (bindingResult.hasErrors()) {
+			throw new BrichException("인자가 부족합니다.", "error/403");
+		}
+		
 		requestCreateCmpnVO.setUsrId(loginUser.getUsrId());
 		
 		boolean insert = this.campaignService.createNewCampaign(requestCreateCmpnVO);
@@ -336,8 +363,17 @@ public class CampaignController {
 	}
 	
 	@PostMapping("/adv/campaign/modify")
-	public String doModifyCampaignAction(RequestCreateCmpnVO requestCreateCmpnVO,
-											@SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
+	public String doModifyCampaignAction(@Valid RequestCreateCmpnVO requestCreateCmpnVO,
+										 BindingResult bindingResult,
+										 @SessionAttribute(value="__LOGIN_USER__") UserVO loginUser) {
+		if (!loginUser.getAutr().equals("1004")) {
+			throw new BrichException("잘못된 접근입니다.", "error/403");
+		}
+		
+		if (bindingResult.hasErrors()) {
+			throw new BrichException("인자가 부족합니다.", "error/500");
+		}
+		
 		requestCreateCmpnVO.setUsrId(loginUser.getUsrId());
 		boolean modify = this.campaignService.modifyNewCampaign(requestCreateCmpnVO);
 		if (modify) {
@@ -357,6 +393,10 @@ public class CampaignController {
 		requestSearchCampaignVO.setPageCountInGroup(5);
 		requestSearchCampaignVO.setLoginId(loginUser.getUsrId());
 		
+		if (!loginUser.getAutr().equals("1004")) {
+			throw new BrichException("잘못된 접근입니다.", "error/403");
+		}
+		
 		ResponseCampaignListVO campaignList = this.campaignService.readCampaignListByUsrId(requestSearchCampaignVO);
 		model.addAttribute("campaignList", campaignList);
 		model.addAttribute("search", requestSearchCampaignVO);
@@ -365,8 +405,8 @@ public class CampaignController {
 	}
 	
 	@GetMapping("/adv/campaign/deny-history/{cmpnId}")
-	public String readDenyHistory(Model model
-								  , RequestSearchCampaignVO requestSearchCampaignVO) {
+	public String readDenyHistory(Model model, 
+								  RequestSearchCampaignVO requestSearchCampaignVO) {
 		
 		ResponseCampaignListVO denyList = this.campaignService.readDenyHistoryByCmpnId(requestSearchCampaignVO);
 		denyList.setIsDeny(true);
@@ -385,5 +425,16 @@ public class CampaignController {
 		boolean create = this.campaignService.createTemporaryCampaign(requestCreateCmpnVO);
 		
 		return "redirect:/adv/campaign/list";
+	}
+	
+	@GetMapping("/adv/post-deny-history/{postId}")
+	@ResponseBody
+	public AjaxResponse doReadDenyHistoryAction(@PathVariable String postId) {
+		List<ResponseDenyHistoryVO> history = this.campaignService.readDenyHistoryByCmpnPstAdptId(postId);
+
+		AjaxResponse response = new AjaxResponse();
+		response.setBody(history);
+		
+		return response;
 	}
 }

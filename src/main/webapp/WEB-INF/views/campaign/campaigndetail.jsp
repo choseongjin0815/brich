@@ -7,7 +7,6 @@
        <script type="text/javascript" src="/js/campaign/campaignmain.js"></script>
        <script type="text/javascript" src="/js/common/paginator.js"></script>
        <script type="text/javascript" src="/js/common/validate.js"></script>
-       <script type="text/javascript" src="/js/campaign/campaignmain.js"></script>
 </c:set>
 
 <c:set var="css">
@@ -88,10 +87,8 @@
 						    <c:forEach var="f" items="${detail.fileVoList}" varStatus="st">
 						      <div class="cmpn-image">
 						        <div class="path">
-						        /file/1234/${detail.flGrpId}/${f.flId}
 						        </div>
 						           <img src="/file/1234/${detail.flGrpId}/${f.flId}"/>
-						           <img class = "cmpn-detail-image" src=" /file/1234/FG-20251104-000155/FL-20251104-000279"/>
 						      </div>
 						    </c:forEach>
 						  </div>

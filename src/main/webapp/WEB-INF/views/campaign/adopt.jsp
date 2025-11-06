@@ -93,46 +93,55 @@
 		        </jsp:include>
 	        </div>
 	        
-	        <div class="modal">
-	             <div class="modal-post">
-		            <jsp:include page="/WEB-INF/views/campaign/campaignBlock.jsp">
-		              <jsp:param value="${adoptList.campaignInfo.cmpnId}" name="cmpnId" />
-		              <jsp:param value="${adoptList.campaignInfo.cmpnTitle}" name="cmpnTitle" />
-		              <jsp:param value="${adoptList.cmpnCdNm}" name="cmpnCdNm" />
-		              <jsp:param value="${adoptList.campaignInfo.cnfmDt}" name="cnfmDt" />
-		              <jsp:param value="${adoptList.campaignInfo.rcrtStrtDt}" name="rcrtStrtDt" />
-		              <jsp:param value="${adoptList.campaignInfo.rcrtEndDt}" name="rcrtEndDt" />
-		              <jsp:param value="${adoptList.campaignInfo.pstEndDt}" name="pstEndDt" />
-		              <jsp:param value="${adoptList.campaignInfo.cmpnEndDt}" name="cmpnEndDt" />
-		              <jsp:param value="${adoptList.campaignInfo.usrId}" name="usrId"/>
-                      <jsp:param value="${adoptList.campaignInfo.attchGrpId}" name="flGrpId"/>
-                      <jsp:param value="${adoptList.campaignInfo.fileVoList[0].flId}" name="flId"/>
-		            </jsp:include>
-		            
-		            <div>포스팅 보기</div>
-		            <div class="post-url">포스팅 URL : </div>
-				    <div class="button-list">
-				    </div>
-		            
-		            <div class="deny-container">
-                        <textarea name="reason" id="reason" class="text-input require-input require-empty" placeholder="반려 사유를 입력하세요."></textarea>
-                        <div class="add-file-flex">
-                            <!-- <button type="button" class="add-file">첨부파일 +</button> -->
-                            <input id="add-file" type="file" name="file" multiple />
-                            <div id="file-list"></div>
-                        </div>
-                        <div class="pst-ddln">
-                            <span>포스팅 제출일</span>
-                            <input type="date" name="pstDdln" />
-                        </div>
-                        <div class="modal-button-list">
-                            <button type="button" class="modal-close">닫기</button>
-                            <button type="button" class="modal-submit deny-submit auto-active">제출</button>
-                        </div>
-                    </div>
-                    <button type="button" class="modal-close close-mark">X</button>
-	            </div>
-	        </div>
+	        
         </div>
     </div>
-<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
+	<div class="modal">
+	    <div class="modal-post">
+	       <jsp:include page="/WEB-INF/views/campaign/campaignBlock.jsp">
+	         <jsp:param value="${adoptList.campaignInfo.cmpnId}" name="cmpnId" />
+	         <jsp:param value="${adoptList.campaignInfo.cmpnTitle}" name="cmpnTitle" />
+	         <jsp:param value="${adoptList.cmpnCdNm}" name="cmpnCdNm" />
+	         <jsp:param value="${adoptList.campaignInfo.cnfmDt}" name="cnfmDt" />
+	         <jsp:param value="${adoptList.campaignInfo.rcrtStrtDt}" name="rcrtStrtDt" />
+	         <jsp:param value="${adoptList.campaignInfo.rcrtEndDt}" name="rcrtEndDt" />
+	         <jsp:param value="${adoptList.campaignInfo.pstEndDt}" name="pstEndDt" />
+	         <jsp:param value="${adoptList.campaignInfo.cmpnEndDt}" name="cmpnEndDt" />
+	         <jsp:param value="${adoptList.campaignInfo.usrId}" name="usrId"/>
+	         <jsp:param value="${adoptList.campaignInfo.attchGrpId}" name="flGrpId"/>
+	         <jsp:param value="${adoptList.campaignInfo.fileVoList[0].flId}" name="flId"/>
+	       </jsp:include>
+	       
+	       <div>포스팅 보기</div>
+	       <div class="post-url">포스팅 URL : </div>
+	       <div class="button-list">
+	       </div>
+	       
+	       <div class="deny-history-show">
+	           <span>반려기록 보기</span>
+	           <img src="/img/arrow-bottom.png" />
+	       </div>
+	       <div class="deny-history">
+	       </div>
+	       
+	       <div class="deny-container">
+	           <textarea name="reason" id="reason" class="text-input require-input require-empty" placeholder="반려 사유를 입력하세요."></textarea>
+	           <div class="add-file-flex">
+	               <!-- <button type="button" class="add-file">첨부파일 +</button> -->
+	                <input id="add-file" type="file" name="file" multiple />
+	                <div id="file-list"></div>
+	            </div>
+	            <div class="pst-ddln">
+	                <span>포스팅 제출일</span>
+	                <input type="date" name="pstDdln" />
+	            </div>
+	            <div class="modal-button-list">
+	                <button type="button" class="modal-close">닫기</button>
+	                <button type="button" class="modal-submit deny-submit auto-active">제출</button>
+	            </div>
+	        </div>
+	        <button type="button" class="modal-close close-mark">X</button>
+	    </div>
+	</div>
+</body>
+</html>
