@@ -4,6 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ktdsuniversity.edu.domain.campaign.dao.impl.AdminCampaignDaoImpl">
 
+    <!-- 캠페인 상위 카테고리 찾기 -->
     <select id="selectAdminCategoryParent" parameterType="string" resultType="string">
         SELECT CTG.CD_ID
           FROM (
@@ -17,110 +18,200 @@
           WHERE CTG.LV = CTG.MAX_LV - 1
     </select>
     
+    <!-- 캠페인 목록 (정렬+필터 포함) -->
     <resultMap type="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminCampaignVO" 
                id="RequestAdminCampaignVOMap"
                autoMapping="true">
-               <id column="CMPN_ID" property="cmpnId"/>
-               <collection property="area"
-                           javaType="list"
-                           ofType="java.lang.String">
-                           <result property="area" column="AREA"/>
-               </collection>
+        <id column="CMPN_ID" property="cmpnId"/>
+        
+        <collection property="area" javaType="list" ofType="java.lang.String">
+            <result property="area" column="AREA"/>
+        </collection>
     </resultMap>
     <select id="selectAdminCampaignListCategoryAndSortBy"
             resultMap="RequestAdminCampaignVOMap"
             parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminSearchCampaignVO">
             <include refid="Common.paginationHeader" />
         SELECT CMPN.CMPN_ID 
-                 , CMPN.OFFR_CN 
-                 , CMPN.RCRT_PRSNN 
-                 , CMPN.CMPN_TITLE
-                 , CMPN.STTS_CD
-                 , NVL(ADPT_TABLE.ADPT_CNT,0) AS ADPT_CNT
-                 , CMPN.RCRT_STRT_DT 
-                 , CMPN.RCRT_END_DT
-                 , PARCD.CD_NM AS PARENT_AREA  
-                 , ARCD.CD_NM AS AREA
-              FROM CMPN CMPN 
-              LEFT JOIN (SELECT CMPN_ID 
-                              , COUNT(CMPN_ID) AS ADPT_CNT
-                           FROM CMPN_PST_ADPT 
-                          WHERE DLT_YN = 'N'
-                          GROUP BY CMPN_ID) ADPT_TABLE
-                     ON CMPN.CMPN_ID = ADPT_TABLE.CMPN_ID 
-              LEFT JOIN CMPN_AR CMPNAR
-                ON CMPN.CMPN_ID = CMPNAR.CMPN_ID 
-              LEFT JOIN AR_CD ARCD
-                ON CMPNAR.AR_CD = ARCD.CD_ID
-              LEFT JOIN AR_CD PARCD
-                ON PARCD.CD_ID = ARCD.PRNT_CD_ID 
-             WHERE CMPN.CMPN_TITLE LIKE '%' || #{searchKeyword, jdbcType=VARCHAR} || '%'        
-               AND CMPN.CTG_CD IN (SELECT CD_ID
-                                     FROM CM_CD
-                                    START WITH CD_ID = NVL(#{category, jdbcType=VARCHAR}, '3000')        
-                                  CONNECT BY PRIOR CD_ID = PRNT_CD_ID)
-              <choose>
-                <!-- 최신순/기본 목록 (필터링 없음) -->
-                <when test="sortBy == 'latest'">
-                </when>
-                <!-- 검토 중 (under-review) -->
-                <when test="sortBy == 'under-review'">
-                  AND CMPN.STTS_CD = '2001'
-                </when>
-                <!-- 승인 (cnfm) -->
-                <when test="sortBy == 'cnfm'">
-                  AND CMPN.STTS_CD = '2002'
-                </when>
-                
-                <!-- 반려 (rtrn) -->
-                <when test="sortBy == 'rtrn'">
-                  AND CMPN.STTS_CD = '2003'
-                </when>
-                
-                <!-- 시작 대기 (start-waiting) -->
-                <when test="sortBy == 'start-waiting'">
-                  AND CMPN.STTS_CD = '2004'
-                </when>
-                
-                <!-- 모집 중 (recruiting) -->
-                <when test="sortBy == 'recruiting'">
-                  AND CMPN.STTS_CD = '2005'
-                </when>
-                
-                <!-- 선정 중 (choice) -->
-                <when test="sortBy == 'choice'">
-                  AND CMPN.STTS_CD = '2006'
-                </when>
-                
-                <!-- 진행 중 (start) -->
-                <when test="sortBy == 'start'">
-                  AND CMPN.STTS_CD = '2007'
-                </when>
-
-                <!-- 종료 (end) -->
-                <when test="sortBy == 'end'">
-                  AND CMPN.STTS_CD = '2009'
-                </when>
-                
-                <otherwise>
-                  <!-- sortBy 파라미터가 유효하지 않은 경우 (기본값) -->
-                  <!-- 필터링 없음. 모든 상태를 조회 -->
-                </otherwise>
-              </choose>
-              
-              ORDER BY
-                <!-- sortBy='latest'일 때 '2001' (검토 중) 캠페인을 최우선 정렬 -->
-                CASE 
-                    WHEN #{sortBy} = 'latest' 
-                    THEN CASE 
-                             WHEN CMPN.STTS_CD = '2001' 
-                             THEN 0 ELSE 1 
-                          END
-                 END ASC 
-                 <!-- sortBy가 다른 경우일 때, 모든 필터링 및 정렬 조건에서 생성일 기준 최신순 정렬 -->
-                   , CMPN.CRT_DT DESC
+             , CMPN.OFFR_CN 
+             , CMPN.RCRT_PRSNN 
+             , CMPN.CMPN_TITLE
+             , CMPN.STTS_CD
+             , NVL(ADPT_TABLE.ADPT_CNT,0) AS ADPT_CNT
+             , CMPN.RCRT_STRT_DT 
+             , CMPN.RCRT_END_DT
+             , PARCD.CD_NM AS PARENT_AREA  
+             , ARCD.CD_NM AS AREA
+          FROM CMPN CMPN 
+          LEFT JOIN (SELECT CMPN_ID 
+                          , COUNT(CMPN_ID) AS ADPT_CNT
+                       FROM CMPN_PST_ADPT 
+                      WHERE DLT_YN = 'N'
+                      GROUP BY CMPN_ID) ADPT_TABLE
+                 ON CMPN.CMPN_ID = ADPT_TABLE.CMPN_ID 
+          LEFT JOIN CMPN_AR CMPNAR
+            ON CMPN.CMPN_ID = CMPNAR.CMPN_ID 
+          LEFT JOIN AR_CD ARCD
+            ON CMPNAR.AR_CD = ARCD.CD_ID
+          LEFT JOIN AR_CD PARCD
+            ON PARCD.CD_ID = ARCD.PRNT_CD_ID 
+         WHERE CMPN.CMPN_TITLE LIKE '%' || #{searchKeyword, jdbcType=VARCHAR} || '%'        
+           AND CMPN.CTG_CD IN (SELECT CD_ID
+                                 FROM CM_CD
+                                START WITH CD_ID = NVL(#{category, jdbcType=VARCHAR}, '3000')        
+                              CONNECT BY PRIOR CD_ID = PRNT_CD_ID)
+        <choose>
+            <!-- 최신순/기본 목록 (필터링 없음) -->
+            <when test="sortBy == 'latest'"></when>
             
+            <!-- 검토 중 (under-review) -->
+            <when test="sortBy == 'under-review'">
+            AND CMPN.STTS_CD = '2001'
+            </when>
+            
+            <!-- 승인 (cnfm) -->
+            <when test="sortBy == 'cnfm'">
+            AND CMPN.STTS_CD = '2002'
+            </when>
+            
+            <!-- 반려 (rtrn) -->
+            <when test="sortBy == 'rtrn'">
+            AND CMPN.STTS_CD = '2003'
+            </when>
+            
+            <!-- 시작 대기 (start-waiting) -->
+            <when test="sortBy == 'start-waiting'">
+            AND CMPN.STTS_CD = '2004'
+            </when>
+            
+            <!-- 모집 중 (recruiting) -->
+            <when test="sortBy == 'recruiting'">
+            AND CMPN.STTS_CD = '2005'
+            </when>
+            
+            <!-- 선정 중 (choice) -->
+            <when test="sortBy == 'choice'">
+            AND CMPN.STTS_CD = '2006'
+            </when>
+            
+            <!-- 진행 중 (start) -->
+            <when test="sortBy == 'start'">
+            AND CMPN.STTS_CD = '2007'
+            </when>
+
+            <!-- 종료 (end) -->
+            <when test="sortBy == 'end'">
+            AND CMPN.STTS_CD = '2009'
+            </when>
+            
+            <otherwise>
+              <!-- sortBy 파라미터가 유효하지 않은 경우 (기본값) -->
+              <!-- 필터링 없음. 모든 상태를 조회 -->
+            </otherwise>
+        </choose>
+          
+          ORDER BY
+            <!-- sortBy='latest'일 때 '2001' (검토 중) 캠페인을 최우선 정렬 -->
+            CASE 
+                WHEN #{sortBy} = 'latest' 
+                THEN CASE 
+                         WHEN CMPN.STTS_CD = '2001' 
+                         THEN 0 ELSE 1 
+                      END
+             END ASC 
+             <!-- sortBy가 다른 경우일 때, 모든 필터링 및 정렬 조건에서 생성일 기준 최신순 정렬 -->
+               , CMPN.CRT_DT DESC
           <include refid="Common.paginationFooter" />
+    </select>
+    
+    
+    <!-- 캠페인 상세 정보 조회 -->
+    <resultMap type="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminCampaignVO" 
+               id="ResponseAdminCampaignVOMap"
+               autoMapping="true">
+        <id column="CMPN_ID" property="cmpnId"/>
+        
+        <collection property="area" javaType="list" ofType="java.lang.String">
+            <result property="area" column="AREA"/>
+        </collection>
+        
+        <collection property="fileVoList" javaType="list" ofType="com.ktdsuniversity.edu.domain.file.vo.FileVO">
+            <result property="flNm" column="FL_NM"/>
+            <result property="flPth" column="FL_PTH"/>
+            <result property="flId" column="FL_ID"/>
+        </collection>  
+    </resultMap>
+    <select id="selectAdminCampaignDetailById" parameterType="string" resultMap="ResponseAdminCampaignVOMap">
+        SELECT CMPN.CMPN_ID
+             , CMPN.USR_ID
+             , U.LOG_ID AS LOG_ID
+             , CMPN.CTG_CD
+             , CMPN.STTS_CD
+             , TO_CHAR(CMPN.PRSNN_PRC, 'FM999,999,999,999') AS CMPN_PRSNN_PRC
+             , TO_CHAR(CMPN.DRTN_PRC, 'FM999,999,999,999') AS CMPN_DRTN_PRC
+             , CMPN.PRSNN_PRC
+             , CMPN.DRTN_PRC
+             , CMPN.PRSNN_DSCNT
+             , CMPN.DRTN_DSCNT
+             , CMPN.CMPN_PRNT_ID
+             , CMPN.RCRT_PRSNN
+             , CMPN.PRGRSS_DRTN
+             , TO_CHAR(CMPN.RCRT_STRT_DT, 'RR-MM-DD') AS RCRT_STRT_DT
+             , TO_CHAR(CMPN.RCRT_END_DT, 'RR-MM-DD') AS RCRT_END_DT
+             , TO_CHAR(CMPN.PST_END_DT,  'RR-MM-DD') AS PST_END_DT
+             , TO_CHAR(CMPN.CMPN_END_DT, 'RR-MM-DD') AS CMPN_END_DT
+             , CMPN.ADDRS
+             , CMPN.ATTCH_GRP_ID
+             , CMPN.CMPN_TITLE
+             , CMPN.CMPN_CN
+             , CMPN.OFFR_CN
+             , CMPN.OFFR_PRC
+             , CMPN.PST_MSSN
+             , CMPN.HSTG
+             , CMPN.NTFCN
+             , TO_CHAR(CMPN.CNFM_DT, 'RR-MM-DD') AS CNFM_DT
+             , CMPN.CRT_DT
+             , CMPN.CRTR
+             , CMPN.UPDT_DT
+             , CMPN.MTTR
+             , CMPN.DLT_YN
+             , NVL(ADPT_TABLE.ADPT_CNT, 0) AS ADPT_CNT
+             , ARCD.CD_NM AS AREA
+             , PARCD.CD_NM AS PARENT_AREA
+             , NVL(TO_CHAR(PYMNT.CRT_DT, 'YYYY-MM-DD HH24:MI:SS'), '-') AS PYMNT_CRT_DT
+             , PYMNT.CMPN_PYMNT_ID AS CMPN_PYMNT_ID
+             , NVL(PYMNT.ORDER_ID, '-') AS ORDER_ID
+             , NVL(PYMNT.PYMNT_CD, '-') AS PYMNT_CD
+             , NVL(TO_CHAR(PYMNT.AMNT, 'FM999,999,999,999'), '-') AS AMNT
+             , FG.FL_GRP_ID 
+             , FG.FL_CNT
+             , FL.FL_ID
+             , FL.FL_NM AS FL_NM
+             , FL.FL_PTH AS FL_PTH
+          FROM CMPN CMPN
+          LEFT OUTER JOIN USR U -- LOG_ID
+            ON CMPN.USR_ID = U.USR_ID
+          LEFT OUTER JOIN (SELECT ADPT.CMPN_ID 
+                                , COUNT(ADPT.CMPN_ID) AS ADPT_CNT
+                             FROM CMPN_PST_ADPT ADPT 
+                            WHERE ADPT.CMPN_ID = #{_parameter}
+                              AND ADPT.DLT_YN = 'N'
+                            GROUP BY ADPT.CMPN_ID) ADPT_TABLE
+            ON CMPN.CMPN_ID = ADPT_TABLE.CMPN_ID 
+          LEFT OUTER JOIN CMPN_AR CMPNAR
+            ON CMPN.CMPN_ID = CMPNAR.CMPN_ID 
+          LEFT OUTER JOIN AR_CD ARCD
+            ON CMPNAR.AR_CD = ARCD.CD_ID
+          LEFT OUTER JOIN AR_CD PARCD
+            ON PARCD.CD_ID = ARCD.PRNT_CD_ID 
+          LEFT OUTER JOIN CMPN_PYMNT PYMNT
+            ON CMPN.CMPN_ID = PYMNT.CMPN_ID 
+          LEFT OUTER JOIN FL_GRP FG
+            ON CMPN.ATTCH_GRP_ID = FG.FL_GRP_ID 
+          LEFT OUTER JOIN FL FL
+            ON FG.FL_GRP_ID = FL.FL_GRP_ID 
+         WHERE CMPN.CMPN_ID = #{_parameter}
+           AND CMPN.DLT_YN = 'N'
     </select>
 
 </mapper>
