@@ -63,9 +63,14 @@ public class ChatController {
 	public String viewChatRoomListPage(@SessionAttribute(name = "__LOGIN_USER__", required = false) UserVO loginUser,
 			Model model, @RequestParam(required = false) String cmpnId) {
 		String usrId = loginUser.getUsrId();
+		Map<String, String> parameter = new HashMap<>();
+		parameter.put("usrId", usrId);
+		parameter.put("cmpnId", cmpnId);
+		List<String> allChtRmId = this.chatService.readAllChtRmIdByUsrIdOrCmpnId(parameter);
 		log.info(cmpnId);
 		model.addAttribute("usrId", usrId);
 		model.addAttribute("cmpnId", cmpnId);
+		model.addAttribute("allChtRmId", allChtRmId);
 		return "chat/chatRoomList";
 	}
 
@@ -304,4 +309,6 @@ public class ChatController {
 		// 읽음 처리 알림을 채팅방 참가자에게 전송
 		messagingTemplate.convertAndSend("/topic/chat/" + chtRmId + "/read", payload);
 	}
+	
+	
 }

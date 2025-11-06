@@ -44,4 +44,8 @@ public interface ChatDao {
 	public CampaignVO selectCampaignByChtRmId(String chtRmId);
 
 	public String selectTargetUsrIdByChtRmIdAndUsrId(Map<String, String> chtRoomInfo);
+
+	public List<String> selectChtRmIdListByCmpnId(Map<String, String> parameter);
+
+	public List<String> selectChtRmIdListByUsrId(Map<String, String> parameter);
 }

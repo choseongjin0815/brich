@@ -427,4 +427,18 @@ public class ChatServiceImpl implements ChatService {
 		return campaignVO;
 	}
 
+	@Override
+	public List<String> readAllChtRmIdByUsrIdOrCmpnId(Map<String, String> parameter) {
+		List<String> chtRmIdList = null;
+		//캠페인 아이디가 있으면 캠페인에 대한 채팅방 목록 아이디를 가져온다.
+		if(parameter.get("cmpnId") != null) {
+			chtRmIdList = this.chatDao.selectChtRmIdListByCmpnId(parameter);
+		}
+		else {
+			chtRmIdList = this.chatDao.selectChtRmIdListByUsrId(parameter);
+		}
+		return chtRmIdList;
+	}
+
+
 }

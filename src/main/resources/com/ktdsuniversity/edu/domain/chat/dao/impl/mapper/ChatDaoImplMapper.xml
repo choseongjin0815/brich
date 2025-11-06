@@ -214,4 +214,22 @@
 		 WHERE CHT_RM_ID = #{chtRmId}
 		   AND USR_ID != #{currentUsrId}
     </select>
+    
+    <select id="selectChtRmIdListByCmpnId"
+            parameterType="hashmap"
+            resultType="string">
+        SELECT CHT_RM_ID
+          FROM CHT_RM
+         WHERE CMPN_ID = #{cmpnId}
+           AND DLT_YN = 'N'
+    </select>
+     <select id="selectChtRmIdListByUsrId"
+            parameterType="hashmap"
+            resultType="string">
+        SELECT CHT_RM_ID
+		  FROM CHT_PRTCPNT
+		 WHERE USR_ID = #{usrId}
+		   AND LFT_YN = 'N'
+    </select> 
+     
 </mapper>

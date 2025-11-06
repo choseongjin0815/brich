@@ -6,6 +6,7 @@ var cmpnId = "";
 $().ready(function() {
     auth = $(".content-box").data("auth");
     cmpnId = $(".chat-main").data("cmpn");
+    chtRmId = $(this).closest(".chatroom-content-item").data("chat-room");
 
     console.log("auth:", auth);
     console.log("cmpnId:", cmpnId);

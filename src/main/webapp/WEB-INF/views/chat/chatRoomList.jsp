@@ -14,7 +14,12 @@
 	<jsp:param name="scripts"
 		value="
         <script type='text/javascript' src='/js/blog/verification.js'></script>
+        <script type='text/javascript' src='/js/common/socketconnect.js'></script>
     " />
+    <jsp:param name="sockjs"
+        value='<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>' />
+    <jsp:param name="stompjs"
+        value='<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>' />
     
 
 </jsp:include>
@@ -22,7 +27,8 @@
 	<div class="header-title">메세지</div>
 	<div class="chat-main" data-cmpn="${cmpnId}">
 		<div class="content-box"
-			data-auth="${sessionScope.__LOGIN_USER__.autr}">
+			data-auth="${sessionScope.__LOGIN_USER__.autr}"
+			data-chtid-list="${allChtRmId}">
 			<c:if test="${sessionScope.__LOGIN_USER__.autr eq 1004 }">
 	           <img src="/img/arrow-left.png" class="arrow-back"/>
 	        </c:if>
