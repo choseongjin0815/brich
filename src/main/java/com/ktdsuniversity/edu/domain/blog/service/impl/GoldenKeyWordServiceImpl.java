@@ -13,9 +13,6 @@ import java.util.List;
 @Service
 public class GoldenKeyWordServiceImpl implements GoldenKeyWordService {
 
-    private static final Logger log = LoggerFactory.getLogger(GoldenKeyWordServiceImpl.class);
-
-
     @Autowired
     private GoldenKeyWordDao goldenKeyWordDao;
 
@@ -24,7 +21,6 @@ public class GoldenKeyWordServiceImpl implements GoldenKeyWordService {
 
         List<CommonCodeVO> result = goldenKeyWordDao.selectUserCategories(usrId);
 
-        log.info("들어왔수다 {}", result);
 
         return result;
     }

@@ -71,9 +71,7 @@ public class ResponseCampaignVO extends CampaignVO{
 	  * 공통코드 이름
 	  */
 	 private String SttsCdNm;
-	 
-	 	 
-	
+
 	 public String getSttsCdNm() {
 		return this.SttsCdNm;
 	}
