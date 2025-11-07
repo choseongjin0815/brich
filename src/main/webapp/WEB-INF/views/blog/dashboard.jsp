@@ -2,6 +2,7 @@
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <jsp:include page="/WEB-INF/views/layout/menu.jsp">
@@ -55,7 +56,6 @@
 		<div class="dashboard-section golden-keyword-section">
 			<div class="section-header">
 				<div class="dashboard-title">핵심 황금 키워드</div>
-				<button id="golden-keyword-detail" class="dashboard-detail-btn">자세히 보기</button>
 			</div>
 			<div class="dashboard-detail">추천 키워드 중 경쟁률이 낮고, 상위 노출 가능성이 높음</div>
 			<canvas id="bubbleChart"></canvas>
@@ -93,9 +93,20 @@
 		<div class="dashboard-section daily-visitor-section">
 			<div class="section-header">
 				<div class="dashboard-title">나의 블로그 방문자 수</div>
-				<button id="daily-visitor-detail" class="dashboard-detail-btn">자세히 보기</button>
+<%--				<button id="daily-visitor-detail" class="dashboard-detail-btn">내 순위 보기</button>--%>
 			</div>
-			<div id="total-visitor">총 방문자 수   <span>${totalVisitor}</span></div>
+
+			<div id="total-visitor">총 방문자 수   <span><fmt:formatNumber value="${totalVisitor}" pattern="#,###"/></span></div>
+			<div id="total-visitor-modal" class="modal">
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<h3>블로그 상세 통계 </h3>
+
+					<div class="table-container">
+					</div>
+
+				</div>
+			</div>
 			<span class="sub-info">▲ 2.1% 지난 주 대비</span>
 			<canvas id="dailyVisitorChart"></canvas>
 		</div>
