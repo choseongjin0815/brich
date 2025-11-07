@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
-import com.ktdsuniversity.edu.domain.blog.service.DailyVisitorService;
 import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
 import com.ktdsuniversity.edu.domain.blog.vo.DailyVisitorVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogIndexListVO;
@@ -55,8 +54,6 @@ public class CampaignController {
     @Autowired
     private BlogDataService blogDataService;
     
-    @Autowired
-    private DailyVisitorService dailyVisitorService;
     
     @GetMapping("/campaigndetail/{campaignId}")
     public String campaignDetailPage(@PathVariable String campaignId, Model model,
@@ -460,13 +457,16 @@ public class CampaignController {
 				this.blogDataService.readBlogIndexList(usrId);
 
 		List<DailyVisitorVO> dailyVisitorsResult =
-				this.dailyVisitorService.selectDailyVisitors(usrId);
+				this.blogDataService.selectDailyVisitors(usrId);
 
 		double currentIndex = this.blogDataService.selectMostRecentIndex(usrId);
+		int totalVisitor = this.blogDataService.selectTotalVisitor(usrId);
+		
 		model.addAttribute("user", usrId);
 		model.addAttribute("dailyVisitorsResult", dailyVisitorsResult);
 		model.addAttribute("index", indexResult);
 		model.addAttribute("currentIndex",currentIndex);
+		model.addAttribute("totalVisitor", totalVisitor);
 
 
 		return "campaign/userDetail";
