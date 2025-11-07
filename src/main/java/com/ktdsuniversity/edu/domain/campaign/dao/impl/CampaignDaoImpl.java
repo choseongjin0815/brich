@@ -275,4 +275,5 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	public List<ResponseDenyHistoryVO> selectDenyHistoryByCmpnPstAdptId(String postId) {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectDenyHistoryByCmpnPstAdptId", postId);
 	}
+
 }

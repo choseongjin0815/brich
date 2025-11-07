@@ -1,5 +1,6 @@
 package com.ktdsuniversity.edu.domain.user.vo;
 
+import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
 import com.ktdsuniversity.edu.global.common.BaseVO;
 
 /**
@@ -169,7 +170,19 @@ public class UserVO extends BaseVO{
      */
     private String flGrpId;
 
-    public String getUsrId() {
+    
+    private BlogIndexVO blogIndexVO;
+    
+    
+    public BlogIndexVO getBlogIndexVO() {
+		return this.blogIndexVO;
+	}
+
+	public void setBlogIndexVO(BlogIndexVO blogIndexVO) {
+		this.blogIndexVO = blogIndexVO;
+	}
+
+	public String getUsrId() {
         return this.usrId;
     }
     

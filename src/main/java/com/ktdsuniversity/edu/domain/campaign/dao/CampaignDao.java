@@ -113,4 +113,6 @@ public interface CampaignDao {
 	int updateTemporaryCampaignByCmpnId(RequestCreateCmpnVO requestCreateCmpnVO);
 
 	List<ResponseDenyHistoryVO> selectDenyHistoryByCmpnPstAdptId(String postId);
+
+
 }
