@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
-import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCampaignApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.PostReturnHistoryVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCampaignAreaVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
@@ -18,6 +18,7 @@ import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminCampaignA
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseDenyHistoryVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 public interface CampaignDao {
@@ -36,7 +37,7 @@ public interface CampaignDao {
 
 	int selectApplicantCountByCmpnId(RequestApplicantVO requestApplicantVO);
 
-	String selectCampaignStateByCmpnPstAdptId(String cmpnPstAdptId);
+	CampaignVO selectCampaignStateByCmpnPstAdptId(String cmpnPstAdptId);
 
 	List<ResponseAdoptVO> selectAdoptListByCmpnId(RequestApplicantVO requestApplicantVO);
 
@@ -109,5 +110,10 @@ public interface CampaignDao {
 	String selectReturnReason(Map<String, String> param);
 
 	int updateCmpnPrntIdByCmpnId(RequestCreateCmpnVO requestCreateCmpnVO);
-	
+
+	int updateTemporaryCampaignByCmpnId(RequestCreateCmpnVO requestCreateCmpnVO);
+
+	List<ResponseDenyHistoryVO> selectDenyHistoryByCmpnPstAdptId(String postId);
+
+
 }

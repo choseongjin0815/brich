@@ -33,6 +33,7 @@ import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class WidgetController {
@@ -74,9 +75,11 @@ public class WidgetController {
 			requestData = (JSONObject) parser.parse(jsonBody);
 			String clientOrderName = (String) requestData.get("orderName");
 			String clientCdId = (String) requestData.get("cdId");
+			
 			String clientUsrId = (String) requestData.get("usrId");
-			String clientOrderId = (String) requestData.get("orderId");
 			String clientCmpnId = (String) requestData.get("cmpnid");
+			
+			String clientOrderId = (String) requestData.get("orderId");
 			String clientPrice = String.valueOf(requestData.get("price"));
 			
             logger.info("-----클라이언트가 보내준 값 ----- : " + 
@@ -92,10 +95,14 @@ public class WidgetController {
             RequestPaymentVO requestPaymentVO = new RequestPaymentVO();
             requestPaymentVO.setClientOrderId(clientOrderId);
             requestPaymentVO.setClientOrderName(clientOrderName);
-            requestPaymentVO.setClientUsrId(clientUsrId);
+            
+            if(clientUsrId != null && clientUsrId != "") {
+            	requestPaymentVO.setClientId(clientUsrId);            	
+            } else if(clientCmpnId != null && clientCmpnId != "") {
+            	requestPaymentVO.setClientId(clientCmpnId);
+            }
             requestPaymentVO.setClientPrice(clientPrice);
             requestPaymentVO.setClientCdId(clientCdId);
-            requestPaymentVO.setClientCmpnId(clientCmpnId);
             PKkey = this.payService.beforePaymentInfoSave(requestPaymentVO);
             
 		} catch (ParseException e) {
@@ -109,7 +116,7 @@ public class WidgetController {
     
     
     @RequestMapping(value = "/confirm")
-    public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
+    public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody, HttpSession httpSession) throws Exception {
         logger.info("============= 결제 시작 =============" ); 
 
         JSONParser parser = new JSONParser();
@@ -117,7 +124,7 @@ public class WidgetController {
         String amount;
         String paymentKey;
         JSONObject easyPay;
-        Long easyAmount;
+        String easyAmount;
         String orderName;  
         
 
@@ -176,17 +183,26 @@ public class WidgetController {
             orderName    = (String) jsonObject.get("orderName");
         	paymentKey   = (String) jsonObject.get("paymentKey");
         	easyPay = (JSONObject) jsonObject.get("easyPay");
-            easyAmount    = (easyPay != null && easyPay.get("amount") != null)
-                               ? ((Number) easyPay.get("amount")).longValue() : null;
-            
+            easyAmount    = String.valueOf((easyPay != null && easyPay.get("amount") != null)
+                               ? ((Number) easyPay.get("amount")).longValue() : null);
             logger.info("응답값 파라미터 : " +
             		"orderId : " + orderId + 
             		"orderName : " + orderName + 
             		"paymentKey : " + paymentKey + 
             		"easyAmount : " + easyAmount);
-            boolean paymentValidationCheck = this.payService.paymentValidationCheck(orderId, paymentKey, orderName, easyAmount);
+            
+            RequestPaymentVO requestPaymentVO = new RequestPaymentVO();
+            requestPaymentVO.setOrderId(orderId);
+            requestPaymentVO.setOrderName(orderName);
+            requestPaymentVO.setPaymentKey(paymentKey);
+            requestPaymentVO.setEasyAmount(easyAmount);
+            requestPaymentVO.setPKkey(PKkey);
+            boolean paymentValidationCheck = this.payService.paymentValidationCheck(requestPaymentVO);
             if(paymentValidationCheck) {
-            	int paymentSuccessUpdateCount = this.payService.paymentSuccessUpdate(orderId, paymentKey, orderName, easyAmount);
+            	int paymentSuccessUpdateCount = this.payService.paymentSuccessUpdate(requestPaymentVO);
+            }else {
+            	jsonObject.put("status", "ABORTED");
+                return ResponseEntity.status(HttpURLConnection.HTTP_BAD_REQUEST).body(jsonObject);
             }
             
             

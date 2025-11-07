@@ -4,15 +4,9 @@ package com.ktdsuniversity.edu.domain.blog.service;
 import java.util.List;
 import java.util.Map;
 
-import com.ktdsuniversity.edu.domain.blog.vo.BlogDetailStatVO;
-import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
-import com.ktdsuniversity.edu.domain.blog.vo.PostDataInsertVO;
-import com.ktdsuniversity.edu.domain.blog.vo.PostDataVO;
-import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogIndexListVO;
-import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogInfoVO;
-import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
-import com.ktdsuniversity.edu.domain.blog.vo.RequestModifyBlogAddrsVO;
+import com.ktdsuniversity.edu.domain.blog.vo.*;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
+import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 public interface BlogDataService {
 
@@ -40,8 +34,10 @@ public interface BlogDataService {
 
 	List<BlogDetailStatVO> readBlogDetailStat(String usrId);
 
+	List<DailyVisitorVO> selectDailyVisitors(String usrId);
 
+	List<CommonCodeVO> selectUserCategoryKeywords(String usrId);
 
-
+	int selectTotalVisitor(String usrId);
 
 }

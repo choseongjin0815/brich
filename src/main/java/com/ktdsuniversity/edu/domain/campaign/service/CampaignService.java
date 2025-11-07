@@ -4,16 +4,20 @@ package com.ktdsuniversity.edu.domain.campaign.service;
 
 import java.util.List;
 
+import com.ktdsuniversity.edu.domain.campaign.vo.PostReturnHistoryVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.ResponseModifyCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestPostSubmitVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignwriteVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseDenyHistoryVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 
@@ -63,4 +67,12 @@ public interface CampaignService {
 	String postReturnReason(String campaignId, String usrId);
 
 	boolean modifyNewCampaign(RequestCreateCmpnVO requestCreateCmpnVO);
+
+	boolean createTemporaryCampaign(RequestCreateCmpnVO requestCreateCmpnVO);
+
+	ResponseModifyCampaignVO readModifyInfoByCmpnId(String cmpnId);
+
+	List<ResponseDenyHistoryVO> readDenyHistoryByCmpnPstAdptId(String postId);
+
+
 }
