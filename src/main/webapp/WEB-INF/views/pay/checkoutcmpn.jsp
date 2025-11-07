@@ -99,7 +99,6 @@
 		    headers: {'Content-Type':'application/json'},
 		    body: JSON.stringify({
 		      orderId: orderId,
-		      usrId: usrId,
 		      orderName: "캠페인 구매",
 		      price: price,
 		      cmpnId: cmpnId,

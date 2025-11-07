@@ -110,6 +110,11 @@ public class PayDaoImpl extends SqlSessionDaoSupport implements PayDao{
 	public int updateBeforeCampaignPaymentInfoSave(RequestPaymentVO requestPaymentVO) {
 		return super.getSqlSession().update(this.NAME_SPACE + "updateBeforeCampaignPaymentInfoSave", requestPaymentVO);
 	}
+
+	@Override
+	public String selectBeforeCampaigninfo(String clientCmpnId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectBeforeCampaigninfo" , clientCmpnId);
+	}
     
     
 }

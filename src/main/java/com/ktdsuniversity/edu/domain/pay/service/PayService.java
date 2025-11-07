@@ -27,5 +27,7 @@ public interface PayService {
 
 	String payInfoServiceCampaignAmount(String cmpnId);
 
+	String beforeCampaigninfo(String clientCmpnId);
+
 
 }

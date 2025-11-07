@@ -45,4 +45,6 @@ public interface PayDao {
 
 	int updateBeforeCampaignPaymentInfoSave(RequestPaymentVO requestPaymentVO);
 
+	String selectBeforeCampaigninfo(String clientCmpnId);
+
 }

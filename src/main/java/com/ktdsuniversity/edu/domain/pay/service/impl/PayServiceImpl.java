@@ -40,6 +40,7 @@ public class PayServiceImpl implements PayService{
 		log.info("====== 결제정보 유효성 검사 저장 start ======");
 
 		// 테이블 조회 (주문번호, (유저아이디/캠페인번호), 가격)
+		
 		String PKkey = requestPaymentVO.getPKkey();
 		ResponsePaymentVO saveInfo = this.payDao.selectBeforeSaveInfo(PKkey);  //union all
 		
@@ -158,6 +159,12 @@ public class PayServiceImpl implements PayService{
 	@Override
 	public String payInfoServiceCampaignAmount(String cmpnId) {
 		return this.payDao.selectPayInfoServiceCampaignAmount(cmpnId);
+	}
+
+
+	@Override
+	public String beforeCampaigninfo(String clientCmpnId) {
+		return this.payDao.selectBeforeCampaigninfo(clientCmpnId);
 	}
 	
 	

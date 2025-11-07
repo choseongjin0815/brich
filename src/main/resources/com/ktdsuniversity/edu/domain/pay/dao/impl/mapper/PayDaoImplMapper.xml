@@ -311,6 +311,13 @@
            SET ORDER_ID =#{clientOrderId}
          WHERE CMPN_ID=#{clientId}
 </update>
+<select id="selectBeforeCampaigninfo"
+        parameterType="string"
+        resultType="string">
+        SELECT CMPN_PYMNT_ID
+          FROM CMPN_PYMNT
+         WHERE CMPN_ID = #{clientCmpnId}
+</select>
 
 </mapper>
 
