@@ -52,7 +52,7 @@ public class BlogDataController {
 	        return "redirect:/access-denied";
 	    }
 
-		requestExpireSoonCampaignVO.setListSize(4);
+		requestExpireSoonCampaignVO.setListSize(12);
 		requestExpireSoonCampaignVO.setPageCount(1);
 
 		ResponseExpireSoonListVO result =
@@ -82,7 +82,7 @@ public class BlogDataController {
 	}
 	
 	@GetMapping("/blog/{usrId}/manage")
-	public String viewBlogManagePage(@PathVariable String usrId, HttpSession session, Model model) {
+	public String viewBlogManagePage(@PathVariable String usrId, HttpSession session, Model model, RequestExpireSoonCampaignVO requestExpireSoonCampaignVO) {
 		UserVO loginUser = (UserVO) session.getAttribute("__LOGIN_USER__");
 		if (loginUser == null || !loginUser.getUsrId().equals(usrId)) {
 			System.out.println(usrId);
@@ -92,6 +92,10 @@ public class BlogDataController {
 			return "redirect:/blog/"+ loginUser.getUsrId() + "/verification";
 		}
 		
+		
+		ResponseExpireSoonListVO result =
+				this.blogDataService.readExpireSoonCampaignList(requestExpireSoonCampaignVO);
+		model.addAttribute("list",result);
 		
 		
 		return "/blog/manage";

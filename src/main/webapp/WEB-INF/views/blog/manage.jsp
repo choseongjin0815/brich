@@ -19,69 +19,41 @@
        	<script type='text/javascript' src='/js/blog/manage.js'></script>
 	" />    
 </jsp:include>
-		<div class="header-title">블로그 관리</div>
-		<div class="dashboard-container">
+		<div class="manage-container">
+			<div class="header-title">블로그 관리</div>
+			
 			<table class="table table-bordered table-hover dt-responsive">
 			        
 			        <thead>
 			          <tr>
-			            <th>1111</th>
-			            <th>Languages</th>
-			            <th>Population</th>
-			            <th>Median Age</th>
-			            <th>Area (Km²)</th>
+			            <th>제출일</th>
+			            <th>제목</th>
+			            <th>캠페인 제목</th>
+			            <th>상태</th>
+			            <th>반려사유</th>
 			          </tr>
 			        </thead>
-			        <tbody>
-			          <tr>
-			            <td>A11</td>
-			            <td>Spanish (official), English, Italian, German, French</td>
-			            <td>41,803,125</td>
-			            <td>31.3</td>
-			            <td>2,780,387</td>
-			          </tr>
-			          <tr>
-			            <td>Australia</td>
-			            <td>English 79%, native and other languages</td>
-			            <td>23,630,169</td>
-			            <td>37.3</td>
-			            <td>7,739,983</td>
-			          </tr>
-			          <tr>
-			            <td>Greece</td>
-			            <td>Greek 99% (official), English, French</td>
-			            <td>11,128,404</td>
-			            <td>43.2</td>
-			            <td>131,956</td>
-			          </tr>
-			          <tr>
-			            <td>Luxembourg</td>
-			            <td>Luxermbourgish (national) French, German (both administrative)</td>
-			            <td>536,761</td>
-			            <td>39.1</td>
-			            <td>2,586</td>
-			          </tr>
-			          <tr>
-			            <td>Russia</td>
-			            <td>Russian, others</td>
-			            <td>142,467,651</td>
-			            <td>38.4</td>
-			            <td>17,076,310</td>
-			          </tr>
-			          <tr>
-			            <td>Sweden</td>
-			            <td>Swedish, small Sami- and Finnish-speaking minorities</td>
-			            <td>9,631,261</td>
-			            <td>41.1</td>
-			            <td>449,954</td>
-			          </tr>
-			        </tbody>
-			        <tfoot>
-			          <tr>
-			            <td colspan="5" class="text-center">Data retrieved from <a href="http://www.infoplease.com/ipa/A0855611.html" target="_blank">infoplease</a> and <a href="http://www.worldometers.info/world-population/population-by-country/" target="_blank">worldometers</a>.</td>
-			          </tr>
-			        </tfoot>
-			      </table>
+				<tbody>
+				<c:choose>
+					<c:when test="${not empty list.list}">
+						<c:forEach items="${list.list}" var="recommend">
+							<tr>
+								<td>${recommend.cmpnId}</td>
+								<td>${recommend.cmpnTitle}</td>
+								<td>${recommend.rcrtEndDt}</td>
+								<td>${recommend.offrCn}</td>
+								<td>${recommend.offrCn}</td>
+							</tr>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<tr>
+							<td colspan="5" class="no-data">표시할 캠페인 없음</td>
+						</tr>
+					</c:otherwise>
+				</c:choose>
+				</tbody>
+	      	</table>
 			
 		</div>
 	</body>

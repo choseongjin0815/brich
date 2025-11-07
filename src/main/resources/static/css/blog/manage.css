@@ -8,6 +8,16 @@
     color: #5A6ACF;
 }
 
+.dataTables_wrapper{
+	margin: 0 auto;
+}
+
+.manage-container{
+	display: flex;
+    flex-direction: column;
+    flex-grow:1;
+}
+
 table.dataTable th,
 table.dataTable td {
   white-space: nowrap;

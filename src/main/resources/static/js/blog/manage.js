@@ -1,6 +1,12 @@
 $(document).ready(function() {
     $('table').DataTable({
-        responsive: true,
+		responsive: {
+		  details: false // 👈 하위 행으로 절대 이동하지 않게
+		},
+		columnDefs: [
+		  { className: 'all', targets: '_all' } // 👈 모든 컬럼 항상 표시
+		],
+		lengthChange: false, 
 		info:false,
 		searching:false,
 		language: {

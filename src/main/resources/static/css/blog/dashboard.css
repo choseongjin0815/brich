@@ -17,6 +17,7 @@
     }
 }
 
+
 .header-title{
     min-width: 100px;
     height:75px;
@@ -194,6 +195,7 @@ h3{
 .dashboard-detail {
     font-size: 0.9rem;
     color: #666;
+    margin: 6px;
 }
 
 .dashboard-detail-btn {

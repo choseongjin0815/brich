@@ -673,4 +673,6 @@ public class CampaignServiceImpl implements CampaignService {
 	
 	return this.campaignDao.selectDenyHistoryByCmpnPstAdptId(postId);
   }
+
+
 }
