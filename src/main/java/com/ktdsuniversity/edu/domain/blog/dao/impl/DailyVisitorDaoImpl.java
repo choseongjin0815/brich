@@ -28,6 +28,11 @@ public class DailyVisitorDaoImpl extends SqlSessionDaoSupport implements DailyVi
         return super.getSqlSession().selectList(this.NAME_SPACE+ "selectDailyVisitor", usrId);
     }
 
+    @Override
+    public int selectTotalVisitor(String usrId) {
+        return super.getSqlSession().selectOne(this.NAME_SPACE+ "selectTotalVisitor", usrId);
+    }
+
 
 
 
