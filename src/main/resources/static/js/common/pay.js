@@ -65,6 +65,7 @@ $().ready(function() {
 	  if (!startDate || !daysStr || !Number.isInteger(daysNum) || daysNum <= 0) {
 	    end.val('');
 		campEnd.attr('min','');
+        $('#totalPayHidden').val('');
 	    return;
 	  }
 	  const endDate = addDays(startDate, daysNum);
@@ -73,6 +74,8 @@ $().ready(function() {
 	  cmpnStart.val(formatDate(cmpnStartDate));	
 	  const campStartStr = formatDate(cmpnStartDate);
 	  campEnd.attr('min', formatDate(addDays(cmpnStartDate,7)));
+      
+     
 	}
 	
 	start.on('change input', recalc);
@@ -85,6 +88,7 @@ $().ready(function() {
 	  totalPay = ($(this).val()*$('.payPrice').data('dayprice'))
 	  				+ ($('.payPrice').data('rcrtprsnn')*Number($('.payPerson').data('person'))); 
 	  $('.total-pay').text(totalPay);
+      $('#totalPayHidden').val(totalPay);
 	});
 	
     campEnd.on('blur', function(){

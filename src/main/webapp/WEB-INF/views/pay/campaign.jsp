@@ -68,6 +68,7 @@ pageEncoding="UTF-8"%>
     		<div class="campaign-payment-title">최종 금액</div>
     		<div class="campaign-payment-content">가격</div>
     	</div>
+    	<input type="hidden" name="totalPay" id="totalPayHidden" readonly>
     </form>
     </div>
 	<div class ="payment-bottom flex-row">

@@ -68,9 +68,14 @@ public class WidgetController {
     @GetMapping("/adv/pay/{cmpnId}")
     public String PayAdv(@PathVariable String cmpnId, Model model,
     		@SessionAttribute(value = "__LOGIN_USER__", required = false) UserVO loginUser ) {
+    	// cmpnId 로 결재내역 검색
+    	String amount = this.payService.payInfoServiceCampaignAmount(cmpnId);
     	
-
-    	return "pay/checkout";
+    	
+    	model.addAttribute("amount", amount );
+    	model.addAttribute("usrId", loginUser.getUsrId());
+    	model.addAttribute("cmpnId", cmpnId);
+    	return "pay/checkoutcmpn";
     	
     }
     

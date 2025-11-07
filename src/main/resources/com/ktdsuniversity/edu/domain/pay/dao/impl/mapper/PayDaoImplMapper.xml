@@ -253,14 +253,66 @@
        OR CMPN_PRNT_ID = #{cmpnId})
      AND USR_ID = #{usrId}
 </update>
+<select id="selectCmpnPayment"
+        parameterType="com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentCampaignVO"
+        resultType="string">
+		SELECT CASE 
+		         WHEN EXISTS (SELECT 1 
+		                        FROM CMPN_PYMNT 
+		                       WHERE CMPN_ID = #{cmpnId} )
+		         THEN 'Y' 
+		         ELSE 'N' 
+		       END
+		FROM dual
+</select>
+<update id="updatePaymentInfoCampaignSave"
+        parameterType="com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentCampaignVO">
+		UPDATE CMPN_PYMNT
+		   SET AMNT = #{totalPay}
+		 WHERE CMPN_ID = #{cmpnId}        
+</update>
+<insert id="insertPaymentInfoCampaignSave"
+        parameterType="com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentCampaignVO">
+		INSERT INTO CMPN_PYMNT
+		(CMPN_PYMNT_ID
+		, CMPN_ID
+		, PYMNT_CD
+		, AMNT
+		, CRT_DT
+		, CRTR
+		, UPDT_DT
+		, MTTR
+		, DLT_YN
+		, ORDER_ID
+		, PAYMENT_KEY)
+		VALUES
+		( 'CMPN_PYMNT-' || TO_CHAR(SYSDATE, 'YYYYMMDD-') || LPAD(SEQ_CMPN_PYMNT_PK.NEXTVAL, 6, 0)
+		, #{cmpnId}
+		, '9002'
+		, #{totalPay}
+		, SYSDATE
+		, 'SYSTEM'
+		, SYSDATE
+		, 'SYSTEM'
+		, 'N' 
+		, NULL
+		, NULL
+		)
+</insert>
+<select id="selectPayInfoServiceCampaignAmount"
+        resultType="string">
+        SELECT AMNT
+          FROM CMPN_PYMNT
+         WHERE CMPN_ID = #{cmpnId}
+</select>
+<update id="updateBeforeCampaignPaymentInfoSave"
+        parameterType="com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO">
+        UPDATE CMPN_PYMNT
+           SET ORDER_ID =#{clientOrderId}
+         WHERE CMPN_ID=#{clientId}
+</update>
 
 </mapper>
-
-
-       
-       
-
-
 
 
 

@@ -35,4 +35,14 @@ public interface PayDao {
 
 	int updatePayInfoCampaignSave(RequestPaymentCampaignVO requestPaymentCampaignVO);
 
+	String selectCmpnPayment(RequestPaymentCampaignVO requestPaymentCampaignVO);
+
+	int updatePaymentInfoCampaignSave(RequestPaymentCampaignVO requestPaymentCampaignVO);
+
+	int insertPaymentInfoCampaignSave(RequestPaymentCampaignVO requestPaymentCampaignVO);
+
+	String selectPayInfoServiceCampaignAmount(String cmpnId);
+
+	int updateBeforeCampaignPaymentInfoSave(RequestPaymentVO requestPaymentVO);
+
 }

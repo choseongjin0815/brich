@@ -4,8 +4,15 @@ import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 
 public class RequestPaymentCampaignVO extends CampaignVO{
 	
-	public String usrId;
-
+	private String usrId;
+	private String totalPay;
+	
+	public String getTotalPay() {
+		return this.totalPay;
+	}
+	public void setTotalPay(String totalPay) {
+		this.totalPay = totalPay;
+	}
 	public String getUsrId() {
 		return this.usrId;
 	}
@@ -14,7 +21,7 @@ public class RequestPaymentCampaignVO extends CampaignVO{
 	}
 	@Override
 	public String toString() {
-		return super.toString()+ "RequestPaymentCampaignVO [ usrId=" + usrId + "]";
+		return "RequestPaymentCampaignVO [usrId=" + usrId + ", totalPay=" + totalPay + "]";
 	}
 	
 	

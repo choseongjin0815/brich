@@ -25,5 +25,7 @@ public interface PayService {
 
 	int payInfoCampaignSave(RequestPaymentCampaignVO requestPaymentCampaignVO);
 
+	String payInfoServiceCampaignAmount(String cmpnId);
+
 
 }

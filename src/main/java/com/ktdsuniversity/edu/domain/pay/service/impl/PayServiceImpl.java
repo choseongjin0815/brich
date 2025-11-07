@@ -120,7 +120,8 @@ public class PayServiceImpl implements PayService{
 		if(autr.equals("1002") || autr.equals("1003")) {  //구독
 			count = this.payDao.insertBeforeSubscribePaymentInfoSave(requestPaymentVO);
 		} else if (autr.equals("1004")){
-			count = this.payDao.insertBeforeCampaignPaymentInfoSave(requestPaymentVO);
+//			count = this.payDao.insertBeforeCampaignPaymentInfoSave(requestPaymentVO);
+			count = this.payDao.updateBeforeCampaignPaymentInfoSave(requestPaymentVO);
 		} else {
 			return null ;
 		}
@@ -142,7 +143,21 @@ public class PayServiceImpl implements PayService{
 	@Override
 	public int payInfoCampaignSave(RequestPaymentCampaignVO requestPaymentCampaignVO) {
 		int count = this.payDao.updatePayInfoCampaignSave(requestPaymentCampaignVO);
+		
+		// 결제정보 있는지 확인
+		String isYN = this.payDao.selectCmpnPayment(requestPaymentCampaignVO);
+		if(isYN.equals("Y")) {
+			count = this.payDao.updatePaymentInfoCampaignSave(requestPaymentCampaignVO);
+		}else {
+			int count2 = this.payDao.insertPaymentInfoCampaignSave(requestPaymentCampaignVO);
+		}
 		return count;
+	}
+
+
+	@Override
+	public String payInfoServiceCampaignAmount(String cmpnId) {
+		return this.payDao.selectPayInfoServiceCampaignAmount(cmpnId);
 	}
 	
 	
