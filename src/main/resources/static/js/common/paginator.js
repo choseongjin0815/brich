@@ -17,9 +17,11 @@ $().ready(function() {
                                 
                                  var pageNo = $(this).data("page-no");
                                  var listSize = 10;
-                                 if(window.location.href.includes("/adv/campaign/list")){
+                                 
+                                 if (window.location.pathname === "/adv/campaign/list") {
                                     listSize = 8;
                                  }
+                                 
                                  url = "";
                                  if (window.location.search === "") {
                                     url = window.location.pathname + "?pageNo=" + pageNo + "&listSize=" + listSize;

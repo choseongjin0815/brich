@@ -135,7 +135,7 @@
     <select id="selectCampaignStateByCmpnPstAdptId"
             parameterType="string"
             resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
-        SELECT STTS_CD
+        SELECT C.STTS_CD
              , C.USR_ID
 		  FROM CMPN C
 		 INNER JOIN CMPN_PST_ADPT CPA

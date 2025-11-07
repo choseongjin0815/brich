@@ -581,10 +581,10 @@ input[name="offrPrc"] {
 
 .modal-post {
   width: 1250px;
-  max-height: 700px;
+  max-height: 800px;
   box-sizing: border-box;
   border-radius: 10px;
-  padding: 20px;
+  padding: 25px 15px 25px 25px;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-gutter: stable;
@@ -602,6 +602,7 @@ input[name="offrPrc"] {
   & > div:nth-child(2) {
     width: 1200px;
     height: 80px;
+    color: #5275c1;
 
     border-bottom: 1px solid #d3d3d3;
     font-size: 2.25rem;
@@ -1006,7 +1007,7 @@ input[name="offrPrc"] {
             padding: 0;
         }
         
-        & > .deny-submit {
+        & > .deny-submit-text {
             padding: 0px 20px;
         }
         
@@ -1015,4 +1016,22 @@ input[name="offrPrc"] {
             gap: 10px;
         }
     }
+}
+
+.user-detail-container {
+	display: grid;
+    grid-template-columns: repeat(2, 425px);
+    gap: 20px;
+    padding: 15px;
+}
+
+button[name=blog-detail-info] {
+	color: #fff;
+    background-color: #5275C1;
+    border-radius: 8px;
+    border: none;
+}
+
+.user-name-space {
+	color: #7B61FF;
 }

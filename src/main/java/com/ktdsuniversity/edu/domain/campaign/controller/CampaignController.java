@@ -1,4 +1,4 @@
-package com.ktdsuniversity.edu.domain.campaign.controller;
+	package com.ktdsuniversity.edu.domain.campaign.controller;
 
 import java.util.List;
 
@@ -14,8 +14,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
+import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
+import com.ktdsuniversity.edu.domain.blog.vo.DailyVisitorVO;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogIndexListVO;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
-import com.ktdsuniversity.edu.domain.campaign.vo.PostReturnHistoryVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseModifyCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
@@ -33,6 +40,7 @@ import com.ktdsuniversity.edu.global.common.AjaxResponse;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 import com.ktdsuniversity.edu.global.exceptions.BrichException;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -42,6 +50,10 @@ public class CampaignController {
 
     @Autowired
     private CampaignService campaignService;
+    
+    @Autowired
+    private BlogDataService blogDataService;
+    
     
     @GetMapping("/campaigndetail/{campaignId}")
     public String campaignDetailPage(@PathVariable String campaignId, Model model,
@@ -436,5 +448,27 @@ public class CampaignController {
 		response.setBody(history);
 		
 		return response;
+	}
+	
+	@GetMapping("/adv/blog-info/{usrId}")
+	public String viewBlogDashBoard(@PathVariable String usrId, HttpSession session, Model model, RequestExpireSoonCampaignVO requestExpireSoonCampaignVO, RequestBlogIndexListVO requestBlogIndexListVO) throws JsonProcessingException {
+
+		List<BlogIndexVO>indexResult = 
+				this.blogDataService.readBlogIndexList(usrId);
+
+		List<DailyVisitorVO> dailyVisitorsResult =
+				this.blogDataService.selectDailyVisitors(usrId);
+
+		double currentIndex = this.blogDataService.selectMostRecentIndex(usrId);
+		int totalVisitor = this.blogDataService.selectTotalVisitor(usrId);
+		
+		model.addAttribute("user", usrId);
+		model.addAttribute("dailyVisitorsResult", dailyVisitorsResult);
+		model.addAttribute("index", indexResult);
+		model.addAttribute("currentIndex",currentIndex);
+		model.addAttribute("totalVisitor", totalVisitor);
+
+
+		return "campaign/userDetail";
 	}
 }

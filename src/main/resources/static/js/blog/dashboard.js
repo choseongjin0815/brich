@@ -66,5 +66,10 @@ $().ready(function(){
 	$(window).on("click", function(e) {
 		if ($(e.target).is(modal)) modal.fadeOut(200);
 	});
+    
+    var url = new URL(window.location.href);
+    var searchParam = url.searchParams;
+    var userName = searchParam.get("userName");
+    $(".user-name-space").text(userName);
 
 })

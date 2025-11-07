@@ -72,62 +72,82 @@ $().ready(function() {
     });
     
     $(".view-post").on("click", function() {
-        postState = $(this).closest("div.applicant").children("button[name=postState]").text();
-        postId = $(this).closest(".applicant").children(".user").children(".logId").data("cmpn-apply-id");
+        var postState = $(this).closest("div.applicant").children("button[name=postState]").text();
+        var postId = $(this).closest(".applicant").children(".user").children(".logId").data("cmpn-apply-id");
+        var denyCount = $(this).data("deny-count");
         
         $.get("/adv/post-deny-history/" + postId, function(response) {
-            var deny = response.body;
-            var denyBlock = $(".deny-history");
-            for(i = 0; i < deny.length; i++) {
-                rsnCount = $("<div></div>");
-                rsnCount.text("반려 " + (i+1) + "회");
-                rsnCount.addClass("deny");
+            if (response.error) {
+                alert(response.error.message);
+                console.log(response.error);
+            }
+            else {
+                $(".modal").css("display", "flex");
                 
-                denyRsn = $("<div></div>");
-                denyRsn.text("반려 사유 : " + deny[i].postRetnRsn);
-                denyRsn.addClass("deny-reason");
+                var deny = response.body;
+                var denyBlock = $(".deny-history");
+                var denyCountBlock = $("<div></div>");
+                denyCountBlock.text("반려: " + denyCount + "회");
+                denyBlock.append(denyCountBlock);
+                var denyGuide = $("<div></div>");
+                denyGuide.text("반려는 3회까지 가능합니다.");
+                denyGuide.css("font-size", "0.85rem");
+                denyGuide.css("color", "#aaa");
+                denyBlock.append(denyGuide);
                 
-                if (deny[i].retnFile.length > 0) {
-                    files = deny[i].retnFile;
-                    fileGroup = deny[i].retnFlGrpId;
-                    fileBlock = $("<div></div>");
-                    fileBlock.addClass("deny-file");
-                    fileBlock.text("파일: ");
-                    for(j = 0; j < files.length; j++) {
-                        file = $("<a></a>");
-                        file.attr("href", "/file/" + postId + "/" + fileGroup + "/" + files[j].flId);
-                        file.text(files[j].flNm);
-                        fileBlock.append(file);
+                for(i = 0; i < deny.length; i++) {
+                    rsnCount = $("<div></div>");
+                    rsnCount.text("반려 " + (i+1) + "회");
+                    rsnCount.addClass("deny");
+                    
+                    denyRsn = $("<div></div>");
+                    denyRsn.text("반려 사유 : " + deny[i].postRetnRsn);
+                    denyRsn.addClass("deny-reason");
+                    
+                    if (deny[i].retnFile.length > 0) {
+                        files = deny[i].retnFile;
+                        fileGroup = deny[i].retnFlGrpId;
+                        fileBlock = $("<div></div>");
+                        fileBlock.addClass("deny-file");
+                        fileBlock.text("파일: ");
+                        for(j = 0; j < files.length; j++) {
+                            file = $("<a></a>");
+                            file.attr("href", "/file/" + postId + "/" + fileGroup + "/" + files[j].flId);
+                            file.text(files[j].flNm);
+                            fileBlock.append(file);
+                        }
+                        denyRsn.append(fileBlock);
                     }
-                    denyRsn.append(fileBlock);
-                }
-                rsnCount.append(denyRsn);
-                
-                submitChg = $("<div></div>");
-                submitChg.text("재제출 : " + deny[i].postSubmitChgCn);
-                submitChg.addClass("deny-submit");
-                
-                if (deny[i].submitFile.length > 0) {
-                    files = deny[i].submitFile;
-                    fileGroup = deny[i].submitFlGrpId;
-                    fileBlock = $("<div></div>");
-                    fileBlock.addClass("deny-file");
-                    fileBlock.text("파일: ");
-                    for(j = 0; j < files.length; j++) {
-                        file = $("<a></a>");
-                        file.attr("href", "/file/" + postId + "/" + fileGroup + "/" + files[j].flId);
-                        file.text(files[j].flNm);
-                        fileBlock.append(file);
+                    rsnCount.append(denyRsn);
+                    
+                    if (deny[i].postSubmitChgCn !== null) {
+                        submitChg = $("<div></div>");
+                        submitChg.text("재제출 : " + deny[i].postSubmitChgCn);
+                        submitChg.addClass("deny-submit-text");
+                        
+                        if (deny[i].submitFile.length > 0) {
+                            files = deny[i].submitFile;
+                            fileGroup = deny[i].submitFlGrpId;
+                            fileBlock = $("<div></div>");
+                            fileBlock.addClass("deny-file");
+                            fileBlock.text("파일: ");
+                            for(j = 0; j < files.length; j++) {
+                                file = $("<a></a>");
+                                file.attr("href", "/file/" + postId + "/" + fileGroup + "/" + files[j].flId);
+                                file.text(files[j].flNm);
+                                fileBlock.append(file);
+                            }
+                            submitChg.append(fileBlock);
+                        }
+                        rsnCount.append(submitChg);
                     }
-                    submitChg.append(fileBlock);
+                    
+                   denyBlock.append(rsnCount);
                 }
-                rsnCount.append(submitChg);
-                
-               denyBlock.append(rsnCount);
             }
         });
         
-        if (postState === "검토중") {
+        if (postState === "검토중" && denyCount < 3) {
             approveButton = $("<button type='button'></button>")
             approveButton.addClass("button_120_50");
             approveButton.addClass("post-approve");
@@ -150,14 +170,18 @@ $().ready(function() {
             denyButton.addClass("post-deny");
             denyButton.on("click", function() {
                     $(".deny-container").css("display", "block");
+                    var today = new Date();
+                    today.setDate(today.getDate() + 7);
+                    var year = today.getFullYear();
+                    var month = String(today.getMonth() + 1).padStart(2, '0');
+                    var day = String(today.getDate()).padStart(2, '0');
+                    $("input[name=pstDdln]").val(year + "-" + month + "-" + day);
                 });
             denyButton.text("반려");
             
             $(".button-list").append(approveButton);
             $(".button-list").append(denyButton);
         }
-        
-        $(".modal").css("display", "flex");
         
         var url = $(this).data("post-url");
         var postUrl = $("<a></a>");
@@ -230,5 +254,17 @@ $().ready(function() {
     
     $(".modal-close").on("click", function() {
         $(".deny-history").empty();
+        $(".deny-history").css("display", "none");
+        $(".deny-history-hide").addClass("deny-history-show").removeClass("deny-history-hide");
+    });
+    
+    $("button[name=blog-detail-info]").on("click", function() {
+        var userId = $(this).data("blog-id");
+        var userName = $(this).data("blog-name");
+        var url = "/adv/blog-info/" + userId + "?userName=" + userName;
+        var name = "유저 정보";
+        var option = "width=900, height=500, left=300, top=300"
+        
+        window.open(url, name, option);
     });
 });
