@@ -10,6 +10,11 @@ pageEncoding="UTF-8"%>
       <!-- <img class = "cmpn-image" src=" /file/1234/${campaignList.flGrpId}/${campaignList.fileVoList[0].flId}"/>  -->
            <img class = "cmpn-image" src=" /file/1234/FG-20251104-000155/FL-20251104-000279"/>
         </c:if>
+        <c:if test="${empty campaignList.fileVoList[0].flPth}" > 
+           <img class = "cmpn-image" src=" /img/image13.png"/>
+        </c:if>
+        <c:if test="${(sessionScope.__LOGIN_USER__.autr == 1002 
+            or sessionScope.__LOGIN_USER__.autr == 1003)}">
          <c:if test="${not empty sessionScope.__LOGIN_USER__ }" > 
               <c:set var="love" value="${campaignList.favYn eq 'Y'}" />
               <div
@@ -20,6 +25,7 @@ pageEncoding="UTF-8"%>
                   <div class="love-off ${love ? 'display-none' : ''}"></div>
               </div>
            </c:if>
+          </c:if>
         </div>
         <div class="campaign-one-title padding-10px">
           <c:if test="${not empty campaignList.parentArea}">

@@ -19,8 +19,8 @@ pageEncoding="UTF-8"%>
 <div class="main flex-column side-padding">
     <div class="px36blue campaign-title-area height-center">캠페인 결제하기</div>
     <div class="flex-column flex-cente box-shadow">
-    <form>
-    	<div class="campaign-payment-block">
+    <form id="payForm">
+    	<div class="campaign-payment-block" id="campaign-payment-block" data-cmpn-id="${detail.cmpnId }">
     		<div class="campaign-payment-title">상품정보</div>
     		<div class="campaign-payment-content">${detail.cmpnTitle }</div>
     	</div>
@@ -39,17 +39,17 @@ pageEncoding="UTF-8"%>
 				
 				  <div>
 				    <div>모집 마감일</div>
-				    <input type="date" id="endDate" name="rcrtEndDt" disabled/>
+				    <input type="date" id="endDate" name="rcrtEndDt" readonly/>
 				  </div>
 				
 				  <div>
 				    <div>캠페인 시작일</div>
-				    <input type="date" id="campStartDate" disabled/>
+				    <input type="date" id="campStartDate" readonly/>
 				  </div>
 				
 				  <div>
 				    <div>캠페인 마감일</div>
-				    <input type="date" id="pstEndDt" name="campEndDt" />
+				    <input type="date" id="pstEndDt" name="pstEndDt" />
 				  </div>
 				</div>
     	</div>
@@ -60,7 +60,7 @@ pageEncoding="UTF-8"%>
     	<div> 총 모집일과 인원 수를 계산하여 총 결제 금액이 결정됩니다 </div>
     	<div class="campaign-payment-block">
     		<div class="campaign-payment-title">요금 상세</div>
-    		<div class="campaign-payment-content payPrice" data-rcrtprsnn=" ${detail.personPrice}" data-dayprice="${detail.dayPrice}">
+    		<div class="campaign-payment-content payPrice" data-rcrtprsnn="${detail.personPrice}" data-dayprice="${detail.dayPrice}">
     			(${detail.rcrtPrsnn} 명 x ${detail.personPrice }원) + ( <span id="payDay"></span>일 x ${detail.dayPrice }원) =  <span class="total-pay"></span>원 
     		</div>
     	</div>

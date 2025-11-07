@@ -242,7 +242,18 @@
             WHERE CMPN.CMPN_ID = #{cmpnId}
               AND CMPN.USR_ID  = #{usrId} 		 
  </select>
- 
+<update id="updatePayInfoCampaignSave" parameterType="map">
+  UPDATE CMPN
+     SET RCRT_STRT_DT = TO_DATE(#{rcrtStrtDt, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+       , PRGRSS_DRTN  = TO_NUMBER(#{prgrssDrtn,  jdbcType=VARCHAR})
+       , RCRT_END_DT  = TO_DATE(#{rcrtEndDt,   jdbcType=VARCHAR}, 'YYYY-MM-DD')
+       , PST_END_DT   = TO_DATE(#{pstEndDt,    jdbcType=VARCHAR}, 'YYYY-MM-DD')
+       , CMPN_END_DT  = TO_DATE(#{pstEndDt,   jdbcType=VARCHAR}, 'YYYY-MM-DD')
+   WHERE (CMPN_ID = #{cmpnId}
+       OR CMPN_PRNT_ID = #{cmpnId})
+     AND USR_ID = #{usrId}
+</update>
+
 </mapper>
 
 

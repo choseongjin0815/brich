@@ -51,6 +51,7 @@ $().ready(function() {
         var campaignId = $(".apply-blg").data("campaign-id");
         $.post("/blgr/apply/" + campaignId ,function() {
             alert("신청완료!");
+            location.reload();
             $(".apply-blg").toggleClass('display-none');
             $(".apply-cancel-blg").toggleClass('display-none');
         })
@@ -59,6 +60,7 @@ $().ready(function() {
         var campaignId = $(".apply-cancel-blg").data("campaign-id");
         $.post("/blgr/apply/" + campaignId ,function() {
             alert("취소완료!");
+            location.reload();
             $(".apply-cancel-blg").toggleClass('display-none');
             $(".apply-blg").toggleClass('display-none');
         })

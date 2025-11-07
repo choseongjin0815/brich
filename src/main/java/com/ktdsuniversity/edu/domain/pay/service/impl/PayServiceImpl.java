@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.domain.pay.dao.PayDao;
 import com.ktdsuniversity.edu.domain.pay.service.PayService;
+import com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentCampaignVO;
 import com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO;
 import com.ktdsuniversity.edu.domain.pay.vo.response.ResponsePaymentVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
@@ -135,6 +136,13 @@ public class PayServiceImpl implements PayService{
 		param.put("usrId",usrId);	
 		ResponseCampaignVO detail = this.payDao.selectReadCampaignPayment(param);
 		return detail;
+	}
+
+
+	@Override
+	public int payInfoCampaignSave(RequestPaymentCampaignVO requestPaymentCampaignVO) {
+		int count = this.payDao.updatePayInfoCampaignSave(requestPaymentCampaignVO);
+		return count;
 	}
 	
 	

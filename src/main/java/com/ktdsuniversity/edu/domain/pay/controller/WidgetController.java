@@ -49,7 +49,7 @@ public class WidgetController {
     private PayService payService;
     
     @GetMapping("/blgr/pay/{cdId}")
-    public String pay(@PathVariable String cdId, Model model,
+    public String PayBlgr(@PathVariable String cdId, Model model,
 			 @SessionAttribute(value = "__LOGIN_USER__", required = false) UserVO loginUser ) {
     	
     	// 결제 cdId 로 클라이언트에서 전달할 정보 조회하기
@@ -63,7 +63,15 @@ public class WidgetController {
     	model.addAttribute("usrId", loginUser.getUsrId());
     	return "pay/checkout";
     	
-    	//cmpnid 광고주는 이거 넣어주기
+    }
+    
+    @GetMapping("/adv/pay/{cmpnId}")
+    public String PayAdv(@PathVariable String cmpnId, Model model,
+    		@SessionAttribute(value = "__LOGIN_USER__", required = false) UserVO loginUser ) {
+    	
+
+    	return "pay/checkout";
+    	
     }
     
     @PostMapping("/orders/prepay")

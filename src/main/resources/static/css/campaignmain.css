@@ -13,7 +13,16 @@
 	padding : 20px 0 20px 40px;	
 }
 
-
+.campaign-fav{
+     position:absolute;
+     top:10px;
+     left:10px;
+}
+.campaign-fav1{
+     position:relative;
+     top:10px;
+     left:10px;
+}
 .campaign-payment-block {
 	margin-bottom: 30px;
 	.campaign-payment-title{
@@ -91,6 +100,7 @@
             width:320px;
             background-color : #DDE1FF;
             border-radius : 15px;
+            position : relative;
             & > .cmpn-image{
 	            height : 100%;
 	            width : 100%;   

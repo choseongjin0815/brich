@@ -9,12 +9,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.domain.pay.service.PayService;
+import com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentCampaignVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
+import com.ktdsuniversity.edu.global.common.AjaxResponse;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 @Controller
@@ -55,4 +59,20 @@ public class PayController {
     	
     	return "pay/campaign";
     }
+	
+	@ResponseBody
+	@PostMapping("/adv/pay/campaign/{cmpnId}")
+	public AjaxResponse advCampaignDateSave(@PathVariable String cmpnId,RequestPaymentCampaignVO requestPaymentCampaignVO,
+									@SessionAttribute(value = "__LOGIN_USER__") UserVO loginUser) {
+		requestPaymentCampaignVO.setUsrId(loginUser.getUsrId());
+		
+		log.info("결제 입력 파라미터 값 : " + requestPaymentCampaignVO.toString());
+		
+    	int count = this.payService.payInfoCampaignSave(requestPaymentCampaignVO);
+    	
+    	AjaxResponse ajaxResponse = new AjaxResponse();
+    	ajaxResponse.setBody(count);
+    	return ajaxResponse;
+	}
+
 }
