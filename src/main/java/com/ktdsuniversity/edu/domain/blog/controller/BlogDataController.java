@@ -8,8 +8,6 @@ import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ktdsuniversity.edu.domain.blog.service.DailyVisitorService;
-import com.ktdsuniversity.edu.domain.blog.service.GoldenKeyWordService;
 import com.ktdsuniversity.edu.domain.blog.vo.*;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 import org.slf4j.Logger;
@@ -38,11 +36,6 @@ public class BlogDataController {
 
 	@Autowired BlogDataService blogDataService;
 
-	@Autowired
-	DailyVisitorService dailyVisitorService;
-
-	@Autowired
-	GoldenKeyWordService goldenKeyWordService;
 
 	@GetMapping("/blog/{usrId}/dashboard")
 	public String viewBlogDashBoard(@PathVariable String usrId, HttpSession session, Model model, RequestExpireSoonCampaignVO requestExpireSoonCampaignVO, RequestBlogIndexListVO requestBlogIndexListVO) throws JsonProcessingException {
@@ -61,13 +54,15 @@ public class BlogDataController {
 				this.blogDataService.readBlogIndexList(usrId);
 
 		List<DailyVisitorVO> dailyVisitorsResult =
-				this.dailyVisitorService.selectDailyVisitors(usrId);
+				this.blogDataService.selectDailyVisitors(usrId);
 		List<CommonCodeVO> goldenKeywordList =
-				this.goldenKeyWordService.selectUserCategoryKeywords(usrId);
+				this.blogDataService.selectUserCategoryKeywords(usrId);
 		ObjectMapper mapper = new ObjectMapper();
 		String goldenKeywordListJson = mapper.writeValueAsString(goldenKeywordList);
 
 		double currentIndex = this.blogDataService.selectMostRecentIndex(usrId);
+		int totalVisitor = this.blogDataService.selectTotalVisitor(usrId);
+
 		model.addAttribute("user", loginUser);
 		model.addAttribute("dailyVisitorsResult", dailyVisitorsResult);
 		model.addAttribute("list", result);
@@ -76,7 +71,7 @@ public class BlogDataController {
 		model.addAttribute("index", indexResult);
 		model.addAttribute("goldenKeywordListJson", goldenKeywordListJson);
 		model.addAttribute("currentIndex",currentIndex);
-
+		model.addAttribute("totalVisitor", totalVisitor);
 
 		return "blog/dashboard";
 	}

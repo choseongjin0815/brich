@@ -152,7 +152,7 @@
 				<div class="dashboard-title">나의 블로그 방문자 수</div>
 				<button id="daily-visitor-detail" class="dashboard-detail-btn">자세히 보기</button>
 			</div>
-			<div id="total-visitor">총 방문자 수 1,119,000</div>
+			<div id="total-visitor">총 방문자 수   <span>${totalVisitor}</span></div>
 			<span class="sub-info">▲ 2.1% 지난 주 대비</span>
 			<canvas id="dailyVisitorChart"></canvas>
 		</div>

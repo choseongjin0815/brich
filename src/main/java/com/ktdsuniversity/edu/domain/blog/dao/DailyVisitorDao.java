@@ -11,4 +11,6 @@ public interface DailyVisitorDao {
 
     List<DailyVisitorVO> selectDailyVisitor(String usrId);
 
+    int selectTotalVisitor(String usrId);
+
 }

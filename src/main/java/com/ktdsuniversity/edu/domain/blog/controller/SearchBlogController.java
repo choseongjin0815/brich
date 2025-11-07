@@ -2,10 +2,6 @@ package com.ktdsuniversity.edu.domain.blog.controller;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ktdsuniversity.edu.domain.blog.service.BlogRankService;
-
-import com.ktdsuniversity.edu.domain.blog.service.DailyVisitorService;
-import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
-import com.ktdsuniversity.edu.domain.blog.vo.DailyVisitorVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -16,9 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-
 
 /************************************************
  *
