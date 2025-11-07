@@ -57,10 +57,12 @@
 				        </c:if>
 					</div>
 				    <c:if test="${not empty sessionScope.__LOGIN_USER__ }" > 
+				        <c:if test="${(sessionScope.__LOGIN_USER__.autr == 1002 
+                              or sessionScope.__LOGIN_USER__.autr == 1003)}">
 						<div class="cmpn-title-love">
 				            <c:if test="${not empty sessionScope.__LOGIN_USER__ }" > 
 				                <c:set var="love" value="${detail.favYn eq 'Y'}" />
-				                <div class="campaign-fav love-${detail.favYn}"
+				                <div class="campaign-fav campaign-fav1 love-${detail.favYn}"
 				                     data-usr-id="${sessionScope.__LOGIN_USER__.usrId}"
 				                     data-cmpn-id="${detail.cmpnId}"> 
 				                <div class="love-on ${love ? '' : 'display-none'}"></div>
@@ -68,6 +70,7 @@
 				              </div>
 				            </c:if>							
     					</div>
+					   </c:if>
 					</c:if>
 				</div>
 	            <div class="cmpn-title-offrCn">${detail.offrCn}</div>

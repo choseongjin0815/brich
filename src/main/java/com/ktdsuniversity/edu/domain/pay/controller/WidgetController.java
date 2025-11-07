@@ -49,7 +49,7 @@ public class WidgetController {
     private PayService payService;
     
     @GetMapping("/blgr/pay/{cdId}")
-    public String pay(@PathVariable String cdId, Model model,
+    public String PayBlgr(@PathVariable String cdId, Model model,
 			 @SessionAttribute(value = "__LOGIN_USER__", required = false) UserVO loginUser ) {
     	
     	// 결제 cdId 로 클라이언트에서 전달할 정보 조회하기
@@ -63,11 +63,25 @@ public class WidgetController {
     	model.addAttribute("usrId", loginUser.getUsrId());
     	return "pay/checkout";
     	
-    	//cmpnid 광고주는 이거 넣어주기
+    }
+    
+    @GetMapping("/adv/pay/{cmpnId}")
+    public String PayAdv(@PathVariable String cmpnId, Model model,
+    		@SessionAttribute(value = "__LOGIN_USER__", required = false) UserVO loginUser ) {
+    	// cmpnId 로 결재내역 검색
+    	String amount = this.payService.payInfoServiceCampaignAmount(cmpnId);
+    	
+    	
+    	model.addAttribute("amount", amount );
+    	model.addAttribute("usrId", loginUser.getUsrId());
+    	model.addAttribute("cmpnId", cmpnId);
+    	return "pay/checkoutcmpn";
+    	
     }
     
     @PostMapping("/orders/prepay")
-    public ResponseEntity<Void> prepay(@RequestBody String jsonBody) {
+    public ResponseEntity<Void> prepay(@RequestBody String jsonBody, 
+    		@SessionAttribute(value = "__LOGIN_USER__") UserVO loginUser) {
         // orderId, usrId, orderName, amount 를 DB나 세션에 저장
     	JSONParser parser = new JSONParser();
     	JSONObject requestData;
@@ -77,7 +91,7 @@ public class WidgetController {
 			String clientCdId = (String) requestData.get("cdId");
 			
 			String clientUsrId = (String) requestData.get("usrId");
-			String clientCmpnId = (String) requestData.get("cmpnid");
+			String clientCmpnId = (String) requestData.get("cmpnId");
 			
 			String clientOrderId = (String) requestData.get("orderId");
 			String clientPrice = String.valueOf(requestData.get("price"));
@@ -104,7 +118,11 @@ public class WidgetController {
             requestPaymentVO.setClientPrice(clientPrice);
             requestPaymentVO.setClientCdId(clientCdId);
             PKkey = this.payService.beforePaymentInfoSave(requestPaymentVO);
-            
+            if(loginUser.getAutr().equals("1004")) {
+            	logger.info("ClientId : " + requestPaymentVO.getClientId());
+            	PKkey = this.payService.beforeCampaigninfo(requestPaymentVO.getClientId());
+            	logger.info("PKkey : " + PKkey);
+            }
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

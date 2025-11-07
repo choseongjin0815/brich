@@ -38,7 +38,7 @@
 			               and detail.pstSttsCd eq null
 			                }">
                         <div class="right-bar-bottom"> 여기는 통계 영역입니다 </div>
-			            <c:set var="isApplied" value="${detail.adptYn eq 'Y'}" />
+			            <c:set var="isApplied" value="${detail.adptYn eq 'N'}" />
                         <div class="right-bar-bottom apply-cancel-blg middle-center ${isApplied ? 'display-none' : ''}" data-campaign-id="${detail.cmpnId}">
                         신청취소
                         </div>                        

@@ -3,6 +3,7 @@ package com.ktdsuniversity.edu.domain.pay.service;
 import java.util.List;
 
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
+import com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentCampaignVO;
 import com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
@@ -21,6 +22,12 @@ public interface PayService {
 	String beforePaymentInfoSave(RequestPaymentVO requestPaymentVO);
 
 	ResponseCampaignVO readCampaignPayment(String cmpnId, String usrId);
+
+	int payInfoCampaignSave(RequestPaymentCampaignVO requestPaymentCampaignVO);
+
+	String payInfoServiceCampaignAmount(String cmpnId);
+
+	String beforeCampaigninfo(String clientCmpnId);
 
 
 }

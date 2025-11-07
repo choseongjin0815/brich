@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.domain.pay.dao.PayDao;
 import com.ktdsuniversity.edu.domain.pay.service.PayService;
+import com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentCampaignVO;
 import com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO;
 import com.ktdsuniversity.edu.domain.pay.vo.response.ResponsePaymentVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
@@ -39,6 +40,7 @@ public class PayServiceImpl implements PayService{
 		log.info("====== 결제정보 유효성 검사 저장 start ======");
 
 		// 테이블 조회 (주문번호, (유저아이디/캠페인번호), 가격)
+		
 		String PKkey = requestPaymentVO.getPKkey();
 		ResponsePaymentVO saveInfo = this.payDao.selectBeforeSaveInfo(PKkey);  //union all
 		
@@ -119,7 +121,8 @@ public class PayServiceImpl implements PayService{
 		if(autr.equals("1002") || autr.equals("1003")) {  //구독
 			count = this.payDao.insertBeforeSubscribePaymentInfoSave(requestPaymentVO);
 		} else if (autr.equals("1004")){
-			count = this.payDao.insertBeforeCampaignPaymentInfoSave(requestPaymentVO);
+//			count = this.payDao.insertBeforeCampaignPaymentInfoSave(requestPaymentVO);
+			count = this.payDao.updateBeforeCampaignPaymentInfoSave(requestPaymentVO);
 		} else {
 			return null ;
 		}
@@ -135,6 +138,33 @@ public class PayServiceImpl implements PayService{
 		param.put("usrId",usrId);	
 		ResponseCampaignVO detail = this.payDao.selectReadCampaignPayment(param);
 		return detail;
+	}
+
+
+	@Override
+	public int payInfoCampaignSave(RequestPaymentCampaignVO requestPaymentCampaignVO) {
+		int count = this.payDao.updatePayInfoCampaignSave(requestPaymentCampaignVO);
+		
+		// 결제정보 있는지 확인
+		String isYN = this.payDao.selectCmpnPayment(requestPaymentCampaignVO);
+		if(isYN.equals("Y")) {
+			count = this.payDao.updatePaymentInfoCampaignSave(requestPaymentCampaignVO);
+		}else {
+			int count2 = this.payDao.insertPaymentInfoCampaignSave(requestPaymentCampaignVO);
+		}
+		return count;
+	}
+
+
+	@Override
+	public String payInfoServiceCampaignAmount(String cmpnId) {
+		return this.payDao.selectPayInfoServiceCampaignAmount(cmpnId);
+	}
+
+
+	@Override
+	public String beforeCampaigninfo(String clientCmpnId) {
+		return this.payDao.selectBeforeCampaigninfo(clientCmpnId);
 	}
 	
 	

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.domain.pay.dao.PayDao;
+import com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentCampaignVO;
 import com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO;
 import com.ktdsuniversity.edu.domain.pay.vo.response.ResponsePaymentVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
@@ -78,6 +79,41 @@ public class PayDaoImpl extends SqlSessionDaoSupport implements PayDao{
 	@Override
 	public ResponseCampaignVO selectReadCampaignPayment(Map<String, String> param) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectReadCampaignPayment" , param);
+	}
+
+	@Override
+	public int updatePayInfoCampaignSave(RequestPaymentCampaignVO requestPaymentCampaignVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updatePayInfoCampaignSave" , requestPaymentCampaignVO);
+	}
+
+	@Override
+	public String selectCmpnPayment(RequestPaymentCampaignVO requestPaymentCampaignVO) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE+"selectCmpnPayment", requestPaymentCampaignVO);
+	}
+
+	@Override
+	public int updatePaymentInfoCampaignSave(RequestPaymentCampaignVO requestPaymentCampaignVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updatePaymentInfoCampaignSave", requestPaymentCampaignVO);
+	}
+
+	@Override
+	public int insertPaymentInfoCampaignSave(RequestPaymentCampaignVO requestPaymentCampaignVO) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertPaymentInfoCampaignSave", requestPaymentCampaignVO);
+	}
+
+	@Override
+	public String selectPayInfoServiceCampaignAmount(String cmpnId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectPayInfoServiceCampaignAmount", cmpnId);
+	}
+
+	@Override
+	public int updateBeforeCampaignPaymentInfoSave(RequestPaymentVO requestPaymentVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateBeforeCampaignPaymentInfoSave", requestPaymentVO);
+	}
+
+	@Override
+	public String selectBeforeCampaigninfo(String clientCmpnId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectBeforeCampaigninfo" , clientCmpnId);
 	}
     
     
