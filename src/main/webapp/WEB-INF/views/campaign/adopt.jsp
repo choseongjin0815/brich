@@ -53,10 +53,10 @@
 		                </div>
 		                <c:choose>
 		                    <c:when test="${empty adopt.pstUrl}">
-		                        <button class="button_50_30 disabled">보기</button>
+		                        <button class="button_50_30 disabled"">보기</button>
 		                    </c:when>
 		                    <c:otherwise>
-		                        <button class="button_50_30 abled view-post" data-post-url="${adopt.pstUrl}">보기</button>
+		                        <button class="button_50_30 abled view-post" data-post-url="${adopt.pstUrl} data-deny-count="${adopt.denyCount}">보기</button>
 		                    </c:otherwise>
 		                </c:choose>
 		                

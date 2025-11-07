@@ -187,6 +187,10 @@
 		           AND CP1.DLT_YN = 'N'
 		           AND CP2.DLT_YN = 'N'
 		           AND CR.DLT_YN = 'N') AS CHT_RM_ID
+		     , (SELECT COUNT(POST_RTRN_HIST_ID)
+                  FROM POST_RTRN_HIST
+                 WHERE POST_ID = CPA.CMPN_PST_ADPT_ID
+                   AND DLT_YN = 'N') AS DENY_COUNT
 		  FROM CMPN_PST_ADPT CPA
 		 INNER JOIN (SELECT USR_ID
 		                  , LOG_ID
