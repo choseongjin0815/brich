@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.PostReturnHistoryVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCampaignAreaVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
@@ -21,6 +22,7 @@ import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestUpdatePstSttsVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseDenyHistoryVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 
@@ -86,7 +88,7 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 
 
 	@Override
-	public String selectCampaignStateByCmpnPstAdptId(String cmpnPstAdptId) {
+	public CampaignVO selectCampaignStateByCmpnPstAdptId(String cmpnPstAdptId) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectCampaignStateByCmpnPstAdptId", cmpnPstAdptId);
 	}
 
@@ -262,5 +264,15 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	@Override
 	public int updateCmpnPrntIdByCmpnId(RequestCreateCmpnVO requestCreateCmpnVO) {
 		return super.getSqlSession().update(this.NAME_SPACE + "updateCmpnPrntIdByCmpnId", requestCreateCmpnVO);
+	}
+
+	@Override
+	public int updateTemporaryCampaignByCmpnId(RequestCreateCmpnVO requestCreateCmpnVO) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateTemporaryCampaignByCmpnId", requestCreateCmpnVO);
+	}
+
+	@Override
+	public List<ResponseDenyHistoryVO> selectDenyHistoryByCmpnPstAdptId(String postId) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectDenyHistoryByCmpnPstAdptId", postId);
 	}
 }

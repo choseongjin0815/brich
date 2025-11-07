@@ -241,7 +241,6 @@ body {
 .campaign-content-wrapper {
 	margin: 50px auto;
 	width: fit-content;
-	height: 750px;
 	position: relative;
 }
 
@@ -261,6 +260,19 @@ body {
 	gap: 20px;
 	grid-template-columns: repeat(2, 650px);
 	grid-template-rows: repeat(4, auto);
+	height: 650px;
+}
+
+.empty-space {
+	width: 1300px;
+	height: 650px;
+	
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 3rem;
+	color: #5275C1;
+	background-color: #F1F2F7;
 }
 
 #create-campaign {
@@ -349,6 +361,16 @@ input[name="cmpnTitle"] {
         outline: none;
      }
     }
+}
+
+input[name="rcrtPrsnn"] {
+	width: 50px;
+	border-radius: 5px;
+}
+
+input[name="offrPrc"] {
+    width: 100px;
+    border-radius: 5px;
 }
 
 .search-container {
@@ -548,6 +570,7 @@ input[name="cmpnTitle"] {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 99999999;
 
   display: none;
   justify-content: center;
@@ -558,9 +581,13 @@ input[name="cmpnTitle"] {
 
 .modal-post {
   width: 1250px;
+  max-height: 700px;
   box-sizing: border-box;
   border-radius: 10px;
   padding: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
 
   display: flex;
   flex-direction: column;
@@ -731,14 +758,42 @@ input[name="cmpnTitle"] {
   }
 }
 
+.area {
+	& > div {
+	   display: flex;
+	   align-items: flex-end;
+	   gap: 5px;
+	   
+	   & > button {
+	       width: 40px;
+            height: 30px;
+            background-color: #fff;
+            border: 1px solid #5275C1;
+            border-radius: 5px;
+            
+            &:hover {
+                color: #fff;
+                background-color: #5275C1;
+            }
+	   }
+	}
+}
+
 .checked-cities, .area-list {
   font-size: 1rem;
   display: flex;
   gap: 5px;
+  padding: 5px 5px;
 }
 
 .check-city {
-      display: flex;
+    display: flex;
+    gap: 5px;
+    background-color: #F1F2F7;
+    border-radius: 5px;
+    padding: 0 5px;
+    height: 25px;
+    font-size: 0.85rem;
 }
 
 .text-input {
@@ -801,7 +856,32 @@ input[name="cmpnTitle"] {
     background-color: #eee;
     color: #ccc;
     border: 0;
+    }
 }
+
+.create-button-list {
+	text-align: right;
+	
+	& > button {
+	    width: 80px;
+	    height: 45px;
+	    font-size: 1rem;
+	    border: none;
+	    
+        background-color: #fff;
+	}
+	  
+	& > .submit-button {
+        background-color: #1a62f8;
+        color: #fff;
+        border-radius: 10px;
+    }
+    
+    & > button[disabled="disabled"] {
+        background-color: #eee;
+        color: #ccc;
+        border: 0;
+    }
 }
 
 .campaign-block {
@@ -823,6 +903,10 @@ input[name="cmpnTitle"] {
     width: 100px;
     height: 110px;
     border-radius: 10px;
+  }
+  
+  & > div:nth-child(2) {
+    width: 65px;
   }
   
   &:hover {
@@ -890,4 +974,45 @@ input[name="cmpnTitle"] {
 
 .deny-reason {
 	padding: 13px 33px 0 33px;
+}
+
+.require-after::after {
+	content: "* 필수 입력";
+	color: #FB3535;
+	font-size: 0.75rem;
+}
+
+.input-again::after {
+	content: "다시 입력";
+	color: #7B61FF;
+	font-size: 0.75rem;
+}
+
+.deny-history-hide > img {
+	transform: rotate(180deg);
+}
+
+.deny-history {
+	width: inherit;
+    padding: 0 20px;
+    display: none;
+    
+    & > .deny {
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        margin: 10px 0;
+        
+        & > .deny-reason {
+            padding: 0;
+        }
+        
+        & > .deny-submit {
+            padding: 0px 20px;
+        }
+        
+        & .deny-file {
+            display: flex;
+            gap: 10px;
+        }
+    }
 }

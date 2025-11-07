@@ -42,7 +42,10 @@ $().ready(function() {
     });
     
     $(".submit-button").on("click", function() {
-        if (parseInt($("input[name=rcrtPrsnn]").val(), 10) === 0) {
+        if($("input[name=ctgCd]:checked").length === 0) {
+            alert("카테고리를 선택하세요.");
+        }
+        else if (parseInt($("input[name=rcrtPrsnn]").val(), 10) === 0) {
             alert("모집 인원은 0명일 수 없습니다.");
         }
         
@@ -54,8 +57,44 @@ $().ready(function() {
                 hidden.attr("value", checkedList[i].code);
                 $(".hidden-area-list").append(hidden);
             }
+            
+            var urlParams = new URLSearchParams(window.location.search);
+            var sttsCd = urlParams.get("sttsCd");
+            if (sttsCd === "2008" || sttsCd === "2003") {
+                var prevCmpnId = urlParams.get("cmpnId");
+                $("form").attr("action", "/adv/campaign/modify?prevCmpnId=" + prevCmpnId + "&sttsCd=" + sttsCd);
+            }
+            else {
+                $("form").attr("action", "/adv/campaign/write");
+            }
+            
             $("#campaign-submit").submit();
         }
+    });
+    
+    // 임시저장
+    $(".temporary-button").on("click", function() {
+        var title = $("input[name=cmpnTitle]");
+        if (title.val() === '') { title.val("임시저장"); }
+        if ($("input[name=ctgCd]:checked").length === 0) {
+            $("input[name=ctgCd]").attr("checked", "checked");
+        }
+        $("textarea.require-input").each(function() {
+            if ($(this).text() === "") {
+                $(this).text("임시저장 빈 칸");
+            }
+        });
+        
+        var urlParams = new URLSearchParams(window.location.search);
+        var sttsCd = urlParams.get("sttsCd");
+        if (sttsCd === "2008" || sttsCd === "2003") {
+            var prevCmpnId = urlParams.get("cmpnId");
+            $("form").attr("action", "/adv/campaign/temporary?prevCmpnId=" + prevCmpnId + "&sttsCd=" + sttsCd);
+        }
+        else {
+            $("form").attr("action", "/adv/campaign/temporary");
+        }
+        $("#campaign-submit").submit();
     });
     
     if ($("input[type=number]").val() === "") {

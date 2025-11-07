@@ -7,12 +7,14 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.ResponseModifyCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCampaignAreaVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
@@ -27,14 +29,18 @@ import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignwriteVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseDenyHistoryVO;
 import com.ktdsuniversity.edu.domain.file.dao.FileDao;
 import com.ktdsuniversity.edu.domain.file.dao.FileGroupDao;
 import com.ktdsuniversity.edu.domain.file.util.MultipartFileHandler;
 import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
 import com.ktdsuniversity.edu.domain.file.vo.FileVO;
-import com.ktdsuniversity.edu.domain.report.vo.request.RequestReportCreateVO;
+import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 import com.ktdsuniversity.edu.global.config.WebSocketConfig;
+import com.ktdsuniversity.edu.global.exceptions.AjaxException;
+import com.ktdsuniversity.edu.global.exceptions.BrichException;
+import com.ktdsuniversity.edu.global.util.SessionUtil;
 
 @Service
 public class CampaignServiceImpl implements CampaignService {
@@ -233,6 +239,11 @@ public class CampaignServiceImpl implements CampaignService {
 		int adoptCount = this.campaignDao.selectAdoptCountByCmpnId(requestApplicantVO.getCmpnId());
 		CampaignVO campaignInfo = this.campaignDao.selectCampaignInfoByCmpnId(requestApplicantVO.getCmpnId());
 		
+		UserVO userId = SessionUtil.getLoginObject();
+		if (!campaignInfo.getUsrId().equals(userId.getUsrId())) {
+			throw new BrichException("잘못된 접근입니다.", "error/403");
+		}
+		
 		ResponseApplicantListVO applicantList = new ResponseApplicantListVO();
 		applicantList.setApplicantList(applicant);
 		applicantList.setAdoptCount(adoptCount);
@@ -244,10 +255,14 @@ public class CampaignServiceImpl implements CampaignService {
 	@Override
 	@Transactional
 	public boolean updateAdptYnByCmpnPstAdptId(RequestApplicantVO requestApplicantVO) {
-		String cmpnState = this.campaignDao.selectCampaignStateByCmpnPstAdptId(requestApplicantVO.getCmpnPstAdptId());
-		if (!cmpnState.equals("2006")) {
-			// TODO : Ajax 에러 처리 하기
-			throw new IllegalArgumentException("선정 단계가 아닙니다.");
+		CampaignVO campaign = this.campaignDao.selectCampaignStateByCmpnPstAdptId(requestApplicantVO.getCmpnPstAdptId());
+		if (!campaign.getSttsCd().equals("2006")) {
+			throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
+		}
+		
+		UserVO userId = SessionUtil.getLoginObject();
+		if (!campaign.getUsrId().equals(userId.getUsrId())) {
+			throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
 		}
 		
 		int updateCount = this.campaignDao.updateAdptYnByCmpnPstAdptId(requestApplicantVO);
@@ -262,13 +277,15 @@ public class CampaignServiceImpl implements CampaignService {
 		requestApplicantVO.setPageCount(adoptCount);
 		
 		ResponseCampaignVO campaign = this.campaignDao.selectCampaignInfoByCmpnId(requestApplicantVO.getCmpnId());
+		UserVO userId = SessionUtil.getLoginObject();
+		if (!campaign.getUsrId().equals(userId.getUsrId())) {
+			throw new BrichException("잘못된 접근입니다.", "error/403");
+		}
 		
 		ResponseAdoptListVO adoptList = new ResponseAdoptListVO();
 		adoptList.setAdoptList(adopt);
 		adoptList.setCampaignInfo(campaign);
-		adoptList.setCmpnCdNm(this.campaignDao.selectStateNameByStateCode(adoptList.getCampaignInfo().getSttsCd()));
-		
-		// TODO: ResponseAdoptVO에 chtRmId 채팅방 아이디 들어갈 수 있게 service dao mapper 짤 것. query는 짰다 성공!
+		adoptList.setCmpnCdNm(this.campaignDao.selectStateNameByStateCode(adoptList.getCampaignInfo().getSttsCd()));		
 		
 		return adoptList;
 	}
@@ -388,6 +405,17 @@ public class CampaignServiceImpl implements CampaignService {
 	@Transactional
 	@Override
 	public boolean updatePstSttsApproveByCmpnPstAdoptId(RequestApplicantVO requestApplicantVO) {
+		CampaignVO campaign = this.campaignDao.selectCampaignStateByCmpnPstAdptId(requestApplicantVO.getCmpnPstAdptId());
+		if (!campaign.getSttsCd().equals("2007")) {
+			throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
+		}
+		
+		ResponseCampaignVO campaignInfo = this.campaignDao.selectCampaignInfoByCmpnId(campaign.getCmpnId());
+		UserVO userId = SessionUtil.getLoginObject();
+		if (!campaignInfo.getUsrId().equals(userId.getUsrId())) {
+			throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
+		}
+		
 		RequestUpdatePstSttsVO requestUpdatePstSttsVO = new RequestUpdatePstSttsVO();
 		requestUpdatePstSttsVO.setCmpnPstAdptId(requestApplicantVO.getCmpnPstAdptId());
 		requestUpdatePstSttsVO.setStts("6004");
@@ -399,6 +427,17 @@ public class CampaignServiceImpl implements CampaignService {
 	@Transactional
 	@Override
 	public boolean createDenyByCmpnPstAdoptId(RequestDenyVO requestDenyVO) {
+		CampaignVO campaign = this.campaignDao.selectCampaignStateByCmpnPstAdptId(requestDenyVO.getCmpnPstAdptId());
+		if (!campaign.getSttsCd().equals("2007")) {
+			throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
+		}
+		
+		ResponseCampaignVO campaignInfo = this.campaignDao.selectCampaignInfoByCmpnId(campaign.getCmpnId());
+		UserVO userId = SessionUtil.getLoginObject();
+		if (!campaignInfo.getUsrId().equals(userId.getUsrId())) {
+			throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
+		}
+		
 		List<FileVO> uploadResult = this.multipartFileHandler.upload(requestDenyVO.getFile());
 		RequestUpdatePstSttsVO requestUpdatePstSttsVO = new RequestUpdatePstSttsVO();
 		requestUpdatePstSttsVO.setCmpnPstAdptId(requestDenyVO.getCmpnPstAdptId());
@@ -480,6 +519,7 @@ public class CampaignServiceImpl implements CampaignService {
 			requestCreateCmpnVO.setAttchGrpId(fileGroupVO.getFlGrpId());
 		}
 		
+		requestCreateCmpnVO.setSttsCd("2001");
 		int insertCmpnCount = this.campaignDao.insertNewCampaign(requestCreateCmpnVO);
 		
 		if (requestCreateCmpnVO.getArea() != null && insertCmpnCount == 1) {
@@ -510,6 +550,12 @@ public class CampaignServiceImpl implements CampaignService {
 
 	@Override
 	public ResponseCampaignListVO readDenyHistoryByCmpnId(RequestSearchCampaignVO requestSearchCampaignVO) {
+		CampaignVO campaignInfo = this.campaignDao.selectCampaignInfoByCmpnId(requestSearchCampaignVO.getCmpnId());
+		
+		UserVO userId = SessionUtil.getLoginObject();
+		if (!campaignInfo.getUsrId().equals(userId.getUsrId())) {
+			throw new BrichException("잘못된 접근입니다.", "error/403");
+		}
 		
 		List<ResponseCampaignVO> denyList = this.campaignDao.selectDenyListByCmpnId(requestSearchCampaignVO);
 		
@@ -535,11 +581,96 @@ public class CampaignServiceImpl implements CampaignService {
   @Transactional
   @Override
   public boolean modifyNewCampaign(RequestCreateCmpnVO requestCreateCmpnVO) {
-	boolean insert = this.createNewCampaign(requestCreateCmpnVO);
-	boolean modify = false;
-	if (insert) {
-		modify = this.campaignDao.updateCmpnPrntIdByCmpnId(requestCreateCmpnVO) == 1;
+	int modify = 0;
+	if (requestCreateCmpnVO.getSttsCd().equals("2008")) {
+		if (requestCreateCmpnVO.getRoadAddress() != null || requestCreateCmpnVO.getDetailAddress() != null) {
+			String addr = requestCreateCmpnVO.getRoadAddress() + " " + requestCreateCmpnVO.getDetailAddress();
+			requestCreateCmpnVO.setAddrs(addr);
+		}
+		
+		FileVO uploadResult = this.multipartFileHandler.upload(requestCreateCmpnVO.getFile());
+		
+		if (uploadResult != null) {
+			// 1. File Group Insert
+			FileGroupVO fileGroupVO = new FileGroupVO();
+			fileGroupVO.setFlCnt(1);
+			int insertGroupCount = this.fileGroupDao.insertFileGroup(fileGroupVO);
+			
+			// 2. File Insert
+			uploadResult.setFlGrpId(fileGroupVO.getFlGrpId());
+			int insertFileCount = this.fileDao.insertFile(uploadResult);
+			
+			requestCreateCmpnVO.setAttchGrpId(fileGroupVO.getFlGrpId());
+		}
+		requestCreateCmpnVO.setSttsCd("2001");
+		modify = this.campaignDao.updateTemporaryCampaignByCmpnId(requestCreateCmpnVO);
+		
+		if (requestCreateCmpnVO.getArea() != null && modify == 1) {
+			RequestCampaignAreaVO requestCampaignAreaVO = new RequestCampaignAreaVO();
+			requestCampaignAreaVO.setCmpnId(requestCreateCmpnVO.getPrevCmpnId());
+			requestCampaignAreaVO.setUsrId(requestCreateCmpnVO.getUsrId());
+			
+			for(String arCd : requestCreateCmpnVO.getArea()) {
+				requestCampaignAreaVO.setArCd(arCd);
+				int insertAreaCount = this.campaignDao.insertCampaignCategory(requestCampaignAreaVO);
+			}
+		}
 	}
-	return modify;
+	else {
+		requestCreateCmpnVO.setSttsCd("2001");
+		boolean insert = this.createNewCampaign(requestCreateCmpnVO);
+		if (insert) {
+			modify = this.campaignDao.updateCmpnPrntIdByCmpnId(requestCreateCmpnVO);
+		}
+	}
+	return modify == 1;
+  }
+
+  @Transactional
+  @Override
+  public boolean createTemporaryCampaign(RequestCreateCmpnVO requestCreateCmpnVO) {
+	int count = 0;
+	if (requestCreateCmpnVO.getSttsCd() == null) {
+		requestCreateCmpnVO.setSttsCd("2008");
+		count = this.campaignDao.insertNewCampaign(requestCreateCmpnVO);
+	}
+	else if (requestCreateCmpnVO.getSttsCd().equals("2008")) {
+		count = this.campaignDao.updateTemporaryCampaignByCmpnId(requestCreateCmpnVO);
+	}
+	else if (requestCreateCmpnVO.getSttsCd().equals("2003")) {
+		requestCreateCmpnVO.setSttsCd("2008");
+		count = this.campaignDao.insertNewCampaign(requestCreateCmpnVO);
+		if (count == 1) {
+			count = this.campaignDao.updateCmpnPrntIdByCmpnId(requestCreateCmpnVO);
+		}
+	}
+	return count == 1;
+  }
+
+  @Override
+  public ResponseModifyCampaignVO readModifyInfoByCmpnId(String cmpnId) {
+	ResponseCampaignwriteVO common = this.createCampaign();
+	ResponseCampaignVO campaign = this.readCampaignDetail(cmpnId);
+	
+	ResponseModifyCampaignVO modifyInfo = new ResponseModifyCampaignVO();
+	modifyInfo.setCampaign(campaign);
+	modifyInfo.setCommon(common);
+	return modifyInfo;
+  }
+
+  @Override
+  public List<ResponseDenyHistoryVO> readDenyHistoryByCmpnPstAdptId(String postId) {
+//	CampaignVO campaign = this.campaignDao.selectCampaignStateByCmpnPstAdptId(postId);
+//	if (!campaign.getSttsCd().equals("2007")) {
+//		throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
+//	}
+//	
+//	ResponseCampaignVO campaignInfo = this.campaignDao.selectCampaignInfoByCmpnId(campaign.getCmpnId());
+//	UserVO userId = SessionUtil.getLoginObject();
+//	if (!campaignInfo.getUsrId().equals(userId.getUsrId())) {
+//		throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
+//	}
+	
+	return this.campaignDao.selectDenyHistoryByCmpnPstAdptId(postId);
   }
 }
