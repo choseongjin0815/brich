@@ -64,6 +64,8 @@ public class BlogDataController {
 				this.dailyVisitorService.selectDailyVisitors(usrId);
 		List<CommonCodeVO> goldenKeywordList =
 				this.goldenKeyWordService.selectUserCategoryKeywords(usrId);
+		ObjectMapper mapper = new ObjectMapper();
+		String goldenKeywordListJson = mapper.writeValueAsString(goldenKeywordList);
 
 		double currentIndex = this.blogDataService.selectMostRecentIndex(usrId);
 		model.addAttribute("user", loginUser);
@@ -72,10 +74,9 @@ public class BlogDataController {
 		model.addAttribute("user", loginUser);
 		model.addAttribute("paginator", requestExpireSoonCampaignVO);
 		model.addAttribute("index", indexResult);
-		model.addAttribute("goldenKeywordListJson", goldenKeywordList);
+		model.addAttribute("goldenKeywordListJson", goldenKeywordListJson);
 		model.addAttribute("currentIndex",currentIndex);
 
-		log.info("황키 : {}", goldenKeywordList);
 
 		return "blog/dashboard";
 	}

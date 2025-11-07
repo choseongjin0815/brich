@@ -2,6 +2,8 @@ package com.ktdsuniversity.edu.global.exceptions;
 
 public class BrichException extends RuntimeException{
 	
+	private static final long serialVersionUID = -254738828445974509L;
+	
 	private String viewName;
 	private String modelKey;
 	private Object modelValue;

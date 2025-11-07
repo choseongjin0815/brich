@@ -7,6 +7,11 @@ import com.ktdsuniversity.edu.domain.file.vo.FileVO;
 
 public class ResponseCampaignVO extends CampaignVO{
 	
+	
+	private String personPrice;
+	private String dayPrice;
+
+
 	 /**
 	  * 파일 갯수
 	  */
@@ -66,9 +71,7 @@ public class ResponseCampaignVO extends CampaignVO{
 	  * 공통코드 이름
 	  */
 	 private String SttsCdNm;
-	 
-	 	 
-	
+
 	 public String getSttsCdNm() {
 		return this.SttsCdNm;
 	}
@@ -164,12 +167,28 @@ public class ResponseCampaignVO extends CampaignVO{
 	 public void setFileVoList(List<FileVO> fileVoList) {
 		 this.fileVoList = fileVoList;
 	 }
+	 public String getPersonPrice() {
+		return personPrice;
+	}
+
+	public void setPersonPrice(String personPrice) {
+		this.personPrice = personPrice;
+	}
+
+	public String getDayPrice() {
+		return dayPrice;
+	}
+
+	public void setDayPrice(String dayPrice) {
+		this.dayPrice = dayPrice;
+	}
 
 	 @Override
-	 public String toString() {
-		return "ResponseCampaignVO [flCnt=" + flCnt + ", flGrpId=" + flGrpId + ", fileVoList=" + fileVoList
-				+ ", likeCnt=" + likeCnt + ", adptCnt=" + adptCnt + ", area=" + area + ", parentArea=" + parentArea
-				+ ", pstSttsCd=" + pstSttsCd + ", pstSttsCdNm=" + pstSttsCdNm + ", favYn=" + favYn + ", adptYn="
-				+ adptYn + ", SttsCdNm=" + SttsCdNm + super.toString() + "]";
-	 }
+	public String toString() {
+		return "ResponseCampaignVO [personPrice=" + personPrice + ", dayPrice=" + dayPrice + ", flCnt=" + flCnt
+				+ ", flGrpId=" + flGrpId + ", fileVoList=" + fileVoList + ", likeCnt=" + likeCnt + ", adptCnt="
+				+ adptCnt + ", area=" + area + ", parentArea=" + parentArea + ", pstSttsCd=" + pstSttsCd
+				+ ", pstSttsCdNm=" + pstSttsCdNm + ", favYn=" + favYn + ", adptYn=" + adptYn + ", SttsCdNm=" + SttsCdNm
+				+ "]";
+	}
 }

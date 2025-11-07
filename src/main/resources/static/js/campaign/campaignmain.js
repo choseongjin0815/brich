@@ -176,7 +176,7 @@ $().ready(function() {
 	
     $(".button-campaign-modify").on("click", function() {
         cmpnId = $("input[name=campaign-tab]").data("cmpn-id");
-        window.location.href = "/adv/campaign/modify/" + cmpnId;
+        window.location.href = "/adv/campaign/modify?cmpnId=" + cmpnId + "&sttsCd=2003";
     });
     $(".file-insert").off("click").on("click", function() {
         $("#file-input").click();

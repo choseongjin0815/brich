@@ -15,7 +15,18 @@ $().ready(function() {
         }
     });
     
-    $(".require-input").on("keyup", function() {
+    $("input.require-input").on("keyup", function() {
+        var value = $(this).val();
+        if (value === "") {
+            $(this).addClass("require-empty");
+        }
+        else {
+            $(this).removeClass("require-empty");
+        }
+        submitAutoActive();
+    });
+    
+    $("textarea.require-input").on("keyup", function() {
         var value = $(this).val();
         if (value === "") {
             $(this).addClass("require-empty");
@@ -119,7 +130,13 @@ $().ready(function() {
         
     $(".campaign-block").on("click", function() {
         cmpnId = $(this).data("cmpn-id");
-        window.location.href = "/campaigndetail/" + cmpnId;
+        if ($(this).children(".font-brown").text() === "임시저장") {
+            window.location.href = "/adv/campaign/modify?cmpnId=" + cmpnId + "&sttsCd=2008";
+        }
+        
+        else {
+            window.location.href = "/campaigndetail/" + cmpnId;
+        }
     });
     
     // campaignTab js
@@ -159,6 +176,17 @@ $().ready(function() {
 });
 
 function submitAutoActive() {
+    $("input.require-input").each(function() {
+        if ($(this).val() === "") {
+            $(this).addClass("require-empty");
+        }
+    });
+    
+    $("textarea.require-input").each(function() {
+        if($(this).val() === "") {
+            $(this).addClass("require-empty");
+        }
+    });
     var emptyLength = $(".require-empty").length;
     if (emptyLength > 0) {
         $(".auto-active").attr("disabled", "disabled");
