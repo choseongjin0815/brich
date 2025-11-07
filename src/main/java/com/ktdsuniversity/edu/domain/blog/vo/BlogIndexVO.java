@@ -3,6 +3,7 @@ package com.ktdsuniversity.edu.domain.blog.vo;
 public class BlogIndexVO {
 
 	private String usrId;
+	private String logId;
 	private String statDt;
 	private double indxVal;
 	private double indxValAvg5d;
@@ -21,6 +22,12 @@ public class BlogIndexVO {
 	}
 	public void setUsrId(String usrId) {
 		this.usrId = usrId;
+	}
+	public String getLogId() {
+		return this.logId;
+	}
+	public void setLogId(String logId) {
+		this.logId = logId;
 	}
 	public String getStatDt() {
 		return this.statDt;
@@ -43,7 +50,7 @@ public class BlogIndexVO {
 	
 	@Override
 	public String toString() {
-		return "BlogIndexVO [usrId=" + this.usrId + ", statDt=" + this.statDt + ", indxVal=" + this.indxVal + ", indxValAvg5d="
-				+ this.indxValAvg5d + "]";
+		return "BlogIndexVO [usrId=" + usrId + ", logId=" + logId + ", statDt=" + statDt + ", indxVal=" + indxVal
+				+ ", indxValAvg5d=" + indxValAvg5d + ", ovllBlgIndx=" + ovllBlgIndx + "]";
 	}
 }

@@ -85,6 +85,7 @@ $().ready(function() {
     
     $(".area-close").on("click", function() {
         checkedList = JSON.parse(JSON.stringify(beforeChecked));
+        makeCheckedList(".checked-cities");
     });
         
     $(".modal-submit").on("click", function() {

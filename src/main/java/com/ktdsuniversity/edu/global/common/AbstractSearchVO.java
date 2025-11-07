@@ -125,7 +125,7 @@ public abstract class AbstractSearchVO {
 		this.groupEndPageNo = (this.groupNo + 1) * this.pageCountInGroup - 1;
 		
 		// 현재 그룹의 마지막 페이지 보정
-		if (this.pageCount < this.groupEndPageNo) {
+		if (this.pageCount <= this.groupEndPageNo) {
 			this.groupEndPageNo = this.pageCount - 1;
 		}
 		if (this.groupEndPageNo < 0) {

@@ -38,6 +38,7 @@
 		            <div>
 		                <span class="campaign-sub-title">지역</span>
 		                <button type="button">선택</button>
+		                <div>최대 3개</div>
 		            </div>
 		            <div class="area-list"></div>
 		            <div class="hidden-area-list"></div>
