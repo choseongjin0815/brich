@@ -7,7 +7,27 @@
     padding: 0;
     
   }
+.box-shadow {
+	box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+	border-radius : 10px;
+	padding : 20px 0 20px 40px;	
+}
 
+
+.campaign-payment-block {
+	margin-bottom: 30px;
+	.campaign-payment-title{
+		font-size: 24px;
+		text-decoration: underline;
+	}
+	.campaign-payment-content{
+		font-size: 20px;
+		padding-left : 10px;
+		margin : 10px 0 10px 0;
+		gap : 30px;
+	}
+	
+}
   .campaign-title-area {
     height: 100px;
   }
@@ -434,7 +454,7 @@
 	  		}	  		
 	  	}
 	}
-     
+  
  .re-submit-modal-btn-ok {
 	  	background-color : #1A62F8;
 	  	color : white;
@@ -451,7 +471,7 @@
 	padding-top : 50px;
 	gap : 250px ;
 	& > .subscribe-box{
-box-shadow: 0 2px 12px rgba(0,0,0,0.3);	   border-radius : 10px;
+	box-shadow: 0 2px 12px rgba(0,0,0,0.3);	   border-radius : 10px;
 	   padding:15px;
 	   width : 300px;
 	   height : 500px;
@@ -495,11 +515,36 @@ box-shadow: 0 2px 12px rgba(0,0,0,0.3);	   border-radius : 10px;
         color: red;
     }	
 }
+.payment-bottom{
+  position: fixed;
+  bottom: 0;
+  right : 0;
+  z-index: 10;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  width: calc(100vw - 290px); 
+  height : 100px;
+  gap : 30px;
+  align-items: center;
+  justify-content: flex-end;
+  .payment-bottom-title{
+  	font-size : 24px;
+  }
+  .payment-bottom-button{
+  	background-color: #7B61FF;
+  	border-radius : 10px;
+  	color : white;
+  	width : 220px;
+  	height: 65px;
+  	font-size : 24px;
+  	margin : 30px;
+  }
+}
 
 
 
-
-
+.end-pay{
+	font-size: 24px;
+	text-decoration: underline;}
 
 
 

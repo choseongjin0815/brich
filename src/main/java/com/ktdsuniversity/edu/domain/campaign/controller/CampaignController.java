@@ -382,4 +382,6 @@ public class CampaignController {
 		
 		return "campaign/list";
 	}
+
+	
 }

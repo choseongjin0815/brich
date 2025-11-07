@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>토스페이먼츠 샘플 프로젝트</title>
+    <title>결제 성공</title>
   </head>
 
   <body>
@@ -33,6 +33,9 @@
         <button class="button p-grid-col5" onclick="location.href='https://docs.tosspayments.com/guides/v2/payment-widget/integration';">연동 문서</button>
         <button class="button p-grid-col5" onclick="location.href='https://discord.gg/A4fRFXQhRu';" style="background-color: #e8f3ff; color: #1b64da">실시간 문의</button>
       </div>
+      <div class="p-grid">
+        <button class="button p-grid-col5" onclick="location.href='/campaignmain';" style="background-color: #e8f3ff; color: #1b64da">메인화면 돌아가기</button>
+      </div>      
     </div>
     <script>
       // 쿼리 파라미터 값이 결제 요청할 때 보낸 데이터와 동일한지 반드시 확인하세요.
