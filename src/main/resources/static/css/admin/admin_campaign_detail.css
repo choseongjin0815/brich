@@ -1,60 +1,54 @@
 @charset "UTF-8";
 
+.rtrnRsn {
+	margin-bottom: 15px;
+}
+
 summary {
     position: relative;
-    /* 아이콘 공간 확보를 위해 패딩을 추가할 수 있습니다. */
     padding-right: 1.5em; 
     cursor: pointer;
     list-style: none; /* marker 제거를 위한 표준 방식 */
 }
 
 details > div:first-of-type {
-    /* 윗쪽(summary와 닿는 부분)에 10px의 패딩을 줍니다. */
     padding-top: 10px; 
 }
+
 summary::before {
-    content: "펼치기"; /* 원하는 텍스트 삽입 */
+    content: "펼치기";
     
-    /* 가상 요소를 summary 위치에 정확히 오도록 설정 */
     display: block;
-    color: #333; /* 텍스트 색상 다시 지정 */
-    text-indent: 0; /* 가상 요소의 텍스트는 원위치로 복귀 */
-    
-    /* 만약 이전 요청에서 사용했던 ▼/▲ 아이콘이 필요하다면 여기에 추가 CSS를 적용해야 합니다. */
+    color: #333;
+    text-indent: 0;
 }
-/* 1. 기본 마커 제거 */
+
 summary::marker {
     content: none;
 }
 
-/* 2. 아이콘 자체를 나타내는 가상 요소 하나만 사용 */
 summary::after {
-    /* 닫힘 상태 (▼) */
     content: '';
     display: inline-block;
     width: 0;
     height: 0;
     
-    /* 삼각형 모양 만들기 */
     border-left: 0.4em solid transparent;
     border-right: 0.4em solid transparent;
-    border-top: 0.6em solid currentColor; /* 아래쪽을 가리키는 삼각형 (▼) */
+    border-top: 0.6em solid currentColor;
     
     position: absolute;
     top: 50%;
     right: 0;
     transform: translateY(-50%);
-    transition: transform 0.2s ease; /* 애니메이션 효과 추가 */
+    transition: transform 0.2s ease;
 }
 
 details[open] summary::before {
-    content: "접기"; /* 열렸을 때 표시될 텍스트로 변경 */
+    content: "접기";
 }
 
-/* 3. [open] 상태일 때 회전 (▲) */
 details[open] summary::after {
-  
-    /* 닫힘 상태의 삼각형(▼)을 180도 회전하여 위쪽(▲)을 가리키게 합니다. */
     transform: translateY(-50%) rotate(180deg); 
 }
 
@@ -98,10 +92,4 @@ details[open] summary::after {
 
 .reject-btn:active {
     background-color: rgba(190, 59, 61);
-}
-
-/* 반려 모달 */
-.modal-area {
-    width: 600px;
-    height: 370px;
 }

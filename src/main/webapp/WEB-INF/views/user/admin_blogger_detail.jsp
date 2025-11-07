@@ -20,7 +20,7 @@
         <c:choose>
             <c:when test="${not empty userInfo.cmpnProgressList}">
                 <c:forEach items="${userInfo.cmpnProgressList}" var="campaginInfo">
-                    <a href="/">[${campaginInfo.cmpnTitle}]</a>
+                    <a href="/admin/campaign-detail/${campaginInfo.cmpnId}">[${campaginInfo.cmpnTitle}]</a>
                 </c:forEach>
             </c:when>
             
@@ -42,7 +42,7 @@
 	   <c:choose>
 	       <c:when test="${not empty userInfo.cmpnCompletedList}">
 			    <c:forEach items="${userInfo.cmpnCompletedList}" var="campaginInfo">
-			        <a href="/">[${campaginInfo.cmpnTitle}]</a>
+			        <a href="/admin/campaign-detail/${campaginInfo.cmpnId}">[${campaginInfo.cmpnTitle}]</a>
 			    </c:forEach>
 		   </c:when>
 		   

@@ -36,9 +36,6 @@
                 <c:if test="${param.sttsCd eq 2003}">
                      <div class="deny-reason">
                          <div class="font-red">반려 사유</div>
-                         <div>${param.rtrnRsn}</div>
-                     </div>
-                     <div class="middle-center">
-                         <button type="button" class="button_200_30 button-campaign-modify">수정</button>
+                         <div class="rtrnRsn">: ${detail.rtrnRsn}</div>
                      </div>
                 </c:if>
