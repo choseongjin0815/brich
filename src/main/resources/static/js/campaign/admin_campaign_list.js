@@ -7,14 +7,10 @@ $().ready(function() {
     var searchKeyword = $("input[name='searchKeyword']");
     var searchButton = $(".search-button");
     var hereCategory = new URLSearchParams(window.location.search).get('category') || '';
-    var campaignMainBlock = $(".campaign-main-block");
     var here = location.pathname.replace(/^\/+|\/+$/g, '').split('/');    
     
-    if (here.includes('campaignmain')) {
+    if (here.includes('/admin/campaign-list')) {
       $('.campaign-status').removeClass('display-none');
-    }
-    if (here.includes('closedcampaign')) {
-      $('.campaign-fav').addClass('display-none');
     }
     
     $(".category-seleted-box-all").removeClass('visibility-hidden');
@@ -60,9 +56,9 @@ $().ready(function() {
 
     $(document).on("click", ".campaign-main-block", function () {
         const cmpnId = $(this).data("cmpn-id");
-        window.location.href = "/campaigndetail/" + cmpnId;
+        console.log("cmpnId: " + cmpnId);
+        window.location.href = "/admin/campaign-detail/" + cmpnId;
     });
-    
     
     $(".status--draft").on("click",function() {
         $(".submit-modal-form").removeClass("display-none");
@@ -79,27 +75,23 @@ $().ready(function() {
     let hasMore = true;
 
     $(window).on("scroll", function () {
-      if (!isLoading && hasMore && $(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
-        isLoading = true;
-        pageNo++;
-
-        const params = $(".search-section").serialize() + "&pageNo=" + pageNo + "&listSize=16";
-
-        $.get("/admin/campaign-list", params, function (html) {
-          const newContent = $(html).find(".campaign-main-list-area").html();
-
-          if ($.trim(newContent) === "") {
-            hasMore = false;
-          } else {
-            $(".campaign-main-list-area").append(newContent);
-          }
-
-          isLoading = false;
-        });
-      }
+        if (!isLoading && hasMore && $(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+            isLoading = true;
+            pageNo++;
+    
+            const params = $(".search-section").serialize() + "&pageNo=" + pageNo + "&listSize=16";
+    
+            $.get("/admin/campaign-list", params, function (html) {
+                const newContent = $(html).find(".campaign-main-list-area").html();
+    
+                if ($.trim(newContent) === "") {
+                    hasMore = false;
+                } else {
+                    $(".campaign-main-list-area").append(newContent);
+                }
+              isLoading = false;
+            });
+        }
     });
-    
-
-    
     
 });

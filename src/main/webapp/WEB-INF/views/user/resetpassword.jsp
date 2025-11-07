@@ -20,7 +20,7 @@
         </div>
         <span class="email-not-check">${checked}</span>
         <div class="find-id-main regist-main">
-            <form method="post" action="/reset/password" class="user-regist-form">
+            <form method="post" action="/reset/password" class="user-regist-form reset">
                     <div class="right-flex">
                         <div class="input-flex"> 
                             <label for="id" class="require">아이디</label>
@@ -32,14 +32,14 @@
                             <label for="email" class="require" >이메일</label>
                             <input type="text" id="email" name="eml" value="${registData.eml}" placeholder="이메일을 입력해주세요"/>
                         </div>
-                        <div class="regist-side-btn email-send"><div>인증 번호</div></div>
+                        <div class="regist-side-btn email-send find"><div>인증 번호</div></div>
                     </div>
                     <div class="right-flex">
                         <div class="input-flex">
                            <label for="email-confirm">인증번호 입력</label>
                            <input type="text" id="email-confirm" placeholder="인증번호를 입력하세요"/>
                         </div>
-                        <div class="regist-side-btn email-verify"><div>인증 확인</div></div>   
+                        <div class="regist-side-btn email-verify find"><div>인증 확인</div></div>   
                     </div>    
                     <span class="email-check-timer"></span>
                     <span class="email-confirm-message"></span>

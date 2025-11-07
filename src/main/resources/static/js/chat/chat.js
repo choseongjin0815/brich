@@ -3,9 +3,9 @@ var currentFilter = 'all'; // 'all', 'ongoing', 'ended'
 var currentPage = 0;
 
 $().ready(function() {
- 
+    
     loadCampaignList('all', 0);
-
+        
     // 전체 버튼 클릭
     $(".progress.all").on("click", function() {
         updateFilterButtons($(this));
@@ -14,6 +14,9 @@ $().ready(function() {
         loadCampaignList('all', 0);
     });
 
+    $(".progress.all").trigger("click");
+
+    
     // 진행중 버튼 클릭
     $(".progress.on").on("click", function() {
         updateFilterButtons($(this));
@@ -60,9 +63,11 @@ $().ready(function() {
 
 // 필터 버튼 스타일 업데이트
 function updateFilterButtons($clickedButton) {
+    console.log($clickedButton);
     $(".progress.all, .progress.on, .progress.end").css({
         "border-bottom": "0"
     });
+  
     $clickedButton.css({
         "border-bottom": "3px solid #000"
     });

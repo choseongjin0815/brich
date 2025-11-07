@@ -3,7 +3,24 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ktdsuniversity.edu.domain.pay.dao.impl.PayDaoImpl">
-    
+    <resultMap type="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO" 
+               id="RequestCampaignVOMap"
+               autoMapping="true">
+               <id column="CMPN_ID" property="cmpnId"/>
+               <collection property="area"
+                           javaType="list"
+                           ofType="java.lang.String">
+                           <result property="area" column="AREA"/>
+               </collection>
+               <collection property="fileVoList"
+                           javaType="list"
+                           ofType="com.ktdsuniversity.edu.domain.file.vo.FileVO">
+                           <result property="flNm" column="FL_NM"/>
+                           <result property="flPth" column="FL_PTH"/>
+                           <result property="flId" column="FL_ID"/>
+                           
+               </collection>               
+    </resultMap>
   <select id="selectPayInfoList"
           resultType="com.ktdsuniversity.edu.global.common.CommonCodeVO">
 		  SELECT CD_ID
@@ -59,9 +76,9 @@
 		, PAYMENT_KEY)
 		VALUES
 		( #{PKkey}
-		, #{clientUsrId}
+		, #{clientId}
 		, '9002'
-		, #{clientCdId}
+		, NULL
 		, #{clientPrice}
 		, SYSDATE
 		, 'SYSTEM'
@@ -91,7 +108,7 @@
 		, ORDER_ID
 		, PAYMENT_KEY)
 		VALUES( #{PKkey}
-		, #{clientCmpnId}
+		, #{clientId}
 		, 9002
 		, #{clientPrice}
 		, SYSDATE
@@ -102,6 +119,139 @@
 		, #{clientOrderId}
 		, NULL
 		)
- 
  </insert>
+ 
+ <select id="selectBeforeSaveInfo"
+         parameterType="string"
+         resultType="com.ktdsuniversity.edu.domain.pay.vo.response.ResponsePaymentVO">
+		SELECT ORDER_ID AS ORDER_ID
+		     , AMNT AS AMOUNT
+		  FROM CMPN_PYMNT
+		 WHERE CMPN_PYMNT_ID = #{_parameter}
+		 UNION ALL
+		SELECT ORDER_ID AS ORDER_ID 
+		     , AMNT AS AMOUNT
+		  FROM SBSCRPTN_PYMNT
+		 WHERE SBSCRPTN_PYMNT_ID=  #{_parameter}
+ </select>
+ <update id="updatePaymentSuccessSubscribe"
+         parameterType = "com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO">
+		UPDATE SBSCRPTN_PYMNT
+		   SET USR_ID       = #{clientUsrId}
+		     , PYMNT_CD     = '9001'
+		     , SBSCRPTN_CD  = #{sbscrptnCd}
+		     , PAYMENT_KEY  = #{paymentKey}
+		 WHERE SBSCRPTN_PYMNT_ID = #{PKkey}       
+ </update>
+ 
+ <select id="selectSbscrptnCd"
+         resultType="string"
+         parameterType = "string">
+         SELECT CD_ID 
+           FROM CM_CD
+          WHERE VALUE1 = #{_parameter}
+ </select>
+ <update id="updatePaymentFailSubscribe"
+         parameterType="string">
+         UPDATE SBSCRPTN_PYMNT
+            SET PYMNT_CD = '9003'
+          WHERE SBSCRPTN_PYMNT_ID = #{_parameter}
+ </update>
+ <update id="updatePaymentFailCampaign"
+         parameterType="string">
+         UPDATE CMPN_PYMNT
+            SET PYMNT_CD = '9003'
+          WHERE CMPN_PYMNT_ID = #{_parameter}
+ </update>
+ <update id="updatePaymentSuccessDate"
+         parameterType = "com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO">
+		UPDATE USR
+		   SET SBSCRPTN_EXPRS_DT = CASE
+		                               WHEN SBSCRPTN_EXPRS_DT IS NULL THEN SYSDATE + 
+		                               <if test="sbscrptnCd == 'A001' "> 30 </if>
+		                               <if test="sbscrptnCd == 'A002' "> 365 </if>
+		                               WHEN SBSCRPTN_EXPRS_DT  <![CDATA[<]]> SYSDATE THEN SYSDATE + 
+                                       <if test="sbscrptnCd == 'A001' "> 30 </if>
+                                       <if test="sbscrptnCd == 'A002' "> 365 </if>
+		                               ELSE SBSCRPTN_EXPRS_DT + 
+                                       <if test="sbscrptnCd == 'A001' "> 30 </if>
+                                       <if test="sbscrptnCd == 'A002' "> 365 </if>
+		                           END
+		     , AUTR = '1002'
+		 WHERE USR_ID = #{clientUsrId}
+ </update>
+ <select id="selectReadCampaignPayment"
+ 		 parameterType ="map"
+ 		 resultMap ="RequestCampaignVOMap">
+			SELECT  CMPN.CMPN_ID
+                  , CMPN.USR_ID
+                  , CMPN.CTG_CD
+                  , CMPN.STTS_CD
+                  , CMPN.PRSNN_PRC
+                  , CMPN.DRTN_PRC
+                  , CMPN.PRSNN_DSCNT
+                  , CMPN.DRTN_DSCNT
+                  , CMPN.CMPN_PRNT_ID
+                  , TO_CHAR(CMPN.RCRT_STRT_DT, 'MM-DD') AS RCRT_STRT_DT
+                  , CMPN.RCRT_PRSNN
+                  , CMPN.PRGRSS_DRTN
+                  , TO_CHAR(CMPN.RCRT_END_DT, 'MM-DD')  AS RCRT_END_DT
+                  , TO_CHAR(CMPN.PST_END_DT,  'MM-DD')  AS PST_END_DT
+                  , TO_CHAR(CMPN.CMPN_END_DT, 'MM-DD')  AS CMPN_END_DT
+                  , CMPN.RTRN_RSN
+                  , CMPN.ADDRS
+                  , CMPN.ATTCH_GRP_ID
+                  , CMPN.CMPN_TITLE
+                  , CMPN.CMPN_CN
+                  , CMPN.OFFR_CN
+                  , CMPN.OFFR_PRC
+                  , CMPN.PST_MSSN
+                  , CMPN.HSTG
+                  , CMPN.NTFCN
+                  , CMPN."VIEW"
+                  , TO_CHAR(CMPN.CNFM_DT, 'MM-DD')       AS CNFM_DT
+                  , TO_CHAR(CMPN.CRT_DT,  'MM-DD')       AS CRT_DT
+                  , CMPN.CRTR
+                  , TO_CHAR(CMPN.UPDT_DT, 'MM-DD')       AS UPDT_DT
+                  , CMPN.MTTR
+                  , CMPN.DLT_YN
+                  , ARCD.CD_NM                                 AS AREA
+                  , PARCD.CD_NM                                AS PARENT_AREA   
+                  , FG.FL_CNT                               
+                  , FG.FL_GRP_ID 
+                  , FL.FL_NM                             AS FL_NM
+                  , FL.FL_PTH                           AS FL_PTH
+                  , FL.FL_ID                
+                  , (SELECT VALUE1
+                  	   FROM CM_CD
+                  	  WHERE CD_ID = '4000') 	AS  DAY_PRICE
+                  , (SELECT VALUE1
+                  	   FROM CM_CD
+                  	  WHERE CD_ID ='5000') 		AS PERSON_PRICE
+              FROM CMPN CMPN 
+             LEFT JOIN CMPN_AR CMPNAR
+               ON CMPN.CMPN_ID = CMPNAR.CMPN_ID 
+             LEFT JOIN AR_CD ARCD
+               ON CMPNAR.AR_CD = ARCD.CD_ID
+             LEFT JOIN AR_CD PARCD
+               ON PARCD.CD_ID = ARCD.PRNT_CD_ID             
+             LEFT JOIN FL_GRP FG
+               ON CMPN.ATTCH_GRP_ID = FG.FL_GRP_ID 
+             LEFT JOIN FL FL
+               ON FG.FL_GRP_ID = FL.FL_GRP_ID                
+            WHERE CMPN.CMPN_ID = #{cmpnId}
+              AND CMPN.USR_ID  = #{usrId} 		 
+ </select>
+ 
 </mapper>
+
+
+       
+       
+
+
+
+
+
+
+

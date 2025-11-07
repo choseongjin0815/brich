@@ -5,7 +5,12 @@ body {
     color: #333;
     margin: 0;
 }
+.chat-wrapper {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
 
+}
 ul{
     list-style: none;
 }
@@ -34,7 +39,7 @@ ul{
 }
 .header-title{
     min-width: 100px;
-    height: 100px;
+    height:75px;
     line-height: 100px;
     margin-left: 75px;
     font-size: 36px;
@@ -42,7 +47,7 @@ ul{
     color: #5A6ACF;
 }
 .content-box{
-    margin-top: 50px;
+	position: relative;
     margin-left: 50px;
     width: 1200px;
     height: 750px;
@@ -58,6 +63,14 @@ ul{
     color: #5A6ACF;
     font-weight: 700;
     border-bottom: 1px solid #C8CBD9;
+}
+.arrow-back {
+	position: absolute;
+	width: 35px;
+	height: 35px;
+	left: 20px;
+	top: 15px;
+	
 }
 .progress-check {
     align-items: center;

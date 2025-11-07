@@ -1,4 +1,5 @@
 $().ready(function() {
+    var currentUrl = window.location.href;
     $(".role-box").on("click", function() {
         var role = $(this).data("role")
         window.location.href = "/terms/" + role;
@@ -36,29 +37,29 @@ $().ready(function() {
         $(".modal").css("display", "flex");
         makeCheckedList(".checked-cities");
     });
-    
+
     // 모달 선택 버튼
     $(".modal-submit").on("click", function() {
         $(".modal").css("display", "none");
         updateSelectedAreaList();
     });
-    
+
     // 모달 닫기 버튼
     $(".modal-close").on("click", function() {
         $(".modal").css("display", "none");
     });
-    
+
     // 시/도 클릭 시 하위 시/군/구 가져오기 
     $("input[name=do-city]").on("click", function() {
         var id = $(this).attr("id");
-        
-        $.get("/regist/area/" + id, function(response) { 
+
+        $.get("/regist/area/" + id, function(response) {
             console.log("sdasdsda")
             console.log(response);
             $(".city-gu-gun").empty();
-            if(response.body) {
+            if (response.body) {
                 city = response.body;
-                for(i = 0; i < city.length; i++) {
+                for (i = 0; i < city.length; i++) {
                     cityBox = $("<input>");
                     cityBox.attr("type", "checkbox");
                     cityBox.attr("name", "city-gu-gun");
@@ -68,9 +69,9 @@ $().ready(function() {
                         doName = $("input[name=do-city]:checked").data("do-name");
                         cityName = doName + " " + $(this).attr("id");
                         cityCode = $(this).data("city-code");
-                        
+
                         var arCnt = 3;
-                        if(checkedList.some(e => e.name === cityName)) {
+                        if (checkedList.some(e => e.name === cityName)) {
                             checkedList = checkedList.filter((e) => e.name !== cityName);
                         }
                         else if (checkedList.length === arCnt) {
@@ -84,26 +85,26 @@ $().ready(function() {
                             };
                             checkedList.push(cityInfo);
                         }
-                        
+
                         makeCheckedList(".checked-cities");
                     });
-                    
+
                     cityLabel = $("<label></label>");
                     cityLabel.attr("for", city[i].cdNm);
                     cityLabel.text(city[i].cdNm);
-                    
+
                     $(".city-gu-gun").append(cityBox);
                     $(".city-gu-gun").append(cityLabel);
                 }
             }
         });
     });
-    
-    
+
+
     // 선택된 지역 목록 업데이트
     function updateSelectedAreaList() {
         $(".selected-area-list").empty();
-        
+
         checkedList.forEach(function(area) {
             const areaItem = $("<div></div>");
             areaItem.addClass("select-list-item");
@@ -111,12 +112,12 @@ $().ready(function() {
             $(".selected-area-list").append(areaItem);
         });
     }
-    
+
     // 회원가입 버튼 클릭 시 (기존 코드 수정)
     $(".regist-btn").on("click", function() {
         // 선택된 지역을 hidden input으로 추가
         $(".hidden-area-list").empty();
-        
+
         checkedList.forEach(function(area) {
             const hidden = $("<input />");
             hidden.attr("type", "hidden");
@@ -124,7 +125,7 @@ $().ready(function() {
             hidden.attr("value", area.code);
             $(".hidden-area-list").append(hidden);
         });
-        
+
         $(".user-regist-form").submit();
     });
     $(".next-btn").on("click", function() {
@@ -141,35 +142,44 @@ $().ready(function() {
     $(".email-send").on("click", function() {
         var email = $("#email").val();
         var timerHtml = $(".email-check-timer");
-        if (email !== "" && /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g.test(email)) {
-            var totalSeconds = 180; //3분
-            var timerInterval;
-            function startTimer() {
-                timerInterval = setInterval(function() {
-                    var minutes = Math.floor(totalSeconds / 60);
-                    var seconds = totalSeconds % 60;
-
-                    // 2자리 숫자 포맷
-                    var display =
-                        (minutes < 10 ? "0" + minutes : minutes) + ":" +
-                        (seconds < 10 ? "0" + seconds : seconds);
-
-                    timerHtml.text(display);
-
-                    totalSeconds--;
-
-                    if (totalSeconds < 0) {
-                        clearInterval(timerInterval);
-                        timerHtml.text("시간 만료");
-                    }
-                }, 1000);
+        var duplicate = null;
+        $.get("/email/duplicate/" + email, function(response) {
+            if (response.body === false && currentUrl.includes("regist")) {
+                duplicate = true;
+                timerHtml.text("이미 등록된 이메일입니다.");
+                return;
             }
-            // 타이머 시작
-            startTimer();
-        }
-        else {
-            timerHtml.text("적절하지 않은 이메일입니다.")
-        }
+
+            if (email !== "" && /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g.test(email)) {
+                var totalSeconds = 180; //3분
+                var timerInterval;
+                function startTimer() {
+                    timerInterval = setInterval(function() {
+                        var minutes = Math.floor(totalSeconds / 60);
+                        var seconds = totalSeconds % 60;
+
+                        // 2자리 숫자 포맷
+                        var display =
+                            (minutes < 10 ? "0" + minutes : minutes) + ":" +
+                            (seconds < 10 ? "0" + seconds : seconds);
+
+                        timerHtml.text(display);
+
+                        totalSeconds--;
+
+                        if (totalSeconds < 0) {
+                            clearInterval(timerInterval);
+                            timerHtml.text("시간 만료");
+                        }
+                    }, 1000);
+                }
+                // 타이머 시작
+                startTimer();
+            }
+            else {
+                timerHtml.text("적절하지 않은 이메일입니다.")
+            }
+        });
         $.post("/email/send?email=" + email, function() { });
     });
 
@@ -208,7 +218,7 @@ $().ready(function() {
     $(".do-reset-btn").on("click", function() {
         if ($("#email-confirm").val() === "OK"
             && $("#password").val() === $("#password-confirm").val()) {
-            alert($("#password").val(), $("#password-confirm").val())
+            alert("비밀번호가 재설정 되었습니다.")
             $(".user-regist-form").submit();
         }
     });

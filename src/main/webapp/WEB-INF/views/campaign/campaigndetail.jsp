@@ -73,8 +73,11 @@
 	            <div class="cmpn-title-offrCn">${detail.offrCn}</div>
 	            <div class ="cmpn-title-person flex-space-between">
 	              <div>신청 ${detail.adptCnt } / ${detail.rcrtPrsnn }</div>
-	              <c:if test="${not empty detail.pstSttsCd}">
-		              <div class ="pst-stts-cd-${detail.pstSttsCd}">${detail.pstSttsCdNm}</div>
+	              <c:if test="${(sessionScope.__LOGIN_USER__.autr == 1002 
+                              or sessionScope.__LOGIN_USER__.autr == 1003)}">
+		              <c:if test="${not empty detail.pstSttsCd}">
+			              <div class ="pst-stts-cd-${detail.pstSttsCd}">${detail.pstSttsCdNm}</div>
+		              </c:if>
 	              </c:if>
 	            </div>
 	          </div>

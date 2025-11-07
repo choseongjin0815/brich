@@ -37,11 +37,13 @@
     </insert>
     
     <select id="selectBlogIndex"
-    		parameterType="string">
+    		parameterType="string"
+    		resultType="com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO">
     SELECT USR_ID
     	 , TO_CHAR(STAT_DT, 'YYYY-MM-DD') AS STAT_DT
     	 , INDX_VAL
     	 , INDX_VAL_AVG_5D
+    	 , OVLL_BLG_INDX
     	 , CRT_DT
     	 , CRTR
     	 , UPDT_DT
@@ -50,6 +52,42 @@
 	 WHERE USR_ID = #{_parameter}
 	   AND STAT_DT > SYSDATE - 20 
 	 ORDER BY STAT_DT
+    </select>
+    
+    <select id="selectRecentIndex"
+    		parameterType="string">
+    
+    SELECT OVLL_BLG_INDX
+	  FROM TEAM_A.BLG_INDX
+	 WHERE USR_ID = #{_parameter}
+	   AND OVLL_BLG_INDX IS NOT NULL
+	 ORDER BY STAT_DT DESC
+ 	 FETCH FIRST 1 ROWS ONLY
+    </select>
+    
+    <select id="selectBlogDetailStat"
+    		parameterType="string"
+    		resultType="com.ktdsuniversity.edu.domain.blog.vo.BlogDetailStatVO">
+    
+       WITH date_range AS ( 
+     SELECT TRUNC(SYSDATE - 20) + LEVEL - 1 AS STAT_DATE
+       FROM DUAL
+    CONNECT BY LEVEL <![CDATA[ <=]]> (TRUNC(SYSDATE - 6) - TRUNC(SYSDATE - 20)) + 1
+)
+	 SELECT d.STAT_DATE AS DT,
+     	    NVL(COUNT(p.PST_URL), 0) AS POST_COUNT,
+    	    ROUND(NVL(AVG(p.PST_LK), 0), 2) AS AVG_LK,
+    	    ROUND(NVL(AVG(p.PST_CMNT), 0), 2) AS AVG_CMMT,
+    	    ROUND(NVL(AVG(v.VSTR_CNT), 0), 2) AS VST_CNT
+	   FROM date_range d
+	   LEFT JOIN TEAM_A.DLY_VSTR v
+  		 ON TRUNC(v.VST_DT) = d.STAT_DATE
+  	    AND v.USR_ID = #{_parameter}
+	   LEFT JOIN TEAM_A.PST_DA p
+  		 ON TRUNC(p.PSTD_DT) = d.STAT_DATE
+  	    AND p.USR_ID = v.USR_ID
+	  GROUP BY d.STAT_DATE
+	  ORDER BY d.STAT_DATE
     </select>
     
 </mapper>
