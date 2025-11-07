@@ -33,7 +33,7 @@ $().ready(function() {
     });
     
     $(".arrow-back").on("click", function() {
-        window.history.back();
+        window.location = document.referrer;
     });
 
     // 페이지 번호 클릭 이벤트 (동적 생성된 요소)
@@ -180,7 +180,7 @@ function loadChatRoomList(filter, pageNo) {
                 
                 if (lastMsg === "") {
                     lastMsg = "파일 메시지 입니다.";
-                } else if (lastMsg.length >= 20) {
+                } else if (lastMsg.length >= 25) {
                     lastMsg = lastMsg.substr(0, 20) + "...";
                 }
 

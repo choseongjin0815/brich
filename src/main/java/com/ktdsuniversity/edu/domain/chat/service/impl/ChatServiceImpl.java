@@ -383,12 +383,6 @@ public class ChatServiceImpl implements ChatService {
 		List<ChatMessageVO> unreadMessages = chatMessageRepository.findUnreadMessages(chtRmId, usrId);
 		String now = DateTimeFormatter.ISO_INSTANT.format(Instant.now());
 
-//		// 읽음 처리
-//		for (ChatMessageVO msg : unreadMessages) {
-//			msg.setRdYn("Y");
-//			msg.setUpdtDt(now);
-//			chatMessageRepository.save(msg);
-//		}
 		//Bulk operation으로 N+1해소
 		// 1번의 조회 - n개의 데이터 
 		// n번만큼 업데이트 - n번 

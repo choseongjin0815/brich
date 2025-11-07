@@ -19,8 +19,14 @@ $(document).ready(function() {
     })
 
     $('common-menu').removeClass('menu-selected');
+     
+    $(".search-input").on("keyup", function(e) {
+        if(e.keyCode === 13) {
+            window.location.href = "/campaignmain?searchKeyword=" + $(this).val() + "&sortBy=latest"
+        } 
+    });
 
-
+    
     if (here.includes('campaignmain') || here.includes('campaigndetail')) {
         $('.menu-campaignmain-selected').addClass('menu-selected')
     }

@@ -133,6 +133,8 @@
       display: flex;
       padding : 0 25px 0 25px;
       & > .cmpn-profile-area{
+        display: flex;
+        align-items: center;
         border : 1px solid black;
         border-radius : 5px;
         flex-grow: 1;
