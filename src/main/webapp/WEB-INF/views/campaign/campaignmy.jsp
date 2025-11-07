@@ -22,7 +22,14 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
                     </div>
                     <div class="profile-end middle-center flex-column">
                         <span>연결 계정</span> 
-                        <div>블로그이름 들어갈 자리</div>
+                        <c:choose>
+	                        <c:when test="${sessionScope.__LOGIN_USER__.blgTitle}">
+	                           <div>${sessionScope.__LOGIN_USER__.blgTitle }</div>
+	                        </c:when>
+	                        <c:otherwise>
+	                           연결된 블로그가 없습니다.
+	                        </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
                 

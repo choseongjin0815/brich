@@ -159,11 +159,17 @@ textarea {
     font-size: 13px;
 }
 
-.list-head,
-.list-item {
-
+.list-head {
 	border: 1px solid #D9D5EC;
 	
+}
+.list-item {
+	border: 1px solid #D9D5EC;
+	border-top: 0;
+}
+
+.list-head,
+.list-item {	
 	display: flex;
 	background-color: #F4F2FF;
 	padding: 15px 20px;

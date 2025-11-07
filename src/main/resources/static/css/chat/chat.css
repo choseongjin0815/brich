@@ -187,6 +187,9 @@ ul{
     gap: 10px;
 }
 .latest-time {
+	display: flex;
+	justify-content: center;
+	width: 50px;
     font-size: 14px;
     font-weight: 700;
     color: #777373;

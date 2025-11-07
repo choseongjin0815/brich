@@ -2,6 +2,7 @@ var stompClient = null;
 var chtRmIdList = [];
 $().ready(function() {
     var chtRmIdString = $(".content-box").data("chtid-list");
+    console.log(chtRmIdString);
     chtRmIdList = chtRmIdString
           .substring(1, chtRmIdString.length - 1) 
           .split(',')                              
