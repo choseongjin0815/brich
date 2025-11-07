@@ -332,7 +332,7 @@
         UPDATE CMPN
            SET STTS_CD = '2004'
          WHERE CMPN_ID = #{clientId} 
-           AND DLT_YN = 'N'
+           AND STTS_CD = '2002'
 </update>
 <select id="selectPaymentCmpnId"
         parameterType="com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO"
@@ -340,7 +340,7 @@
         SELECT CMPN_ID
           FROM CMPN_PYMNT
          WHERE ORDER_ID=#{orderId}
-           AND STTS_CD = '2002'
+           AND DLT_YN = 'N'
 </select>
 </mapper>
 
