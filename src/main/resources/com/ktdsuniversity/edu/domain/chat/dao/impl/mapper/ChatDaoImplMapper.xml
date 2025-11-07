@@ -91,17 +91,17 @@
         <include refid="Common.paginationFooter" />
     </select>
 
-    <!-- 광고주용 캠페인 총 개수 조회 (전체) -->
+    <!-- 광고주용 캠페인 총 개수 조회 (진행중, 종료 중) -->
     <select id="selectAllCampaignListCount" 
             parameterType="com.ktdsuniversity.edu.domain.chat.vo.SearchChatVO" 
             resultType="int">
         SELECT COUNT(*)
         FROM CMPN C
         WHERE C.USR_ID = #{usrId}
-          AND C.STTS_CD NOT IN ('2001', '2003', '2008')
+          AND C.STTS_CD IN ('2007', '2009')
     </select>
 
-    <!-- 광고주용 채팅방 캠페인 목록 전체 (페이징) 검토중 반려 임시저장 제외-->
+    <!-- 광고주용 채팅방 캠페인 목록 전체 (페이징) 진행중 종료 중-->
     <select id="selectAllCampaignList" 
             parameterType="com.ktdsuniversity.edu.domain.chat.vo.SearchChatVO" 
             resultType="com.ktdsuniversity.edu.domain.chat.vo.response.ResponseChatCampaignListVO">
@@ -114,7 +114,7 @@
              INNER JOIN CM_CD CD 
                 ON CD.CD_ID = C.STTS_CD 
              WHERE C.USR_ID = #{usrId}
-               AND C.STTS_CD NOT IN ('2001', '2003', '2008')
+               AND C.STTS_CD IN ('2007', '2009')
              ORDER BY C.CRT_DT DESC
         <include refid="Common.paginationFooter" />
     </select>
@@ -154,7 +154,7 @@
         SELECT COUNT(*)
         FROM CMPN C
         WHERE C.USR_ID = #{usrId}
-          AND C.STTS_CD NOT IN ('2001', '2003', '2008', '2009')
+          AND C.STTS_CD IN('2007')
     </select>
 
     <!-- 광고주용 채팅방 캠페인 목록 진행중 (페이징) -->
@@ -170,7 +170,7 @@
              INNER JOIN CM_CD CD 
                 ON CD.CD_ID = C.STTS_CD 
              WHERE C.USR_ID = #{usrId}
-               AND C.STTS_CD NOT IN ('2001', '2003', '2008', '2009')
+               AND C.STTS_CD IN('2007')
              ORDER BY C.CRT_DT DESC
         <include refid="Common.paginationFooter" />
     </select>
@@ -205,4 +205,31 @@
 		    ON CR.CMPN_ID = C.CMPN_ID 
 		 WHERE CR.CHT_RM_ID = #{chtRmId}
     </select>
+    
+    <select id="selectTargetUsrIdByChtRmIdAndUsrId"
+            parameterType="hashmap"
+            resultType="string">
+        SELECT USR_ID
+		  FROM CHT_PRTCPNT
+		 WHERE CHT_RM_ID = #{chtRmId}
+		   AND USR_ID != #{currentUsrId}
+    </select>
+    
+    <select id="selectChtRmIdListByCmpnId"
+            parameterType="hashmap"
+            resultType="string">
+        SELECT CHT_RM_ID
+          FROM CHT_RM
+         WHERE CMPN_ID = #{cmpnId}
+           AND DLT_YN = 'N'
+    </select>
+     <select id="selectChtRmIdListByUsrId"
+            parameterType="hashmap"
+            resultType="string">
+        SELECT CHT_RM_ID
+		  FROM CHT_PRTCPNT
+		 WHERE USR_ID = #{usrId}
+		   AND LFT_YN = 'N'
+    </select> 
+     
 </mapper>

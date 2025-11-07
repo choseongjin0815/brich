@@ -65,6 +65,7 @@ public class BlogDataController {
 		List<CommonCodeVO> goldenKeywordList =
 				this.goldenKeyWordService.selectUserCategoryKeywords(usrId);
 
+		double currentIndex = this.blogDataService.selectMostRecentIndex(usrId);
 		model.addAttribute("user", loginUser);
 		model.addAttribute("dailyVisitorsResult", dailyVisitorsResult);
 		model.addAttribute("list", result);
@@ -72,6 +73,7 @@ public class BlogDataController {
 		model.addAttribute("paginator", requestExpireSoonCampaignVO);
 		model.addAttribute("index", indexResult);
 		model.addAttribute("goldenKeywordListJson", goldenKeywordList);
+		model.addAttribute("currentIndex",currentIndex);
 
 		log.info("황키 : {}", goldenKeywordList);
 
@@ -89,6 +91,8 @@ public class BlogDataController {
 			return "redirect:/blog/"+ loginUser.getUsrId() + "/verification";
 		}
 		
+		
+		
 		return "/blog/manage";
 	}
 	
@@ -104,19 +108,12 @@ public class BlogDataController {
 		return "/blog/verification";
 	}
 	
-	@GetMapping("/api/blog/{usrId}/details")
+	@GetMapping("/api/blog/index/{usrId}/detail")
 	@ResponseBody
-	public Map<String, Object> getBlogDetails(
-	        @PathVariable String usrId,
-	        @RequestParam("date") String date) {
-
-	    Map<String, Object> result = new HashMap<>();
-	    List<PostDataVO> posts = blogDataService.readPostStatsByDate(usrId, date);
-	    List<BlogIndexVO> blogIndex = blogDataService.readDailyIndex(usrId, date);
-
-	    result.put("posts", posts);
-	    result.put("indexSummary", blogIndex);
-	    return result;
+	public List<BlogDetailStatVO> getBlogDetails(
+	        @PathVariable String usrId) {
+	    List<BlogDetailStatVO> list = blogDataService.readBlogDetailStat(usrId);
+	    return list;
 	}
 
 }

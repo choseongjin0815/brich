@@ -32,4 +32,9 @@ public class AdminCampaignDaoImpl extends SqlSessionDaoSupport implements AdminC
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdminCampaignListCategoryAndSortBy", requestAdminSearchCampaignVO);
 	}
 
+	@Override
+	public ResponseAdminCampaignVO selectAdminCampaignDetailById(String cmpnId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectAdminCampaignDetailById", cmpnId);
+	}
+
 }

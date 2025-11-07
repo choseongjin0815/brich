@@ -120,5 +120,10 @@ public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
 		return super.getSqlSession().update(this.NAME_SPACE + "updateBlogTitle", request);
 	}
 
+	@Override
+	public int selectEmailCountByInputEmail(String email) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectEmailCountByInputEmail", email);
+	}
+
 
 }

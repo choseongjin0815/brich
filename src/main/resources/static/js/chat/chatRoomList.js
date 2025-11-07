@@ -6,6 +6,7 @@ var cmpnId = "";
 $().ready(function() {
     auth = $(".content-box").data("auth");
     cmpnId = $(".chat-main").data("cmpn");
+    chtRmId = $(this).closest(".chatroom-content-item").data("chat-room");
 
     console.log("auth:", auth);
     console.log("cmpnId:", cmpnId);
@@ -29,6 +30,10 @@ $().ready(function() {
         currentFilter = 'unread';
         currentPage = 0;
         loadChatRoomList('unread', 0);
+    });
+    
+    $(".arrow-back").on("click", function() {
+        window.history.back();
     });
 
     // 페이지 번호 클릭 이벤트 (동적 생성된 요소)

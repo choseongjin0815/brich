@@ -25,7 +25,12 @@ public class AdminCampaignServiceImpl implements AdminCampaignService {
 	
 	@Autowired
 	private CampaignDao campaignDao;
-
+	
+	/**
+	 * 캠페인 관리 - 목록 페이지
+	 * @param requestAdminSearchCampaignVO
+	 * @return
+	 */
 	@Override
 	public ResponseAdminCampaignListVO readAdminCampaignListAndCategory(RequestAdminSearchCampaignVO requestAdminSearchCampaignVO) {
 		
@@ -61,6 +66,20 @@ public class AdminCampaignServiceImpl implements AdminCampaignService {
 		}
 		
 		return responseAdminCampaignListVO;
+	}
+
+	@Override
+	public ResponseAdminCampaignVO readAdminCampaignDetail(String cmpnId) {
+		
+		// 캠페인 상세 정보 조회
+		ResponseAdminCampaignVO detail = this.adminCampaignDao.selectAdminCampaignDetailById(cmpnId);
+		
+		// 지역명 두 글자로 자르기
+		if(detail.getParentArea() != null) {
+			detail.setParentArea(detail.getParentArea().substring(0, 2));
+		}
+		
+		return detail;
 	}
 
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ktdsuniversity.edu.domain.blog.dao.PostDataDao;
+import com.ktdsuniversity.edu.domain.blog.vo.BlogDetailStatVO;
 import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
 import com.ktdsuniversity.edu.domain.blog.vo.PostDataVO;
 
@@ -33,6 +34,16 @@ public class PostDataDaoImpl extends SqlSessionDaoSupport implements PostDataDao
 	@Override
 	public List<BlogIndexVO> selectBlogIndex(String usrId) {
 		return super.getSqlSession().selectList(this.NAME_SPACE+ "selectBlogIndex", usrId);
+	}
+
+	@Override
+	public double selectRecentIndex(String usrId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectRecentIndex", usrId);
+	}
+
+	@Override
+	public List<BlogDetailStatVO> selectBlogDetailStat(String usrId) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectBlogDetailStat", usrId);
 	}
 
 

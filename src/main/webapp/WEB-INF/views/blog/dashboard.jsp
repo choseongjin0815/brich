@@ -46,16 +46,25 @@
 		</div>
 		<div>추천 캠페인</div>
 		<div>핵심 황금 키워드</div>
-		<div> <div class="flex-grow">내 블로그 지수</div> <button id="blog-index-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="blog-index-detail-btn">자세히 보기</button>
+		<div>
+			<h4 >내 블로그 지수</h4> 
+			<div class="flex-row">
+				<div>현재 블로그 지수: <span class="blog-index">${currentIndex}</span></div>
+				<button id="blog-index-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="blog-index-detail-btn">자세히 보기</button>
+			</div>
+			
 			<div id="blog-index-modal" class="modal">
 				<div class="modal-content">
-					<span class="close">&times;</span>
-					<h3>내 블로그 지수</h3>
-
-
-					<button class="btn right-align" id="download-excel">엑셀 다운로드</button>
-
-				</div>
+    				<span class="close">&times;</span>
+    				<h3>블로그 상세 통계</h3>
+    				<div class="table-container">
+    					<table id="blog-detail-table" border="1">
+      						<thead></thead>
+      						<tbody></tbody>
+    					</table>
+    				</div>
+    				
+  				</div>
 			</div>
 			<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -149,13 +158,19 @@
 
 			const labels = [
 				<c:forEach items="${index}" var="row" varStatus="st">
-				"${row.statDt}"<c:if test="${!st.last}">,</c:if>
+					"${row.statDt}"<c:if test="${!st.last}">,</c:if>
 				</c:forEach>
 			];
 
 			const avg5d = [
 				<c:forEach items="${index}" var="row" varStatus="st">
-				${row.indxValAvg5d}<c:if test="${!st.last}">,</c:if>
+					${row.indxValAvg5d}<c:if test="${!st.last}">,</c:if>
+				</c:forEach>
+			];
+
+			const ovll = [
+				<c:forEach items="${index}" var="row" varStatus="st">
+					${row.ovllBlgIndx}<c:if test="${!st.last}">,</c:if>
 				</c:forEach>
 			];
 
@@ -165,39 +180,66 @@
 				data: {
 					labels: labels,
 					datasets: [
-
 						{
 							label: '5일 평균 지수',
 							data: avg5d,
 							borderColor: '#7B61FF',
 							backgroundColor: 'rgba(123, 97, 255, 0.1)',
-							tension: 0.5,
+							tension: 0.4,
 							fill: true,
 							pointRadius: 3,
-							pointHoverRadius: 5
+							pointHoverRadius: 5,
+							borderWidth: 2
+						},
+						{
+							label: '전체 평균 지수',
+							data: ovll,
+							borderColor: '#00B8A9',
+							backgroundColor: 'rgba(0, 184, 169, 0.1)',
+							tension: 0.4,
+							fill: true,
+							pointRadius: 3,
+							pointHoverRadius: 5,
+							borderWidth: 2
 						}
 					]
 				},
 				options: {
 					responsive: true,
 					plugins: {
-						legend: { position: 'top' },
+						legend: {
+							position: 'top',
+							labels: {
+								color: '#333',
+								font: { size: 13 }
+							}
+						},
 						title: {
 							display: true,
-							text: '최근 블로그 지수 변화'
+							text: '블로그 지수 추이 (5일 평균 | 전체 평균)',
+							color: '#333',
+							font: { size: 15, weight: 'bold' }
+						},
+						tooltip: {
+							mode: 'index',
+							intersect: false
 						}
 					},
 					scales: {
 						x: {
-							title: { display: true, text: '날짜' }
+							ticks: { color: '#555' },
+							grid: { color: 'rgba(0,0,0,0.05)' }
 						},
 						y: {
-							beginAtZero: true,
-							title: { display: true, text: '지수' }
+							beginAtZero: false,
+							ticks: { color: '#555' },
+							grid: { color: 'rgba(0,0,0,0.05)' }
 						}
 					}
 				}
 			});
+
+
 		</script>
 	</div>
 </div>
