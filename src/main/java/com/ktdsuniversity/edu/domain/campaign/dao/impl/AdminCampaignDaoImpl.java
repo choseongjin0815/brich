@@ -8,7 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.domain.campaign.dao.AdminCampaignDao;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCamapaignRejectVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCampaignApplicantVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCampaignApproveVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminSearchCampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminCampaignApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminCampaignVO;
 
 @Repository
@@ -35,6 +40,32 @@ public class AdminCampaignDaoImpl extends SqlSessionDaoSupport implements AdminC
 	@Override
 	public ResponseAdminCampaignVO selectAdminCampaignDetailById(String cmpnId) {
 		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectAdminCampaignDetailById", cmpnId);
+	}
+
+	@Override
+	public CampaignVO selectAdminCampaignAllInfoById(String cmpnId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectAdminCampaignAllInfoById", cmpnId);
+	}
+
+	@Override
+	public int updateAdminCampaignByRejectInfo(RequestAdminCamapaignRejectVO rejectInfo) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateAdminCampaignByRejectInfo", rejectInfo);
+	}
+
+	@Override
+	public int updateAdminCampaignByApproveInfo(RequestAdminCampaignApproveVO approveInfo) {
+		return super.getSqlSession().update(this.NAME_SPACE + "updateAdminCampaignByApproveInfo", approveInfo);
+	}
+
+	@Override
+	public int selectAdminCampaignApplicantCountByCmpnId(RequestAdminCampaignApplicantVO requestApplicantVO) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectAdminCampaignApplicantCountByCmpnId", requestApplicantVO);
+	}
+
+	@Override
+	public List<ResponseAdminCampaignApplicantVO> selectAdminCampaignApplicantListByCmpnId(
+			RequestAdminCampaignApplicantVO requestApplicantVO) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdminCampaignApplicantListByCmpnId", requestApplicantVO);
 	}
 
 }

@@ -130,6 +130,7 @@
                id="ResponseAdminCampaignVOMap"
                autoMapping="true">
         <id column="CMPN_ID" property="cmpnId"/>
+        <result column="STTS_CD_NM" property="sttsCdNm"/>
         
         <collection property="area" javaType="list" ofType="java.lang.String">
             <result property="area" column="AREA"/>
@@ -147,6 +148,7 @@
              , U.LOG_ID AS LOG_ID
              , CMPN.CTG_CD
              , CMPN.STTS_CD
+             , STCD.CD_NM AS STTS_CD_NM
              , TO_CHAR(CMPN.PRSNN_PRC, 'FM999,999,999,999') AS CMPN_PRSNN_PRC
              , TO_CHAR(CMPN.DRTN_PRC, 'FM999,999,999,999') AS CMPN_DRTN_PRC
              , CMPN.PRSNN_PRC
@@ -160,6 +162,7 @@
              , TO_CHAR(CMPN.RCRT_END_DT, 'RR-MM-DD') AS RCRT_END_DT
              , TO_CHAR(CMPN.PST_END_DT,  'RR-MM-DD') AS PST_END_DT
              , TO_CHAR(CMPN.CMPN_END_DT, 'RR-MM-DD') AS CMPN_END_DT
+             , CMPN.RTRN_RSN
              , CMPN.ADDRS
              , CMPN.ATTCH_GRP_ID
              , CMPN.CMPN_TITLE
@@ -191,6 +194,8 @@
           FROM CMPN CMPN
           LEFT OUTER JOIN USR U -- LOG_ID
             ON CMPN.USR_ID = U.USR_ID
+          LEFT OUTER JOIN CM_CD STCD
+            ON CMPN.STTS_CD = STCD.CD_ID 
           LEFT OUTER JOIN (SELECT ADPT.CMPN_ID 
                                 , COUNT(ADPT.CMPN_ID) AS ADPT_CNT
                              FROM CMPN_PST_ADPT ADPT 
@@ -213,5 +218,143 @@
          WHERE CMPN.CMPN_ID = #{_parameter}
            AND CMPN.DLT_YN = 'N'
     </select>
-
+    
+    <!-- 캠페인의 모든 정보 받아오기 (수정 이력 테이블 비교용) -->
+    <select id="selectAdminCampaignAllInfoById" parameterType="string" resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
+        SELECT CMPN_ID
+             , USR_ID
+             , CTG_CD
+             , STTS_CD
+             , PRSNN_PRC
+             , DRTN_PRC
+             , PRSNN_DSCNT
+             , DRTN_DSCNT
+             , CMPN_PRNT_ID
+             , RCRT_STRT_DT
+             , RCRT_PRSNN
+             , PRGRSS_DRTN
+             , RCRT_END_DT
+             , PST_END_DT
+             , CMPN_END_DT
+             , RTRN_RSN
+             , ADDRS
+             , ATTCH_GRP_ID
+             , CMPN_TITLE
+             , CMPN_CN
+             , OFFR_CN
+             , OFFR_PRC
+             , PST_MSSN
+             , HSTG
+             , NTFCN
+             , "VIEW"
+             , CNFM_DT
+             , CRT_DT
+             , CRTR
+             , UPDT_DT
+             , MTTR
+             , DLT_YN
+         FROM CMPN
+        WHERE CMPN_ID = #{_parameter}
+          AND DLT_YN = 'N'
+    </select>
+    
+    <!-- 캠페인 반려 -->
+    <update id="updateAdminCampaignByRejectInfo" parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCamapaignRejectVO">
+        UPDATE CMPN
+          SET RTRN_RSN = #{rtrnRsn}
+            , STTS_CD = '2003'
+            , UPDT_DT = SYSDATE
+            , MTTR = #{adminId}
+        WHERE CMPN_ID = #{cmpnId}
+          AND STTS_CD = '2001'
+          AND DLT_YN = 'N'
+    </update>
+    
+    <!-- 캠페인 승인 -->
+    <update id="updateAdminCampaignByApproveInfo" parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCampaignApproveVO">
+        UPDATE CMPN
+           SET CNFM_DT = SYSDATE
+             , STTS_CD = '2002'
+             , UPDT_DT = SYSDATE
+             , MTTR = #{adminId}
+         WHERE CMPN_ID = #{cmpnId}
+           AND STTS_CD = '2001'
+           AND DLT_YN = 'N'
+    </update>
+    
+    <!-- 캠페인 아이디로 한 캠페인에 대한 신청자 수 찾기 -->
+    <select id="selectAdminCampaignApplicantCountByCmpnId" resultType="_int" parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCampaignApplicantVO">
+        SELECT COUNT(CPA.BLG_USR_ID)
+          FROM CMPN_PST_ADPT CPA
+         INNER JOIN (SELECT USR_ID
+                          , LOG_ID
+                          , PNLT_CNT
+                          , BLG_ADDRS
+                          , TTL_VSTR_CNT
+                          , AVRG_VSTR_CNT
+                          , BLG_NGHBR_CNT
+                          , SCRP_CNT
+                          , DLT_YN
+                       FROM USR
+                      WHERE DLT_YN  = 'N'
+                        AND AUTR != '1005') U
+            ON U.USR_ID = CPA.BLG_USR_ID
+         WHERE CPA.CMPN_ID = #{cmpnId}
+           AND CPA.DLT_YN = 'N'
+       <if test="searchKeyword != null and searchKeyword != ''">
+           AND U.LOG_ID LIKE '%' || #{searchKeyword} || '%'
+       </if>
+       <if test='sortCol != null and sortCol != ""'>
+         ORDER BY NVL(${sortCol}, 0) ${order}  
+       </if>
+    </select>
+    
+    <!-- 캠페인 아이디로 한 캠페인에 대한 신청자 리스트 받아오기 -->
+    <resultMap id="ResponseAdminCampaignApplicantVOMap" type="com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminCampaignApplicantVO" autoMapping="true">
+        <id column="CMPN_PST_ADPT_ID" property="cmpnPstAdptId" />
+        
+        <association property="userInfo" javaType="com.ktdsuniversity.edu.domain.user.vo.UserVO"  autoMapping="true">
+            <id column="USR_ID" property="usrId"></id>
+        </association>
+    </resultMap>
+    <select id="selectAdminCampaignApplicantListByCmpnId" resultMap="ResponseAdminCampaignApplicantVOMap" parameterType="com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCampaignApplicantVO">
+        <include refid="Common.paginationHeader" />
+        SELECT CPA.CMPN_PST_ADPT_ID
+             , CPA.ADPT_YN
+             , U.USR_ID
+             , U.LOG_ID
+             , U.BLG_ADDRS
+             , U.TTL_VSTR_CNT
+             , U.AVRG_VSTR_CNT
+             , U.BLG_NGHBR_CNT
+             , U.SCRP_CNT
+             , U.PNLT_CNT
+             , U.DLT_YN
+          FROM CMPN_PST_ADPT CPA
+         INNER JOIN (SELECT USR_ID
+                          , AUTR
+                          , LOG_ID
+                          , PNLT_CNT
+                          , BLG_ADDRS
+                          , TTL_VSTR_CNT
+                          , AVRG_VSTR_CNT
+                          , BLG_NGHBR_CNT
+                          , SCRP_CNT
+                          , DLT_YN
+                       FROM USR
+                      WHERE DLT_YN  = 'N'
+                        AND AUTR != '1005') U
+            ON U.USR_ID = CPA.BLG_USR_ID
+         WHERE CPA.CMPN_ID = #{cmpnId}
+           AND CPA.DLT_YN = 'N'
+       <if test="searchKeyword != null and searchKeyword != ''">
+           AND U.LOG_ID LIKE '%' || #{searchKeyword} || '%'
+       </if>
+         ORDER BY AUTR ASC
+       <if test='sortCol != null and sortCol != ""'>
+             , NVL(${sortCol}, 0) ${order}  
+       </if>
+       <include refid="Common.paginationFooter" />
+    </select>
+    
 </mapper>

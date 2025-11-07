@@ -9,11 +9,11 @@ import com.ktdsuniversity.edu.global.common.BaseVO;
 public class CampaignUpdateHistoryVO extends BaseVO{
 
     /**
-     * @ColumnName CMPN_UPDA_HIST_ID
+     * @ColumnName CMPN_UPDT_HIST_ID
      * @ColumnType VARCHAR2(50)
      * @ColumnComment 캠페인 수정 기록 아이디 (PK)
      */
-    private String cmpnUpdaHistId;
+    private String cmpnUpdtHistId;
 
     /**
      * @ColumnName CMPN_ID
@@ -59,12 +59,12 @@ public class CampaignUpdateHistoryVO extends BaseVO{
 
   
 
-    public String getCmpnUpdaHistId() {
-        return this.cmpnUpdaHistId;
+    public String getCmpnUpdtHistId() {
+        return this.cmpnUpdtHistId;
     }
     
-    public void setCmpnUpdaHistId(String cmpnUpdaHistId) {
-        this.cmpnUpdaHistId = cmpnUpdaHistId;
+    public void setCmpnUpdtHistId(String cmpnUpdtHistId) {
+        this.cmpnUpdtHistId = cmpnUpdtHistId;
     }
     
     public String getCmpnId() {
@@ -117,7 +117,7 @@ public class CampaignUpdateHistoryVO extends BaseVO{
 
 	@Override
 	public String toString() {
-		return "CampaignUpdateHistoryVO [cmpnUpdaHistId=" + cmpnUpdaHistId + ", cmpnId=" + cmpnId + ", updtItem="
+		return "CampaignUpdateHistoryVO [cmpnUpdtHistId=" + cmpnUpdtHistId + ", cmpnId=" + cmpnId + ", updtItem="
 				+ updtItem + ", befUpdtCn=" + befUpdtCn + ", aftUpdtCn=" + aftUpdtCn + ", updtAdmin=" + updtAdmin
 				+ ", updtRsn=" + updtRsn + ", toString()=" + super.toString() + "]";
 	}

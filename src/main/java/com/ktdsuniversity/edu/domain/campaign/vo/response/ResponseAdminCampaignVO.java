@@ -15,6 +15,7 @@ public class ResponseAdminCampaignVO extends CampaignVO {
 	private List<String> area;    // 지역 이름
 	private String parentArea;    // 부모 지역 이름
 	private String sttsCdNm;    // 공통 코드 이름
+	private String rtrnRsn;    // 반려 사유
 	
 	// 상세 페이지
 	private String logId;    // 회원 아이디 (USR)
@@ -82,6 +83,12 @@ public class ResponseAdminCampaignVO extends CampaignVO {
 	public void setSttsCdNm(String sttsCdNm) {
 		this.sttsCdNm = sttsCdNm;
 	}
+	public String getRtrnRsn() {
+		return this.rtrnRsn;
+	}
+	public void setRtrnRsn(String rtrnRsn) {
+		this.rtrnRsn = rtrnRsn;
+	}
 	public String getLogId() {
 		return this.logId;
 	}
@@ -143,9 +150,9 @@ public class ResponseAdminCampaignVO extends CampaignVO {
 	public String toString() {
 		return "ResponseAdminCampaignVO [flGrpId=" + flGrpId + ", flCnt=" + flCnt + ", fileVoList=" + fileVoList
 				+ ", adptCnt=" + adptCnt + ", area=" + area + ", parentArea=" + parentArea + ", sttsCdNm=" + sttsCdNm
-				+ ", logId=" + logId + ", cmpnPymntId=" + cmpnPymntId + ", pymntCd=" + pymntCd + ", pymntCrtDt="
-				+ pymntCrtDt + ", orderId=" + orderId + ", amnt=" + amnt + ", cmpnPrsnnPrc=" + cmpnPrsnnPrc
-				+ ", cmpnDrtnPrc=" + cmpnDrtnPrc + "]";
+				+ ", rtrnRsn=" + rtrnRsn + ", logId=" + logId + ", cmpnPymntId=" + cmpnPymntId + ", pymntCd=" + pymntCd
+				+ ", pymntCrtDt=" + pymntCrtDt + ", orderId=" + orderId + ", amnt=" + amnt + ", cmpnPrsnnPrc="
+				+ cmpnPrsnnPrc + ", cmpnDrtnPrc=" + cmpnDrtnPrc + "]";
 	}
 	
 }

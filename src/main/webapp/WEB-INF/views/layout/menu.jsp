@@ -120,7 +120,7 @@ pageEncoding="UTF-8"%>
                     <li class="menu-admin-report-selected"><a href="/admin/report_list">신고 관리</a></li>
                     <li class="menu-admin-campaign-selected"><a href="/admin/campaign-list">캠페인 관리</a></li>
                     <li class="menu-admin-category-selected"><a href="/admin/category-manage">카테고리 관리</a></li>
-                    <li><a href="">도움말 관리</a></li>
+                    <!-- <li><a href="/">도움말 관리</a></li>  -->
                   </ul>
                 </li>
               </c:if>

@@ -11,6 +11,7 @@
 <c:set var="css">
     <link type='text/css' rel='stylesheet' href='/css/campaignmain.css' />
     <link type='text/css' rel='stylesheet' href='/css/admin/admin_campaign_detail.css' />
+    <link type='text/css' rel='stylesheet' href='/css/admin/admin_campaign_reject_modal.css' />
     <link type='text/css' rel='stylesheet' href='/css/brich.css' />
 </c:set>
 
@@ -25,6 +26,8 @@
                 <jsp:param value="${detail.cmpnTitle}" name="cmpnTitle"></jsp:param>
                 <jsp:param value="${detail.sttsCd}" name="sttsCd"></jsp:param>
             </jsp:include>
+            <input type="hidden" id="adminId" value="${sessionScope.__LOGIN_USER__.usrId}"/>
+            <input type="hidden" id="cmpnId" value="${detail.cmpnId}"/>
 	        <div class="campaign-detail-wrapper">
                 <div class="cmpn-top-area">
                     <div class="cmpn-title flex-space-between">
@@ -160,19 +163,10 @@
             </div>
             
             <div class="btn-area">
-            <c:choose>
-                <c:when test="${detail.sttsCd == '2001'}">
+                <c:if test="${detail.sttsCd == '2001'}">
 		            <button type="button" class="campaign-yn-btn-group reject-btn" data-action="reject">반려</button>
                       <button type="button" class="campaign-yn-btn-group approve-btn" data-action="approve">승인</button>
-                </c:when>
-                
-                <c:when test="${detail.sttsCd == '2002' || detail.sttsCd == '2004'}">
-                    <button type="button" class="modify-btn">수정</button>
-                </c:when>
-                
-                <c:otherwise>
-                </c:otherwise>
-            </c:choose>
+                </c:if>
             </div>
         </div>
         
@@ -180,11 +174,11 @@
         <div id="rejectModal" class="reject-modal-area" style="display: none;">
 		    <div class="reject-modalcontent-area">
 		        <div class="reject-modal-title-area">
-		            <h4 class="reject-modal-title">반려 사유를 작성해 주세요.</h4>
+		            <span class="reject-modal-title">반려 사유를 작성해 주세요.</span>
 		        </div>
 		        
 		        <div class="reject-modal-input-area">
-		            <input type="text" class="reject-modal-input" placeholder="반려 사유 입력"/>
+		            <textarea type="text" class="reject-modal-input" placeholder="반려 사유 입력"></textarea>
 		        </div>
 		        
 		        <div class="reject-modal modal-btn-area-one">

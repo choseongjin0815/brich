@@ -153,6 +153,12 @@ public class AdminUserController {
 		return ajaxResponse;
 	}
 	
+	/**
+	 * 회원 관리 - 경고/정지 처리
+	 * @param usrId
+	 * @param adminPanaltyRequestVO
+	 * @return
+	 */
 	@ResponseBody
 	@PostMapping("/admin/user_penalty_process/{usrId}")
 	public AjaxResponse doAdminUserPenaltyProcessAction(@PathVariable String usrId, 

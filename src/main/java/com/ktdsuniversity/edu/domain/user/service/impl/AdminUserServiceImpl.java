@@ -56,6 +56,11 @@ public class AdminUserServiceImpl implements AdminUserService {
 	@Autowired
 	private MultipartFileHandler multipartFileHandler;
 	
+	/**
+	 * 회원 관리 목록
+	 * @param tab
+	 * @return
+	 */
 	@Override
 	public List<AdminUserListVO> readAdminUserList(String tab) {
 		
@@ -74,6 +79,11 @@ public class AdminUserServiceImpl implements AdminUserService {
 		
 	}
 
+	/**
+	 * 회원 상세 정보 
+	 * @param usrId
+	 * @return
+	 */
 	@Override
 	public AdminUserBaseInfoVO readAdminUserDetailById(String usrId) {
 		
@@ -131,6 +141,11 @@ public class AdminUserServiceImpl implements AdminUserService {
 		
 	}
 
+	/**
+	 * 광고주 가입 승인/반려
+	 * @param requestData
+	 * @return
+	 */
 	@Transactional
 	@Override
 	public boolean updateAdvertiserRegistAuthCode(Map<String, String> requestData) {
@@ -149,11 +164,21 @@ public class AdminUserServiceImpl implements AdminUserService {
 		}
 	}
 
+	/**
+	 * 블로거 카테고리 받아오기 (List)
+	 * @return
+	 */
 	@Override
 	public List<CommonCodeVO> readBlogCategoryList() {
 		return this.adminUserDao.selectBlogCategoryList();
 	}
 
+	/**
+	 * 회원 정보 수정
+	 * @param adminUserModifyInfoVO
+	 * @param newFiles
+	 * @return
+	 */
 	@Transactional
 	@Override
 	public boolean updateUserInfo(AdminUserModifyInfoVO adminUserModifyInfoVO, List<MultipartFile> newFiles) {

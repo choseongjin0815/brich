@@ -3,26 +3,23 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <div class="campaign-tab">
-    <c:choose>
-        <c:when test="${not empty param.sttsCd}" >
-            <input type="radio" name="campaign-tab" id="campaign-adopt">
-            <label for="campaign-adopt">캠페인</label>
-        </c:when>
+        <input type="radio" name="campaign-tab" id="campaign-detail" data-cmpn-id="${param.cmpnId}">
+        <label class="campaign-tab-detail" for="campaign-detail">캠페인</label>
         
-        <c:when test="${not empty param.sttsCd && 
+        <c:if test="${not empty param.sttsCd && 
                        (param.sttsCd eq '2005' || 
                         param.sttsCd eq '2006' || 
                         param.sttsCd eq '2007' || 
                         param.sttsCd eq '2009')}" >
             <input type="radio" name="campaign-tab" id="campaign-applicant">
             <label for="campaign-applicant">신청자</label>
-            
-            <input type="radio" name="campaign-tab" id="campaign-return-hist">
-            <label for="campaign-return-hist">채택자</label>
-        </c:when>
+        </c:if>
         
-        <c:otherwise>
-        
-        </c:otherwise>
-    </c:choose>
+        <c:if test="${not empty param.sttsCd && 
+                      (param.sttsCd eq '2006' || 
+                       param.sttsCd eq '2007' || 
+                       param.sttsCd eq '2009')}">
+            <input type="radio" name="campaign-tab" id="campaign-adopters">
+            <label for="campaign-adopters">채택자</label>
+        </c:if>
 </div>
