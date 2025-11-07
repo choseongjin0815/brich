@@ -31,17 +31,17 @@ pageEncoding="UTF-8"%>
       <div class="top-menu">
         <div class="top-menu-content">
         	<div class="top-menu-left flex-row">
-        		<div class="main-logo"></div>
+            <img src="/img/logo.png"/>
+        		
         		<div class="brich-title height-center">
         			<a href="/campaignmain">Brich</a>
         		</div>
         	</div>
         	<div class="top-menu-right flex-row">
 		        <div class="top-menu-search-area">
-		          <input class="search-input" type="text" name="searchKeyword" placeholder="Search" />
+		          <input class="search-input menu" type="text" name="searchKeywordMenu" placeholder="Search" />
 		        </div>
 	            <div class="top-menu-profile-area flex-row">
-	            	<div class="menu-profile"></div>
 	            	<div class="menu-profilename height-center">${sessionScope.__LOGIN_USER__.logId}</div>
 	            	<c:choose>
 	            	  <c:when test="${sessionScope.__LOGIN_USER__ ne null}">
@@ -51,7 +51,6 @@ pageEncoding="UTF-8"%>
 	            	      <a class="logout" href="/login">로그인</a>
 	            	  </c:otherwise>
 	            	</c:choose>
-	            	<div class="menu-alert"></div>
 				</div>
         	</div>
         </div>
@@ -112,7 +111,7 @@ pageEncoding="UTF-8"%>
                 <li class="admin-menu">
                   <span>MENU</span>
                   <li class="menu-campaignmain-selected"><a href="/campaignmain" class="admin-campaign">캠페인</a></li>
-                  <span>ADMIN MENU</span>
+                  <span class="menu-admin-header">ADMIN MENU</span>
                   <ul class="menu-content">
                   
                     <li class="menu-admin-user-selected"><a href="/admin/user_list">회원 관리</a></li>

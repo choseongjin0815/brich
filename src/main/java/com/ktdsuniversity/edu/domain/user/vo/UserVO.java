@@ -168,6 +168,8 @@ public class UserVO extends BaseVO{
      * @ColumnComment 사업자 등록증의 파일 그룹 아이디
      */
     private String flGrpId;
+    
+    private String blgTitle;
 
     public String getUsrId() {
         return this.usrId;
@@ -352,6 +354,14 @@ public class UserVO extends BaseVO{
     public void setFlGrpId(String flGrpId) {
         this.flGrpId = flGrpId;
     }
+
+	public String getBlgTitle() {
+		return this.blgTitle;
+	}
+
+	public void setBlgTitle(String blgTitle) {
+		this.blgTitle = blgTitle;
+	}
 
 	@Override
 	public String toString() {

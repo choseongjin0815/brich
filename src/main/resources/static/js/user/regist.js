@@ -204,7 +204,13 @@ $().ready(function() {
 
     $(".find-btn").on("click", function() {
         var name = $("#name").val();
-        window.location.href = "/find/id/" + ((name !== "") ? name : "non");
+        if ($("#name").val() === ""
+            || $("#email").val() === ""
+            || $("email-confirm").val() === "") {
+            alert("모든 값을 입력하세요!");
+        } else {
+            window.location.href = "/find/id/" + ((name !== "") ? name : "non");
+        }
     });
 
     $(".reset-password-btn").on("click", function() {
@@ -216,7 +222,14 @@ $().ready(function() {
     });
 
     $(".do-reset-btn").on("click", function() {
-        if ($("#email-confirm").val() === "OK"
+        if ($("#id").val() === ""
+            || $("#email").val() === ""
+            || $("#email-confirm").val() === ""
+            || $("#password").val() === ""
+            || $("#password-confirm").val() === "") {
+            alert("모든 값을 입력해주세요!");
+        }
+        else if ($("#email-confirm").val() === "OK"
             && $("#password").val() === $("#password-confirm").val()) {
             alert("비밀번호가 재설정 되었습니다.")
             $(".user-regist-form").submit();

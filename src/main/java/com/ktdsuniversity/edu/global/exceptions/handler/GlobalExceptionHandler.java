@@ -48,7 +48,8 @@ public class GlobalExceptionHandler {
 	public String viewErrorPage(BrichException hse, Model model) {
 		
 		logger.error(hse.getMessage(), hse);
-		
+		logger.info("{}", hse.getModelValue());
+		logger.info("{} ㅇㅇ", hse.getViewName());
 		model.addAttribute("errorMessage", hse.getMessage());
 		
 		if(hse.getModelKey() != null) {

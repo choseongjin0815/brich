@@ -227,7 +227,7 @@ public class WidgetController {
         return "/pay/success";
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+//    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(HttpServletRequest request, Model model) throws Exception {
         return "/pay/checkout";
     }

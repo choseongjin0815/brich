@@ -33,6 +33,7 @@
              , UPDT_DT
              , MTTR
              , DLT_YN
+             , BLG_TITLE
          FROM USR
         WHERE LOG_ID = #{logId}
           AND AUTR IN('1001', '1002', '1003', '1004', '1007')

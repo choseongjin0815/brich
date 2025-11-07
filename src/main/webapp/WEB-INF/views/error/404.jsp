@@ -10,7 +10,6 @@
 	</head>
 	<body>
 	    <div class="Wrapper">
-	       <jsp:include page="../member/memberloginlogout.jsp" />
 	       <h1 class="page-title">존재하지 않는 페이지입니다.</h1>
 	       
 	       ${errorMessage}

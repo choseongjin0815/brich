@@ -33,6 +33,7 @@
 			 INNER JOIN CM_CD CD ON CD.CD_ID = C.STTS_CD
 			 WHERE CP.USR_ID = #{usrId}
 			   AND CP.LFT_YN = 'N'
+			   AND C.STTS_CD IN ('2007', '2009')
 			 ORDER BY CR.CRT_DT DESC
         <include refid="Common.paginationFooter" />
     </select>

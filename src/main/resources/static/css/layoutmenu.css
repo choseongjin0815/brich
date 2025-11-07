@@ -44,10 +44,10 @@ ul {
           padding-left: 15px;
           font-size: 16px;
           font-weight: bold;
-          color: #5A67BA;
+          color: #045d89;
 
           a:visited {
-            color: #5A67BA;
+            color: #045d89;
           }
         }
       }
@@ -56,8 +56,9 @@ ul {
         display: flex;
         flex-grow: 1;
         background-color: white;
-
+        justify-content: space-between;
         & > .top-menu-search-area {
+          max-width: 1200px;
           flex-grow: 1;
           padding: 20px 100px 20px 50px;
           & > .search-input {
@@ -76,6 +77,8 @@ ul {
           }
 
           & > .menu-profilename {
+            color: #5A67BA;
+            font-weight: bold;
             flex-grow: 0.5;
             padding: 9px 0 9px 12px;
           }
@@ -171,7 +174,8 @@ ul {
       }
 
       #menu-image::before {
-        content: "🔗";
+       transform: translateY(1.7px);
+        content: url("/img/Chart.png")
       }
     }
   }
@@ -259,6 +263,11 @@ ul {
 	background-repeat: no-repeat;
 	background-position : right 10px bottom 50%;   
 	background-size: 15px;
+	
+	&.menu {
+	   min-width: 700px;
+	   max-width: 1100px;
+	}
   }
   .search-input:focus {  
     outline: none;
@@ -272,17 +281,30 @@ ul {
 
 .logout {
 	white-space: nowrap;
-	color: #333;
+	color: #616161;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	margin: 0 20px;
 	font-size: 14px;
+	font-weight: 600;
+	
+	&:hover {
+	   color: #333;
+	   transition: 0.1s;
+	   padding: 10px;
+	   border-radius: 10px;
+	   background-color: rgb(249, 249, 249);
+	}
 }
 
 .admin-campaign {
 	padding-left: 55px;
 }
 
-
+.menu-admin-header {
+	display: block;
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
 
