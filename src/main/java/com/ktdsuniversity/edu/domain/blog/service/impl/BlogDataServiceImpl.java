@@ -3,19 +3,16 @@ package com.ktdsuniversity.edu.domain.blog.service.impl;
 import java.util.List;
 import java.util.UUID;
 
+import com.ktdsuniversity.edu.domain.blog.dao.DailyVisitorDao;
+import com.ktdsuniversity.edu.domain.blog.dao.GoldenKeyWordDao;
+import com.ktdsuniversity.edu.domain.blog.vo.*;
+import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ktdsuniversity.edu.domain.blog.dao.PostDataDao;
 import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
-import com.ktdsuniversity.edu.domain.blog.vo.BlogDetailStatVO;
-import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
-import com.ktdsuniversity.edu.domain.blog.vo.PostDataInsertVO;
-import com.ktdsuniversity.edu.domain.blog.vo.PostDataVO;
-import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogInfoVO;
-import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
-import com.ktdsuniversity.edu.domain.blog.vo.RequestModifyBlogAddrsVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
@@ -33,10 +30,14 @@ public class BlogDataServiceImpl implements BlogDataService{
 	private CampaignDao campaignDao;
 	@Autowired
 	private UserDao userDao;
-	
+	@Autowired
+	private DailyVisitorDao dailyVisitorDao;
 	@Autowired
 	private PostDataDao postDataDao;
-	
+	@Autowired
+	private GoldenKeyWordDao goldenKeyWordDao;
+
+
 	@Override
 	public ResponseExpireSoonListVO readExpireSoonCampaignList(RequestExpireSoonCampaignVO requestExpireSoonCampaignVO) {
 		
@@ -138,8 +139,21 @@ public class BlogDataServiceImpl implements BlogDataService{
 
 
 
+	@Override
+	public List<DailyVisitorVO> selectDailyVisitors(String usrId) {
+		List<DailyVisitorVO> list = dailyVisitorDao.selectDailyVisitor(usrId);
+		return list;
+	}
 
 
-	
+	@Override
+	public List<CommonCodeVO> selectUserCategoryKeywords(String usrId) {
+		List<CommonCodeVO> result = goldenKeyWordDao.selectUserCategories(usrId);
+		return result;
+	}
 
+	@Override
+	public int selectTotalVisitor(String usrId) {
+		return dailyVisitorDao.selectTotalVisitor(usrId);
+	}
 }

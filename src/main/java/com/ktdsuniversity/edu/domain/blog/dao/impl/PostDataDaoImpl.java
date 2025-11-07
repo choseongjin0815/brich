@@ -38,7 +38,8 @@ public class PostDataDaoImpl extends SqlSessionDaoSupport implements PostDataDao
 
 	@Override
 	public double selectRecentIndex(String usrId) {
-		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectRecentIndex", usrId);
+	    Double result = super.getSqlSession().selectOne(this.NAME_SPACE + "selectRecentIndex", usrId);
+	    return (result != null) ? result : 0.0;
 	}
 
 	@Override

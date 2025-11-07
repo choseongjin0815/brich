@@ -8,8 +8,6 @@ import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ktdsuniversity.edu.domain.blog.service.DailyVisitorService;
-import com.ktdsuniversity.edu.domain.blog.service.GoldenKeyWordService;
 import com.ktdsuniversity.edu.domain.blog.vo.*;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 import org.slf4j.Logger;
@@ -38,11 +36,6 @@ public class BlogDataController {
 
 	@Autowired BlogDataService blogDataService;
 
-	@Autowired
-	DailyVisitorService dailyVisitorService;
-
-	@Autowired
-	GoldenKeyWordService goldenKeyWordService;
 
 	@GetMapping("/blog/{usrId}/dashboard")
 	public String viewBlogDashBoard(@PathVariable String usrId, HttpSession session, Model model, RequestExpireSoonCampaignVO requestExpireSoonCampaignVO, RequestBlogIndexListVO requestBlogIndexListVO) throws JsonProcessingException {
@@ -52,7 +45,7 @@ public class BlogDataController {
 	        return "redirect:/access-denied";
 	    }
 
-		requestExpireSoonCampaignVO.setListSize(4);
+		requestExpireSoonCampaignVO.setListSize(12);
 		requestExpireSoonCampaignVO.setPageCount(1);
 
 		ResponseExpireSoonListVO result =
@@ -61,13 +54,15 @@ public class BlogDataController {
 				this.blogDataService.readBlogIndexList(usrId);
 
 		List<DailyVisitorVO> dailyVisitorsResult =
-				this.dailyVisitorService.selectDailyVisitors(usrId);
+				this.blogDataService.selectDailyVisitors(usrId);
 		List<CommonCodeVO> goldenKeywordList =
-				this.goldenKeyWordService.selectUserCategoryKeywords(usrId);
+				this.blogDataService.selectUserCategoryKeywords(usrId);
 		ObjectMapper mapper = new ObjectMapper();
 		String goldenKeywordListJson = mapper.writeValueAsString(goldenKeywordList);
 
 		double currentIndex = this.blogDataService.selectMostRecentIndex(usrId);
+		int totalVisitor = this.blogDataService.selectTotalVisitor(usrId);
+
 		model.addAttribute("user", loginUser);
 		model.addAttribute("dailyVisitorsResult", dailyVisitorsResult);
 		model.addAttribute("list", result);
@@ -76,13 +71,13 @@ public class BlogDataController {
 		model.addAttribute("index", indexResult);
 		model.addAttribute("goldenKeywordListJson", goldenKeywordListJson);
 		model.addAttribute("currentIndex",currentIndex);
-
+		model.addAttribute("totalVisitor", totalVisitor);
 
 		return "blog/dashboard";
 	}
 	
 	@GetMapping("/blog/{usrId}/manage")
-	public String viewBlogManagePage(@PathVariable String usrId, HttpSession session, Model model) {
+	public String viewBlogManagePage(@PathVariable String usrId, HttpSession session, Model model, RequestExpireSoonCampaignVO requestExpireSoonCampaignVO) {
 		UserVO loginUser = (UserVO) session.getAttribute("__LOGIN_USER__");
 		if (loginUser == null || !loginUser.getUsrId().equals(usrId)) {
 			System.out.println(usrId);
@@ -92,6 +87,10 @@ public class BlogDataController {
 			return "redirect:/blog/"+ loginUser.getUsrId() + "/verification";
 		}
 		
+		
+		ResponseExpireSoonListVO result =
+				this.blogDataService.readExpireSoonCampaignList(requestExpireSoonCampaignVO);
+		model.addAttribute("list",result);
 		
 		
 		return "/blog/manage";

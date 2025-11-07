@@ -1,0 +1,57 @@
+.header-title{
+    min-width: 100px;
+    height:75px;
+    line-height: 100px;
+    margin-left: 75px;
+    font-size: 36px;
+    font-weight: 700;
+    color: #5A6ACF;
+}
+
+.dataTables_wrapper{
+	margin: 0 auto;
+}
+
+.manage-container{
+	display: flex;
+    flex-direction: column;
+    flex-grow:1;
+}
+
+table.dataTable th,
+table.dataTable td {
+  white-space: nowrap;
+}
+.dataTables_wrapper .dataTables_paginate {
+  text-align: center !important;
+  float: none !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  background-color: #7B61FF;
+  color: white !important;
+  border-radius: 6px;
+  margin: 0 4px;
+  padding: 6px 12px;
+  border: none !important;
+}
+
+
+/* 헤더 배경색, 글자색 */
+table.dataTable thead th {
+  background-color: #7B61FF;  /* 보라색 배경 */
+  color: #ffffff;              /* 흰색 글씨 */
+  font-weight: bold;           /* 굵은 글씨 */
+  text-align: center;          /* 가운데 정렬 */
+}
+
+
+
+/* 정렬 가능한 헤더에 화살표 아이콘 스타일 변경 */
+table.dataTable thead th.sorting:after,
+table.dataTable thead th.sorting_asc:after,
+table.dataTable thead th.sorting_desc:after {
+  font-family: 'FontAwesome';  /* 예: FontAwesome 아이콘 사용 */
+  content: "\f0dc";            /* 예시 아이콘 코드 (화살표) */
+  margin-left: 8px;
+  color: #ffffff;
+}

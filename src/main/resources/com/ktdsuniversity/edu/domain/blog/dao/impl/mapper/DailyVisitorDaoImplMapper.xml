@@ -21,4 +21,13 @@
 
     </select>
 
+    <select id="selectTotalVisitor"  parameterType="string" resultType="int">
+        SELECT TTL_VSTR_CNT
+          FROM USR
+         WHERE DLT_YN = 'N'
+           AND USR_ID = #{_parameter}
+    </select>
+
+
+
 </mapper>

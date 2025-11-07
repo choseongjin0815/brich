@@ -40,7 +40,7 @@
     		parameterType="string"
     		resultType="com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO">
     SELECT USR_ID
-    	 , TO_CHAR(STAT_DT, 'YYYY-MM-DD') AS STAT_DT
+    	 , TO_CHAR(STAT_DT, 'MM-DD') AS STAT_DT
     	 , INDX_VAL
     	 , INDX_VAL_AVG_5D
     	 , OVLL_BLG_INDX
@@ -57,7 +57,7 @@
     <select id="selectRecentIndex"
     		parameterType="string">
     
-    SELECT OVLL_BLG_INDX
+    SELECT NVL(OVLL_BLG_INDX,0) AS OVLL_BLG_INDX
 	  FROM TEAM_A.BLG_INDX
 	 WHERE USR_ID = #{_parameter}
 	   AND OVLL_BLG_INDX IS NOT NULL
