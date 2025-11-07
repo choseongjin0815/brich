@@ -91,7 +91,7 @@
 	text-align: right;
 }
 
-.flex-row{
+.flex-row-index{
 	display:flex;
 	justify-content: space-between;
 	align-items: center;

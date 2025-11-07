@@ -57,7 +57,7 @@
     <select id="selectRecentIndex"
     		parameterType="string">
     
-    SELECT OVLL_BLG_INDX
+    SELECT NVL(OVLL_BLG_INDX,0) AS OVLL_BLG_INDX
 	  FROM TEAM_A.BLG_INDX
 	 WHERE USR_ID = #{_parameter}
 	   AND OVLL_BLG_INDX IS NOT NULL

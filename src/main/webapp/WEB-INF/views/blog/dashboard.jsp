@@ -14,7 +14,7 @@
 	" />
 </jsp:include>
 <div class="dashboard-container">
-	<div class="header-title">Dashboard</div>
+	<div class="title">Dashboard</div>
 	<div class="grid">
 		<div>마감 임박 캠페인
 			<table>
@@ -48,7 +48,7 @@
 		<div>핵심 황금 키워드</div>
 		<div>
 			<h4 >내 블로그 지수</h4> 
-			<div class="flex-row">
+			<div class="flex-row-index">
 				<div>현재 블로그 지수: <span class="blog-index">${currentIndex}</span></div>
 				<button id="blog-index-detail" data-user-id="${sessionScope.__LOGIN_USER__.usrId}" class="blog-index-detail-btn">자세히 보기</button>
 			</div>
