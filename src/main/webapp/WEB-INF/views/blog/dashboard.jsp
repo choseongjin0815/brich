@@ -23,6 +23,7 @@
     <!-- ✅ 마감임박 캠페인 -->
     <div class="dashboard-section campaign-section">
       <div class="dashboard-title">마감임박 캠페인</div>
+	  <div class="dashboard-detail">곧 마감되는 캠페인이에요! 서둘러 신청하세요.</div>
       <table class="expire-table table">
         <tbody id="expire-table-body">
           <c:choose>
@@ -31,7 +32,7 @@
                 <tr class="expire-row" data-index="${status.index}">
                   <td><a href="/campaigndetail/${recommend.cmpnId}" class="btn-view">${recommend.cmpnTitle}</a></td>
                   <td>마감 ${recommend.rcrtEndDt}일 전</td>
-                  <td>${recommend.offrPrc}원</td>
+                  <td class="right-align">${recommend.offrPrc}원</td>
                 </tr>
               </c:forEach>
             </c:when>
@@ -51,6 +52,7 @@
     <!-- ✅ 추천 캠페인 -->
     <div class="dashboard-section campaign-section">
       <div class="dashboard-title">추천 캠페인</div>
+	  <div class="dashboard-detail">채택 확률이 높은 캠패인입니다!</div>
       <table class="recommend-table table">
         <tbody id="recommend-table-body">
           <c:choose>
@@ -58,7 +60,7 @@
               <c:forEach items="${recommended}" var="c" varStatus="status">
                 <tr class="recommend-row" data-index="${status.index}">
                   <td><a href="/campaigndetail/${c.cmpnId}" class="btn-view">${c.cmpnTitle}</a></td>
-                  <td>${c.offrPrc}원</td>
+                  <td class="right-align">${c.offrPrc}원</td>
                 </tr>
               </c:forEach>
             </c:when>
