@@ -5,7 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.ktdsuniversity.edu.domain.blog.vo.*;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostManageVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.PostReturnHistoryVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseDenyHistoryVO;
 import com.ktdsuniversity.edu.global.common.CommonCodeVO;
 
 public interface BlogDataService {
@@ -39,5 +43,11 @@ public interface BlogDataService {
 	List<CommonCodeVO> selectUserCategoryKeywords(String usrId);
 
 	int selectTotalVisitor(String usrId);
+
+	List<CampaignPostManageVO> readCampaignPostByUsrId(String usrId);
+
+	List<ResponseDenyHistoryVO> getReturnHistory(String postId);
+
+	List<CampaignVO> selectRecommendCampaign(String usrId);
 
 }

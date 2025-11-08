@@ -12,6 +12,7 @@ public class AccessControlInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+
 		String uri = request.getRequestURI();  
         UserVO loginUser = (UserVO)request.getSession().getAttribute("__LOGIN_USER__");
         String auth = null;
@@ -37,6 +38,7 @@ public class AccessControlInterceptor implements HandlerInterceptor{
             && (!"1002".equals(auth) && !"1003".equals(auth) && !"1004".equals(auth))) {
         	return false;
         }
+		
         return true;
 	}
 	

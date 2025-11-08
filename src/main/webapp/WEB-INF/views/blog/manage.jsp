@@ -22,39 +22,94 @@
 		<div class="manage-container">
 			<div class="header-title">블로그 관리</div>
 			
-			<table class="table table-bordered table-hover dt-responsive">
-			        
-			        <thead>
-			          <tr>
-			            <th>제출일</th>
-			            <th>제목</th>
-			            <th>캠페인 제목</th>
-			            <th>상태</th>
-			            <th>반려사유</th>
-			          </tr>
-			        </thead>
-				<tbody>
-				<c:choose>
-					<c:when test="${not empty list.list}">
-						<c:forEach items="${list.list}" var="recommend">
+			<div class="info-container">
+				<div class="blog-info">
+									<div class="info-box">
+										1
+									</div>
+									<div class="info-box">
+										1
+									</div>
+									<div class="info-box">
+										1
+									</div>
+									<div class="info-box">
+										1
+									</div>
+									<div class="info-box">
+										1
+									</div>
+								</div>
+			</div>
+			<div class="table-container">
+				
+				
+				<table class="table table-bordered table-hover dt-responsive">
+				        
+				        <thead>
+				          <tr>
+				            <th>제출일</th>
+				            <th>제목</th>
+				            <th>캠페인 제목</th>
+				            <th>상태</th>
+				            <th>반려사유</th>
+				          </tr>
+				        </thead>
+					<tbody>
+					<c:choose>
+						<c:when test="${not empty list}">
+							<c:forEach var="post" items="${list}">
+							  <tr >
+							    <td class="center">${post.pstSbmtDt}</td>
+							    <td><a href="${post.pstUrl}" target="_blank">${post.pstTitle}</a></td>
+							    <td>${post.cmpnTitle}</td>
+								<td class="center">
+								  <c:choose>
+								    <c:when test="${post.pstSttsCd eq '6001'}">
+								      <span class="status status-pending">제출 전</span>
+								    </c:when>
+								    <c:when test="${post.pstSttsCd eq '6002'}">
+								      <span class="status status-review">검토중</span>
+								    </c:when>
+								    <c:when test="${post.pstSttsCd eq '6003'}">
+								      <span class="status status-rejected">반려</span>
+								    </c:when>
+								    <c:when test="${post.pstSttsCd eq '6004'}">
+								      <span class="status status-approved">승인</span>
+								    </c:when>
+								    <c:otherwise>
+								      <span class="status status-unknown">-</span>
+								    </c:otherwise>
+								  </c:choose>
+								</td>
+	
+							    <td class ="center">
+							      <c:choose>
+							        <c:when test="${post.hasReturn}">
+							          <button class="btn-reason" data-id="${post.cmpnPstAdptId}">반려 내용 보기</button>
+							        </c:when>
+							        <c:otherwise>-</c:otherwise>
+							      </c:choose>
+							    </td>
+							  </tr>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>
 							<tr>
-								<td>${recommend.cmpnId}</td>
-								<td>${recommend.cmpnTitle}</td>
-								<td>${recommend.rcrtEndDt}</td>
-								<td>${recommend.offrCn}</td>
-								<td>${recommend.offrCn}</td>
+								<td colspan="5" class="no-data">표시할 캠페인 없음</td>
 							</tr>
-						</c:forEach>
-					</c:when>
-					<c:otherwise>
-						<tr>
-							<td colspan="5" class="no-data">표시할 캠페인 없음</td>
-						</tr>
-					</c:otherwise>
-				</c:choose>
-				</tbody>
-	      	</table>
-			
+						</c:otherwise>
+					</c:choose>
+					</tbody>
+		      	</table>
+			</div>
+			<div id="reason-modal" class="modal">
+			  <div class="modal-content">
+			    <span class="close">&times;</span>
+			    <h3>반려사유</h3>
+			    <div id="reason-detail"></div>
+			  </div>
+			</div>
 		</div>
 	</body>
 </html>

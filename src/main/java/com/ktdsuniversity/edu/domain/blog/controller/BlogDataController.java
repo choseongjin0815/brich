@@ -2,9 +2,8 @@ package com.ktdsuniversity.edu.domain.blog.controller;
 
 
 
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,11 +17,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostManageVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseDenyHistoryVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 
 
@@ -57,6 +58,7 @@ public class BlogDataController {
 				this.blogDataService.selectDailyVisitors(usrId);
 		List<CommonCodeVO> goldenKeywordList =
 				this.blogDataService.selectUserCategoryKeywords(usrId);
+		List<CampaignVO> recommendResult = this.blogDataService.selectRecommendCampaign(usrId);
 		ObjectMapper mapper = new ObjectMapper();
 		String goldenKeywordListJson = mapper.writeValueAsString(goldenKeywordList);
 
@@ -72,6 +74,7 @@ public class BlogDataController {
 		model.addAttribute("goldenKeywordListJson", goldenKeywordListJson);
 		model.addAttribute("currentIndex",currentIndex);
 		model.addAttribute("totalVisitor", totalVisitor);
+		model.addAttribute("recommended",recommendResult);
 
 		return "blog/dashboard";
 	}
@@ -88,10 +91,8 @@ public class BlogDataController {
 		}
 		
 		
-		ResponseExpireSoonListVO result =
-				this.blogDataService.readExpireSoonCampaignList(requestExpireSoonCampaignVO);
-		model.addAttribute("list",result);
-		
+		List<CampaignPostManageVO> results = this.blogDataService.readCampaignPostByUsrId(usrId);
+		model.addAttribute("list",results);
 		
 		return "/blog/manage";
 	}
@@ -114,6 +115,12 @@ public class BlogDataController {
 	        @PathVariable String usrId) {
 	    List<BlogDetailStatVO> list = blogDataService.readBlogDetailStat(usrId);
 	    return list;
+	}
+	
+	@GetMapping("/api/user/{postId}/return-reason")
+	@ResponseBody
+	public List<ResponseDenyHistoryVO> getReturnHistory(@PathVariable String postId) {
+	    return blogDataService.getReturnHistory(postId);
 	}
 
 }

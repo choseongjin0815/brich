@@ -12,8 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostManageVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseModifyCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
@@ -682,6 +684,22 @@ public class CampaignServiceImpl implements CampaignService {
 	}
 	
 	return this.campaignDao.selectDenyHistoryByCmpnPstAdptId(postId);
+  }
+
+  @Override
+  public List<CampaignVO> readExpireSoonCampaignList(RequestExpireSoonCampaignVO requestExpireSoonCampaignVO) {
+	  
+	return this.campaignDao.selectExpireSoonCampaign(requestExpireSoonCampaignVO);
+  }
+
+  @Override
+  public List<CampaignPostManageVO> readCampaignManageListByUsrId(String usrId) {
+	return this.campaignDao.selectCampaignPostListByUsrId(usrId);
+  }
+
+  @Override
+  public List<CampaignVO> readRecommendedCampaignByUsrId(String usrId) {
+	return this.campaignDao.selectRecommendedCampaignByUsrId(usrId);
   }
 
 

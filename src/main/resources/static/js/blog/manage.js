@@ -21,7 +21,37 @@ $(document).ready(function() {
 		    next: "다음",
 		    previous: "이전"
 		  }
-		}
+		},
+		autoWidth: false, // ✅ 수동 width 적용 가능하게 함
+		columnDefs: [
+		  { width: "80px", targets: 0 },   // 첫 번째 열 80px
+		  { width: "400px", targets: 1 },  // 두 번째 열 200px
+		  { width: "300px", targets: 2 },  // 세 번째 열 150px
+		]
     });
+	
+	$(document).on("click", ".btn-reason", function () {
+	  const postId = $(this).data("id");
+	  $.ajax({
+	    url: `/api/user/${postId}/return-reason`,
+	    type: "GET",
+		success: function (data) {
+		  let html = "";
+		  if (typeof data === "string") {
+		    html = `<p>${data}</p>`;
+		  } else if (Array.isArray(data)) {
+		    data.forEach(r => {
+		      html += `<p><strong>${r.crtDt}</strong><br>${r.postRetnRsn}</p><hr>`;
+		    });
+		  }
+		  $("#reason-detail").html(html);
+		  $("#reason-modal").fadeIn(200);
+		}
+	  });
+	});
+
+	$(".close, #reason-modal").on("click", function (e) {
+	  if ($(e.target).is(".modal, .close")) $("#reason-modal").fadeOut(200);
+	});
 });
 

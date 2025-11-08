@@ -10,7 +10,7 @@
 }
 
 .simple-paginator button {
-  background-color: #FBFCFE;
+  background-color: #5A6ACF;
   color: #5A6ACF;
   border: none;
   padding: 8px 14px;
@@ -20,5 +20,8 @@
   & > img{
   	filter: sepia(100%) saturate(500%) hue-rotate(180deg);
   	}
+}
+.simple-paginator button:disabled{
+	background-color: #FBFCFE;
 }
 

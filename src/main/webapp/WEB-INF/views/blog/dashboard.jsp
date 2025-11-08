@@ -16,40 +16,65 @@
 	" />
 </jsp:include>
 <div class="dashboard-container">
-	<div class="title">Dashboard</div>
-	<div class="grid">
-		<div>
-		<div class="section-header">
-			<div class="dashboard-title">마감임박 캠페인</div>
-		</div>
-			<table>
-				<tbody>
-				<c:choose>
-					<c:when test="${not empty list.list}">
-						<c:forEach items="${list.list}" var="recommend">
-							<tr>
-								<td>${recommend.cmpnId}</td>
-								<td>${recommend.cmpnTitle}</td>
-								<td>${recommend.rcrtEndDt}</td>
-								<td>${recommend.offrCn}</td>
-							</tr>
-						</c:forEach>
-					</c:when>
-					<c:otherwise>
-						<tr>
-							<td colspan="6" class="no-data">표시할 캠페인 없음</td>
-						</tr>
-					</c:otherwise>
-				</c:choose>
-				</tbody>
-			</table>
-			<jsp:include page="/WEB-INF/views/layout/paginator-simple.jsp">
-				<jsp:param name="havePrevPageGroup" value="${paginator.havePrevPageGroup}" />
-				<jsp:param name="pageNo" value="${paginator.pageNo}" />
-				<jsp:param name="haveNextPageGroup" value="${paginator.haveNextPageGroup}" />
-			</jsp:include>
-		</div>
-		<div class="dashboard-title">추천 캠페인</div>
+  <div class="title">Dashboard</div>
+
+  <div class="grid">
+
+    <!-- ✅ 마감임박 캠페인 -->
+    <div class="dashboard-section campaign-section">
+      <div class="dashboard-title">마감임박 캠페인</div>
+      <table class="expire-table table">
+        <tbody id="expire-table-body">
+          <c:choose>
+            <c:when test="${not empty list.list}">
+              <c:forEach items="${list.list}" var="recommend" varStatus="status">
+                <tr class="expire-row" data-index="${status.index}">
+                  <td><a href="/campaigndetail/${recommend.cmpnId}" class="btn-view">${recommend.cmpnTitle}</a></td>
+                  <td>마감 ${recommend.rcrtEndDt}일 전</td>
+                  <td>${recommend.offrPrc}원</td>
+                </tr>
+              </c:forEach>
+            </c:when>
+            <c:otherwise>
+              <tr><td colspan="6" class="no-data">표시할 캠페인 없음</td></tr>
+            </c:otherwise>
+          </c:choose>
+        </tbody>
+      </table>
+      <jsp:include page="/WEB-INF/views/layout/paginator-simple.jsp">
+        <jsp:param name="havePrevPageGroup" value="true" />
+        <jsp:param name="pageNo" value="1" />
+        <jsp:param name="haveNextPageGroup" value="true" />
+      </jsp:include>
+    </div>
+
+    <!-- ✅ 추천 캠페인 -->
+    <div class="dashboard-section campaign-section">
+      <div class="dashboard-title">추천 캠페인</div>
+      <table class="recommend-table table">
+        <tbody id="recommend-table-body">
+          <c:choose>
+            <c:when test="${not empty recommended}">
+              <c:forEach items="${recommended}" var="c" varStatus="status">
+                <tr class="recommend-row" data-index="${status.index}">
+                  <td><a href="/campaigndetail/${c.cmpnId}" class="btn-view">${c.cmpnTitle}</a></td>
+                  <td>${c.offrPrc}원</td>
+                </tr>
+              </c:forEach>
+            </c:when>
+            <c:otherwise>
+              <tr><td colspan="6" class="no-data">표시할 캠페인 없음</td></tr>
+            </c:otherwise>
+          </c:choose>
+        </tbody>
+      </table>
+
+      <jsp:include page="/WEB-INF/views/layout/paginator-simple.jsp">
+        <jsp:param name="havePrevPageGroup" value="true" />
+        <jsp:param name="pageNo" value="1" />
+        <jsp:param name="haveNextPageGroup" value="true" />
+      </jsp:include>
+    </div>
 
 
 		<div class="dashboard-section golden-keyword-section">

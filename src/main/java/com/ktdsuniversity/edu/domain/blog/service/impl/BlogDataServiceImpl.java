@@ -14,8 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ktdsuniversity.edu.domain.blog.dao.PostDataDao;
 import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
+import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostManageVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.PostReturnHistoryVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseDenyHistoryVO;
 import com.ktdsuniversity.edu.domain.user.dao.UserDao;
 import com.ktdsuniversity.edu.global.util.PythonExecutor;
 
@@ -27,7 +31,7 @@ public class BlogDataServiceImpl implements BlogDataService{
 	private final String NAME_SPACE = "C:\\Users\\User\\Desktop\\project\\brich-project\\src\\main\\resources\\static\\crawler\\";
 	
 	@Autowired
-	private CampaignDao campaignDao;
+	private CampaignService campaignService;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -39,16 +43,17 @@ public class BlogDataServiceImpl implements BlogDataService{
 
 
 	@Override
-	public ResponseExpireSoonListVO readExpireSoonCampaignList(RequestExpireSoonCampaignVO requestExpireSoonCampaignVO) {
-		
-		List<CampaignVO> list = this.campaignDao.selectExpireSoonCampaign(requestExpireSoonCampaignVO);
-		
-		ResponseExpireSoonListVO result = new ResponseExpireSoonListVO();
-		result.setList(list);
-		int totalCount = 50;
-		requestExpireSoonCampaignVO.setPageCount(totalCount);;
-		return result;
+	public ResponseExpireSoonListVO readExpireSoonCampaignList(RequestExpireSoonCampaignVO request) {
+
+	    // ✅ 기존 DAO 직접 호출 → Service 계층 호출
+	    List<CampaignVO> list = this.campaignService.readExpireSoonCampaignList(request);
+
+	    ResponseExpireSoonListVO result = new ResponseExpireSoonListVO();
+	    result.setList(list);
+	    result.setCount(50);
+	    return result;
 	}
+
 
 	@Transactional
 	@Override
@@ -82,14 +87,14 @@ public class BlogDataServiceImpl implements BlogDataService{
 	@Transactional
 	@Override
 	public boolean insertPostData(PostDataInsertVO post) {
-		int insertCount = postDataDao.insertPostData(post); 
+		int insertCount = this.postDataDao.insertPostData(post); 
 		
 		return insertCount > 0;
 	}
 
 	@Override
 	public List<BlogIndexVO> readBlogIndexList(String usrId) {
-		List<BlogIndexVO> list = postDataDao.selectBlogIndex(usrId);
+		List<BlogIndexVO> list = this.postDataDao.selectBlogIndex(usrId);
 		
 		return list;
 	}
@@ -127,12 +132,12 @@ public class BlogDataServiceImpl implements BlogDataService{
 	@Override
 	public double selectMostRecentIndex(String usrId) {
 		
-		return postDataDao.selectRecentIndex(usrId);
+		return this.postDataDao.selectRecentIndex(usrId);
 	}
 
 	@Override
 	public List<BlogDetailStatVO> readBlogDetailStat(String usrId) {
-		List<BlogDetailStatVO> list  = postDataDao.selectBlogDetailStat(usrId);
+		List<BlogDetailStatVO> list  = this.postDataDao.selectBlogDetailStat(usrId);
 		
 		return list;
 	}
@@ -141,19 +146,38 @@ public class BlogDataServiceImpl implements BlogDataService{
 
 	@Override
 	public List<DailyVisitorVO> selectDailyVisitors(String usrId) {
-		List<DailyVisitorVO> list = dailyVisitorDao.selectDailyVisitor(usrId);
+		List<DailyVisitorVO> list = this.dailyVisitorDao.selectDailyVisitor(usrId);
 		return list;
 	}
 
 
 	@Override
 	public List<CommonCodeVO> selectUserCategoryKeywords(String usrId) {
-		List<CommonCodeVO> result = goldenKeyWordDao.selectUserCategories(usrId);
+		List<CommonCodeVO> result = this.goldenKeyWordDao.selectUserCategories(usrId);
 		return result;
 	}
 
 	@Override
 	public int selectTotalVisitor(String usrId) {
-		return dailyVisitorDao.selectTotalVisitor(usrId);
+		return this.dailyVisitorDao.selectTotalVisitor(usrId);
+	}
+
+	@Override
+	public List<CampaignPostManageVO> readCampaignPostByUsrId(String usrId) {
+		return this.campaignService.readCampaignManageListByUsrId(usrId);
+	}
+
+
+	@Override
+	public List<ResponseDenyHistoryVO> getReturnHistory(String postId) {
+		
+		return this.campaignService.readDenyHistoryByCmpnPstAdptId(postId);
+		
+	}
+
+
+	@Override
+	public List<CampaignVO> selectRecommendCampaign(String usrId) {
+		return this.campaignService.readRecommendedCampaignByUsrId(usrId);
 	}
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostManageVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.PostReturnHistoryVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
@@ -274,6 +275,16 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 	@Override
 	public List<ResponseDenyHistoryVO> selectDenyHistoryByCmpnPstAdptId(String postId) {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectDenyHistoryByCmpnPstAdptId", postId);
+	}
+
+	@Override
+	public List<CampaignPostManageVO> selectCampaignPostListByUsrId(String usrId) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectCampaignPostListByUsrId", usrId);
+	}
+
+	@Override
+	public List<CampaignVO> selectRecommendedCampaignByUsrId(String usrId) {
+		return super.getSqlSession().selectList(this.NAME_SPACE+"selectRecommendedCampaignByUsrId",usrId);
 	}
 
 }

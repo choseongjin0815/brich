@@ -4,6 +4,9 @@ package com.ktdsuniversity.edu.domain.campaign.service;
 
 import java.util.List;
 
+import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostManageVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.PostReturnHistoryVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseModifyCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
@@ -73,6 +76,12 @@ public interface CampaignService {
 	ResponseModifyCampaignVO readModifyInfoByCmpnId(String cmpnId);
 
 	List<ResponseDenyHistoryVO> readDenyHistoryByCmpnPstAdptId(String postId);
+
+	List<CampaignVO> readExpireSoonCampaignList(RequestExpireSoonCampaignVO requestExpireSoonCampaignVO);
+
+	List<CampaignPostManageVO> readCampaignManageListByUsrId(String usrId);
+
+	List<CampaignVO> readRecommendedCampaignByUsrId(String usrId);
 
 
 }

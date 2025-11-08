@@ -17,7 +17,29 @@
     }
 }
 
+.table{
+	width: 100%;
+	
+	& a{
+		color: #5A6ACF;
+	}
+	& td{
+		padding: 10px;
+	}
+	
+	.expire{
+		color: #f00 !important;
+	}
+}
 
+.campaign-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.campaign-section .paginator-wrapper {
+  margin-top: auto; /* ✅ 남은 공간을 밀어내서 맨 아래로 이동 */
+}
 .header-title{
     min-width: 100px;
     height:75px;
