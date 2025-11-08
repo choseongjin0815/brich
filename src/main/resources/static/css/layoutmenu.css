@@ -179,12 +179,77 @@ ul {
       }
     }
   }
+  
 
+.applied-list { margin-top: 8px; }
+
+.applied-page-nav{
+  display:flex; align-items:center; justify-content:center;
+  gap:10px; margin-top:10px;
+}
+
+.applied-page-nav .applied-prev,
+.applied-page-nav .applied-next{
+  width:36px; height:36px; border-radius:8px;
+  background:#fff; border:1px solid rgba(0,0,0,.08);
+  box-shadow:0 1px 2px rgba(0,0,0,.06);
+  color:#7f89ff; font-size:18px; line-height:1;
+  display:inline-flex; align-items:center; justify-content:center;
+  cursor:pointer; transition: box-shadow .18s ease, transform .18s ease;
+}
+.applied-page-nav .applied-prev:hover,
+.applied-page-nav .applied-next:hover{ box-shadow:0 2px 6px rgba(0,0,0,.12); transform: translateY(-1px); }
+.applied-page-nav .applied-prev:disabled,
+.applied-page-nav .applied-next:disabled{ opacity:.4; cursor:default; transform:none; }
+
+.applied-page-indicator{ font-size:13px; color:#6b7280; }
+  
+.applied-list .js-applied-items{
+  display:flex; flex-direction:column; gap:10px;
+}
+.applied-list .js-applied-items > a{ display:block; } /* 보여질 때 block */
+
+
+  .submit-area{
+	box-shadow: 1px 1px 1px rgba(0,0,0,.12), 2px 2px 2px rgba(0,0,0,.12), inset 0 1px 0 rgba(0,0,0,.06),inset 1px 0 0 rgba(0,0,0,.06); 
+	
+  	flex-basis : 50px;
+  	min-width: 300px;
+  	max-width: 450px;
+  	align-items: center;
+  	font-size : 16px;
+  	font-weight: normal;
+  	padding : 5px 15px 5px 15px;
+  	border-radius : 4px;
+  	
+  	.submit-title-area{
+  		padding-left: 5px;
+  	}
+  	.submit-title{
+  		font-size : 18px;
+  		font-weight: bold;
+  	}
+  	.submit-lo{
+		font-size : 12px;  	
+  		color : #2A46A9;
+  		font-weight: bold;
+  	}
+  	.submit-cmpn-image{
+  		width: 40px;
+  		height:40px;
+  	}
+  	.submit-stts{
+  	flex-grow : 1;
+  	text-align : right;
+  	padding-right:30px;
+  	color : #C4C93F;
+  	font-weight: bold;
+  	}
+  }
   .flex-row {
     display: flex;
     flex-direction: row;
   }
-
   .flex-column {
     display: flex;
     flex-direction: column;

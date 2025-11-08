@@ -7,6 +7,9 @@
     padding: 0;
     
   }
+.cursor-pointer {  
+	cursor : pointer;
+}  
 .box-shadow {
 	box-shadow: 0 2px 12px rgba(0,0,0,0.3);
 	border-radius : 10px;
@@ -85,38 +88,44 @@
     }
   }
   
-  .campaign-main-list-area{
-    padding-top : 25px;
-    & > .campaign-main-block:visited{
-        color : #333;
-    }
-    & > .campaign-main-block{
-        display:inline-block;
-        width: 353px;
-        padding: 0 25px 20px 0;
-        gap:50px;
-        & > .campaign-thumbnail{
-            height:200px;
-            width:320px;
-            background-color : #DDE1FF;
-            border-radius : 15px;
-            position : relative;
-            & > .cmpn-image{
-	            height : 100%;
-	            width : 100%;   
-	            object-fit: cover;
-	            border-radius : 15px;
-            }
-        }
-        
-        & > .campaign-one-offrcn {
-            font-size:14px;
-        }
-        .campaign-one-adptcnt{
-            font-size:14px;
-        }
-    }
-  }
+  /**/
+.campaign-main-list-area {
+  padding-top: 25px;
+}
+
+.campaign-main-list-area > .campaign-main-block {
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  transform: translateY(0);
+  cursor: pointer;
+  display: inline-block;
+  width: 353px;
+  padding: 0 25px 20px 0;
+  vertical-align: top;
+}
+
+.campaign-main-list-area > .campaign-main-block > .campaign-thumbnail {
+  height: 200px;
+  width: 320px;
+  background-color: #DDE1FF;
+  border-radius: 15px;
+  position: relative;
+}
+
+.campaign-main-list-area > .campaign-main-block > .campaign-thumbnail > .cmpn-image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+.campaign-main-list-area > .campaign-main-block:hover,
+.campaign-main-list-area > .campaign-main-block:focus,
+.campaign-main-list-area > .campaign-main-block:focus-within {
+  outline: none;
+  transform: translate3d(0, -10px, 0);
+}
+  
+  /**/
   .padding-10px{
     padding-left:10px;
   }
@@ -210,7 +219,6 @@
 
               & > .right-bar-detail-table {
                 display: flex;
-                border-bottom: 1px solid black;
                 flex-direction: column;
                 padding-bottom: 20px;
 
@@ -478,6 +486,10 @@
 .italic{
 	font-style: italic;
 }
+.gap5px{
+	
+}
+
 
 .subscribe-area{
 	padding-top : 50px;

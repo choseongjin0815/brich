@@ -86,8 +86,44 @@
 			<div>현재 블로그 지수:	 <span class="blog-index">${currentIndex}</span></div>
 			<canvas id="blogIndexChart"></canvas>
 		</div>
-        <div class="dashboard-title">신청한 캠페인</div>
-
+		
+		<!-- 신청한 캠페인 -->
+		<div class="dashboard-title">
+		  <div class="section-header">신청한 캠페인</div>
+		  <div class="dashboard-detail">내가 신청한 캠페인 목록</div>
+		
+		  <div class="applied-list" data-page-size="4" data-max-pages="4">
+		    <div class="flex-column js-applied-items">
+		      <c:choose>
+		        <c:when test="${not empty campaignList}">
+		          <c:forEach items="${campaignList}" var="campaignList">
+			          	<a href="/campaigndetail/${campaignList.cmpnId}">
+				           <div class="flex-row submit-area">
+				              <img class="submit-cmpn-image" src="/file/1234/FG-20251104-000155/FL-20251104-000279"/>
+				              <div class="flex-column submit-title-area">
+				                <div class="submit-lo">${campaignList.parentArea}</div>
+				                <div class="submit-title">${campaignList.cmpnTitle}</div>
+				              </div>
+				              <div class="submit-stts">채택 전</div>
+				           </div>
+			            </a>
+		          </c:forEach>
+		        </c:when>
+		        <c:otherwise>
+		          <div class="no-data">표시할 캠페인 없음</div>
+		        </c:otherwise>
+		      </c:choose>
+		    </div>
+		
+		    <div class="applied-page-nav">
+		      <button type="button" class="applied-prev" aria-label="이전">‹</button>
+		      <span class="applied-page-indicator">
+		        <b class="applied-page-now">1</b> / <span class="applied-page-total">1</span>
+		      </span>
+		      <button type="button" class="applied-next" aria-label="다음">›</button>
+		    </div>
+		  </div>
+		</div>
 
 		<!-- 나의 블로그 방문자 수 -->
 		<div class="dashboard-section daily-visitor-section">

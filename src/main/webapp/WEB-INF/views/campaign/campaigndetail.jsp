@@ -75,7 +75,7 @@
 				</div>
 	            <div class="cmpn-title-offrCn">${detail.offrCn}</div>
 	            <div class ="cmpn-title-person flex-space-between">
-	              <div>신청 ${detail.adptCnt } / ${detail.rcrtPrsnn }</div>
+	              <div>신청자 ${detail.adptCnt } / 모집인원 ${detail.rcrtPrsnn }</div>
 	              <c:if test="${(sessionScope.__LOGIN_USER__.autr == 1002 
                               or sessionScope.__LOGIN_USER__.autr == 1003)}">
 		              <c:if test="${not empty detail.pstSttsCd}">
