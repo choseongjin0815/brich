@@ -207,7 +207,24 @@ ul {
 .applied-list .js-applied-items{
   display:flex; flex-direction:column; gap:10px;
 }
-.applied-list .js-applied-items > a{ display:block; } /* 보여질 때 block */
+.applied-list .js-applied-items > a{ display:block; } 
+.applied-list .js-applied-items > a,
+.applied-list .js-applied-items > a:link,
+.applied-list .js-applied-items > a:visited,
+.applied-list .js-applied-items > a:hover,
+.applied-list .js-applied-items > a:active {
+  color: inherit;            
+  text-decoration: none;     
+}
+
+.applied-list .js-applied-items > a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.applied-list .js-applied-items > a:focus {
+  outline: none;
+}
+
 
 
   .submit-area{
