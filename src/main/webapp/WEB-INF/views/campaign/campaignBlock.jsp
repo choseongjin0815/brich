@@ -8,7 +8,7 @@
             <img src="/file/${param.usrId}/${param.flGrpId}/${param.flId}" />
         </c:when>
         <c:otherwise>
-            <img src="/img/image13.png" />
+            <img src="/img/logo.png" />
         </c:otherwise>
     </c:choose>
     <div class="flex-grow-1">
@@ -27,8 +27,9 @@
             </c:when>
             
             <c:when test="${param.cmpnCdNm eq '선정중'}">
-            </div>
-            <div class="font-green">${param.cmpnCdNm}</div>
+                <div class="enddate">캠페인 시작일 : ${param.rcrtStrtDt}</div>
+	            </div>
+	            <div class="font-green">${param.cmpnCdNm}</div>
             </c:when>
             
             <c:when test="${param.cmpnCdNm eq '진행중'}">
