@@ -75,6 +75,12 @@ $().ready(function() {
         }
     });
 
+    // 메뉴 외부 클릭시 메뉴 숨김
+        $(document).on("click", function() {
+            $(".report-btn-rm, .leave-chat-btn-rm").hide();
+            $(".modal").fadeOut(200);
+        });
+    
     // 페이지 벗어날 때 WebSocket 연결 해제
     $(window).on("beforeunload", function() {
         disconnect();

@@ -23,7 +23,7 @@ pageEncoding="UTF-8"%> <%@ taglib prefix="c" uri="jakarta.tags.core" %>
                     <div class="profile-end middle-center flex-column">
                         <span>연결 계정</span> 
                         <c:choose>
-	                        <c:when test="${sessionScope.__LOGIN_USER__.blgTitle}">
+	                        <c:when test="${sessionScope.__LOGIN_USER__.blgTitle ne null}">
 	                           <div>${sessionScope.__LOGIN_USER__.blgTitle }</div>
 	                        </c:when>
 	                        <c:otherwise>
