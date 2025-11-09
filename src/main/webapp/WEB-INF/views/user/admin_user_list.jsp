@@ -70,7 +70,7 @@
                                    <div class="cell">${empty items.rcntBlgCrtfctnDt ? '-' : items.rcntBlgCrtfctnDt}</div>
                                    <div class="cell">${empty items.sbscrptnExprsDt ? '-' : items.sbscrptnExprsDt}</div>
                                    
-                                   <div class="cell">${items.rcntLgnScsDt}</div>
+                                   <div class="cell">${empty items.rcntLgnScsDt ? '-' : items.rcntLgnScsDt}</div>
                                    <div class="cell">${items.pnltCnt}</div>
                                    <div class="cell">${items.crtDt}</div>
                                </div>
@@ -102,7 +102,7 @@
                                     <div class="cell"><a href="/admin/user_detail/${items.usrId}">${items.logId}</a></div>
                                     <div class="cell">${items.nm}</div>
                                     <div class="cell">${empty items.blgAddrs ? '-' : items.blgAddrs}</div>
-                                    <div class="cell">${empty items.rcntBlgCrtfctnDt ? '-' : items.rcntBlgCrtfctnDt}</div>
+                                    <div class="cell">${empty items.rcntBlgCrtfctnDt ? '미인증' : items.rcntBlgCrtfctnDt}</div>
                                     <div class="cell">${empty items.sbscrptnExprsDt ? '-' : items.sbscrptnExprsDt}</div>
                                     <div class="cell">${items.cmpnPrgrssCnt}</div>
                                     <div class="cell">${items.cmpnAllCnt}</div>

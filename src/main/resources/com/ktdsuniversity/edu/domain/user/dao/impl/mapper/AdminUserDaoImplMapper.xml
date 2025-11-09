@@ -56,7 +56,12 @@
                             AND C.USR_ID = U.USR_ID
                             AND C.STTS_CD IN ('2005', '2006', '2007', '2009'))
                    END AS CMPN_ALL_CNT
-             , U.RCNT_LGN_SCS_DT
+             , CASE 
+                   WHEN U.RCNT_LGN_SCS_DT IS NULL
+                   THEN '-'
+                   WHEN U.RCNT_LGN_SCS_DT IS NOT NULL
+                   THEN TO_CHAR(U.RCNT_LGN_SCS_DT, 'YYYY-MM-DD HH24:MI:SS')
+                END AS RCNT_LGN_SCS_DT
              , U.PNLT_CNT
              , CASE
                    WHEN U.AUTR = '1007'
@@ -106,7 +111,12 @@
                     AND C_ADPT.BLG_USR_ID = U.USR_ID
                     AND C.STTS_CD = '2007'
                     AND C_ADPT.ADPT_YN = 'Y') AS CMPN_ALL_CNT
-             , U.RCNT_LGN_SCS_DT
+             , CASE 
+                   WHEN U.RCNT_LGN_SCS_DT IS NULL
+                   THEN '-'
+                   WHEN U.RCNT_LGN_SCS_DT IS NOT NULL
+                   THEN TO_CHAR(U.RCNT_LGN_SCS_DT, 'YYYY-MM-DD HH24:MI:SS')
+                END AS RCNT_LGN_SCS_DT
              , U.PNLT_CNT
              , U.SBSCRPTN_EXPRS_DT
              , U.CRT_DT
@@ -141,7 +151,12 @@
                  WHERE C.DLT_YN = 'N'
                    AND C.USR_ID = U.USR_ID
                    AND C.STTS_CD IN ('2005', '2006', '2007', '2009')) AS CMPN_ALL_CNT
-             , U.RCNT_LGN_SCS_DT
+             , CASE 
+                   WHEN U.RCNT_LGN_SCS_DT IS NULL
+                   THEN '-'
+                   WHEN U.RCNT_LGN_SCS_DT IS NOT NULL
+                   THEN TO_CHAR(U.RCNT_LGN_SCS_DT, 'YYYY-MM-DD HH24:MI:SS')
+                END AS RCNT_LGN_SCS_DT
              , U.PNLT_CNT
              , U.CRT_DT
           FROM USR U
@@ -177,7 +192,12 @@
              , U.AUTR
              , U.BLG_ADDRS
              , U.RCNT_BLG_CRTFCTN_DT
-             , U.RCNT_LGN_SCS_DT
+             , CASE 
+                   WHEN U.RCNT_LGN_SCS_DT IS NULL
+                   THEN '-'
+                   WHEN U.RCNT_LGN_SCS_DT IS NOT NULL
+                   THEN TO_CHAR(U.RCNT_LGN_SCS_DT, 'YYYY-MM-DD HH24:MI:SS')
+                END AS RCNT_LGN_SCS_DT
              , (SELECT COUNT(C_ADPT.BLG_USR_ID)
                   FROM CMPN_PST_ADPT C_ADPT
                  INNER JOIN CMPN C
@@ -324,7 +344,12 @@
                  WHERE C.DLT_YN = 'N'
                    AND C.STTS_CD IN ('2005', '2006', '2007', '2009')
                    AND C.USR_ID = U.USR_ID) AS CMPN_PROGRESS_CNT
-             , U.RCNT_LGN_SCS_DT
+             , CASE 
+                   WHEN U.RCNT_LGN_SCS_DT IS NULL
+                   THEN '-'
+                   WHEN U.RCNT_LGN_SCS_DT IS NOT NULL
+                   THEN TO_CHAR(U.RCNT_LGN_SCS_DT, 'YYYY-MM-DD HH24:MI:SS')
+                END AS RCNT_LGN_SCS_DT
              , U.PNLT_CNT
              , U.CRT_DT
              , U.UPDT_DT

@@ -19,7 +19,8 @@
 
       <div class="campaign-one-adptcnt padding-10px flex-row flex-space-between">
           <c:if test="${campaignList.sttsCd != '2001' && campaignList.sttsCd != '2002' 
-                       && campaignList.sttsCd != '2003' && campaignList.sttsCd != '2004'}">
+                       && campaignList.sttsCd != '2003' && campaignList.sttsCd != '2004'
+                       && campaignList.sttsCd != '2008'}">
           <div>신청 ${campaignList.adptCnt} / ${campaignList.rcrtPrsnn}</div>
           </c:if>
           <div class="campaign-now-status-${campaignList.sttsCd} campaign-status">

@@ -86,8 +86,8 @@
 </div>
 
 <div class="detail-row">
-    <div class="detail-key">최근 인증일</div>
-    <div class="detail-value" id="rcntBlgCrtfctnDt">${userInfo.rcntBlgCrtfctnDt}</div>
+    <div class="detail-key">최근 블로그 인증일</div>
+    <div class="detail-value" id="rcntBlgCrtfctnDt">${empty userInfo.rcntBlgCrtfctnDt ? '미인증' : userInfo.rcntBlgCrtfctnDt}</div>
 </div>
 
 <div class="detail-row">

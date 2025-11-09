@@ -58,7 +58,7 @@ $().ready(function() {
     
     
     // 답변 등록
-    $(".save-btn").on("click", function() {
+    $(".ansr-save-btn").on("click", function() {
         
         var ansrCn = $("#ansr_input").val();
         
