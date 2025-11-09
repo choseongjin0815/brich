@@ -1,6 +1,7 @@
 package com.ktdsuniversity.edu.domain.campaign.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +65,11 @@ public class AdminCampaignController {
 	public String viewAdminCampaignDetailPage(@PathVariable String cmpnId, Model model) {
 		
 		ResponseAdminCampaignVO detail = this.adminCampaignService.readAdminCampaignDetail(cmpnId);
+		
+        // 캠페인 참여자 통계
+        Map<String, Object> stats = this.adminCampaignService.readCampaignIndexStats(cmpnId);
+
+        model.addAttribute("indexStats", stats.get("list"));
 		
     	log.info("어드민 캠페인 상세 보기 결과: " + detail.toString());
     	model.addAttribute("detail", detail);

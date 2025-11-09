@@ -1,6 +1,8 @@
 package com.ktdsuniversity.edu.domain.campaign.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import com.ktdsuniversity.edu.domain.campaign.dao.AdminCampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignUpdateHistoryDao;
 import com.ktdsuniversity.edu.domain.campaign.service.AdminCampaignService;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignIndexStatVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignUpdateHistoryVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCamapaignRejectVO;
@@ -243,6 +246,37 @@ public class AdminCampaignServiceImpl implements AdminCampaignService {
 		log.info("재제출 이력: " + list.toString());
 		
 		return list;
+	}
+
+	@Override
+	public Map<String, Object> readCampaignIndexStats(String cmpnId) {
+		Map<String, Object> result = new HashMap<>();
+
+	      // 참여자별 블로그 지수 DAO에서 직접 조회 (BlogDataService 의존 X)
+	      List<CampaignIndexStatVO> list = this.campaignDao.selectCampaignIndexStats(cmpnId);
+	      result.put("list", list);
+
+	      // 통계 계산
+	      double sum = 0;
+	      double max = Double.MIN_VALUE;
+	      double min = Double.MAX_VALUE;
+
+	      for (CampaignIndexStatVO vo : list) {
+	          double avg = vo.getAvgIndx();
+	          sum += avg;
+	          if (avg > max) max = avg;
+	          if (avg < min) min = avg;
+	      }
+
+	      double overallAvg = list.isEmpty() ? 0 : Math.round((sum / list.size()) * 100.0) / 100.0;
+
+	      result.put("overallAvg", overallAvg);
+	      result.put("max", max == Double.MIN_VALUE ? 0 : max);
+	      result.put("min", min == Double.MAX_VALUE ? 0 : min);
+
+	      log.info("어드민 맵: " + result);
+	      
+	      return result;
 	}
 
 

@@ -1,6 +1,7 @@
 package com.ktdsuniversity.edu.domain.campaign.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCamapaignRejectVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCampaignAdopterVO;
@@ -32,5 +33,7 @@ public interface AdminCampaignService {
 	List<ResponseAdminAdopterPstRtrnRsnVO> readAdopterReturnReasonListByPostId(String postId);
 
 	List<ResponseAdminAdopterPstReSubmitCnVO> readAdopterReSubmitContentListByPostId(String postId);
+
+	Map<String, Object> readCampaignIndexStats(String cmpnId);
 
 }

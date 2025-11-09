@@ -5,7 +5,14 @@
 <div class="campaign-main-list-area">
 <c:forEach items="${campaignList}" var="campaignList">
     <div class="campaign-main-block" data-cmpn-id="${campaignList.cmpnId}">
-        <div class="campaign-thumbnail"></div>
+        <div class="campaign-thumbnail">
+	        <c:if test="${not empty campaignList.fileVoList[0].flPth}" > 
+	            <img class = "cmpn-image" src=" /file/1234/${campaignList.flGrpId}/${campaignList.fileVoList[0].flId}"/> 
+	        </c:if>
+	        <c:if test="${empty campaignList.fileVoList[0].flPth}" > 
+	           <img class = "cmpn-image" src=" /img/logo.png"/>
+	        </c:if>
+        </div>
         <div class="campaign-one-title padding-10px">
 	        <c:if test="${not empty campaignList.parentArea}">
 	            [${campaignList.parentArea}]
