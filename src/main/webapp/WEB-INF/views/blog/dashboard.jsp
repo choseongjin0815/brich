@@ -127,10 +127,10 @@
 			          	<a href="/campaigndetail/${campaignList.cmpnId}">
 				           <div class="flex-row submit-area">
 					        <c:if test="${not empty campaignList.fileVoList[0].flPth}" > 
-					       		<img class = "cmpn-image" src=" /file/1234/${campaignList.flGrpId}/${campaignList.fileVoList[0].flId}"/> 
+					       		<img class = "cmpn-image cmpn-image1" src=" /file/1234/${campaignList.flGrpId}/${campaignList.fileVoList[0].flId}"/> 
 					        </c:if>
 					        <c:if test="${empty campaignList.fileVoList[0].flPth}" > 
-					           <img class = "cmpn-image" src=" /img/logo.png"/>
+					           <img class = "cmpn-image cmpn-image1" src=" /img/logo.png"/>
 					        </c:if>				              <div class="flex-column submit-title-area">
 				                <div class="submit-lo">${campaignList.parentArea}</div>
 				                <div class="submit-title">${campaignList.cmpnTitle}</div>
