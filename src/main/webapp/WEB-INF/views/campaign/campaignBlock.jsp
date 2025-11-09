@@ -27,8 +27,9 @@
             </c:when>
             
             <c:when test="${param.cmpnCdNm eq '선정중'}">
-            </div>
-            <div class="font-green">${param.cmpnCdNm}</div>
+                <div class="enddate">캠페인 시작일 : ${param.rcrtStrtDt}</div>
+	            </div>
+	            <div class="font-green">${param.cmpnCdNm}</div>
             </c:when>
             
             <c:when test="${param.cmpnCdNm eq '진행중'}">

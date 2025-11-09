@@ -29,7 +29,7 @@
 		        
 		        <div class="campaign-sub-title require-after">카테고리</div>
 		        <div>
-		            <c:forEach items="${common.categoryList}" var="category">
+		            <c:forEach items="${common.categoryList}" var="category" begin="1">
 		                <input type="radio" name="ctgCd" value="${category.cdId}" />${category.cdNm}
 		            </c:forEach>
 		        </div>
