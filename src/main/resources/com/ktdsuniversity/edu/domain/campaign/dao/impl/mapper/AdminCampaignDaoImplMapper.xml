@@ -27,6 +27,16 @@
         <collection property="area" javaType="list" ofType="java.lang.String">
             <result property="area" column="AREA"/>
         </collection>
+        
+        <collection property="fileVoList"
+                    javaType="list"
+                    ofType="com.ktdsuniversity.edu.domain.file.vo.FileVO">
+                    <result property="flNm" column="FL_NM"/>
+                    <result property="flPth" column="FL_PTH"/>
+                    <result property="flId" column="FL_ID"/>
+                    <result property="flGrpId" column="FL_GRP_ID"/>
+                    
+        </collection> 
     </resultMap>
     <select id="selectAdminCampaignListCategoryAndSortBy"
             resultMap="RequestAdminCampaignVOMap"
@@ -42,6 +52,11 @@
              , CMPN.RCRT_END_DT
              , PARCD.CD_NM AS PARENT_AREA  
              , ARCD.CD_NM AS AREA
+             , FG.FL_CNT                               
+             , FG.FL_GRP_ID 
+             , FL.FL_NM 
+             , FL.FL_PTH                 
+             , FL.FL_ID
           FROM CMPN CMPN 
           LEFT JOIN (SELECT CMPN_ID 
                           , COUNT(CMPN_ID) AS ADPT_CNT
@@ -55,6 +70,10 @@
             ON CMPNAR.AR_CD = ARCD.CD_ID
           LEFT JOIN AR_CD PARCD
             ON PARCD.CD_ID = ARCD.PRNT_CD_ID 
+          LEFT JOIN FL_GRP FG
+            ON CMPN.ATTCH_GRP_ID = FG.FL_GRP_ID 
+          LEFT JOIN FL FL
+            ON FG.FL_GRP_ID = FL.FL_GRP_ID  
          WHERE CMPN.CMPN_TITLE LIKE '%' || #{searchKeyword, jdbcType=VARCHAR} || '%'        
            AND CMPN.CTG_CD IN (SELECT CD_ID
                                  FROM CM_CD
