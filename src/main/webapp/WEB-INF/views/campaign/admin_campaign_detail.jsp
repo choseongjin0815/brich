@@ -79,27 +79,27 @@
                             </li>
                             <li>
 		                        <label for="">설명</label>
-		                        <div>${detail.cmpnCn}</div>                  
+		                        <pre>${detail.cmpnCn}</pre>                  
 	                        </li>
 		                    <li>
 		                        <label for="">제공</label>
-		                        <div>${detail.offrCn}</div>                  
+		                        <pre>${detail.offrCn}</pre>                  
 		                    </li>
 		                    <li>
 		                        <label for="">미션</label>
-		                        <div>${detail.pstMssn}</div>                 
+		                        <pre>${detail.pstMssn}</pre>                 
 		                    </li>
 		                    <li>
 		                        <label for="">해시 태그</label>
-		                        <div>${detail.hstg}</div>
+		                        <pre>${detail.hstg}</pre>
 		                    </li>
 		                    <li>
 		                        <label for="">안내 사항</label>
-		                        <div>${detail.ntfcn}</div>
+		                        <pre>${detail.ntfcn}</pre>
 		                    </li>
 		                    <li>
 		                        <label for="">위치</label>
-		                        <div>${detail.addrs}</div>
+		                        <pre>${detail.addrs}</pre>
 		                    </li>
 		                    <li>
 		                        <label>지도</label>
@@ -109,7 +109,7 @@
 		                    </li>
 		                    <li>
                                 <label for="">등록자</label>
-                                <div>${detail.logId}</div>
+                                <pre>${detail.logId}</pre>
                             </li>
                             <li>
                                 <label for="">결제 정보</label>
