@@ -9,6 +9,11 @@ a {
     color: #5A6ACF;
 }
 
+pre {
+    white-space: pre-wrap;
+    font-family: sans-serif;
+}
+
 .admin-title {
     margin-top: 22px;
     margin-left: 80px;
@@ -239,7 +244,7 @@ a {
 
 .ansr-y .ansr-content-wrap {
     /* padding-bottom: 15px; */
-    padding: 10px;
+    padding-left: 15px;
     /* border-bottom: 1px dashed #cccccc; */
     border: 1px solid #cccccc;
     border-radius: 10px;

@@ -103,9 +103,7 @@
 		                <c:when test="${inqrInfo.ansrYn eq 'Y'}">
 		                    <div class="ansr-area ansr-y detail-content-box">
 		                        <div class="ansr-content-wrap">
-		                           <div id="ansrCn">
-		                               ${inqrInfo.inqrVO.ansrCn}
-		                           </div>
+		                           <pre id="ansrCn">${inqrInfo.inqrVO.ansrCn}</pre>
 		                        </div>
 		                        
 		                        <c:set var="hasVaildAnsrFile" value="false" />
