@@ -114,9 +114,10 @@
                            </div>
 	                  </c:if>
 	                  
+	                  <%--
 	                  <c:if test="${param.sttsCd eq 2004}">
 	                       <div class="middle-center">
                                <button type="button" class="button_200_30 button-report">취소</button>
                            </div>
-	                  </c:if>
+	                  </c:if>--%>
                   </c:if>

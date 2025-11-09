@@ -120,16 +120,18 @@
 	                    <label for="">안내 사항</label>
 	                    <div>${detail.ntfcn }</div>
 	                  </li>
-	                  <li>
-	                    <label for="">위치</label>
-	                    <div>${detail.addrs }</div>
-	                  </li>
-	                  <li>
-	                    <label>지도</label>
-	                    <div id="map" style="width:500px;height:400px;" data-location="${detail.addrs }"></div>
-	                    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=75d2ae10ae5482a8868edf8364c88dad&libraries=services"></script>
-	                    <script type="text/javascript" src="/js/common/map.js"></script>
-	                  </li>
+	                  <c:if test="${not empty detail.addrs}">
+		                  <li>
+		                    <label for="">위치</label>
+		                    <div>${detail.addrs }</div>
+		                  </li>
+		                  <li>
+		                    <label>지도</label>
+		                    <div id="map" style="width:500px;height:400px;" data-location="${detail.addrs }"></div>
+		                    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=75d2ae10ae5482a8868edf8364c88dad&libraries=services"></script>
+		                    <script type="text/javascript" src="/js/common/map.js"></script>
+		                  </li>
+	                  </c:if>
 					</ul>
  
                     
