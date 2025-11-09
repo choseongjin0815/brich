@@ -197,6 +197,14 @@
             div {
               flex-grow: 1;
             }
+            
+            img {
+                max-width: 1200px;
+            }
+            
+            & > pre {
+                white-space: pre-wrap;
+            }
           }
         }
       }

@@ -15,13 +15,13 @@
         <div>${param.cmpnTitle}</div>
         <c:choose>
             <c:when test="${param.cmpnCdNm eq '승인'}">
-		        <div class="enddate font-green">~${param.cnfmDt}</div>
+		        <div class="enddate">결제 마감일 : ${param.cnfmDt}</div>
 		        </div>
 		        <div class="font-green">${param.cmpnCdNm}</div>
             </c:when>
             
             <c:when test="${param.cmpnCdNm eq '모집중'}">
-		        <div class="enddate">~${param.rcrtEndDt}</div>
+		        <div class="enddate">모집 마감일 : ${param.rcrtEndDt}</div>
 		        </div>
 		        <div class="font-green">${param.cmpnCdNm}</div>
             </c:when>
@@ -32,13 +32,13 @@
             </c:when>
             
             <c:when test="${param.cmpnCdNm eq '진행중'}">
-                <div class="enddate">~${param.cmpnEndDt}</div>
+                <div class="enddate">캠페인 종료일 : ${param.cmpnEndDt}</div>
                 </div>
                 <div class="font-green">${param.cmpnCdNm}</div>
             </c:when>
             
             <c:when test="${param.cmpnCdNm eq '시작대기' || param.cmpnCdNm eq '검토중'}">
-                <div class="enddate">~${param.rcrtStrtDt}</div>
+                <div class="enddate">캠페인 시작일 : ${param.rcrtStrtDt}</div>
                 </div>
                 <div class="font-brown">${param.cmpnCdNm}</div>
             </c:when>
@@ -54,7 +54,7 @@
             </c:when>
             
             <c:when test="${param.cmpnCdNm eq '종료'}">
-                <div class="enddate">~${param.cmpnEndDt}</div>
+                <div class="enddate">캠페인 종료일 : ${param.cmpnEndDt}</div>
                 </div>
                 <div>${param.cmpnCdNm}</div>
             </c:when>

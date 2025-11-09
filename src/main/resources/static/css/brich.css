@@ -904,6 +904,7 @@ input[name="offrPrc"] {
     width: 100px;
     height: 110px;
     border-radius: 10px;
+    object-fit: contain;
   }
   
   & > div:nth-child(2) {
