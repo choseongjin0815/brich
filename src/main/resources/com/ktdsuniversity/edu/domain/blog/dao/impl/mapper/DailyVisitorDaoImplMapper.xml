@@ -22,10 +22,10 @@
     </select>
 
     <select id="selectTotalVisitor"  parameterType="string" resultType="int">
-        SELECT TTL_VSTR_CNT
-          FROM USR
-         WHERE DLT_YN = 'N'
-           AND USR_ID = #{_parameter}
+    SELECT NVL(TTL_VSTR_CNT, 0)
+      FROM TEAM_A.USR
+     WHERE NVL(DLT_YN, 'N') = 'N'
+       AND USR_ID = #{_parameter}
     </select>
 
 

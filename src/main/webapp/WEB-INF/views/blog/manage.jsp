@@ -20,27 +20,7 @@
 	" />    
 </jsp:include>
 		<div class="manage-container">
-			<div class="header-title">블로그 관리</div>
-			
-			<div class="info-container">
-				<div class="blog-info">
-									<div class="info-box">
-										1
-									</div>
-									<div class="info-box">
-										1
-									</div>
-									<div class="info-box">
-										1
-									</div>
-									<div class="info-box">
-										1
-									</div>
-									<div class="info-box">
-										1
-									</div>
-								</div>
-			</div>
+			<div class="header-title">포스팅 관리</div>
 			<div class="table-container">
 				
 				
@@ -105,8 +85,8 @@
 			</div>
 			<div id="reason-modal" class="modal">
 			  <div class="modal-content">
-			    <span class="close">&times;</span>
-			    <h3>반려사유</h3>
+			    
+			    <h3>반려사유<span class="close right-align">&times;</span></h3>
 			    <div id="reason-detail"></div>
 			  </div>
 			</div>
