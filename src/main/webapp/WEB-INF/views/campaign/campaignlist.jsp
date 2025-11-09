@@ -10,7 +10,7 @@ pageEncoding="UTF-8"%>
        		<img class = "cmpn-image" src=" /file/1234/${campaignList.flGrpId}/${campaignList.fileVoList[0].flId}"/> 
         </c:if>
         <c:if test="${empty campaignList.fileVoList[0].flPth}" > 
-           <img class = "cmpn-image" src=" /img/image13.png"/>
+           <img class = "cmpn-image" src=" /img/logo.png"/>
         </c:if>
         <c:if test="${(sessionScope.__LOGIN_USER__.autr == 1002 
             or sessionScope.__LOGIN_USER__.autr == 1003)}">

@@ -112,8 +112,8 @@
 }
 
 .campaign-main-list-area > .campaign-main-block > .campaign-thumbnail > .cmpn-image {
-  height: 100%;
-  width: 100%;
+  height: 58px;
+  width: 58px;
   object-fit: cover;
   border-radius: 15px;
 }
