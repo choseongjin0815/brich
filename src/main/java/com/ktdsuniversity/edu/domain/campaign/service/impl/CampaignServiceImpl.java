@@ -134,6 +134,7 @@ public class CampaignServiceImpl implements CampaignService {
 		
 		// Level 1 카테고리 목록 구하기
 		List<CommonCodeVO> CategoryList = campaignDao.selectCategoryList();
+		CategoryList.get(0).setCdNm("전체");
 		responseCampaignListVO.setCategoryList(CategoryList);
 		log.info("카테고리 목록 : "+ CategoryList.toString());
 		

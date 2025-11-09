@@ -7,8 +7,7 @@ pageEncoding="UTF-8"%>
       <div class="campaign-main-block" data-cmpn-id="${campaignList.cmpnId}">
         <div class="campaign-thumbnail">
         <c:if test="${not empty campaignList.fileVoList[0].flPth}" > 
-      <!-- <img class = "cmpn-image" src=" /file/1234/${campaignList.flGrpId}/${campaignList.fileVoList[0].flId}"/>  -->
-           <img class = "cmpn-image" src=" /file/1234/FG-20251104-000155/FL-20251104-000279"/>
+       		<img class = "cmpn-image" src=" /file/1234/${campaignList.flGrpId}/${campaignList.fileVoList[0].flId}"/> 
         </c:if>
         <c:if test="${empty campaignList.fileVoList[0].flPth}" > 
            <img class = "cmpn-image" src=" /img/image13.png"/>
@@ -44,7 +43,7 @@ pageEncoding="UTF-8"%>
                 <div></div>
             </c:when>
             <c:when test="${campaignList.sttsCd != 2007}">
-                <div>신청 ${campaignList.adptCnt} / ${campaignList.rcrtPrsnn}</div>
+                <div>신청자 ${campaignList.adptCnt} / 모집인원 ${campaignList.rcrtPrsnn}</div>
             </c:when>
             <c:when test="${campaignList.sttsCd == 2007}">
                 <div></div>

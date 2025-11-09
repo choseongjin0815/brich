@@ -8,7 +8,7 @@
                             <c:if test="${not empty detail.rcrtStrtDt}">
 		                          <li>
 		                            <label for="">캠페인 신청기간</label>
-		                            <div>${detail.rcrtStrtDt } ~ ${detail.pstEndDt }</div>
+		                            <div>${detail.rcrtStrtDt } ~ ${detail.rcrtEndDt }</div>
 		                          </li>
 	                          </c:if>
 	                          <%-- <li>
