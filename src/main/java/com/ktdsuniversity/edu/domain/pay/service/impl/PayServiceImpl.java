@@ -88,8 +88,12 @@ public class PayServiceImpl implements PayService{
 				SessionUtil.getLoginObject().setAutr("1002");
 		} else if (autr.equals("1004")){
 				// 결제 테이블 수정
-				// count = this.payDao.updatePaymentSuccessCampaign(requestPaymentVO);
+				log.info("결제 테이블 수정 들어갑니다 : " + requestPaymentVO.toString());
 				
+				 count = this.payDao.updatePaymentSuccessCampaign(requestPaymentVO);
+				 String cmpnId = this.payDao.selectPaymentCmpnId(requestPaymentVO);
+				 requestPaymentVO.setClientId(cmpnId);
+				 count = this.payDao.updatePaymentCampaignStts(requestPaymentVO);
 				// 캠페인 저장 정보 가져오기
 				
 				// 모집 시작일, 모집 마감일, 캠페인 마감일, 캠페인 상태  수정

@@ -318,7 +318,30 @@
           FROM CMPN_PYMNT
          WHERE CMPN_ID = #{clientCmpnId}
 </select>
-
+<update id="updatePaymentSuccessCampaign"
+        parameterType="com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO">
+        UPDATE CMPN_PYMNT
+        SET PYMNT_CD='9001'
+          , UPDT_DT=SYSDATE
+          , MTTR='SYSTEM'
+          , PAYMENT_KEY=#{paymentKey}
+        WHERE ORDER_ID=#{orderId}
+</update>
+<update id="updatePaymentCampaignStts"
+        parameterType="com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO">
+        UPDATE CMPN
+           SET STTS_CD = '2004'
+         WHERE CMPN_ID = #{clientId} 
+           AND STTS_CD = '2002'
+</update>
+<select id="selectPaymentCmpnId"
+        parameterType="com.ktdsuniversity.edu.domain.pay.vo.request.RequestPaymentVO"
+        resultType="String">
+        SELECT CMPN_ID
+          FROM CMPN_PYMNT
+         WHERE ORDER_ID=#{orderId}
+           AND DLT_YN = 'N'
+</select>
 </mapper>
 
 
