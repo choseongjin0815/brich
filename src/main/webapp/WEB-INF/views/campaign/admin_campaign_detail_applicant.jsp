@@ -73,7 +73,13 @@
                     </div>
                     
                     <div class="user">
-                        <div class="logId" data-cmpn-apply-id="${applicant.cmpnPstAdptId}">${applicant.userInfo.logId}</div>
+                        <div class="logId" data-cmpn-apply-id="${applicant.cmpnPstAdptId}">
+                            ${applicant.userInfo.logId}
+                            <button type="button" 
+                                    name="blog-detail-info"  
+                                    data-blog-id="${applicant.userInfo.usrId}" 
+                                    data-blog-name="${applicant.userInfo.logId}">!</button>
+                        </div>
                         <div><a href="${applicant.userInfo.blgAddrs}" target="_blank">${applicant.userInfo.blgAddrs}</a></div>
                     </div>
                     

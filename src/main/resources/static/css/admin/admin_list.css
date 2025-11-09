@@ -3,11 +3,13 @@
 body {
     margin: 0 auto;
     box-sizing: border-box;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .wrapper {
     height: calc(100vh - 40px);
+    display: flex;
+    flex-direction: column;
 }
 
 .admin-title {
@@ -38,11 +40,14 @@ a {
 }
 
 .container {
-    padding: 40px;
-    overflow-x: auto;
+    padding: 0 40px 40px 40px; 
+    flex-grow: 1; 
+    overflow-y: auto; 
+    overflow-x: auto; 
 }
 
 .list-tbl {
+	margin-top: 20px;
     width: 100%;
     /* margin-top: 20px; */
     /* border-top: 2px solid #5A6ACF; */
@@ -59,11 +64,13 @@ a {
 }
 
 .grid-header {
+    position: sticky; 
+    top: 0;
+    z-index: 20; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+    
     background-color: #eef1f9;
     font-weight: 600;
-    top: 0;
-    z-index: 10;
-    border-top: none;
 }
 
 .cell {

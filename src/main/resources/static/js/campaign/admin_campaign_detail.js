@@ -232,6 +232,7 @@ $().ready(function() {
             }
         }
 
+    /* 졍럴 */
     $(".sort").on("click", function() {
         order = $(this).attr("class").includes("asc") ? "asc" : "desc";
         col = $(this).data("sort-type");
@@ -249,6 +250,17 @@ $().ready(function() {
          }
         
         window.location.href = url;
+    });
+    
+    /* 신청자의 블로그 지수 */
+    $("button[name=blog-detail-info]").on("click", function() {
+        var userId = $(this).data("blog-id");
+        var userName = $(this).data("blog-name");
+        var url = "/adv/blog-info/" + userId + "?userName=" + userName;
+        var name = "유저 정보";
+        var option = "width=900, height=500, left=300, top=300"
+        
+        window.open(url, name, option);
     });
     
 });

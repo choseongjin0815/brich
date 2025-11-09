@@ -109,7 +109,7 @@
               <!-- 필터링 없음. 모든 상태를 조회 -->
             </otherwise>
         </choose>
-          
+            AND CMPN.DLT_YN = 'N' 
           ORDER BY
             <!-- sortBy='latest'일 때 '2001' (검토 중) 캠페인을 최우선 정렬 -->
             CASE 
