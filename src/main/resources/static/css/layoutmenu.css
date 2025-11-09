@@ -63,7 +63,7 @@ ul {
           padding: 20px 100px 20px 50px;
           & > .search-input {
             width: 100%;
-            
+
           }
         }
 
@@ -102,7 +102,7 @@ ul {
       top: 73px;
       flex-basis: 290px;
       min-width: 290px;
-     /*  세로방향 스크롤 안생김 */
+      /*  세로방향 스크롤 안생김 */
       height: calc(100vh - 73px);
       align-self: flex-start;
       background-color: #F1F2F7;
@@ -116,9 +116,9 @@ ul {
       }
 
       .menu-content {
-       /*하단 메뉴 선택시 배경 색 크기 조정용*/
+        /*하단 메뉴 선택시 배경 색 크기 조정용*/
         & li.other-item {
-            width: 218px;
+          width: 218px;
         }
         & > li > a {
           padding-left: 55px;
@@ -131,7 +131,7 @@ ul {
 
       .my-campaign {
         padding-left: 55px;
-		cursor : pointer;
+        cursor : pointer;
         & > .my-sub-menu {
           & > .last-item {
             margin-bottom: 15px;
@@ -174,7 +174,7 @@ ul {
       }
 
       #menu-image::before {
-       transform: translateY(1.7px);
+        transform: translateY(1.7px);
         content: url("/img/Chart.png")
       }
     }
@@ -196,8 +196,8 @@ ul {
   }
   .middle-center{
     display: flex;
-  	align-items: center;
-  	justify-content: center;}
+    align-items: center;
+    justify-content: center;}
 
   .text-align {
     text-align: center;
@@ -255,56 +255,55 @@ ul {
     visibility: hidden;
   }
   .search-input{
-	padding : 9px 0 9px 13px;
-	background-color: #F6F6FB;
-	border:none;
-	border-radius : 5px;
-	background-image :url("/img/Search.png");
-	background-repeat: no-repeat;
-	background-position : right 10px bottom 50%;   
-	background-size: 15px;
-	
-	&.menu {
-	   min-width: 700px;
-	   max-width: 1100px;
-	}
+    padding : 9px 0 9px 13px;
+    background-color: #F6F6FB;
+    border:none;
+    border-radius : 5px;
+    background-image :url("/img/Search.png");
+    background-repeat: no-repeat;
+    background-position : right 10px bottom 50%;
+    background-size: 15px;
+
+    &.menu {
+      min-width: 700px;
+      max-width: 1100px;
+    }
   }
-  .search-input:focus {  
+  .search-input:focus {
     outline: none;
-   }
-   .campaign-now-status-2005, .campaign-now-status-2006{
+  }
+  .campaign-now-status-2005, .campaign-now-status-2006{
     color : #AEB400;
     font-weight : bold;
     padding-right:8px;
-   }
+  }
 }
 
 .logout {
-	white-space: nowrap;
-	color: #616161;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin: 0 20px;
-	font-size: 14px;
-	font-weight: 600;
-	
-	&:hover {
-	   color: #333;
-	   transition: 0.1s;
-	   padding: 10px;
-	   border-radius: 10px;
-	   background-color: rgb(249, 249, 249);
-	}
+  white-space: nowrap;
+  color: #616161;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 20px;
+  font-size: 14px;
+  font-weight: 600;
+
+  &:hover {
+    color: #333;
+    transition: 0.1s;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgb(249, 249, 249);
+  }
 }
 
 .admin-campaign {
-	padding-left: 55px;
+  padding-left: 55px;
 }
 
 .menu-admin-header {
-	display: block;
-	margin-top: 20px;
-	margin-bottom: 10px;
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
-
