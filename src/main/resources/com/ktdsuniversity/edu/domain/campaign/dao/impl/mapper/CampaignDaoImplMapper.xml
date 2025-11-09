@@ -48,10 +48,14 @@
 	   <if test="searchKeyword != null and searchKeyword != ''">
 	       AND U.LOG_ID LIKE '%' || #{searchKeyword} || '%'
 	   </if>
+	   <choose>
+	       <when test='sortCol != null and sortCol != ""'>
+	    ORDER BY NVL(${sortCol}, 0) ${order}
+	       </when>
+	       <otherwise>
 	    ORDER BY AUTR ASC
-       <if test='sortCol != null and sortCol != ""'>
-		    , NVL(${sortCol}, 0) ${order}  
-       </if>
+	       </otherwise>
+	   </choose>
        <include refid="Common.paginationFooter" />
     </select>
     
@@ -497,6 +501,7 @@
              , TO_CHAR(C.RCRT_END_DT, 'YYYY-MM-DD') AS RCRT_END_DT
              , TO_CHAR(C.PST_END_DT, 'YYYY-MM-DD') AS PST_END_DT
              , TO_CHAR(C.CMPN_END_DT, 'YYYY-MM-DD') AS CMPN_END_DT
+             , TO_CHAR(C.CNFM_DT + 3, 'YYYY-MM-DD') AS CNFM_DT
              , C.ATTCH_GRP_ID
              , C.CMPN_TITLE
              , F.FL_ID

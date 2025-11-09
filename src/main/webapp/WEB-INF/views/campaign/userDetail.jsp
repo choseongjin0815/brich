@@ -43,7 +43,7 @@
 		        <div class="blog-info-section">
 		            <div class="section-header">
 		                <div class="dashboard-title"><span class="user-name-space"></span> 의 블로그 방문자 수</div>
-		                <button id="daily-visitor-detail" class="dashboard-detail-btn">자세히 보기</button>
+		                <%--<button id="daily-visitor-detail" class="dashboard-detail-btn">자세히 보기</button>--%>
 		            </div>
             <div id="total-visitor">총 방문자 수   <span>${totalVisitor}</span></div>
             <span class="sub-info">▲ 2.1% 지난 주 대비</span>
