@@ -706,6 +706,7 @@
           , DLT_YN 
       FROM CM_CD
      WHERE PRNT_CD_ID= '3000'
+     	OR CD_ID='3000'
      ORDER BY SRT
     </select>
     
@@ -747,6 +748,7 @@ ORDER BY RCRT_END_DT ASC
                            <result property="flNm" column="FL_NM"/>
                            <result property="flPth" column="FL_PTH"/>
                            <result property="flId" column="FL_ID"/>
+                           <result property="flGrpId" column="FL_GRP_ID"/>
                            
                </collection>               
     </resultMap>
@@ -769,6 +771,7 @@ ORDER BY RCRT_END_DT ASC
                  , FG.FL_GRP_ID 
                  , FL.FL_NM 
                  , FL.FL_PTH 			     
+                 , FL.FL_ID
                  , CASE WHEN EXISTS (
                                      SELECT 1
                                        FROM FAV_CMPN FC
@@ -826,6 +829,7 @@ ORDER BY RCRT_END_DT ASC
                                     START WITH CD_ID= NVL(#{category, jdbcType=VARCHAR}, '3000')        
                                   CONNECT BY PRIOR CD_ID = PRNT_CD_ID)  
 			  AND CMPN.STTS_CD = '2005'   			  
+			  AND CMPN.DLT_YN = 'N'
 			  ORDER BY
 		        CASE WHEN #{sortBy} = 'latest'   THEN CMPN.RCRT_STRT_DT END  DESC ,
 		        CASE WHEN #{sortBy} = 'deadline' THEN CMPN.RCRT_END_DT  END  ASC  ,
@@ -878,13 +882,14 @@ ORDER BY RCRT_END_DT ASC
                  , FG.FL_GRP_ID 
                  , FL.FL_NM 
                  , FL.FL_PTH 			     
+                 , FL.FL_ID 			     
 			  FROM USR U
 			 INNER JOIN CMPN_PST_ADPT ADPT
 			    ON U.USR_ID = ADPT.BLG_USR_ID
 			   AND ADPT.DLT_YN = 'N'
 			 INNER JOIN CMPN CMPN
 			    ON CMPN.CMPN_ID = ADPT.CMPN_ID
-			   AND ADPT.DLT_YN = 'N'
+			   AND CMPN.DLT_YN = 'N'
 			  LEFT JOIN (SELECT CMPN_ID
 			                  , COUNT(CMPN_ID) AS CNT
 			               FROM CMPN_PST_ADPT
@@ -907,6 +912,7 @@ ORDER BY RCRT_END_DT ASC
               LEFT JOIN FL FL
                 ON FG.FL_GRP_ID = FL.FL_GRP_ID 			    
 			 WHERE U.USR_ID    = #{blgId}
+			   AND CMPN.DLT_YN = 'N'
 			   AND ADPT.DLT_YN = 'N'
 			  <if test="statuses != null and statuses.size() > 0">
 			    AND CMPN.STTS_CD IN
@@ -987,6 +993,7 @@ ORDER BY RCRT_END_DT ASC
                  , FG.FL_GRP_ID 
                  , FL.FL_NM 
                  , FL.FL_PTH                  
+                 , FL.FL_ID                                   
               FROM CMPN CMPN
               LEFT JOIN CMPN_AR CMPNAR
                 ON CMPN.CMPN_ID = CMPNAR.CMPN_ID 
@@ -1009,6 +1016,7 @@ ORDER BY RCRT_END_DT ASC
                                        FROM FAV_CMPN FC
                                       WHERE FC.BLG_USR_ID = #{blgId}
                                         AND FC.DLT_YN ='N')
+               AND CMPN.DLT_YN = 'N'
                AND CMPN.STTS_CD IN 
 				    <foreach collection="statuses" item="statuses" open="(" separator="," close=")">
 				      #{statuses}
