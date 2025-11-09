@@ -139,9 +139,9 @@
                     <div class="input-flex">
                         <label class="optional-label">카테고리</label>
                         <div>
-                            <c:forEach items="${common.categoryList}" var="category">
-                                <input name="cdIdList" type="checkbox" value="${category.cdId}"/>${category.cdNm}
-                            </c:forEach>
+                            <c:forEach items="${common.categoryList}" var="category" begin="1">
+							    <input name="cdIdList" type="checkbox" value="${category.cdId}"/>${category.cdNm}
+							</c:forEach>
                         </div>
                     </div>
                     <div class="input-flex">

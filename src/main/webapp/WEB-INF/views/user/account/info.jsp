@@ -58,8 +58,8 @@
 				        기존 코드에는 n인데 블로거 카테고리에는 있어서 나옴 -->  
 				        <div class="select-list">
 				            <c:forEach items="${userInfo.categoryList}" var="category">
-				                 <div class="select-list-item">${category.cdNm}</div>
-				            </c:forEach>
+							    <div class="select-list-item">${category.cdNm}</div>
+							</c:forEach>
 				        </div>
 				        
 				    </div>
@@ -71,16 +71,16 @@
   
 			    <div class="category-checkbox-wrapper" style="display: none;">
 			        <div class="category-checkbox-list">
-			            <c:forEach items="${common.categoryList}" var="item">
-			                <div class="category-checkbox-item">
-			                    <input type="checkbox" 
-			                           name="category-check" 
-			                           id="cat-${item.cdId}" 
-			                           data-category-code="${item.cdId}"
-			                           value="${item.cdId}" />
-			                    <label for="cat-${item.cdId}">${item.cdNm}</label>
-			                </div>
-			            </c:forEach>
+			            <c:forEach items="${common.categoryList}" var="item" begin="1">
+						    <div class="category-checkbox-item">
+						        <input type="checkbox"
+						               name="category-check"
+						               id="cat-${item.cdId}"
+						               data-category-code="${item.cdId}"
+						               value="${item.cdId}" />
+						        <label for="cat-${item.cdId}">${item.cdNm}</label>
+						    </div>
+						</c:forEach>
 			        </div>
 			    </div>
             </c:if>
