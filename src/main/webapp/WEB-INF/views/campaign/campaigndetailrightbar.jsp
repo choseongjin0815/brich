@@ -24,7 +24,11 @@
 	                          <c:if test="${not empty detail.rcrtPrsnn}">
 		                          <li>
 		                            <label for="">신청</label>
-		                            <div>${detail.adptCnt } / ${detail.rcrtPrsnn }</div>
+		                            <div>${detail.adptCnt } </div>
+		                          </li>
+		                          <li>
+		                            <label for="">모집인원</label>
+		                            <div> ${detail.rcrtPrsnn }</div>
 		                          </li>
 	                          </c:if>
                         </ul>
@@ -111,7 +115,7 @@
                             }">
                             <!-- 제출전 -->
                             <c:if test="${detail.pstSttsCd == 6001}" >
-		                        <div class="right-bar-bottom middle-center status--draft status--" data-campaign-id="${detail.cmpnId}">
+		                        <div class="right-bar-bottom middle-center cursor-pointer status--draft status--" data-campaign-id="${detail.cmpnId}">
 		                          포스팅 제출하기
 		                        </div>
                             </c:if>                            
@@ -130,16 +134,18 @@
 								  	<div> ${returnReason} </div> 
 								  </div>
 								</c:if>
-		                        <div class="right-bar-bottom middle-center status--rejected status--" data-campaign-id="${detail.cmpnId}">
+		                        <div class="right-bar-bottom middle-center status--rejected cursor-pointer status--" data-campaign-id="${detail.cmpnId}">
 		                          다시 제출하기
 		                        </div>
                             </c:if>      
                             
                             <!-- 승인됨 -->                      
                             <c:if test="${detail.pstSttsCd == 6004}" >
+                            <c:if test="${detail.sttsCd != 2009}" >
 		                        <div class="right-bar-bottom middle-center status--approved status--" data-campaign-id="${detail.cmpnId}">
 		                          승인 완료
 		                        </div>
+                            </c:if>
                             </c:if>
                             
                             <!-- 종료됨 -->                      
@@ -169,9 +175,10 @@
                            </div>
 	                  </c:if>
 	                  
+	                  <%--
 	                  <c:if test="${param.sttsCd eq 2004}">
 	                       <div class="middle-center">
                                <button type="button" class="button_200_30 button-report">취소</button>
                            </div>
-	                  </c:if>
+	                  </c:if>--%>
                   </c:if>

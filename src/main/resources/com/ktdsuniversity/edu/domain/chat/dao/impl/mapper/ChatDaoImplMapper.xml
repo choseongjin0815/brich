@@ -51,12 +51,14 @@
     <select id="selectCampaignChatRoomsCount"
             parameterType="com.ktdsuniversity.edu.domain.chat.vo.SearchChatVO"
             resultType="int">
-        SELECT COUNT(*)
-        FROM CHT_RM CR
-        INNER JOIN CMPN C 
-            ON CR.CMPN_ID = C.CMPN_ID
-        WHERE CR.CMPN_ID = #{cmpnId}
-          AND CR.DLT_YN = 'N'
+        SELECT COUNT(CR.CHT_RM_ID)
+		  FROM CHT_RM CR
+		 INNER JOIN CHT_PRTCPNT CP
+		    ON CR.CHT_RM_ID = CP.CHT_RM_ID
+		 WHERE CR.CMPN_ID = #{cmpnId}
+		   AND CR.DLT_YN = 'N'
+		   AND CP.LFT_YN = 'N'
+		   AND CP.USR_ID = #{usrId} 
     </select>
 
     <!-- 캠페인별 채팅방 목록 조회 (페이징) -->

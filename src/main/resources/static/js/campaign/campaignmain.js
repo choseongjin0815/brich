@@ -99,7 +99,7 @@ $().ready(function() {
 		$.post("/blgr/pstsubmit/" + campaignId , postData, function() {
 		    alert("제출완료!");
 			$(".submit-modal-form").addClass("display-none");
-			
+			location.reload();
 		})
 	})
 	

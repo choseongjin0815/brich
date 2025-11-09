@@ -160,73 +160,116 @@ public class ChatServiceImpl implements ChatService {
 
 	@Override
 	public SearchChatVO readUnreadChatRoomList(SearchChatVO searchChatVO) {
-		// 안읽은 메시지 조회는 전체 데이터를 가져와서 필터링해야 함
-		// MongoDB에서 unreadCnt를 확인한 후 필터링하기 때문
+	    String auth = searchChatVO.getAuth();
 
-		String auth = searchChatVO.getAuth();
+	    // 1. 전체 채팅방 조회 (페이징 없이)
+	    SearchChatVO tempSearch = new SearchChatVO();
+	    tempSearch.setUsrId(searchChatVO.getUsrId());
+	    tempSearch.setAuth(searchChatVO.getAuth());
+	    tempSearch.setCmpnId(searchChatVO.getCmpnId());
+	    tempSearch.setPageNo(0);
+	    tempSearch.setListSize(Integer.MAX_VALUE);
 
-		// 1. 전체 채팅방 목록 조회 (페이징 없이 전체)
-		SearchChatVO tempSearch = new SearchChatVO();
-		tempSearch.setUsrId(searchChatVO.getUsrId());
-		tempSearch.setAuth(searchChatVO.getAuth());
-		tempSearch.setCmpnId(searchChatVO.getCmpnId());
-		tempSearch.setPageNo(0);
-		tempSearch.setListSize(Integer.MAX_VALUE); // 전체 조회
+	    List<ResponseChatRoomInfoVO> allChatRooms = null;
+	    
+	    if (!auth.equals("1004")) {
+	        allChatRooms = chatDao.selectUserChatRooms(tempSearch);
+	    } else {
+	        allChatRooms = chatDao.selectCampaignChatRooms(tempSearch);
+	    }
 
-		List<ResponseChatRoomInfoVO> allChatRooms = null;
+	    if (allChatRooms == null || allChatRooms.isEmpty()) {
+	        searchChatVO.setChatRoomList(new ArrayList<>());
+	        searchChatVO.setPageCount(0);
+	        return searchChatVO;
+	    }
 
-		if (!auth.equals("1004")) {
-			// 블로거용
-			allChatRooms = chatDao.selectUserChatRooms(tempSearch);
-			log.info("블로거로 안읽은 메시지 리스트!");
-		} else {
-			// 광고주용
-			log.info("광고주로 안읽은 메시지 리스트!{}", searchChatVO.getCmpnId());
-			allChatRooms = chatDao.selectCampaignChatRooms(tempSearch);
-		}
+	    // 2. 채팅방 ID 목록 추출
+	    List<String> chtRmIds = allChatRooms.stream()
+	            .map(ResponseChatRoomInfoVO::getChtRmId)
+	            .collect(Collectors.toList());
 
-		// 2. MongoDB에서 각 채팅방의 안읽은 메시지 수 조회 및 필터링
-		List<ResponseChatRoomInfoVO> unreadRooms = new ArrayList<>();
+	    // 3. 최신 메시지 일괄 조회
+	    Aggregation aggLatest = Aggregation.newAggregation(
+	        Aggregation.match(Criteria.where("CHT_RM_ID").in(chtRmIds).and("DLT_YN").is("N")),
+	        Aggregation.sort(Sort.Direction.DESC, "CRT_DT"),
+	        Aggregation.group("CHT_RM_ID")
+	            .first("$$ROOT").as("message"),
+	        Aggregation.replaceRoot("message")
+	    );
+	    
+	    List<ChatMessageVO> lastMessages = mongoTemplate
+	        .aggregate(aggLatest, "CHT_MSG", ChatMessageVO.class)
+	        .getMappedResults();
+	    
+	    Map<String, ChatMessageVO> messageMap = lastMessages.stream()
+	            .collect(Collectors.toMap(ChatMessageVO::getChtRmId, msg -> msg));
 
-		for (ResponseChatRoomInfoVO chatRoom : allChatRooms) {
-			// 최신 메시지 조회
-			ChatMessageVO messages = chatMessageRepository
-					.findTop1ByChtRmIdAndDltYnOrderByCrtDtDesc(chatRoom.getChtRmId(), "N");
+	    // 4. 안읽은 메시지 수 일괄 조회
+	    Aggregation aggUnread = Aggregation.newAggregation(
+	        Aggregation.match(Criteria.where("CHT_RM_ID").in(chtRmIds)
+	            .and("DLT_YN").is("N")
+	            .and("RD_YN").is("N")
+	            .and("USR_ID").ne(searchChatVO.getUsrId())),
+	        Aggregation.group("CHT_RM_ID").count().as("count")
+	    );
+	    
+	    List<org.bson.Document> unreadResults = mongoTemplate
+	        .aggregate(aggUnread, "CHT_MSG", org.bson.Document.class)
+	        .getMappedResults();
+	    
+	    Map<String, Long> unreadCountMap = new HashMap<>();
+	    for (org.bson.Document doc : unreadResults) {
+	        String roomId = doc.getString("_id");
+	        Integer count = doc.getInteger("count", 0);
+	        unreadCountMap.put(roomId, count.longValue());
+	    }
 
-			if (messages != null) {
-				ChatMessageVO lastMessage = messages;
-				chatRoom.setLastMsgCn(lastMessage.getMsgCn());
-				chatRoom.setLastMsgUsrId(lastMessage.getUsrId());
-				chatRoom.setLastMsgCrtDt(TimeFormatUtil.format(lastMessage.getCrtDt()));
-				chatRoom.setCrtDt(lastMessage.getCrtDt());
-			}
+	    // 5. 데이터 매칭 및 필터링
+	    List<ResponseChatRoomInfoVO> unreadRooms = new ArrayList<>();
+	    
+	    for (ResponseChatRoomInfoVO chatRoom : allChatRooms) {
+	        // 안읽은 메시지 수 확인
+	        int unreadCnt = unreadCountMap.getOrDefault(chatRoom.getChtRmId(), 0L).intValue();
+	        
+	        // 안읽은 메시지가 없으면 스킵
+	        if (unreadCnt == 0) {
+	            continue;
+	        }
+	        
+	        chatRoom.setUnreadCnt(unreadCnt);
+	        
+	        // 최신 메시지 설정
+	        ChatMessageVO lastMessage = messageMap.get(chatRoom.getChtRmId());
+	        if (lastMessage != null) {
+	            chatRoom.setLastMsgCn(lastMessage.getMsgCn());
+	            chatRoom.setLastMsgUsrId(lastMessage.getUsrId());
+	            chatRoom.setLastMsgCrtDt(TimeFormatUtil.format(lastMessage.getCrtDt()));
+	            chatRoom.setCrtDt(lastMessage.getCrtDt());
+	        }
+	        
+	        unreadRooms.add(chatRoom);
+	    }
 
-			// 안읽은 메시지 수 조회
-			long unreadCount = chatMessageRepository.countUnreadMessages(chatRoom.getChtRmId(),
-					searchChatVO.getUsrId());
-			chatRoom.setUnreadCnt((int) unreadCount);
+	    // 6. 최근 메시지 순 정렬
+	    unreadRooms.sort(
+	        Comparator.comparing(ResponseChatRoomInfoVO::getCrtDt, 
+	            Comparator.nullsLast(Comparator.naturalOrder()))
+	            .reversed());
 
-			// 안읽은 메시지가 있는 채팅방만 추가
-			if (unreadCount > 0) {
-				unreadRooms.add(chatRoom);
-			}
-		}
-		unreadRooms.sort(Comparator.comparing(ResponseChatRoomInfoVO::getCrtDt).reversed());
+	    // 7. 메모리 페이징
+	    int startIndex = searchChatVO.getPageNo() * searchChatVO.getListSize();
+	    int endIndex = Math.min(startIndex + searchChatVO.getListSize(), unreadRooms.size());
 
-		// 3. 필터링된 결과에서 페이징 적용
-		int startIndex = searchChatVO.getPageNo() * searchChatVO.getListSize();
-		int endIndex = Math.min(startIndex + searchChatVO.getListSize(), unreadRooms.size());
+	    List<ResponseChatRoomInfoVO> pagedRooms = new ArrayList<>();
+	    if (startIndex < unreadRooms.size()) {
+	        pagedRooms = unreadRooms.subList(startIndex, endIndex);
+	    }
 
-		List<ResponseChatRoomInfoVO> pagedRooms = new ArrayList<>();
-		if (startIndex < unreadRooms.size()) {
-			pagedRooms = unreadRooms.subList(startIndex, endIndex);
-		}
+	    searchChatVO.setChatRoomList(pagedRooms);
+	    searchChatVO.setPageCount(unreadRooms.size());
 
-		// 4. 결과 설정
-		searchChatVO.setChatRoomList(pagedRooms);
-		searchChatVO.setPageCount(unreadRooms.size());
-
-		return searchChatVO;
+	    return searchChatVO;
 	}
 
 	@Override

@@ -30,29 +30,29 @@ pageEncoding="UTF-8"%>
          data-menu-auth="${sessionScope.__LOGIN_USER__.autr}">
       <div class="top-menu">
         <div class="top-menu-content">
-        	<div class="top-menu-left flex-row">
+            <div class="top-menu-left flex-row">
             <img src="/img/logo.png"/>
-        		
-        		<div class="brich-title height-center">
-        			<a href="/campaignmain">Brich</a>
-        		</div>
-        	</div>
-        	<div class="top-menu-right flex-row">
-		        <div class="top-menu-search-area">
-		          <input class="search-input menu" type="text" name="searchKeywordMenu" placeholder="Search" />
-		        </div>
-	            <div class="top-menu-profile-area flex-row">
-	            	<div class="menu-profilename height-center">${sessionScope.__LOGIN_USER__.logId}</div>
-	            	<c:choose>
-	            	  <c:when test="${sessionScope.__LOGIN_USER__ ne null}">
-	            	      <a class="logout" href="/logout">로그아웃</a>
-	            	  </c:when>
-	            	  <c:otherwise>
-	            	      <a class="logout" href="/login">로그인</a>
-	            	  </c:otherwise>
-	            	</c:choose>
-				</div>
-        	</div>
+                
+                <div class="brich-title height-center">
+                    <a href="/campaignmain">Brich</a>
+                </div>
+            </div>
+            <div class="top-menu-right flex-row">
+                <div class="top-menu-search-area">
+                  <input class="search-input menu" type="text" name="searchKeywordMenu" placeholder="Search" />
+                </div>
+                <div class="top-menu-profile-area flex-row">
+                    <div class="menu-profilename height-center">${sessionScope.__LOGIN_USER__.logId}</div>
+                    <c:choose>
+                      <c:when test="${sessionScope.__LOGIN_USER__ ne null}">
+                          <a class="logout" href="/logout">로그아웃</a>
+                      </c:when>
+                      <c:otherwise>
+                          <a class="logout" href="/login">로그인</a>
+                      </c:otherwise>
+                    </c:choose>
+                </div>
+            </div>
         </div>
       </div>
       <div class="application-main">
@@ -81,13 +81,13 @@ pageEncoding="UTF-8"%>
                         <div class="caret-down"></div>
                         <div class="caret-up display-none"></div>
                         </div> 
-	                      <ul class="my-sub-menu display-none">
-	                        <li class="menu-my-submitted-campaign-selected"><a href="/blgr/submittedmycampaign">신청한 캠페인</a></li>
-	                        <li class="menu-my-ongoing-campaign-selected"><a href="/blgr/campaignongoing">진행중 캠페인</a></li>
-	                        <li class="menu-my-closed-campaign-selected"><a href="/blgr/closedcampaign">마감된 캠페인</a></li>
-	                        <li class="last-item menu-my-fav-campaign-selected"><a href="/blgr/favcampaign">관심 캠페인</a></li>
-	                      </ul>
-	                </li>
+                          <ul class="my-sub-menu display-none">
+                            <li class="menu-my-submitted-campaign-selected"><a href="/blgr/submittedmycampaign">신청한 캠페인</a></li>
+                            <li class="menu-my-ongoing-campaign-selected"><a href="/blgr/campaignongoing">진행중 캠페인</a></li>
+                            <li class="menu-my-closed-campaign-selected"><a href="/blgr/closedcampaign">마감된 캠페인</a></li>
+                            <li class="last-item menu-my-fav-campaign-selected"><a href="/blgr/favcampaign">관심 캠페인</a></li>
+                          </ul>
+                    </li>
                     <li class="menu-my-blog-selected"><a href="/blog/${sessionScope.__LOGIN_USER__.usrId}/manage">블로그 관리</a></li>
                     <li class="menu-message-selected"><a href="/blgr/chat/rooms">메세지</a></li>
                   </ul>

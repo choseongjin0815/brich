@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -165,7 +166,8 @@ public class UserController {
     @PostMapping("/regist")
     public String doUserRegistAction(@Valid RequestUserRegistVO requestUserRegistVO
     							   , BindingResult bindingResult
-    							   , Model model) {
+    							   , Model model
+    							   , RedirectAttributes redirectAttributes) {
     	
 	   	log.info("requestUserRegistVO: {}", requestUserRegistVO);
 
@@ -214,7 +216,17 @@ public class UserController {
     	
     	boolean registResult = this.userService.createNewUser(requestUserRegistVO);
     	//가입이 완료되면 로그인 페이지로 이동시킨다.
-    	return "redirect:/login";
+    	
+    	// 회원가입 성공 메시지를 모델에 담기
+    	if(requestUserRegistVO.getAutr().equals("1007")) {
+    	    model.addAttribute("successMessage", "회원가입 신청이 완료되었습니다!");
+    	    model.addAttribute("role", "advertiser");
+    	} else {
+    	    model.addAttribute("successMessage", "회원가입이 완료되었습니다!");
+    	    model.addAttribute("role", "blogger");
+    	}
+        
+    	return "/user/regist";
     }
     
     /**

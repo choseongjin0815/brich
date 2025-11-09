@@ -128,4 +128,46 @@ $().ready(function () {
     ".recommend-table + .simple-paginator .btn-prev",
     ".recommend-table + .simple-paginator .btn-next"
   );
+  const $wrap = document.querySelector('.applied-list');
+	  if(!$wrap) return;
+
+	  const PAGE_SIZE = parseInt($wrap.dataset.pageSize || '4', 10);
+	  const MAX_PAGES = parseInt($wrap.dataset.maxPages || '4', 10);
+
+	  const $container = $wrap.querySelector('.js-applied-items');
+	  // ✅ 플렉스 아이템은 자식 <a>
+	  const $cards = Array.from($container.querySelectorAll(':scope > a'));
+	  const $prev = $wrap.querySelector('.applied-prev');
+	  const $next = $wrap.querySelector('.applied-next');
+	  const $now  = $wrap.querySelector('.applied-page-now');
+	  const $tot  = $wrap.querySelector('.applied-page-total');
+
+	  if ($cards.length === 0) {
+	    $wrap.querySelector('.applied-page-nav').style.display = 'none';
+	    return;
+	  }
+
+	  let totalPages = Math.ceil($cards.length / PAGE_SIZE);
+	  totalPages = Math.min(totalPages, MAX_PAGES);
+	  let page = 1;
+
+	  function render(){
+	    $cards.forEach(a => a.style.display = 'none');
+
+	    const start = (page - 1) * PAGE_SIZE;
+	    const end   = Math.min(start + PAGE_SIZE, $cards.length);
+	    for (let i = start; i < end; i++){
+	      $cards[i].style.display = 'block';  // ✅ flex 아이템이므로 block이면 충분
+	    }
+
+	    $now.textContent = String(page);
+	    $tot.textContent = String(totalPages);
+	    $prev.disabled = page <= 1;
+	    $next.disabled = page >= totalPages;
+	  }
+
+	  $prev.addEventListener('click', () => { if(page > 1){ page--; render(); } });
+	  $next.addEventListener('click', () => { if(page < totalPages){ page++; render(); } });
+
+	  render();
 });

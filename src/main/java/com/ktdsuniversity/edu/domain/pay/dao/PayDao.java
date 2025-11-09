@@ -46,5 +46,13 @@ public interface PayDao {
 	int updateBeforeCampaignPaymentInfoSave(RequestPaymentVO requestPaymentVO);
 
 	String selectBeforeCampaigninfo(String clientCmpnId);
+	
+	int updatePaymentSuccessCampaign(RequestPaymentVO requestPaymentVO);
+
+	int updatePaymentCampaignStts(RequestPaymentVO requestPaymentVO);
+
+	String selectPaymentCmpnId(RequestPaymentVO requestPaymentVO);
+
+
 
 }
