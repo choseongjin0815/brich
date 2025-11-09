@@ -9,7 +9,6 @@ public class ResponseAdminCampaignApplicantListVO {
 	private List<ResponseAdminCampaignApplicantVO> applicantList;
 	private CampaignVO campaignInfo;
 	private int adoptCount;
-	
 
 	public List<ResponseAdminCampaignApplicantVO> getApplicantList() {
 		return this.applicantList;

@@ -25,8 +25,12 @@
                             </c:if>
                             <c:if test="${not empty detail.rcrtPrsnn}">
                                 <li>
-                                    <label for="">신청</label>
-                                    <div>${detail.adptCnt} / ${detail.rcrtPrsnn}</div>
+                                    <label for="">모집 인원</label>
+                                    <div>${detail.rcrtPrsnn}명</div>
+                                </li>
+                                <li>
+                                    <label for="">신청 인원</label>
+                                    <div>${detail.adptCnt}명</div>
                                 </li>
                             </c:if>
                         </ul>

@@ -4,7 +4,6 @@
 <c:set var="scripts">
        <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
        <script type="text/javascript" src="/js/campaign/admin_campaign_detail.js"></script>
-       <script type="text/javascript" src="/js/campaign/admin_campaign_detail_applicant.js"></script>
        <script type="text/javascript" src="/js/common/paginator.js"></script>
 </c:set>
     

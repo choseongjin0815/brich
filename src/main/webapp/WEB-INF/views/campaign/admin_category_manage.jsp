@@ -18,7 +18,7 @@
             " />
         </jsp:include>
 	    <div class="wrapper">
-	        <h1>카테고리 관리</h1>
+	        <div class="title">카테고리 관리</div>
 	        
 	        <div class="container">
 	        <input type="hidden" id="adminId" value="${sessionScope.__LOGIN_USER__.usrId}"/>
