@@ -90,7 +90,7 @@
 		        <textarea class="text-input write-input require-input" name="ntfcn">${campaign.ntfcn}</textarea>
 		        
 		        <div class="create-button-list grid-item">
-	                <button type="button" class="">미리보기</button>
+	                <%--<button type="button" class="">미리보기</button>--%>
 	                <button type="button" class="temporary-button">임시저장</button>
 	                <button type="button" class="cancel-button">취소</button>
 	                <button type="button" class="submit-button auto-active">신청</button>
