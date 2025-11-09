@@ -48,8 +48,8 @@
               THEN 1
               ELSE 0
           END ASC
-            , I.CRT_DT DESC
-            , I.UPDT_DT DESC
+            , I.CRT_DT ASC
+            , I.UPDT_DT ASC
     </select>
     
     <resultMap type="com.ktdsuniversity.edu.domain.inqr.vo.AdminInqrDetailVO" id="AdminInqrDetailVOMap" autoMapping="true">
