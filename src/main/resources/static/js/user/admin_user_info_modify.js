@@ -30,8 +30,8 @@ $().ready(function() {
     });
     
     
-    
-    /* 블로거 - 블로그 수동 인증 */
+    /*
+    /* 블로거 - 블로그 수동 인증 
     var inputBlogAddr = $("input[name='blgAddr']");
     var activeBtn = $(".blog-crtfctn-active-btn");
     $(".crtctn-cancel-btn").hide();
@@ -40,7 +40,7 @@ $().ready(function() {
     // 기존 블로그 주소 값 저장해 놓기
     var currentBlogAddr = inputBlogAddr.val();
         
-    /* 블로그 수동 인증 (모달 제외) */
+    /* 블로그 수동 인증 (모달 제외) 
     $(activeBtn).on("click", function() {
         
         // 1. readonly 풀기
@@ -133,7 +133,7 @@ $().ready(function() {
             },
         });
     });
-    
+    */
     
     
     

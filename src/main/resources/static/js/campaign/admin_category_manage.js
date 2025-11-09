@@ -321,7 +321,7 @@ $().ready(function() {
         
         $.ajax({
             url: url, 
-            type: "GET", 
+            method: "GET", 
             dataType: "json", 
             
             success: function(categoryList) {

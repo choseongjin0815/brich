@@ -16,8 +16,7 @@
         </c:if>
         
         <c:if test="${not empty param.sttsCd && 
-                      (param.sttsCd eq '2006' || 
-                       param.sttsCd eq '2007' || 
+                       (param.sttsCd eq '2007' || 
                        param.sttsCd eq '2009')}">
             <input type="radio" name="campaign-tab" id="campaign-adopters">
             <label for="campaign-adopters">채택자</label>

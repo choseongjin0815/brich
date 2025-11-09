@@ -1,47 +1,216 @@
 @charset "UTF-8";
 
-body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    color: #333333;
-    
-    overflow: hidden;
+.container {
+    padding: 40px;
 }
 
 a {
     text-decoration: none;
+    color: #5A6ACF;
 }
 
-table {
-    border-collapse: collapse;
-    border-top: 1px solid #d9d5ec;
-    border-bottom: 1px solid #d9d5ec;
-}
-
-th {
-    background-color: #eef1f9;
-}
-
-td {
-    border-top: 1px solid #d9d5ec;
-}
-
-.wrapper {
-    height: calc(100vh - 40px);
-}
-
-.tab {
+.admin-title {
+    margin-top: 22px;
+    margin-left: 80px;
     
-    font-size: 14pt;
-    
-    & > .teb-item {
-       display: none;
-    }
+    font-size: 36px;
+    font-weight: 600;
+    color: #5A6ACF;
 }
 
-.container {
-    
+.detail-info {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    /* border-top: 2px solid #5A6ACF; */
+    /* border-bottom: 1px solid #d1d5db; */
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); */
+    border-radius: 8px;
+    overflow: hidden;
 }
 
+.detail-row {
+    display: grid;
+    grid-template-columns: 300px 900px; 
+    /* border-bottom: 1px solid #e5e7eb; */
+    min-height: 50px;
+}
+
+.detail-row.section-separator-top {
+    /* border-top: 1px solid #e5e7eb; */
+}
+
+.last-row {
+    border-bottom: none;
+}
+
+.detail-key {
+    /* background-color: #f9fafb; */
+    font-weight: 600;
+    color: #374151;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    /* border-right: 1px solid #e5e7eb; */
+}
+
+.detail-value {
+    background-color: #ffffff;
+    color: #4b5563;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    line-height: 1.5;
+}
+
+.campaign-list-row .detail-value {
+    justify-content: flex-start; 
+    flex-wrap: wrap;
+}
+
+.detail-value input[type="text"] {
+    padding: 8px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 300px;
+    transition: border-color 0.2s;
+}
+
+.detail-value input[readonly] {
+    background-color: #f3f4f6;
+    cursor: default;
+}
+
+.detail-value .blog-crtfctn-active-btn {
+    padding: 6px 12px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #5A6ACF;
+    color: #ffffff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+}
+
+.detail-value .blog-crtfctn-active-btn:hover {
+    background-color: #4354b3;
+}
+
+
+.detail-value .add-new-file-btn {
+    padding: 6px 12px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #5A6ACF;
+    color: #ffffff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.detail-value .add-new-file-btn:hover {
+    background-color: #4354b3;
+}
+
+.file-list-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.file-item {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.file-remove-btn {
+    margin-left: 8px;
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-group {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    margin-top: 30px;
+    padding: 10px 0;
+}
+
+.penalty-options {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-group label {
+    font-size: 0.95rem;
+    color: #374151;
+    margin-left: 10px;
+}
+
+.control-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.save-btn { /* 처리 버튼 */
+    background-color: #FF676A;
+    color: #ffffff;
+    margin-left: 15px; 
+    font-weight: 500;
+}
+
+.modify-btn { /* 수정 버튼 */
+    background-color: #7B61FF;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.reject-btn { /* 가입 반려 버튼 */
+    background-color: #FF676A;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.approve-btn { /* 가입 승인 버튼 */
+    background-color: #7B61FF;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.save-btn:hover { 
+	background-color: rgba(190, 59, 61);
+}
+
+.modify-btn:hover { 
+	background-color: rgba(81, 59, 190);
+}
+
+.reject-btn:hover { 
+	background-color: rgba(190, 59, 61);
+}
+
+.approve-btn:hover { 
+	background-color: rgba(81, 59, 190);
+}

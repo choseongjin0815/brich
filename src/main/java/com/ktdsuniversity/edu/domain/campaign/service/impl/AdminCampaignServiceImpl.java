@@ -15,9 +15,14 @@ import com.ktdsuniversity.edu.domain.campaign.service.AdminCampaignService;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignUpdateHistoryVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCamapaignRejectVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCampaignAdopterVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCampaignApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCampaignApproveVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminSearchCampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminAdopterPstReSubmitCnVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminAdopterPstRtrnRsnVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminCampaignAdopterListVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminCampaignAdopterVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminCampaignApplicantListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminCampaignApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminCampaignListVO;
@@ -159,6 +164,11 @@ public class AdminCampaignServiceImpl implements AdminCampaignService {
 		return this.adminCampaignDao.updateAdminCampaignByApproveInfo(approveInfo) > 0;
 	}
 
+	/**
+	 * 캠페인 신청자 목록
+	 * @param requestApplicantVO
+	 * @return
+	 */
 	@Override
 	public ResponseAdminCampaignApplicantListVO readAdminCampaignApplicantListById(
 			RequestAdminCampaignApplicantVO requestApplicantVO) {
@@ -176,6 +186,63 @@ public class AdminCampaignServiceImpl implements AdminCampaignService {
 		applicantListVO.setCampaignInfo(campaignInfo);
 		
 		return applicantListVO;
+	}
+
+	/**
+	 * 캠페인 채택자 목록
+	 * @param requestAdminAdopterVO
+	 * @return
+	 */
+	@Override
+	public ResponseAdminCampaignAdopterListVO readAdminCampaignAdopterListById(
+			RequestAdminCampaignAdopterVO requestAdminAdopterVO) {
+		
+		log.info("서비스 캠페인 아이디: " + requestAdminAdopterVO.getCmpnId());
+		
+		int adopterCount = this.campaignDao.selectAdoptCountByCmpnId(requestAdminAdopterVO.getCmpnId());
+		int postApproveCount = this.adminCampaignDao.selectAdminCampaignPostApproveCountByPostId(requestAdminAdopterVO.getCmpnId());
+		requestAdminAdopterVO.setPageCount(postApproveCount);
+		
+		List<ResponseAdminCampaignAdopterVO> adopterList = this.adminCampaignDao.selectAdminCampaignAdopterListByPostId(requestAdminAdopterVO);
+		CampaignVO campaignInfo = this.campaignDao.selectCampaignInfoByCmpnId(requestAdminAdopterVO.getCmpnId());
+		
+		ResponseAdminCampaignAdopterListVO adopterListVO = new ResponseAdminCampaignAdopterListVO();
+		adopterListVO.setAdopterList(adopterList);
+		adopterListVO.setAdopterCount(adopterCount);
+		adopterListVO.setPostApproveCount(postApproveCount);
+		adopterListVO.setCampaignInfo(campaignInfo);
+		
+		return adopterListVO;
+	}
+
+	/**
+	 * 캠페인 채택자 반려 사유 목록
+	 * @param postId
+	 * @return
+	 */
+	@Override
+	public List<ResponseAdminAdopterPstRtrnRsnVO> readAdopterReturnReasonListByPostId(String postId) {
+		
+		List<ResponseAdminAdopterPstRtrnRsnVO> list = this.adminCampaignDao.selectAdopterReturnReasonListByPostId(postId);
+		
+		log.info("반려 사유: " + list.toString());
+		
+		return list;
+	}
+
+	/**
+	 * 캠페인 채택자 재제출 내용 목록
+	 * @param postId
+	 * @return
+	 */
+	@Override
+	public List<ResponseAdminAdopterPstReSubmitCnVO> readAdopterReSubmitContentListByPostId(String postId) {
+		
+		List<ResponseAdminAdopterPstReSubmitCnVO> list = this.adminCampaignDao.selectAdopterPostReSubmitListByPostId(postId);
+		
+		log.info("재제출 이력: " + list.toString());
+		
+		return list;
 	}
 
 

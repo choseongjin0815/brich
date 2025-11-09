@@ -10,9 +10,13 @@ import org.springframework.stereotype.Repository;
 import com.ktdsuniversity.edu.domain.campaign.dao.AdminCampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCamapaignRejectVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCampaignAdopterVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCampaignApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminCampaignApproveVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestAdminSearchCampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminAdopterPstReSubmitCnVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminAdopterPstRtrnRsnVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminCampaignAdopterVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminCampaignApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdminCampaignVO;
 
@@ -66,6 +70,27 @@ public class AdminCampaignDaoImpl extends SqlSessionDaoSupport implements AdminC
 	public List<ResponseAdminCampaignApplicantVO> selectAdminCampaignApplicantListByCmpnId(
 			RequestAdminCampaignApplicantVO requestApplicantVO) {
 		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdminCampaignApplicantListByCmpnId", requestApplicantVO);
+	}
+
+	@Override
+	public int selectAdminCampaignPostApproveCountByPostId(String cmpnId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE + "selectAdminCampaignPostApproveCountByPostId", cmpnId);
+	}
+
+	@Override
+	public List<ResponseAdminCampaignAdopterVO> selectAdminCampaignAdopterListByPostId(
+			RequestAdminCampaignAdopterVO requestAdminAdopterVO) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdminCampaignAdopterListByPostId", requestAdminAdopterVO);
+	}
+
+	@Override
+	public List<ResponseAdminAdopterPstRtrnRsnVO> selectAdopterReturnReasonListByPostId(String postId) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdopterReturnReasonListByPostId", postId);
+	}
+
+	@Override
+	public List<ResponseAdminAdopterPstReSubmitCnVO> selectAdopterPostReSubmitListByPostId(String postId) {
+		return super.getSqlSession().selectList(this.NAME_SPACE + "selectAdopterPostReSubmitListByPostId", postId);
 	}
 
 }

@@ -18,7 +18,7 @@
        </jsp:include>
        
         <div class="wrapper">
-        <h1>문의 상세</h1>
+        <div class="admin-title">문의 상세</div>
 	        <div class="container">
 	            
 	            <input type="hidden" id="login_usrId" value="${sessionScope.__LOGIN_USER__.usrId}"/>
