@@ -16,6 +16,13 @@
 <script type="text/javascript" src="/js/common/validate.js"></script>
 </head>
 <body>
+     <!-- 성공 메시지 처리 -->
+    <c:if test="${not empty successMessage}">
+        <script>
+            alert('${successMessage}');
+            window.location.href = '/login';
+        </script>
+    </c:if>
     <div class="regist-wrapper">
         <div class="regist-header">
             Brich
