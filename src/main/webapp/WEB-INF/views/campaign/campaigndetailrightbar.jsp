@@ -41,7 +41,62 @@
 			                or  sessionScope.__LOGIN_USER__.autr == 1003)
 			               and detail.pstSttsCd eq null
 			                }">
-                        <div class="right-bar-bottom"> 여기는 통계 영역입니다 </div>
+                        <div class="right-bar-bottom"> 							<h3>📊 참여자 블로그 지수 비교</h3>
+							<canvas id="campaignIndexChart"></canvas>
+
+							<script>
+							  const labels = [
+							    <c:forEach items="${indexStats}" var="row" varStatus="st">
+							      "${row.statDt}"<c:if test="${!st.last}">,</c:if>
+							    </c:forEach>
+							  ];
+
+							  const minData = [
+							    <c:forEach items="${indexStats}" var="row" varStatus="st">
+							      ${row.minIndx}<c:if test="${!st.last}">,</c:if>
+							    </c:forEach>
+							  ];
+
+							  const avgData = [
+							    <c:forEach items="${indexStats}" var="row" varStatus="st">
+							      ${row.avgIndx}<c:if test="${!st.last}">,</c:if>
+							    </c:forEach>
+							  ];
+
+							  const maxData = [
+							    <c:forEach items="${indexStats}" var="row" varStatus="st">
+							      ${row.maxIndx}<c:if test="${!st.last}">,</c:if>
+							    </c:forEach>
+							  ];
+
+							  const myIndex = ${myIndex};
+
+							  new Chart(document.getElementById("campaignIndexChart"), {
+							    type: "line",
+							    data: {
+							      labels,
+							      datasets: [
+							        { label: "최소 지수", data: minData, borderColor: "#C2C2C2", tension: 0.3 },
+							        { label: "평균 지수", data: avgData, borderColor: "#7B61FF", borderWidth: 2, tension: 0.4 },
+							        { label: "최대 지수", data: maxData, borderColor: "#00B8A9", tension: 0.3 },
+							        { label: "내 지수", data: Array(labels.length).fill(myIndex), borderColor: "#FF6B6B", borderDash: [5,5], borderWidth: 2 }
+							      ]
+							    },
+							    options: {
+							      responsive: true,
+							      plugins: {
+							        legend: { position: "bottom" },
+							        tooltip: { mode: "index", intersect: false }
+							      },
+							      scales: {
+							        y: {
+							          beginAtZero: false,
+							          title: { display: true, text: "블로그 지수" }
+							        }
+							      }
+							    }
+							  });
+							</script></div>
 			            <c:set var="isApplied" value="${detail.adptYn eq 'N'}" />
                         <div class="right-bar-bottom apply-cancel-blg middle-center ${isApplied ? 'display-none' : ''}" data-campaign-id="${detail.cmpnId}">
                         신청취소

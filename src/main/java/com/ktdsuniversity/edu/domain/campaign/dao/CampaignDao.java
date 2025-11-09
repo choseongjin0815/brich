@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignIndexStatVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostAdoptVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostManageVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.PostReturnHistoryVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
@@ -114,6 +117,16 @@ public interface CampaignDao {
 	int updateTemporaryCampaignByCmpnId(RequestCreateCmpnVO requestCreateCmpnVO);
 
 	List<ResponseDenyHistoryVO> selectDenyHistoryByCmpnPstAdptId(String postId);
+
+	List<CampaignPostManageVO> selectCampaignPostListByUsrId(String usrId);
+
+	List<CampaignVO> selectRecommendedCampaignByUsrId(String usrId);
+
+	CampaignPostAdoptVO selectCampaignPostByPstAdptId(String postId);
+
+	List<CampaignIndexStatVO> selectCampaignIndexStats(String cmpnId);
+
+	Double selectMyBlogIndexInCampaign(String cmpnId, String usrId);
 
 
 }

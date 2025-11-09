@@ -3,8 +3,12 @@ package com.ktdsuniversity.edu.domain.campaign.service;
 
 
 import java.util.List;
+import java.util.Map;
 
-import com.ktdsuniversity.edu.domain.campaign.vo.PostReturnHistoryVO;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignIndexStatVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostManageVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseModifyCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
@@ -12,7 +16,6 @@ import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestDenyVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestPostSubmitVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestSearchCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptListVO;
-import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseAdoptVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseApplicantListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseCampaignVO;
@@ -73,6 +76,14 @@ public interface CampaignService {
 	ResponseModifyCampaignVO readModifyInfoByCmpnId(String cmpnId);
 
 	List<ResponseDenyHistoryVO> readDenyHistoryByCmpnPstAdptId(String postId);
+
+	List<CampaignVO> readExpireSoonCampaignList(RequestExpireSoonCampaignVO requestExpireSoonCampaignVO);
+
+	List<CampaignPostManageVO> readCampaignManageListByUsrId(String usrId);
+
+	List<CampaignVO> readRecommendedCampaignByUsrId(String usrId);
+
+	Map<String, Object> readCampaignIndexStats(String cmpnId, String usrID);
 
 
 }

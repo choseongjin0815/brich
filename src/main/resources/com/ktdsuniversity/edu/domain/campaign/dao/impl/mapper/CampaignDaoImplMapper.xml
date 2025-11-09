@@ -718,7 +718,7 @@
     SELECT
       CMPN_ID,
       CMPN_TITLE,
-      RCRT_END_DT,
+      TRUNC(RCRT_END_DT) - TRUNC(SYSDATE) AS RCRT_END_DT,
       USR_ID,
       STTS_CD,
       CNFM_DT,
@@ -1148,8 +1148,126 @@ ORDER BY RCRT_END_DT ASC
             WHERE ROWNUM = 1 			
 	</select>
 	
+	<select id="selectCampaignPostListByUsrId"
+			parameterType="string"
+			resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostManageVO">
+			
+			SELECT p.CMPN_PST_ADPT_ID AS cmpnPstAdptId
+			     , p.BLG_USR_ID AS blgUsrId,
+        p.CMPN_ID AS cmpnId,
+        c.CMPN_TITLE AS cmpnTitle,
+        p.PST_TITLE AS pstTitle,
+        p.PST_URL AS pstUrl,
+        p.PST_STTS_CD AS pstSttsCd,
+        p.ADPT_YN AS adptYn,
+        p.PST_SBMT_DT AS pstSbmtDt,
+        CASE WHEN EXISTS (
+            SELECT 1 FROM POST_RTRN_HIST r
+            WHERE r.POST_ID = p.CMPN_PST_ADPT_ID
+            AND r.DLT_YN = 'N'
+        ) THEN 1 ELSE 0 END AS hasReturn
+    FROM CMPN_PST_ADPT p
+    JOIN CMPN c ON p.CMPN_ID = c.CMPN_ID
+    WHERE p.BLG_USR_ID = #{_parameter}
+      AND p.DLT_YN = 'N'
+    ORDER BY p.PST_SBMT_DT DESC
+	
+	</select>
 	
 	
+	<select id="selectRecommendedCampaignByUsrId"
+          parameterType="string"
+          resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
+          WITH 
+          MY_INDEX AS (
+              SELECT USR_ID, OVLL_BLG_INDX AS MY_INDEX
+              FROM TEAM_A.BLG_INDX
+              WHERE USR_ID = #{usrId}
+                AND CRT_DT = (
+                    SELECT MAX(CRT_DT)
+                    FROM TEAM_A.BLG_INDX
+                    WHERE USR_ID = #{usrId}
+                )
+          ),
+          RECENT_IDX AS (
+              SELECT B1.USR_ID, B1.OVLL_BLG_INDX AS RECENT_INDEX
+              FROM TEAM_A.BLG_INDX B1
+              WHERE B1.CRT_DT = (
+                  SELECT MAX(B2.CRT_DT)
+                  FROM TEAM_A.BLG_INDX B2
+                  WHERE B2.USR_ID = B1.USR_ID
+              )
+          ),
+          APPLY_IDX AS (
+              SELECT A.CMPN_ID, AVG(R.RECENT_INDEX) AS AVG_INDEX
+              FROM TEAM_A.CMPN_PST_ADPT A
+              JOIN RECENT_IDX R ON A.BLG_USR_ID = R.USR_ID
+              WHERE NVL(A.DLT_YN, 'N') = 'N'
+              GROUP BY A.CMPN_ID
+          )
+          SELECT *
+          FROM (
+              SELECT 
+                  C.CMPN_ID,
+                  C.CMPN_TITLE,
+                  C.CMPN_CN,
+                  C.RCRT_END_DT,
+                  C.PST_END_DT,
+                  C.OFFR_PRC,
+                  C.ADDRS,
+                  ROW_NUMBER() OVER (ORDER BY ABS(AI.AVG_INDEX - M.MY_INDEX)) AS RN
+              FROM TEAM_A.CMPN C
+              JOIN APPLY_IDX AI ON C.CMPN_ID = AI.CMPN_ID
+              JOIN MY_INDEX M ON 1 = 1
+              WHERE AI.AVG_INDEX BETWEEN M.MY_INDEX * 0.5 AND M.MY_INDEX * 1.5
+              AND C.STTS_CD = '2005'
+          )
+          WHERE RN <![CDATA[<=]]> 20
+          ORDER BY RN
+  </select>
+	
+	
+	<select id="selectCampaignPostByPstAdptId"
+			parameterType="string"
+			resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostAdoptVO">
+			SELECT BLG_USR_ID
+			FROM CMPN_PST_ADPT
+			WHERE CMPN_PST_ADPT_ID = #{_parameter}
+	</select>
+	
+	
+	<select id="selectCampaignIndexStats"
+        parameterType="String"
+        resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignIndexStatVO">
+
+    	SELECT
+        	TO_CHAR(BI.CRT_DT, 'YYYY-MM-DD') AS STAT_DT,
+        	ROUND(AVG(BI.OVLL_BLG_INDX), 2) AS AVG_INDX,
+        	MIN(BI.OVLL_BLG_INDX) AS MIN_INDX,
+        	MAX(BI.OVLL_BLG_INDX) AS MAX_INDX
+    	 FROM TEAM_A.CMPN_PST_ADPT A
+    	 JOIN TEAM_A.BLG_INDX BI
+      	   ON A.BLG_USR_ID = BI.USR_ID
+    	WHERE A.CMPN_ID = #{cmpnId}
+    	GROUP BY TO_CHAR(BI.CRT_DT, 'YYYY-MM-DD')
+    	ORDER BY STAT_DT
+	</select>	
+		
+<select id="selectMyBlogIndexInCampaign" parameterType="map" resultType="double">
+    SELECT NVL(OVLL_BLG_INDX, 0)
+    FROM (
+        SELECT b.OVLL_BLG_INDX
+        FROM TEAM_A.CMPN_PST_ADPT c
+        LEFT JOIN TEAM_A.BLG_INDX b
+               ON c.BLG_USR_ID = b.USR_ID
+        WHERE c.CMPN_ID = #{cmpnId}
+          AND c.BLG_USR_ID = #{usrId}
+        ORDER BY b.CRT_DT DESC
+    )
+    WHERE ROWNUM = 1
+
+</select>
+			
 </mapper>
 
 

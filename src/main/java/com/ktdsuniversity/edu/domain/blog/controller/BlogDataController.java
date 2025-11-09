@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostManageVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.response.ResponseDenyHistoryVO;
 import com.ktdsuniversity.edu.domain.blog.vo.BlogDetailStatVO;
 import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
 import com.ktdsuniversity.edu.domain.blog.vo.DailyVisitorVO;
@@ -45,7 +49,7 @@ public class BlogDataController {
 	        return "redirect:/access-denied";
 	    }
 
-		requestExpireSoonCampaignVO.setListSize(12);
+		requestExpireSoonCampaignVO.setListSize(15);
 		requestExpireSoonCampaignVO.setPageCount(1);
 
 		ResponseExpireSoonListVO result =
@@ -57,6 +61,7 @@ public class BlogDataController {
 				this.blogDataService.selectDailyVisitors(usrId);
 		List<CommonCodeVO> goldenKeywordList =
 				this.blogDataService.selectUserCategoryKeywords(usrId);
+		List<CampaignVO> recommendResult = this.blogDataService.selectRecommendCampaign(usrId);
 		ObjectMapper mapper = new ObjectMapper();
 		String goldenKeywordListJson = mapper.writeValueAsString(goldenKeywordList);
 		ResponseCampaignListVO CampaignListAndCategory = 
@@ -73,6 +78,8 @@ public class BlogDataController {
 		model.addAttribute("goldenKeywordListJson", goldenKeywordListJson);
 		model.addAttribute("currentIndex",currentIndex);
 		model.addAttribute("totalVisitor", totalVisitor);
+		model.addAttribute("recommended",recommendResult);
+
 		model.addAttribute("campaignList", CampaignListAndCategory.getResponseCampaignList());
 		return "blog/dashboard";
 	}
@@ -89,10 +96,8 @@ public class BlogDataController {
 		}
 		
 		
-		ResponseExpireSoonListVO result =
-				this.blogDataService.readExpireSoonCampaignList(requestExpireSoonCampaignVO);
-		model.addAttribute("list",result);
-		
+		List<CampaignPostManageVO> results = this.blogDataService.readCampaignPostByUsrId(usrId);
+		model.addAttribute("list",results);
 		
 		return "/blog/manage";
 	}
@@ -115,6 +120,12 @@ public class BlogDataController {
 	        @PathVariable String usrId) {
 	    List<BlogDetailStatVO> list = blogDataService.readBlogDetailStat(usrId);
 	    return list;
+	}
+	
+	@GetMapping("/api/user/{postId}/return-reason")
+	@ResponseBody
+	public List<ResponseDenyHistoryVO> getReturnHistory(@PathVariable String postId) {
+	    return blogDataService.getReturnHistory(postId);
 	}
 
 }

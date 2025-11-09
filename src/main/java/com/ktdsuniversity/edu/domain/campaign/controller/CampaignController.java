@@ -1,6 +1,7 @@
 	package com.ktdsuniversity.edu.domain.campaign.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import com.ktdsuniversity.edu.domain.blog.vo.DailyVisitorVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogIndexListVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignIndexStatVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseExpireSoonListVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseModifyCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
@@ -70,7 +72,17 @@ public class CampaignController {
     	}else {    		
     		detail = campaignService.readCampaignDetail(campaignId);
     	}
-    	
+        String usrId = (loginUser != null) ? loginUser.getUsrId() : null;
+        
+
+        // 블로그 지수 (BlogDataService에서 직접)
+        Double myIndex = (usrId != null) ? blogDataService.readRecentBlogIndex(usrId) : 0.0;
+
+        // 캠페인 참여자 통계
+        Map<String, Object> stats = campaignService.readCampaignIndexStats(campaignId, usrId);
+
+        model.addAttribute("indexStats", stats.get("list"));
+        model.addAttribute("myIndex", stats.get("myIndex"));
     	
     	log.info( "캠페인 상세조회 결과 : " + detail.toString());
     	model.addAttribute("detail", detail);

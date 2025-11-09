@@ -12,8 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ktdsuniversity.edu.domain.blog.service.BlogDataService;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
 import com.ktdsuniversity.edu.domain.campaign.service.CampaignService;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignIndexStatVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostAdoptVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostManageVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.ResponseModifyCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
@@ -672,16 +677,72 @@ public class CampaignServiceImpl implements CampaignService {
   @Override
   public List<ResponseDenyHistoryVO> readDenyHistoryByCmpnPstAdptId(String postId) {
 	CampaignVO campaign = this.campaignDao.selectCampaignStateByCmpnPstAdptId(postId);
+	CampaignPostAdoptVO post = this.campaignDao.selectCampaignPostByPstAdptId(postId);
 	if (!campaign.getSttsCd().equals("2007")) {
+		System.out.println("현재 상태코드: " + campaign.getSttsCd());
+		System.out.println("캠페인 작성자: " + campaign.getUsrId());
 		throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
 	}
 	
 	UserVO userId = SessionUtil.getLoginObject();
-	if (!campaign.getUsrId().equals(userId.getUsrId())) {
+	if (!post.getBlgUsrId().equals(userId.getUsrId()) && !campaign.getUsrId().equals(userId.getUsrId())) {
+		System.out.println("현재 상태코드: " + campaign.getSttsCd());
+		System.out.println("캠페인 작성자: " + campaign.getUsrId());
+		System.out.println("로그인 사용자: " + userId.getUsrId());
 		throw new AjaxException("잘못된 접근입니다.", HttpStatus.NOT_FOUND);
 	}
-	
+
+
 	return this.campaignDao.selectDenyHistoryByCmpnPstAdptId(postId);
+  }
+
+  @Override
+  public List<CampaignVO> readExpireSoonCampaignList(RequestExpireSoonCampaignVO requestExpireSoonCampaignVO) {
+	  
+	return this.campaignDao.selectExpireSoonCampaign(requestExpireSoonCampaignVO);
+  }
+
+  @Override
+  public List<CampaignPostManageVO> readCampaignManageListByUsrId(String usrId) {
+	return this.campaignDao.selectCampaignPostListByUsrId(usrId);
+  }
+
+  @Override
+  public List<CampaignVO> readRecommendedCampaignByUsrId(String usrId) {
+	return this.campaignDao.selectRecommendedCampaignByUsrId(usrId);
+  }
+
+  @Override
+  public Map<String, Object> readCampaignIndexStats(String cmpnId, String usrId) {
+      Map<String, Object> result = new HashMap<>();
+
+      // 참여자별 블로그 지수 DAO에서 직접 조회 (BlogDataService 의존 X)
+      List<CampaignIndexStatVO> list = campaignDao.selectCampaignIndexStats(cmpnId);
+      result.put("list", list);
+
+      // 통계 계산
+      double sum = 0;
+      double max = Double.MIN_VALUE;
+      double min = Double.MAX_VALUE;
+
+      for (CampaignIndexStatVO vo : list) {
+          double avg = vo.getAvgIndx();
+          sum += avg;
+          if (avg > max) max = avg;
+          if (avg < min) min = avg;
+      }
+
+      double overallAvg = list.isEmpty() ? 0 : Math.round((sum / list.size()) * 100.0) / 100.0;
+
+      // ✅ 내 지수는 DB 쿼리에서 같이 가져오기 (별도 필드)
+      Double myIndex = campaignDao.selectMyBlogIndexInCampaign(cmpnId, usrId);
+
+      result.put("myIndex", myIndex != null ? myIndex : 0.0);
+      result.put("overallAvg", overallAvg);
+      result.put("max", max == Double.MIN_VALUE ? 0 : max);
+      result.put("min", min == Double.MAX_VALUE ? 0 : min);
+
+      return result;
   }
 
 

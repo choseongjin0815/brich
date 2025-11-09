@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogInfoVO;
 import com.ktdsuniversity.edu.domain.blog.vo.RequestBlogTitleVO;
+import com.ktdsuniversity.edu.domain.blog.vo.RequestModifyBlogAddrsVO;
 import com.ktdsuniversity.edu.domain.user.vo.BlogCategoryVO;
 import com.ktdsuniversity.edu.domain.user.vo.UserVO;
 import com.ktdsuniversity.edu.domain.user.vo.request.RequestUserAccountPasswordVO;
@@ -45,6 +46,7 @@ public interface UserService {
 	public boolean updateBlogTitle(RequestBlogTitleVO request);
 
 	public boolean readEmailByInputEmail(String email);
+
 
 
 }

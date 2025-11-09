@@ -8,6 +8,8 @@ import com.ktdsuniversity.edu.global.common.BaseVO;
  */
 public class CampaignPostAdoptVO extends BaseVO{
 
+	private String crtDt;
+	
     /**
      * @ColumnName CMPN_PST_ADPT_ID
      * @ColumnType VARCHAR2(50)
@@ -71,7 +73,17 @@ public class CampaignPostAdoptVO extends BaseVO{
      */
     private String pstTitle;
 
-    public String getCmpnPstAdptId() {
+    
+    
+    public String getCrtDt() {
+		return crtDt;
+	}
+
+	public void setCrtDt(String crtDt) {
+		this.crtDt = crtDt;
+	}
+
+	public String getCmpnPstAdptId() {
         return this.cmpnPstAdptId;
     }
     
