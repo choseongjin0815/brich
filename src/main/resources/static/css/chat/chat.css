@@ -217,8 +217,9 @@ ul{
     font-weight: 500;
     top: -15px;
     right: -430px;
-    width: 60px;
-    height: 20px;
+    width: 65px;
+    height: 25px;
+    text-align: center;
     font-size: 16px;
 }
 
@@ -240,8 +241,9 @@ ul{
 
 .leave-chat-btn-rm {
     font-weight: 500;
-    width: 90px;
-    height: 20px;
+    text-align: center;
+    width: 95px;
+    height: 25px;
     top: -15px;
     right: -530px;
     font-size: 16px;
