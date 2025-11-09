@@ -1178,6 +1178,7 @@ ORDER BY RCRT_END_DT ASC
     JOIN CMPN c ON p.CMPN_ID = c.CMPN_ID
     WHERE p.BLG_USR_ID = #{_parameter}
       AND p.DLT_YN = 'N'
+      AND p.PST_STTS_CD IS NOT NULL
     ORDER BY p.PST_SBMT_DT DESC
 	
 	</select>
@@ -1186,52 +1187,67 @@ ORDER BY RCRT_END_DT ASC
 	<select id="selectRecommendedCampaignByUsrId"
           parameterType="string"
           resultType="com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO">
-          WITH 
-          MY_INDEX AS (
-              SELECT USR_ID, OVLL_BLG_INDX AS MY_INDEX
-              FROM TEAM_A.BLG_INDX
-              WHERE USR_ID = #{usrId}
-                AND CRT_DT = (
-                    SELECT MAX(CRT_DT)
-                    FROM TEAM_A.BLG_INDX
-                    WHERE USR_ID = #{usrId}
-                )
-          ),
-          RECENT_IDX AS (
-              SELECT B1.USR_ID, B1.OVLL_BLG_INDX AS RECENT_INDEX
-              FROM TEAM_A.BLG_INDX B1
-              WHERE B1.CRT_DT = (
-                  SELECT MAX(B2.CRT_DT)
-                  FROM TEAM_A.BLG_INDX B2
-                  WHERE B2.USR_ID = B1.USR_ID
-              )
-          ),
-          APPLY_IDX AS (
-              SELECT A.CMPN_ID, AVG(R.RECENT_INDEX) AS AVG_INDEX
-              FROM TEAM_A.CMPN_PST_ADPT A
-              JOIN RECENT_IDX R ON A.BLG_USR_ID = R.USR_ID
-              WHERE NVL(A.DLT_YN, 'N') = 'N'
-              GROUP BY A.CMPN_ID
-          )
-          SELECT *
-          FROM (
-              SELECT 
-                  C.CMPN_ID,
-                  C.CMPN_TITLE,
-                  C.CMPN_CN,
-                  C.RCRT_END_DT,
-                  C.PST_END_DT,
-                  C.OFFR_PRC,
-                  C.ADDRS,
-                  ROW_NUMBER() OVER (ORDER BY ABS(AI.AVG_INDEX - M.MY_INDEX)) AS RN
-              FROM TEAM_A.CMPN C
-              JOIN APPLY_IDX AI ON C.CMPN_ID = AI.CMPN_ID
-              JOIN MY_INDEX M ON 1 = 1
-              WHERE AI.AVG_INDEX BETWEEN M.MY_INDEX * 0.5 AND M.MY_INDEX * 1.5
-              AND C.STTS_CD = '2005'
-          )
-          WHERE RN <![CDATA[<=]]> 20
-          ORDER BY RN
+WITH
+MY_INDEX AS (
+  SELECT USR_ID, TO_NUMBER(OVLL_BLG_INDX) AS MY_INDEX
+  FROM (
+    SELECT B.USR_ID,
+           B.OVLL_BLG_INDX,
+           ROW_NUMBER() OVER (
+             PARTITION BY B.USR_ID
+             ORDER BY B.CRT_DT DESC, B.STAT_DT DESC, B.INDX_VAL DESC
+           ) AS RN
+    FROM TEAM_A.BLG_INDX B
+    WHERE B.USR_ID = #{usrId}
+  )
+  WHERE RN = 1
+),
+LATEST_BLG_INDEX AS (
+  SELECT USR_ID, TO_NUMBER(OVLL_BLG_INDX) AS RECENT_INDEX
+  FROM (
+    SELECT B.USR_ID,
+           B.OVLL_BLG_INDX,
+           ROW_NUMBER() OVER (
+             PARTITION BY B.USR_ID
+             ORDER BY B.CRT_DT DESC, B.STAT_DT DESC, B.INDX_VAL DESC
+           ) AS RN
+    FROM TEAM_A.BLG_INDX B
+  )
+  WHERE RN = 1
+),
+APPLY_IDX AS (
+  SELECT A.CMPN_ID, AVG(L.RECENT_INDEX) AS AVG_INDEX
+  FROM (
+    SELECT DISTINCT CMPN_ID, BLG_USR_ID
+    FROM TEAM_A.CMPN_PST_ADPT
+    WHERE NVL(DLT_YN,'N') = 'N'
+  ) A
+  JOIN LATEST_BLG_INDEX L
+    ON L.USR_ID = A.BLG_USR_ID
+  GROUP BY A.CMPN_ID
+)
+SELECT *
+FROM (
+  SELECT
+    C.CMPN_ID,
+    C.CMPN_TITLE,
+    DBMS_LOB.SUBSTR(C.CMPN_CN, 2000, 1) AS CMPN_CN,
+    C.RCRT_END_DT,
+    C.PST_END_DT,
+    C.OFFR_PRC,
+    C.ADDRS,
+    ROUND(AI.AVG_INDEX, 2) AS AVG_INDEX,
+    ROUND(M.MY_INDEX, 2)    AS MY_INDEX,
+    ROW_NUMBER() OVER (ORDER BY ABS(AI.AVG_INDEX - M.MY_INDEX)) AS RN
+  FROM TEAM_A.CMPN C
+  JOIN APPLY_IDX AI ON AI.CMPN_ID = C.CMPN_ID
+  JOIN MY_INDEX  M  ON 1 = 1
+  WHERE AI.AVG_INDEX BETWEEN M.MY_INDEX * 0.8 AND M.MY_INDEX * 1.2
+    AND C.STTS_CD = '2005'
+    AND NVL(C.DLT_YN,'N') = 'N'
+)
+WHERE RN <![CDATA[<=]]>  20
+ORDER BY RN
   </select>
 	
 	
@@ -1257,6 +1273,7 @@ ORDER BY RCRT_END_DT ASC
     	 JOIN TEAM_A.BLG_INDX BI
       	   ON A.BLG_USR_ID = BI.USR_ID
     	WHERE A.CMPN_ID = #{cmpnId}
+    	  AND A.DLT_YN = 'N'
     	GROUP BY TO_CHAR(BI.CRT_DT, 'YYYY-MM-DD')
     	ORDER BY STAT_DT
 	</select>	
@@ -1269,6 +1286,7 @@ ORDER BY RCRT_END_DT ASC
         LEFT JOIN TEAM_A.BLG_INDX b
                ON c.BLG_USR_ID = b.USR_ID
         WHERE c.CMPN_ID = #{cmpnId}
+          AND c.DLT_YN = 'N'
           AND c.BLG_USR_ID = #{usrId}
         ORDER BY b.CRT_DT DESC
     )

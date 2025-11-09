@@ -32,7 +32,7 @@
               <c:forEach items="${list.list}" var="recommend" varStatus="status">
                 <tr class="expire-row" data-index="${status.index}">
                   <td><a href="/campaigndetail/${recommend.cmpnId}" class="btn-view">${recommend.cmpnTitle}</a></td>
-                  <td>마감 ${recommend.rcrtEndDt}일 전</td>
+                  <td class="expire">마감 ${recommend.rcrtEndDt}일 전</td>
                   <td class="right-align">${recommend.offrPrc}원</td>
                 </tr>
               </c:forEach>

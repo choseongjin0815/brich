@@ -35,6 +35,9 @@ table.dataTable td {
   border: none !important;
 }
 
+.right-align{
+	text-align: right;
+}	
 
 /* 헤더 배경색, 글자색 */
 table.dataTable thead th {
@@ -44,7 +47,9 @@ table.dataTable thead th {
   text-align: center;          /* 가운데 정렬 */
 }
 
-
+h3{
+	width: 100%;
+}
 
 /* 정렬 가능한 헤더에 화살표 아이콘 스타일 변경 */
 table.dataTable thead th.sorting:after,

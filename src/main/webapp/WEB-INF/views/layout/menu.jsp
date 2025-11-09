@@ -88,7 +88,7 @@ pageEncoding="UTF-8"%>
                             <li class="last-item menu-my-fav-campaign-selected"><a href="/blgr/favcampaign">관심 캠페인</a></li>
                           </ul>
                     </li>
-                    <li class="menu-my-blog-selected"><a href="/blog/${sessionScope.__LOGIN_USER__.usrId}/manage">블로그 관리</a></li>
+                    <li class="menu-my-blog-selected"><a href="/blog/${sessionScope.__LOGIN_USER__.usrId}/manage">포스팅 관리</a></li>
                     <li class="menu-message-selected"><a href="/blgr/chat/rooms">메세지</a></li>
                   </ul>
                 </li>
