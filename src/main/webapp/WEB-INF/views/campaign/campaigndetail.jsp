@@ -7,6 +7,7 @@
        <script type="text/javascript" src="/js/campaign/campaignmain.js"></script>
        <script type="text/javascript" src="/js/common/paginator.js"></script>
        <script type="text/javascript" src="/js/common/validate.js"></script>
+	   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </c:set>
 
 <c:set var="css">

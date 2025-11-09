@@ -60,7 +60,7 @@ table.dataTable thead th.sorting_desc:after {
   display: inline-block;
   font-weight: 600;
   padding: 4px 10px;
-  border-radius: 10px;
+  border-radius: 15px;
   font-size: 0.85rem;
 }
 
@@ -94,8 +94,8 @@ table.dataTable thead th.sorting_desc:after {
 	margin: 20px;
 }
 .status-review {
-  color: #5A6ACF;
-  background-color: #e6e9ff;
+  color: #AEB47E;
+  background-color: #FFFAC7;
 }
 
 .status-rejected {
@@ -144,12 +144,11 @@ table.dataTable thead th.sorting_desc:after {
 .btn-reason{
 	background-color: #5A48D8;
 	color: #fff;
-	border-radius: 10px;
+	border-radius: 15px;
 	border: 0;
 	font-weight: 500;
 	padding: 5px 10px;
 }
-/* 기본 버튼 */
 .dataTables_wrapper .dataTables_paginate .paginate_button {
   border: 1px solid #ddd;
   color: #555;
@@ -164,21 +163,20 @@ table.dataTable thead th.sorting_desc:after {
 .center{
 	text-align: center;
 }
-/* 마우스 올렸을 때 */
+
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
   background-color: #7B61FF;
   color: #fff !important;
   border-color: #7B61FF;
 }
 
-/* 클릭(눌렸을 때) 느낌 */
 .dataTables_wrapper .dataTables_paginate .paginate_button:active {
   background-color: #5A48D8;
   color: #fff !important;
   transform: scale(0.96);
 }
 
-/* 현재 활성 페이지 */
+
 .dataTables_wrapper .dataTables_paginate .paginate_button.current,
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
   background-color: #5A6ACF;
@@ -186,7 +184,7 @@ table.dataTable thead th.sorting_desc:after {
   border: 1px solid #5A6ACF;
 }
 
-/* 비활성(이전/다음 버튼) */
+
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
   color: #aaa !important;
   border-color: #eee;

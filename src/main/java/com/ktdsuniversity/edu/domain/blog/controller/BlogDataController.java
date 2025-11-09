@@ -46,7 +46,7 @@ public class BlogDataController {
 	        return "redirect:/access-denied";
 	    }
 
-		requestExpireSoonCampaignVO.setListSize(12);
+		requestExpireSoonCampaignVO.setListSize(15);
 		requestExpireSoonCampaignVO.setPageCount(1);
 
 		ResponseExpireSoonListVO result =

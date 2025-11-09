@@ -180,4 +180,10 @@ public class BlogDataServiceImpl implements BlogDataService{
 	public List<CampaignVO> selectRecommendCampaign(String usrId) {
 		return this.campaignService.readRecommendedCampaignByUsrId(usrId);
 	}
+
+
+	@Override
+	public Double readRecentBlogIndex(String usrId) {
+		return this.postDataDao.selectRecentIndex(usrId);
+	}
 }

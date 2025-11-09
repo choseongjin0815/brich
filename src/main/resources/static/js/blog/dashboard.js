@@ -66,16 +66,11 @@ $().ready(function () {
     if ($(e.target).is(modal)) modal.fadeOut(200);
   });
 
-  /* ==========================
-     2️⃣ URL 파라미터로 사용자 이름 표시
-     ========================== */
   const searchParam = new URL(window.location.href).searchParams;
   const userName = searchParam.get("userName");
   if (userName) $(".user-name-space").text(userName);
 
-  /* ==========================
-     3️⃣ 공통 페이지네이션 함수
-     ========================== */
+
   function setupPagination(
     rowSelector,
     prevSelector,
@@ -100,7 +95,6 @@ $().ready(function () {
       $(nextSelector).prop("disabled", page === totalPages);
     }
 
-    // ✅ 중복 이벤트 방지 (off 후 on)
     $(prevSelector)
       .off("click")
       .on("click", function () {

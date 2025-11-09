@@ -50,4 +50,6 @@ public interface BlogDataService {
 
 	List<CampaignVO> selectRecommendCampaign(String usrId);
 
+	Double readRecentBlogIndex(String usrId);
+
 }

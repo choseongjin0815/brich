@@ -1,5 +1,6 @@
 package com.ktdsuniversity.edu.domain.campaign.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,9 +11,10 @@ import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.domain.blog.vo.RequestExpireSoonCampaignVO;
 import com.ktdsuniversity.edu.domain.campaign.dao.CampaignDao;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignIndexStatVO;
+import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostAdoptVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignPostManageVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.CampaignVO;
-import com.ktdsuniversity.edu.domain.campaign.vo.PostReturnHistoryVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestApplicantVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCampaignAreaVO;
 import com.ktdsuniversity.edu.domain.campaign.vo.request.RequestCreateCmpnVO;
@@ -287,4 +289,22 @@ public class CampaignDaoImpl extends SqlSessionDaoSupport implements CampaignDao
 		return super.getSqlSession().selectList(this.NAME_SPACE+"selectRecommendedCampaignByUsrId",usrId);
 	}
 
+	@Override
+	public CampaignPostAdoptVO selectCampaignPostByPstAdptId(String postId) {
+		return super.getSqlSession().selectOne(this.NAME_SPACE+"selectCampaignPostByPstAdptId",postId);
+	}
+
+	@Override
+	public List<CampaignIndexStatVO> selectCampaignIndexStats(String cmpnId){ 
+		return super.getSqlSession().selectList(this.NAME_SPACE+"selectCampaignIndexStats", cmpnId);
+	}
+
+	@Override
+	public Double selectMyBlogIndexInCampaign(String cmpnId, String usrId) {
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("cmpnId", cmpnId);
+	    params.put("usrId", usrId);
+
+	    return super.getSqlSession().selectOne(this.NAME_SPACE + "selectMyBlogIndexInCampaign", params);
+	}
 }

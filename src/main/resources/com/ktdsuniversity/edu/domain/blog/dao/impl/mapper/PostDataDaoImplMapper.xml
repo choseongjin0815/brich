@@ -68,26 +68,27 @@
     <select id="selectBlogDetailStat"
     		parameterType="string"
     		resultType="com.ktdsuniversity.edu.domain.blog.vo.BlogDetailStatVO">
-    
-       WITH date_range AS ( 
-     SELECT TRUNC(SYSDATE - 20) + LEVEL - 1 AS STAT_DATE
-       FROM DUAL
+    WITH date_range AS ( 
+    SELECT TRUNC(SYSDATE - 20) + LEVEL - 1 AS STAT_DATE
+    FROM DUAL
     CONNECT BY LEVEL <![CDATA[ <=]]> (TRUNC(SYSDATE - 6) - TRUNC(SYSDATE - 20)) + 1
 )
-	 SELECT d.STAT_DATE AS DT,
-     	    NVL(COUNT(p.PST_URL), 0) AS POST_COUNT,
-    	    ROUND(NVL(AVG(p.PST_LK), 0), 2) AS AVG_LK,
-    	    ROUND(NVL(AVG(p.PST_CMNT), 0), 2) AS AVG_CMMT,
-    	    ROUND(NVL(AVG(v.VSTR_CNT), 0), 2) AS VST_CNT
-	   FROM date_range d
-	   LEFT JOIN TEAM_A.DLY_VSTR v
-  		 ON TRUNC(v.VST_DT) = d.STAT_DATE
-  	    AND v.USR_ID = #{_parameter}
-	   LEFT JOIN TEAM_A.PST_DA p
-  		 ON TRUNC(p.PSTD_DT) = d.STAT_DATE
-  	    AND p.USR_ID = v.USR_ID
-	  GROUP BY d.STAT_DATE
-	  ORDER BY d.STAT_DATE
+SELECT 
+    TO_CHAR(d.STAT_DATE, 'YYYY-MM-DD') AS DT,
+    NVL(COUNT(p.PST_URL), 0) AS POST_COUNT,
+    ROUND(NVL(AVG(p.PST_LK), 0), 2) AS AVG_LK,
+    ROUND(NVL(AVG(p.PST_CMNT), 0), 2) AS AVG_CMMT,
+    ROUND(NVL(AVG(v.VSTR_CNT), 0), 2) AS VST_CNT
+FROM date_range d
+LEFT JOIN TEAM_A.DLY_VSTR v
+    ON TRUNC(v.VST_DT) = d.STAT_DATE
+   AND v.USR_ID = #{_parameter}
+LEFT JOIN TEAM_A.PST_DA p
+    ON TRUNC(p.PSTD_DT) = d.STAT_DATE
+   AND p.USR_ID = #{_parameter}  -- ✅ 여기도 직접 사용자 ID로 조인
+GROUP BY d.STAT_DATE
+ORDER BY d.STAT_DATE
+
     </select>
     
 </mapper>
