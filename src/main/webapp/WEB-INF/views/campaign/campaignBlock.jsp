@@ -8,7 +8,7 @@
             <img src="/file/${param.usrId}/${param.flGrpId}/${param.flId}" />
         </c:when>
         <c:otherwise>
-            <img src="/img/image13.png" />
+            <img src="/img/logo.png" />
         </c:otherwise>
     </c:choose>
     <div class="flex-grow-1">
