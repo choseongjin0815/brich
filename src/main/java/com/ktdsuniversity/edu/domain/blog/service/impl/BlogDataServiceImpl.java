@@ -60,9 +60,7 @@ public class BlogDataServiceImpl implements BlogDataService{
 	public boolean runPythonVerification(RequestModifyBlogAddrsVO requestModifyBlogAddrsVO, String code) {
 		String pythonOutput = PythonExecutor.runPython(this.NAME_SPACE + "verification-crawler.py", requestModifyBlogAddrsVO.getBlgAddrs(), code);
 		int updateCount = 0;
-		boolean tr = true;
-		// pythonOutput.contains("Verification successful")
-		if(tr) {
+		if(pythonOutput.contains("Verification successful")) {
 			updateCount = userDao.updateBlgAddrsById(requestModifyBlogAddrsVO);
 			}
 		return updateCount > 0;
