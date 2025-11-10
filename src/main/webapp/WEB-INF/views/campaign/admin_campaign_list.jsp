@@ -32,7 +32,7 @@
                     </span>
                     </label>
                     
-	                <c:forEach items="${category}" var="category">
+	                <c:forEach items="${category}" var="category" begin="1">
 	                    <label class="category-radio">
 	                    <input type="radio" name="category" value="${category.cdNm}"
 	                        ${category.cdId eq search.category ? 'checked' : ''} />
