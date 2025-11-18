@@ -5,7 +5,7 @@
 <div class="campaign-block" data-cmpn-id="${param.cmpnId}">
     <c:choose>
         <c:when test="${not empty param.flId}">
-            <img src="/file/${param.usrId}/${param.flGrpId}/${param.flId}" />
+            <img class="cmpnjij" src="/file/${param.usrId}/${param.flGrpId}/${param.flId}" />
         </c:when>
         <c:otherwise>
             <img src="/img/logo.png" />

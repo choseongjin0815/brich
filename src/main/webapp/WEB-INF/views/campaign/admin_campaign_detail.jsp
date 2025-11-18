@@ -70,7 +70,7 @@
                                     <c:forEach var="f" items="${detail.fileVoList}" varStatus="st">
                                     <div class="cmpn-image">
                                         <div class="path">
-                                            <img src="/file/1234/${detail.flGrpId}/${f.flId}"/>
+                                            <img class="cmpnjij" src="/file/1234/${detail.flGrpId}/${f.flId}"/>
                                         </div>
                                     </div>
                                     </c:forEach>

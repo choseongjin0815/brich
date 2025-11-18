@@ -191,28 +191,28 @@ def find_project_root(target_folder_name="brich-project"):
 
 def load_last_url(blog_url):
 
-    # ✅ 루트 자동 탐색
+    #  루트 자동 탐색
     root_dir = find_project_root("brich-project")
     if not root_dir:
-        print("❌ 프로젝트 루트를 찾을 수 없습니다.")
+        print("프로젝트 루트를 찾을 수 없습니다.")
         return None
 
     folder = os.path.join(root_dir, "latest_post")
 
-    # ✅ 블로그 ID 추출
+    # 블로그 ID 추출
     match = re.search(r'blog.naver.com/([^/?]+)', blog_url)
     blog_id = match.group(1) if match else "unknown"
 
     filepath = os.path.join(folder, f"{blog_id}.json")
 
-    # ✅ 파일 확인
+    # 파일 확인
     if os.path.exists(filepath):
         with open(filepath, "r", encoding="utf-8") as f:
             data = json.load(f)
             print(f"불러온 경로: {filepath}")
             return data.get("latest_post_url", None)
     else:
-        print(f"⚠️ {filepath} 파일이 존재하지 않습니다.")
+        print(f" {filepath} 파일이 존재하지 않습니다.")
         return None
 
 from urllib.parse import urlparse, parse_qs
@@ -274,13 +274,13 @@ except TimeoutException:
 #  목록 열림 상태 보장
 ensure_toplist_open(driver)
 
-# 2️⃣ 잠깐 대기 (목록 DOM 완전히 갱신될 때까지)
+# 2 잠깐 대기 (목록 DOM 완전히 갱신될 때까지)
 time.sleep(0.5)
 
-# 3️⃣ 목록이 열린 상태의 HTML로 새로 파싱
+# 3 목록이 열린 상태의 HTML로 새로 파싱
 soup = BeautifulSoup(driver.page_source, 'html.parser')
 
-# 4️⃣ 페이지 개수 추출
+# 4 페이지 개수 추출
 page_count_elem = soup.select_one('h4.category_title.pcol2')
 numeric_chars = [char for char in page_count_elem.text if char.isdigit()]
 numeric_string = "".join(numeric_chars)
@@ -290,17 +290,17 @@ numeric_string = "".join(numeric_chars)
 # list_size = re.findall(r'\d+', list_size)[0]
 last_url = load_last_url(blg_url)
 stop_collecting = False
-links = []  # ✅ set으로 중복 방지
+links = []  # set으로 중복 방지
 seen = set()
 total_pages = math.ceil(int(numeric_string) / 5)
 
 
 
 for page_num in range(1, 30):
-    # ✅ 현재 페이지 HTML 새로 파싱
+    # 현재 페이지 HTML 새로 파싱
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     
-    # ✅ 링크 수집 (절대경로 + 정확한 클래스 필터)
+    # 링크 수집 (절대경로 + 정확한 클래스 필터)
     for a in soup.find_all('a', href=True):
         href = a['href']
         href = normalize_post_url(href)
@@ -324,7 +324,7 @@ for page_num in range(1, 30):
         break
     print(f"[PAGE {page_num}] 수집된 링크 수: {len(links)}")
 
-    # ✅ 다음 페이지 버튼 클릭
+    # 다음 페이지 버튼 클릭
     next_xpath = f"//a[contains(@class,'_goPageTop') and contains(@class,'_param({page_num+1})')]"
     try:
         next_button = WebDriverWait(driver, 5).until(
@@ -332,7 +332,7 @@ for page_num in range(1, 30):
         )
         driver.execute_script("arguments[0].click();", next_button)
         
-        # ✅ 페이지가 실제로 바뀔 때까지 대기
+        # 페이지가 실제로 바뀔 때까지 대기
         WebDriverWait(driver, 10).until(EC.staleness_of(next_button))
         WebDriverWait(driver, 2).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "table.blog2_list"))
@@ -425,9 +425,9 @@ if results:
     # 블로그별 최신 포스트 URL 저장 (인자 수정)
     save_last_url(blg_url, newest["url"])
 
-    print(f"🆕 최신 포스트 URL 저장 완료 → {newest['url']}")
+    print(f"최신 포스트 URL 저장 완료 → {newest['url']}")
 else:
-    print("⚠️ 새로운 포스트가 없습니다. (모두 5일 이내 또는 수집 실패)")
+    print("새로운 포스트가 없습니다. (모두 5일 이내 또는 수집 실패)")
 
 # ====== API 전송 ======
 url = "http://localhost:8080/api/results"

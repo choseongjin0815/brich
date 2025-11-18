@@ -45,7 +45,6 @@ public class BlogDataServiceImpl implements BlogDataService{
 	@Override
 	public ResponseExpireSoonListVO readExpireSoonCampaignList(RequestExpireSoonCampaignVO request) {
 
-	    // ✅ 기존 DAO 직접 호출 → Service 계층 호출
 	    List<CampaignVO> list = this.campaignService.readExpireSoonCampaignList(request);
 
 	    ResponseExpireSoonListVO result = new ResponseExpireSoonListVO();

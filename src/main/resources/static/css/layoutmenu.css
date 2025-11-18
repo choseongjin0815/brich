@@ -3,6 +3,11 @@
   text-decoration: none;
 }
 
+.cmpnjij{
+	filter: blur(10px);
+}
+
+
 body {
   color: #333;
   margin: 0;
@@ -229,6 +234,7 @@ ul {
 	width : 48px;
 	height:48px;
 	object-fit: cover;
+	
 }
 
   .submit-area{

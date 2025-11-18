@@ -95,7 +95,7 @@
 						      <div class="cmpn-image">
 						        <div class="path">
 						        </div>
-						           <img src="/file/1234/${detail.flGrpId}/${f.flId}"/>
+						           <img class="cmpnjij" src="/file/1234/${detail.flGrpId}/${f.flId}"/>
 						      </div>
 						    </c:forEach>
 						  </div>

@@ -116,6 +116,12 @@
   width: 100%;
   object-fit: cover;
   border-radius: 15px;
+  filter: blur(10px);
+  img {
+  	filter: blur(10px);
+  }
+
+  
 }
 
 .campaign-main-list-area > .campaign-main-block:hover,
