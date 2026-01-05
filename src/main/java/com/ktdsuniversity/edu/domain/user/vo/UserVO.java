@@ -1,5 +1,6 @@
 package com.ktdsuniversity.edu.domain.user.vo;
 
+import com.ktdsuniversity.edu.domain.blog.vo.BlogIndexVO;
 import com.ktdsuniversity.edu.global.common.BaseVO;
 
 /**
@@ -168,8 +169,22 @@ public class UserVO extends BaseVO{
      * @ColumnComment 사업자 등록증의 파일 그룹 아이디
      */
     private String flGrpId;
+    
+    private String blgTitle;
 
-    public String getUsrId() {
+    
+    private BlogIndexVO blogIndexVO;
+    
+    
+    public BlogIndexVO getBlogIndexVO() {
+		return this.blogIndexVO;
+	}
+
+	public void setBlogIndexVO(BlogIndexVO blogIndexVO) {
+		this.blogIndexVO = blogIndexVO;
+	}
+
+	public String getUsrId() {
         return this.usrId;
     }
     
@@ -352,6 +367,14 @@ public class UserVO extends BaseVO{
     public void setFlGrpId(String flGrpId) {
         this.flGrpId = flGrpId;
     }
+
+	public String getBlgTitle() {
+		return this.blgTitle;
+	}
+
+	public void setBlgTitle(String blgTitle) {
+		this.blgTitle = blgTitle;
+	}
 
 	@Override
 	public String toString() {

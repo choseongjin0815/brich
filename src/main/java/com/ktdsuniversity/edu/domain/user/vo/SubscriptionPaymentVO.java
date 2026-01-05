@@ -37,21 +37,33 @@ public class SubscriptionPaymentVO extends BaseVO{
     private String sbscrptnCd;
 
     /**
-     * @ColumnName PG_PYMNT_CD
-     * @ColumnType VARCHAR2(100)
-     * @ColumnComment 결제 대행사에서 주는 코드
-     */
-    private String pgPymntCd;
-
-    /**
      * @ColumnName AMNT
      * @ColumnType NUMBER(7, 0)
      * @ColumnComment 구독 결제 금액
      */
     private int amnt;
 
+    private String orderId;
+    
+    private String paymentKey;
 
-    public String getSbscrptnPymntId() {
+    public String getOrderId() {
+		return this.orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
+	public String getPaymentKey() {
+		return this.paymentKey;
+	}
+
+	public void setPaymentKey(String paymentKey) {
+		this.paymentKey = paymentKey;
+	}
+
+	public String getSbscrptnPymntId() {
         return this.sbscrptnPymntId;
     }
     
@@ -83,13 +95,7 @@ public class SubscriptionPaymentVO extends BaseVO{
         this.sbscrptnCd = sbscrptnCd;
     }
     
-    public String getPgPymntCd() {
-        return this.pgPymntCd;
-    }
-    
-    public void setPgPymntCd(String pgPymntCd) {
-        this.pgPymntCd = pgPymntCd;
-    }
+
     
     public int getAmnt() {
         return this.amnt;
@@ -102,8 +108,8 @@ public class SubscriptionPaymentVO extends BaseVO{
 	@Override
 	public String toString() {
 		return "SubscriptionPaymentVO [sbscrptnPymntId=" + sbscrptnPymntId + ", usrId=" + usrId + ", pymntCd=" + pymntCd
-				+ ", sbscrptnCd=" + sbscrptnCd + ", pgPymntCd=" + pgPymntCd + ", amnt=" + amnt + ", toString()="
-				+ super.toString() + "]";
+				+ ", sbscrptnCd=" + sbscrptnCd + ", amnt=" + amnt + ", orderId=" + orderId + ", paymentKey="
+				+ paymentKey + "]";
 	}
     
    

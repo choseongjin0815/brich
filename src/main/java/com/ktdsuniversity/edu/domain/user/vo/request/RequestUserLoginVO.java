@@ -1,9 +1,14 @@
 package com.ktdsuniversity.edu.domain.user.vo.request;
 
+import jakarta.validation.constraints.NotEmpty;
+
 public class RequestUserLoginVO {
 
+	
+	@NotEmpty(message = "필수 입력입니다.")
 	private String logId;
-
+	
+	@NotEmpty(message = "필수 입력입니다.")
 	private String pswrd;
 
 	public String getLogId() {

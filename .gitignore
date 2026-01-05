@@ -3,6 +3,9 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+/src/main/resources/application.yml
+/target/classes/application.yml
+bin/
 
 ### STS ###
 .apt_generated
@@ -34,3 +37,12 @@ build/
 
 ### DS_STORE ###
 .DS_store
+
+### YML ###
+*.yml
+
+### Metadata ###
+.metadata
+
+### Bin ###
+bin/

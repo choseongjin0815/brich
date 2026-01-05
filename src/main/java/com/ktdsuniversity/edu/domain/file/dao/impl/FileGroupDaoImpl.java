@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ktdsuniversity.edu.domain.file.dao.FileGroupDao;
+import com.ktdsuniversity.edu.domain.file.vo.FileGroupVO;
 
 @Repository
 public class FileGroupDaoImpl extends SqlSessionDaoSupport implements FileGroupDao {
@@ -17,6 +18,11 @@ public class FileGroupDaoImpl extends SqlSessionDaoSupport implements FileGroupD
     public void setSqlSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {
         super.setSqlSessionTemplate(sqlSessionTemplate);
     }
+
+	@Override
+	public int insertFileGroup(FileGroupVO fileGroupVO) {
+		return super.getSqlSession().insert(this.NAME_SPACE + "insertFileGroup", fileGroupVO);
+	}
 
 
 }
